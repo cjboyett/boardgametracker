@@ -1,0 +1,226 @@
+package com.cjboyett.boardgamestats.view.adapter;
+
+import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.v7.widget.AppCompatButton;
+import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.cjboyett.boardgamestats.R;
+import com.cjboyett.boardgamestats.model.stats.StatisticsManager;
+import com.cjboyett.boardgamestats.utility.Preferences;
+import com.cjboyett.boardgamestats.utility.view.ViewUtilities;
+import com.facebook.AccessToken;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
+
+import org.json.JSONObject;
+
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Created by Casey on 5/9/2016.
+ */
+public class PlayerListAdapter extends BaseAdapter
+{
+	private Activity activity;
+	private List<String> players;
+	private Map<String, Integer> allPlayersWithTimesPlayed;
+	private Map<String, Bitmap> avatars;
+
+	private int backgroundColor, foregroundColor;
+
+	public PlayerListAdapter(final Activity activity, final List<String> players)
+	{
+		this.activity = activity;
+		this.players = new ArrayList<>(players);
+		allPlayersWithTimesPlayed = StatisticsManager.getInstance(activity).getAllPlayersWithTimesPlayed();
+
+		backgroundColor = Preferences.getBackgroundColor(activity);
+		foregroundColor = Preferences.getForegroundColor(activity);
+
+		avatars = new HashMap<>();
+//		int maxMemory = (int)(Runtime.getRuntime().maxMemory() / 1024);
+
+		for (int i=0;i<players.size();i++)
+		{
+			String player = players.get(i);
+			new AsyncTask<String, Void, Bitmap>()
+			{
+				@Override
+				protected Bitmap doInBackground(final String... player)
+				{
+					Bitmap avatar = null;
+					avatar = ViewUtilities.createAvatar(activity, player[0], true);
+					avatars.put(player[0], avatar);
+					return avatar;
+				}
+
+				@Override
+				protected void onPostExecute(Bitmap bitmap)
+				{
+					notifyDataSetChanged();
+				}
+			}.execute(player);
+		}
+
+		for (int i=0;i<players.size();i++)
+		{
+			final String player = players.get(i);
+			if (false)//player.charAt(0) == 'A')
+			{
+				new AsyncTask<String, Void, Bitmap>()
+				{
+					@Override
+					protected Bitmap doInBackground(String... param)
+					{
+						final Bitmap[] profilePicture = {null};
+						final Bundle params = new Bundle();
+						params.putString("fields", "friends, picture.type(square)");
+
+						new GraphRequest(
+							AccessToken.getCurrentAccessToken(),
+							"/me",
+							params,
+							HttpMethod.GET,
+							new GraphRequest.Callback() {
+								public void onCompleted(GraphResponse response)
+								{
+									Log.d("RESPONSE", response.toString());
+									JSONObject data = response.getJSONObject();
+
+									if (data.has("friends"))
+									{
+										try
+										{
+											String uid = data.getJSONObject("friends").getJSONArray("data").getJSONObject(0).getString("id");
+											new GraphRequest(
+													AccessToken.getCurrentAccessToken(),
+													"/" + uid,
+													params,
+													HttpMethod.GET,
+													new GraphRequest.Callback()
+													{
+														@Override
+														public void onCompleted(GraphResponse response)
+														{
+															JSONObject data = response.getJSONObject();
+															if (data.has("picture"))
+															{
+																try
+																{
+																	String profilePictureURL = data.getJSONObject("picture")
+																	                               .getJSONObject("data")
+																	                               .getString("url");
+
+																	new AsyncTask<String, Void, Bitmap>()
+																	{
+																		@Override
+																		protected Bitmap doInBackground(String... params)
+																		{
+																			try
+																			{
+																				profilePicture[0] = BitmapFactory.decodeStream(new URL(params[0]).openConnection()
+																				                                                                 .getInputStream());
+																			}
+																			catch (Exception e)
+																			{
+																				e.printStackTrace();
+																			}
+
+																			return profilePicture[0];
+																		}
+
+																		@Override
+																		protected void onPostExecute(Bitmap bitmap)
+																		{
+																			if (bitmap != null) avatars.put(player, bitmap);
+																			else Log.d("PICTURE", "NULL");
+																			notifyDataSetChanged();
+																		}
+																	}.execute(profilePictureURL);
+																}
+																catch (Exception e)
+																{
+																	e.printStackTrace();
+																}
+															}
+														}
+													}
+											).executeAsync();
+										}
+										catch (Exception e)
+										{
+											e.printStackTrace();
+										}
+									}
+								}
+							}
+						).executeAsync();
+
+						return profilePicture[0];
+					}
+				}.execute(player);
+			}
+		}
+	}
+
+	@Override
+	public int getCount()
+	{
+		return players.size();
+	}
+
+	@Override
+	public Object getItem(int position)
+	{
+		return players.get(position);
+	}
+
+	@Override
+	public long getItemId(int position)
+	{
+		return position;
+	}
+
+	@Override
+	public View getView(final int position, View convertView, ViewGroup parent)
+	{
+		final View view;
+		if (convertView != null) view = convertView;
+		else
+		{
+			view = activity.getLayoutInflater().inflate(R.layout.player_list_item, null);
+
+			view.setBackgroundColor(backgroundColor);
+			view.findViewById(R.id.textview_player).setBackgroundColor(backgroundColor);
+			((TextView) view.findViewById(R.id.textview_player)).setTextColor(foregroundColor);
+			ViewUtilities.tintButtonBackground(((AppCompatButton)view.findViewById(R.id.button_player_plays)), foregroundColor);
+			((Button) view.findViewById(R.id.button_player_plays)).setTextColor(backgroundColor);
+		}
+
+		final String player = (String)getItem(position);
+
+		Bitmap avatar = avatars.get(player);
+		if (avatar != null)
+			((ImageView)view.findViewById(R.id.imageview_avatar)).setImageBitmap(avatar);
+		view.findViewById(R.id.progressBar).setVisibility(View.INVISIBLE);
+		((TextView)view.findViewById(R.id.textview_player)).setText(player);
+		((Button)view.findViewById(R.id.button_player_plays)).setText(allPlayersWithTimesPlayed.get(player) + "");
+
+		return view;
+	}
+}

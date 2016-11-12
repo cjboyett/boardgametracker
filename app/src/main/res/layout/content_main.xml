@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".activity.MainActivity"
+    tools:showIn="@layout/activity_main">
+
+	<RelativeLayout
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_alignParentBottom="true"
+		android:layout_centerHorizontal="true"
+		android:layout_marginBottom="15dp">
+
+		<LinearLayout
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal"
+			android:padding="2dp"
+			android:id="@+id/button_bar_1"
+			android:layout_alignParentTop="true"
+			android:layout_alignParentLeft="true">
+
+			<android.support.v7.widget.AppCompatButton
+				android:layout_width="120dp"
+				android:layout_height="80dp"
+				android:text="Add Game Play"
+				android:id="@+id/textview_add_game_play"
+				android:background="@drawable/main_button_background_light"
+				android:layout_marginRight="2dp"/>
+
+			<android.support.v7.widget.AppCompatButton
+				android:layout_width="120dp"
+				android:layout_height="80dp"
+				android:text="Collection"
+				android:id="@+id/textview_add_game"
+				android:background="@drawable/main_button_background_light"
+				android:layout_marginLeft="2dp"/>
+
+		</LinearLayout>
+
+		<RelativeLayout
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal"
+			android:padding="2dp"
+			android:id="@+id/button_bar_2"
+			android:layout_alignLeft="@+id/button_bar_1"
+			android:layout_below="@+id/button_bar_1">
+
+			<android.support.v7.widget.AppCompatButton
+			    android:layout_width="120dp"
+			    android:layout_height="80dp"
+			    android:text="Extras"
+			    android:id="@+id/textview_extras"
+			    android:background="@drawable/main_button_background_light"
+			    android:layout_marginRight="2dp"/>
+
+			<android.support.v7.widget.AppCompatButton
+				android:layout_width="120dp"
+				android:layout_height="80dp"
+				android:text="Game Stats"
+				android:id="@+id/textview_stats"
+				android:background="@drawable/main_button_background_light"
+				android:layout_marginLeft="2dp"
+				android:layout_toRightOf="@+id/textview_extras"/>
+
+			<android.support.v7.widget.AppCompatImageView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:id="@+id/imageview_settings"
+				android:background="@drawable/main_button_background_light"
+				android:src="@android:drawable/ic_menu_preferences"
+				android:layout_marginTop="2dp"
+				android:layout_marginBottom="10dp"
+				android:padding="5dp"
+				android:layout_below="@+id/textview_extras"/>
+
+			<android.support.v7.widget.AppCompatImageView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:id="@+id/imageview_achievements"
+				android:background="@drawable/main_button_background_light"
+				android:src="@drawable/ic_action_achievement"
+				android:layout_marginTop="2dp"
+				android:layout_marginBottom="10dp"
+				android:padding="5dp"
+				android:layout_centerHorizontal="true"
+				android:layout_below="@+id/textview_extras"/>
+
+			<android.support.v7.widget.AppCompatImageView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:id="@+id/imageview_help"
+				android:background="@drawable/main_button_background_light"
+				android:src="@android:drawable/ic_menu_help"
+				android:layout_marginTop="2dp"
+				android:layout_marginBottom="10dp"
+				android:padding="5dp"
+				android:layout_below="@+id/textview_extras"
+				android:layout_alignRight="@+id/textview_stats"/>
+
+		</RelativeLayout>
+
+	</RelativeLayout>
+
+	<TextView
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:id="@+id/textview_welcome_back"
+	    android:layout_alignParentTop="true"
+	    android:layout_centerHorizontal="true"
+	    android:layout_marginTop="30dp"
+	    android:textSize="18dp"
+	    android:layout_marginBottom="10dp"/>
+
+	<com.cjboyett.boardgamestats.view.ticker.Ticker
+		android:id="@+id/ticker"
+		android:layout_width="175dp"
+		android:layout_height="175dp"
+		android:layout_centerHorizontal="true"
+		android:layout_below="@+id/textview_welcome_back"
+		android:layout_marginTop="10dp"/>
+
+</RelativeLayout>

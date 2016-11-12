@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	tools:context="com.cjboyett.boardgamestats.TestActivity">
+
+	<RelativeLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:paddingBottom="@dimen/activity_vertical_margin"
+		android:paddingLeft="@dimen/activity_horizontal_margin"
+		android:paddingRight="@dimen/activity_horizontal_margin"
+		android:paddingTop="@dimen/activity_vertical_margin">
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:textAppearance="?android:attr/textAppearanceLarge"
+			android:text="Main Title"
+			android:id="@+id/textView4"
+			android:visibility="gone"/>
+
+		<TextView
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:textAppearance="?android:attr/textAppearanceMedium"
+			android:text="This is a longer string of text.  It is only here as a demonstration.  I need to take up space on the screen with something, so I am filling it with this nonsense.  You are welcome."
+			android:id="@+id/textView5"
+			android:layout_below="@+id/textView4"
+			android:visibility="gone"/>
+
+		<Button
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Show overlay"
+			android:id="@+id/button_show_overlay"
+			android:layout_alignParentBottom="false"
+			android:layout_centerInParent="true"
+			android:visibility="gone"/>
+
+		<Button
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Backup Database"
+			android:id="@+id/button_backup_database"
+			android:layout_below="@+id/button_show_overlay"
+			android:layout_centerHorizontal="true"/>
+
+		<Button
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Email Sign Up"
+			android:id="@+id/button_email_sign_up"
+			android:layout_below="@+id/button_backup_database"
+			android:layout_centerHorizontal="true"/>
+
+		<Button
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Email Sign In"
+			android:id="@+id/button_email_sign_in"
+			android:layout_centerHorizontal="true"
+			android:layout_below="@+id/button_email_sign_up"/>
+
+		<com.facebook.login.widget.LoginButton
+			android:id="@+id/login_button"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center_horizontal"
+			android:layout_marginTop="15dp"
+			android:layout_marginBottom="15dp"
+			android:layout_alignParentBottom="false"
+			android:layout_centerHorizontal="true"
+			android:layout_below="@+id/button_email_sign_in"/>
+
+	</RelativeLayout>
+
+	<RelativeLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:id="@+id/overlay"
+		android:background="#82000000"
+		android:clipChildren="false"
+		android:visibility="gone">
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:textAppearance="?android:attr/textAppearanceLarge"
+			android:text="Title"
+			android:id="@+id/textView3"
+			android:layout_centerHorizontal="true"
+			android:textSize="32dp"
+			android:visibility="gone"/>
+
+		<ImageView
+			android:layout_width="300dp"
+			android:layout_height="500dp"
+			android:id="@+id/image1"
+			android:layout_centerInParent="true"
+			android:scaleType="fitCenter"/>
+
+		<ImageView
+			android:layout_width="300dp"
+			android:layout_height="500dp"
+			android:id="@+id/image2"
+			android:layout_centerInParent="true"
+			android:scaleType="fitCenter"/>
+
+		<ImageView
+			android:layout_width="300dp"
+			android:layout_height="500dp"
+			android:id="@+id/image3"
+			android:layout_centerInParent="true"
+			android:scaleType="fitCenter"/>
+
+		<ImageView
+			android:layout_width="300dp"
+			android:layout_height="500dp"
+			android:id="@+id/image4"
+			android:layout_centerInParent="true"
+			android:scaleType="fitCenter"/>
+
+		<ImageView
+			android:layout_width="300dp"
+			android:layout_height="500dp"
+			android:id="@+id/image5"
+			android:layout_centerInParent="true"
+			android:scaleType="fitCenter"/>
+
+		<ImageView
+			android:layout_width="300dp"
+			android:layout_height="500dp"
+			android:id="@+id/image6"
+			android:layout_centerInParent="true"
+			android:scaleType="fitCenter"/>
+
+		<Button
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Hide overlay"
+			android:id="@+id/button_hide_overlay"
+			android:layout_below="@+id/textView3"
+			android:layout_toLeftOf="@+id/button_pick_images"/>
+
+		<Button
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Next"
+			android:id="@+id/button_next"
+			android:layout_centerHorizontal="true"
+			android:layout_below="@+id/textView3"
+			android:layout_toRightOf="@+id/button_pick_images"/>
+
+		<Button
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Select Images"
+			android:id="@+id/button_pick_images"
+			android:layout_centerHorizontal="true"
+			android:layout_below="@+id/textView3"/>
+
+	</RelativeLayout>
+
+</RelativeLayout>

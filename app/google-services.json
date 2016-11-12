@@ -1,0 +1,62 @@
+{
+  "project_info": {
+    "project_number": "847981112378",
+    "firebase_url": "https://games-tracker-53f3f.firebaseio.com",
+    "project_id": "games-tracker-53f3f",
+    "storage_bucket": "games-tracker-53f3f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:847981112378:android:6f80dcef0f2a1dbc",
+        "android_client_info": {
+          "package_name": "com.cjboyett.boardgamestats"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "847981112378-3tinl0t3l0sglf7tchvhou0tmtmh1ttp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cjboyett.boardgamestats",
+            "certificate_hash": "7654F072BEF235FD02F7BAAAB84DE6EE9FB8D5B4"
+          }
+        },
+        {
+          "client_id": "847981112378-u00oogau1nuhfmi2ie8egklkhhhm1pm2.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "847981112378-psc6mk319kjel7o874kultb1ld46m7nj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCYDP51ivHKqfHNtI_HRrUNZyN-707VpLA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 2,
+          "analytics_property": {
+            "tracking_id": "UA-76449004-2"
+          }
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "847981112378-u00oogau1nuhfmi2ie8egklkhhhm1pm2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

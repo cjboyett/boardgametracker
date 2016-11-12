@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:paddingBottom="@dimen/activity_vertical_margin"
+	android:paddingLeft="@dimen/activity_horizontal_margin"
+	android:paddingRight="@dimen/activity_horizontal_margin"
+	android:paddingTop="@dimen/activity_vertical_margin"
+	app:layout_behavior="@string/appbar_scrolling_view_behavior"
+	tools:context=".activity.AddBoardGameActivity"
+	tools:showIn="@layout/activity_add_board_game"
+	android:orientation="vertical">
+
+	<LinearLayout
+		android:layout_width="0dp"
+		android:layout_height="0dp"
+		android:orientation="horizontal"
+		android:id="@+id/dummyview"
+		android:focusable="true"
+		android:focusableInTouchMode="true"/>
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="vertical"
+		>
+
+		<SearchView
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:id="@+id/searchview_boardgame"
+			android:layout_weight="1"
+			android:queryHint="Game"
+			android:iconifiedByDefault="false"
+			android:padding="5dp"/>
+
+		<RelativeLayout
+			android:orientation="horizontal"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent">
+
+			<Spinner
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:id="@+id/spinner_game_type"
+				android:padding="5dp"
+				android:layout_alignParentLeft="true"
+				android:layout_alignParentTop="true"/>
+
+			<android.support.v7.widget.AppCompatCheckBox
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="Exact"
+				android:id="@+id/checkbox_exact_match"
+				android:checked="false"
+				android:padding="5dp"
+				android:layout_alignParentLeft="false"
+				android:layout_marginLeft="758dp"
+				android:layout_alignParentTop="false"
+				android:layout_marginTop="2dp"
+				android:layout_alignParentRight="true"
+				android:layout_centerVertical="true"
+				android:visibility="visible"/>
+
+		</RelativeLayout>
+
+	</LinearLayout>
+
+
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+
+		<Space
+			android:layout_width="25dp"
+			android:layout_height="1dp"
+			/>
+
+		<ImageView
+			android:layout_width="wrap_content"
+			android:layout_height="1px"
+			android:id="@+id/imageview_spacer"
+			android:paddingLeft="25dp"
+			android:paddingRight="25dp"
+			android:background="#592121"
+			android:paddingBottom="3dp"
+			android:layout_weight="1"/>
+
+		<Space
+			android:layout_width="25dp"
+			android:layout_height="1dp"
+			/>
+	</LinearLayout>
+
+	<RelativeLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent">
+
+		<ListView
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:id="@+id/listview_boardgames"
+			android:layout_weight="1"
+			android:paddingTop="5dp"/>
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:id="@+id/linearlayout_progress_bar"
+			android:visibility="gone">
+
+			<ProgressBar
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:id="@+id/progressbar_add_game"
+				android:indeterminate="true"
+				android:padding="5dp"
+				android:visibility="visible"
+				android:layout_gravity="center"/>
+
+		</LinearLayout>
+	</RelativeLayout>
+
+</LinearLayout>

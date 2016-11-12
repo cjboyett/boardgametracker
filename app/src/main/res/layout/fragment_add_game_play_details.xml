@@ -1,0 +1,229 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context="com.cjboyett.test.boardgames.AddGamePlayDetailsFragment"
+                android:padding="5dp"
+                android:gravity="center_vertical|center_horizontal"
+                android:animateLayoutChanges="true">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollIndicators="none"
+        android:nestedScrollingEnabled="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:id="@+id/linearlayout_main_details">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/linear_layout_game"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignRight="@+id/linear_layout_time"
+                        android:animateLayoutChanges="true">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Game"
+                            android:id="@+id/textview_game"
+                            android:visibility="visible"
+                            android:textSize="12dp"/>
+
+                        <AutoCompleteTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/edittext_game"
+                            android:hint="Game"
+                            android:inputType="textCapWords|textAutoComplete"
+                            android:imeOptions="actionNext"
+                            android:textSize="16dp"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/linear_layout_time"
+                        android:layout_below="@+id/linear_layout_game"
+                        android:animateLayoutChanges="true">
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Duration"
+                                android:id="@+id/textview_time_played"
+                                android:visibility="visible"
+                                android:textSize="12dp"
+                                android:layout_weight="1"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Start"
+                                android:id="@+id/textview_start_timer"
+                                android:textSize="12dp"
+                                android:layout_weight="1"
+                                android:gravity="right"
+                                android:paddingRight="5dp"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:animateLayoutChanges="true">
+
+                            <EditText
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:ems="10"
+                                android:id="@+id/edittext_time_played"
+                                android:inputType="number"
+                                android:hint="Duration"
+                                android:textSize="16dp"
+                                android:layout_weight="1"/>
+
+                            <Chronometer
+                                android:layout_width="50dp"
+                                android:layout_height="match_parent"
+                                android:id="@+id/timer"
+                                android:visibility="visible"
+                                android:padding="5dp"
+                                android:gravity="center_vertical|right"
+                                android:textSize="12dp"/>
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/linearl_layout_date"
+                        android:animateLayoutChanges="true"
+                        android:layout_below="@+id/linear_layout_time">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Date"
+                            android:id="@+id/textview_date"
+                            android:textSize="12dp"/>
+
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/edittext_date"
+                            android:hint="Date"
+                            android:inputType="none"
+                            android:textSize="16dp"/>
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2">
+
+                    <ImageButton
+                        android:layout_width="75dp"
+                        android:layout_height="75dp"
+                        android:layout_gravity="center"
+                        android:id="@+id/imagebutton_add_pictures"
+                        android:src="@android:drawable/ic_menu_gallery"
+                        android:scaleType="fitCenter"
+                        android:layout_margin="5dp"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/linear_layout_location"
+                android:layout_below="@+id/linearlayout_main_details"
+                android:animateLayoutChanges="true">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Location"
+                    android:id="@+id/textview_location"
+                    android:visibility="visible"
+                    android:textSize="12dp"/>
+
+                <AutoCompleteTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/edittext_location"
+                    android:hint="Location"
+                    android:inputType="textCapWords|textAutoComplete"
+                    android:imeOptions="actionNext"
+                    android:textSize="16dp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/linear_layout_notes"
+                android:layout_below="@+id/linear_layout_location"
+                android:animateLayoutChanges="true"
+                android:layout_alignParentBottom="true">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Notes"
+                    android:id="@+id/textview_notes"
+                    android:visibility="visible"
+                    android:textSize="12dp"/>
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="textCapSentences|textMultiLine|textImeMultiLine"
+                    android:ems="10"
+                    android:id="@+id/edittext_gameplay_notes"
+                    android:hint="Notes"
+                    android:gravity="top"
+                    android:capitalize="sentences"
+                    android:breakStrategy="simple"
+                    android:lines="10"
+                    android:scrollbars="vertical"
+                    android:isScrollContainer="true"
+                    android:textSize="16dp"/>
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+</RelativeLayout>

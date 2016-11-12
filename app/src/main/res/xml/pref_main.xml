@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+                  xmlns:app="http://schemas.android.com/apk/res-auto">
+
+	<PreferenceScreen
+		android:summary="Personal preferences"
+		android:title="@string/preferences_personal_title">
+
+		<!-- NOTE: EditTextPreference accepts EditText attributes. -->
+		<!-- NOTE: EditTextPreference's summary should be set to its value by the activity code. -->
+		<EditTextPreference
+			android:capitalize="words"
+			android:defaultValue="@string/pref_default_display_name"
+			android:inputType="textCapWords"
+			android:key="@string/display_name_preference"
+			android:maxLines="1"
+			android:selectAllOnFocus="true"
+			android:singleLine="true"
+			android:title="@string/pref_title_display_name"/>
+
+		<Preference
+			android:title="Edit avatar"
+			android:key="@string/edit_avatar_preference"/>
+
+		<com.cjboyett.boardgamestats.view.preferences.ImportCollectionDialogPreference
+			android:capitalize="words"
+			android:inputType="textCapWords"
+			android:key="@string/import_collection_preference"
+			android:maxLines="1"
+			android:selectAllOnFocus="true"
+			android:singleLine="true"
+			android:summary="@string/pref_description_import_collection"
+			android:title="@string/pref_title_import_collection"/>
+
+		<com.cjboyett.boardgamestats.view.preferences.ImportGamePlaysDialogPreference
+			android:capitalize="words"
+			android:inputType="textCapWords"
+			android:key="@string/import_game_plays_preference"
+			android:maxLines="1"
+			android:selectAllOnFocus="true"
+			android:singleLine="true"
+			android:summary="@string/pref_description_import_game_plays"
+			android:title="@string/pref_title_import_game_plays"/>
+
+		<com.cjboyett.boardgamestats.view.preferences.SyncBggDataDialogPreference
+			android:capitalize="words"
+			android:inputType="textCapWords"
+			android:key="@string/sync_bgg_preference"
+			android:maxLines="1"
+			android:selectAllOnFocus="true"
+			android:singleLine="true"
+			android:summary="@string/pref_description_sync_bgg"
+			android:title="@string/pref_title_sync_bgg"/>
+
+	</PreferenceScreen>
+
+	<PreferenceScreen
+		android:summary="Customize the look of the app"
+		android:title="@string/preferences_ui_layout_title">
+
+		<!--
+				<CheckBoxPreference
+					android:defaultValue="true"
+					android:key="@string/light_UI_preference"
+					android:summary="@string/pref_description_light_ui"
+					android:title="@string/pref_title_light_ui"/>
+		-->
+		<PreferenceCategory
+			android:title="General layout">
+
+			<ListPreference
+				android:defaultValue="2"
+				android:entries="@array/thumbnail_sizes"
+				android:entryValues="@array/thumbnail_sizes"
+				android:key="@string/thumbnail_size_preference"
+				android:summary="@string/pref_description_thumbnail_size"
+				android:title="@string/pref_title_thumbnail_size"/>
+
+			<CheckBoxPreference
+				android:defaultValue="false"
+				android:key="@string/sort_winners_first_preference"
+				android:summary="@string/pref_description_sort_winners_first"
+				android:title="@string/pref_title_sort_winners_first"/>
+
+		</PreferenceCategory>
+
+		<PreferenceCategory
+			android:title="Theme">
+
+			<com.cjboyett.boardgamestats.view.preferences.ChooseThemeDialogPreference
+				android:key="@string/choose_theme_preference"
+				android:summary="@string/pref_description_choose_theme"
+				android:title="@string/pref_title_choose_theme"/>
+
+			<com.flask.colorpicker.ColorPickerPreference
+				android:key="@string/theme_background_preference"
+				android:title="Theme Background"
+				app:alphaSlider="false"
+				app:density="12"
+				app:initialColor="0xffff0000"
+				app:lightnessSlider="true"/>
+
+			<com.flask.colorpicker.ColorPickerPreference
+				android:key="@string/theme_foreground_preference"
+				android:title="Theme Foreground"
+				app:alphaSlider="false"
+				app:density="12"
+				app:initialColor="0xffff0000"
+				app:lightnessSlider="true"/>
+
+			<CheckBoxPreference
+				android:defaultValue="true"
+				android:key="@string/generate_palette_preference"
+				android:summary="@string/pref_description_generate_palette"
+				android:title="@string/pref_title_generate_palette"/>
+
+		</PreferenceCategory>
+
+	</PreferenceScreen>
+
+	<PreferenceScreen
+		android:summary="Customization of tracked stats"
+		android:title="Stats">
+
+		<EditTextPreference
+			android:defaultValue="@string/pref_default_threshold"
+			android:summary="@string/pref_description_threshold"
+			android:inputType="number"
+			android:key="@string/threshold_preference"
+			android:maxLines="1"
+			android:selectAllOnFocus="true"
+			android:singleLine="true"
+			android:title="@string/pref_title_threshold"/>
+
+		<Preference
+			android:title="Recalculate all stats"
+			android:key="@string/pref_recalculate_stats"/>
+
+	</PreferenceScreen>
+
+	<PreferenceScreen
+		android:summary="Advanced navigation settings"
+		android:title="@string/preferences_navigation_title">
+
+		<CheckBoxPreference
+			android:defaultValue="true"
+			android:key="@string/activity_transition_preference"
+			android:summary="@string/pref_description_activity_transition"
+			android:title="@string/pref_title_activity_transition"/>
+
+		<CheckBoxPreference
+			android:defaultValue="true"
+			android:key="@string/swipe_preference"
+			android:summary="@string/pref_description_swipe"
+			android:title="@string/pref_title_swipe"/>
+
+	</PreferenceScreen>
+
+	<PreferenceScreen
+		android:summary="About the app"
+		android:title="@string/preference_about_title">
+
+		<Preference
+			android:summary="casey@cjboyett.com"
+			android:title="Email"
+			android:key="@string/email_preference"/>
+
+		<Preference
+			android:summary="Version 1.0.9"
+			android:title="Version Number"
+			android:key="@string/version_key"/>
+
+		<com.cjboyett.boardgamestats.view.preferences.ChangeLogDialogPreference
+			android:summary="A summary of changes through the versions"
+			android:title="Change Log"/>
+
+
+	</PreferenceScreen>
+</PreferenceScreen>

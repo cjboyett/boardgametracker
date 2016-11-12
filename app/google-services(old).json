@@ -1,0 +1,59 @@
+{
+  "project_info": {
+    "project_id": "games-tracker-53f3f",
+    "project_number": "847981112378",
+    "name": "Games Tracker"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:847981112378:android:6f80dcef0f2a1dbc",
+        "client_id": "android:com.cjboyett.boardgamestats",
+        "client_type": 1,
+        "android_client_info": {
+          "package_name": "com.cjboyett.boardgamestats",
+          "certificate_hash": []
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "847981112378-3tinl0t3l0sglf7tchvhou0tmtmh1ttp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cjboyett.boardgamestats",
+            "certificate_hash": "7654F072BEF235FD02F7BAAAB84DE6EE9FB8D5B4"
+          }
+        },
+        {
+          "client_id": "847981112378-psc6mk319kjel7o874kultb1ld46m7nj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [],
+      "services": {
+        "analytics_service": {
+          "status": 2,
+          "analytics_property": {
+            "tracking_id": "UA-76449004-2"
+          }
+        },
+        "cloud_messaging_service": {
+          "status": 1,
+          "apns_config": []
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "google_signin_service": {
+          "status": 2
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "client_info": [],
+  "ARTIFACT_VERSION": "1"
+}

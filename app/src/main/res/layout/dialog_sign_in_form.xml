@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="20dp">
+
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:textAppearance="?android:attr/textAppearanceSmall"
+		android:text="Email"
+		android:id="@+id/textview_email"/>
+
+	<EditText
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:inputType="textEmailAddress"
+		android:ems="10"
+		android:id="@+id/edittext_email"
+		android:lines="1"
+		android:hint="Email"
+		android:layout_below="@+id/textview_email"
+		android:layout_alignParentLeft="true"
+		android:layout_alignParentRight="true"/>
+
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:textAppearance="?android:attr/textAppearanceSmall"
+		android:text="Password"
+		android:id="@+id/textview_password"
+		android:layout_below="@+id/edittext_email"/>
+
+	<EditText
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:inputType="textPassword"
+		android:ems="10"
+		android:id="@+id/edittext_password"
+		android:lines="1"
+		android:layout_below="@+id/textview_password"
+		android:hint="Password"
+		android:layout_alignParentLeft="true"
+		android:layout_alignParentRight="true"/>
+
+
+</RelativeLayout>
