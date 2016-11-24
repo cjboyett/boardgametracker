@@ -49,7 +49,7 @@ abstract class BaseAdActivity extends BaseActivity
 				adViewContainer.setGravity(RelativeLayout.CENTER_IN_PARENT);
 
 				AdRequest adRequest = new AdRequest.Builder()
-//					.addTestDevice("A7AC3AA36B47EF166BA856BD3C6009BF")
+//					.addTestDevice("EFC2D62A72499E15BA2294EEB7737A12")
 					.build();
 				googleAdView.setAdListener(new AdListener()
 				{

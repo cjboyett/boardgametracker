@@ -114,8 +114,10 @@ public class MainActivity extends BaseActivity implements GestureDetector.OnGest
 		if (!animatingButton)
 		{
 			animatingButton = true;
-			animateAchievementButton();
+//			animateAchievementButton();
 		}
+
+		Preferences.setSuperUser(this, false);
 	}
 
 	@Override

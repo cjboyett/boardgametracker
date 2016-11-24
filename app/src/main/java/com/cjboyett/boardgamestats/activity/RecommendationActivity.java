@@ -66,7 +66,7 @@ public class RecommendationActivity extends BaseAdActivity
 
 	public RecommendationActivity()
 	{
-		super("");
+		super("ca-app-pub-1437859753538305/8564017075");
 	}
 
 	@Override

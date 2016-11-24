@@ -21,7 +21,7 @@ public class AchievementsActivity extends BaseAdActivity
 
 	public AchievementsActivity()
 	{
-		super("");
+		super("ca-app-pub-1437859753538305/1040750277");
 	}
 
 	@Override

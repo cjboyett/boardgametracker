@@ -34,7 +34,7 @@ public class ExtrasActivity extends BaseAdActivity
 
 	public ExtrasActivity()
 	{
-		super("");
+		super("ca-app-pub-1437859753538305/8564017075");
 	}
 
 	@Override
@@ -49,44 +49,6 @@ public class ExtrasActivity extends BaseAdActivity
 		generateLayout();
 		setColors();
 		colorComponents();
-
-/*
-		long ONE_MEGABYTE = 1024 * 1024;
-		FirebaseStorage storage = FirebaseStorage.getInstance();
-		StorageReference storageReference = storage.getReferenceFromUrl("gs://games-tracker-53f3f.appspot.com");
-		storageReference.child("jae29t.jpg")
-		                .getBytes(2 * ONE_MEGABYTE)
-		                .addOnSuccessListener(new OnSuccessListener<byte[]>()
-		                {
-			                @Override
-			                public void onSuccess(byte[] bytes)
-			                {
-				                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-				                ((ImageView)view.findViewById(R.id.imageview_test)).setImageBitmap(bitmap);
-			                }
-		                })
-		                .addOnFailureListener(new OnFailureListener()
-		                {
-			                @Override
-			                public void onFailure(@NonNull Exception e)
-			                {
-				                AlertDialog alertDialog = new ViewUtilities.DialogBuilder(activity)
-						                .setTitle("Error")
-						                .setMessage("Something went wrong while downloading your files.  Please try again later.")
-						                .setPositiveButton("Okay", new View.OnClickListener()
-						                {
-							                @Override
-							                public void onClick(View v)
-							                {
-								                onBackPressed();
-							                }
-						                })
-						                .create();
-				                alertDialog.setCancelable(false);
-				                alertDialog.show();
-			                }
-		                });
-*/
 	}
 
 	@Override
