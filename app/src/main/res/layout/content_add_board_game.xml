@@ -22,11 +22,20 @@
 		android:focusable="true"
 		android:focusableInTouchMode="true"/>
 
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:textAppearance="?android:attr/textAppearanceSmall"
+		android:text="Search"
+		android:id="@+id/textview_game_search"/>
+
 	<LinearLayout
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:orientation="vertical"
-		>
+		android:background="@drawable/content_background_medium_border"
+		android:id="@+id/layout_game_search"
+		android:padding="5dp">
 
 		<SearchView
 			android:layout_width="match_parent"
@@ -46,9 +55,9 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:id="@+id/spinner_game_type"
-				android:padding="5dp"
 				android:layout_alignParentLeft="true"
-				android:layout_alignParentTop="true"/>
+				android:layout_alignParentTop="true"
+				android:padding="5dp"/>
 
 			<android.support.v7.widget.AppCompatCheckBox
 				android:layout_width="wrap_content"
@@ -69,11 +78,18 @@
 
 	</LinearLayout>
 
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:textAppearance="?android:attr/textAppearanceSmall"
+		android:id="@+id/textview_game_search_results"
+		android:text="Results"/>
 
 	<LinearLayout
 		android:orientation="horizontal"
 		android:layout_width="match_parent"
-		android:layout_height="wrap_content">
+		android:layout_height="wrap_content"
+		android:visibility="gone">
 
 		<Space
 			android:layout_width="25dp"
@@ -98,7 +114,10 @@
 
 	<RelativeLayout
 		android:layout_width="match_parent"
-		android:layout_height="match_parent">
+		android:layout_height="match_parent"
+		android:background="@drawable/content_background_medium_border"
+		android:id="@+id/layout_game_search_results"
+		android:padding="5dp">
 
 		<ListView
 			android:layout_width="match_parent"

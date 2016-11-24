@@ -606,6 +606,12 @@ public class AddBoardGameActivity extends BaseActivity
 		ViewUtilities.tintLayoutBackground(gameTypeSpinner, foregroundColor);
 		listView.setBackgroundColor(backgroundColor);
 
+		((TextView)view.findViewById(R.id.textview_game_search)).setTextColor(foregroundColor);
+		((TextView)view.findViewById(R.id.textview_game_search_results)).setTextColor(foregroundColor);
+
+		ViewUtilities.tintLayoutBackground(view.findViewById(R.id.layout_game_search), foregroundColor);
+		ViewUtilities.tintLayoutBackground(view.findViewById(R.id.layout_game_search_results), foregroundColor);
+
 		findViewById(R.id.imageview_spacer).setBackgroundColor(hintTextColor);
 
 		ViewUtilities.tintProgressBar(progressBar, foregroundColor);
