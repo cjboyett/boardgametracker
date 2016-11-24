@@ -61,10 +61,21 @@ public class AddGamePlaySubmitFragment extends Fragment
 	{
 		view.setBackgroundColor(backgroundColor);
 
-		view.findViewById(R.id.button_submit_gameplay).setBackgroundColor(backgroundColor);
+		if (Preferences.lightUI(getActivity()))
+		{
+			view.findViewById(R.id.button_submit_gameplay).setBackgroundResource(R.drawable.main_button_background_dark);
+			view.findViewById(R.id.button_submit_gameplay_and_share).setBackgroundResource(R.drawable.main_button_background_dark);
+		}
+		else
+		{
+			view.findViewById(R.id.button_submit_gameplay).setBackgroundResource(R.drawable.main_button_background_light);
+			view.findViewById(R.id.button_submit_gameplay_and_share).setBackgroundResource(R.drawable.main_button_background_light);
+		}
+
+//		view.findViewById(R.id.button_submit_gameplay).setBackgroundColor(backgroundColor);
 		((Button)view.findViewById(R.id.button_submit_gameplay)).setTextColor(foregroundColor);
 
-		view.findViewById(R.id.button_submit_gameplay_and_share).setBackgroundColor(backgroundColor);
+//		view.findViewById(R.id.button_submit_gameplay_and_share).setBackgroundColor(backgroundColor);
 		((Button)view.findViewById(R.id.button_submit_gameplay_and_share)).setTextColor(foregroundColor);
 
 		view.findViewById(R.id.checkbox_ignore).setBackgroundColor(backgroundColor);
