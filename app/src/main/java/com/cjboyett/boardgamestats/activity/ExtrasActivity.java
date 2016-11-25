@@ -49,6 +49,37 @@ public class ExtrasActivity extends BaseAdActivity
 		generateLayout();
 		setColors();
 		colorComponents();
+
+		if (Preferences.isFirstExtrasVisit(this))
+		{
+			final AlertDialog recommendDialog = new ViewUtilities.DialogBuilder(this)
+					.setTitle("Extras")
+					.setMessage("You can also get board game recommendations based off of the games you have played.  By default the recommendation will be based off of all of the games you have played.  You can also narrow it down by using only specific games for the recommendation.  Weights can be added to these games as well, both positive and negative.")
+					.setPositiveButton("Okay", new View.OnClickListener()
+					{
+						@Override
+						public void onClick(View view)
+						{
+							Preferences.setFirstExtrasVisit(activity, false);
+						}
+					})
+					.create();
+
+			AlertDialog backupDialog = new ViewUtilities.DialogBuilder(this)
+					.setTitle("Extras")
+					.setMessage("Here you can back up your game play records to an online database.  In a future update the ability to restore your database from the online storage will be added.")
+					.setPositiveButton("Okay", new View.OnClickListener()
+					{
+						@Override
+						public void onClick(View view)
+						{
+							recommendDialog.show();
+						}
+					})
+					.create();
+
+			backupDialog.show();
+		}
 	}
 
 	@Override
@@ -168,17 +199,6 @@ public class ExtrasActivity extends BaseAdActivity
 	void colorComponents()
 	{
 		view.setBackgroundColor(backgroundColor);
-
-/*
-		ViewUtilities.tintLayoutBackground(view.findViewById(R.id.textview_backup_database), foregroundColor);
-		((TextView)view.findViewById(R.id.textview_backup_database)).setTextColor(foregroundColor);
-
-		ViewUtilities.tintLayoutBackground(view.findViewById(R.id.textview_board_game_recommendation), foregroundColor);
-		((TextView)view.findViewById(R.id.textview_board_game_recommendation)).setTextColor(foregroundColor);
-
-		ViewUtilities.tintLayoutBackground(view.findViewById(R.id.textview_email_logout), foregroundColor);
-		((TextView)view.findViewById(R.id.textview_email_logout)).setTextColor(foregroundColor);
-*/
 
 		if (Preferences.lightUI(this))
 		{

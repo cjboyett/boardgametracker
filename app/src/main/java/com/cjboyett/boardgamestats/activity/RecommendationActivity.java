@@ -20,6 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.cjboyett.boardgamestats.MyApp;
 import com.cjboyett.boardgamestats.R;
 import com.cjboyett.boardgamestats.data.DataManager;
 import com.cjboyett.boardgamestats.data.games.GamesDbHelper;
@@ -62,6 +63,7 @@ public class RecommendationActivity extends BaseAdActivity
 	private Map<DatedTextView, AddGameForRecommendationView> addGameForRecommendationViews;
 	private FilteredArrayAdapter filteredArrayAdapter;
 
+	private ProgressDialog progressDialog;
 	private DataAnalyzer dataAnalyzer;
 
 	public RecommendationActivity()
@@ -93,7 +95,10 @@ public class RecommendationActivity extends BaseAdActivity
 						@Override
 						public void onClick(View v)
 						{
-							downloadTextFiles();
+							if (((MyApp)getApplication()).isConnectedToInternet())
+								downloadTextFiles();
+							else
+								ViewUtilities.errorDialog(activity).show();
 						}
 					})
 					.setNegativeButton("No", new View.OnClickListener()
@@ -118,6 +123,7 @@ public class RecommendationActivity extends BaseAdActivity
 	{
 //		addGameForRecommendationView = new AddGameForRecommendationView(this);
 		linearLayout = (LinearLayout) view.findViewById(R.id.linearlayout_add_games);
+		progressDialog = new ProgressDialog(activity);
 //		linearLayout.addView(addGameForRecommendationView);
 
 		DataManager dataManager = DataManager.getInstance(this);
@@ -138,6 +144,9 @@ public class RecommendationActivity extends BaseAdActivity
 			@Override
 			public void onClick(View v)
 			{
+				progressDialog.setMessage("Analyzing your games...");
+				progressDialog.show();
+
 				boolean hasGames = false;
 				Map<BoardGame, Double> seeds = new HashMap<>();
 				GamesDbHelper dbHelper = new GamesDbHelper(activity);
@@ -180,13 +189,11 @@ public class RecommendationActivity extends BaseAdActivity
 			addGameView.colorComponents(backgroundColor, foregroundColor, hintTextColor);
 	}
 
-	private ProgressDialog progressDialog;
 	private int progress, totalProgress;
 	private boolean downloading;
 
 	private void downloadTextFiles()
 	{
-		progressDialog = new ProgressDialog(activity);
 		progressDialog.setMessage("Downloading files...");
 		progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 		progress = 0;
@@ -298,6 +305,7 @@ public class RecommendationActivity extends BaseAdActivity
 			@Override
 			protected void onPostExecute(Void aVoid)
 			{
+				progressDialog.dismiss();
 				for (final BoardGameXmlParser.Item item : gameItems)
 				{
 					gameNames.put(item.id, item.name);

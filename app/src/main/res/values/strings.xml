@@ -92,6 +92,7 @@
 	<string name="access_storage_preference">com.cjboyett.boardgamestats.ACCESS_STORAGE_PREFERENCE</string>
 	<string name="asked_permission">com.cjboyett.boardgamestats.ASKED_PERMISSION</string>
 	<string name="first_visit">com.cjboyett.boardgamestats.FIRST_VISIT</string>
+	<string name="first_extras_visit">com.cjboyett.boardgamestats.FIRST_EXTRAS_VISIT</string>
 	<string name="generated_background">com.cjboyett.boardgamestats.GENERATED_BACKGROUND</string>
 	<string name="generated_foreground">com.cjboyett.boardgamestats.GENERATED_FOREGROUND</string>
 	<string name="database_changed">com.cjboyett.boardgamestats.DATABASE_CHANGED</string>

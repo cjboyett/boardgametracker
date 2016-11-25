@@ -1,10 +1,10 @@
 package com.cjboyett.boardgamestats;
 
 import android.app.Application;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.util.Log;
-import android.view.WindowManager;
 
 import com.cjboyett.boardgamestats.data.DataManager;
 import com.cjboyett.boardgamestats.data.TempDataManager;
@@ -105,5 +105,12 @@ public class MyApp extends Application
 
 		// Init Facebook SDK
 		FacebookSdk.sdkInitialize(this);
+	}
+
+	public boolean isConnectedToInternet()
+	{
+		ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(CONNECTIVITY_SERVICE);
+		NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
+		return activeNetwork != null && activeNetwork.isConnected();
 	}
 }

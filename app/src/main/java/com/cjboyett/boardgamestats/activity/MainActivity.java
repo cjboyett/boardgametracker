@@ -57,8 +57,6 @@ public class MainActivity extends BaseActivity implements GestureDetector.OnGest
 		colorComponents();
 
 		gestureDetector = new GestureDetectorCompat(this, this);
-
-		Preferences.setSuperUser(this, true);
 	}
 
 	@Override
@@ -114,10 +112,9 @@ public class MainActivity extends BaseActivity implements GestureDetector.OnGest
 		if (!animatingButton)
 		{
 			animatingButton = true;
+
 //			animateAchievementButton();
 		}
-
-		Preferences.setSuperUser(this, false);
 	}
 
 	@Override

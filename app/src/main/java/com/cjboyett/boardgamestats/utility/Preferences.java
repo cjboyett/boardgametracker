@@ -225,8 +225,22 @@ public class Preferences
 	{
 		SharedPreferences sharedPreferences = getSharedPreferences(context);
 		sharedPreferences.edit()
-				.putBoolean(context.getString(R.string.first_visit), preference)
-				.apply();
+		                 .putBoolean(context.getString(R.string.first_visit), preference)
+		                 .apply();
+	}
+
+	public static boolean isFirstExtrasVisit(Context context)
+	{
+		SharedPreferences sharedPreferences = getSharedPreferences(context);
+		return sharedPreferences.getBoolean(context.getString(R.string.first_extras_visit), true);
+	}
+
+	public static void setFirstExtrasVisit(Context context, boolean preference)
+	{
+		SharedPreferences sharedPreferences = getSharedPreferences(context);
+		sharedPreferences.edit()
+		                 .putBoolean(context.getString(R.string.first_extras_visit), preference)
+		                 .apply();
 	}
 
 

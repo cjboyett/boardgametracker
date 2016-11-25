@@ -565,6 +565,15 @@ public class ViewUtilities
 		return feedContent;
 	}
 
+	public static AlertDialog errorDialog(Context context)
+	{
+		AlertDialog errorDialog = new DialogBuilder(context)
+				.setTitle("Error")
+				.setMessage("It looks like you are not connected to the Internet.  Please connect and try again later.")
+				.setPositiveButton("Okay", null)
+				.create();
+		return errorDialog;
+	}
 
 	public static int dpToPx(Context context, int dp)
 	{
