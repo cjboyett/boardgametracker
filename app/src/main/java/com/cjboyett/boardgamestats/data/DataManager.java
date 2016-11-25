@@ -1,9 +1,9 @@
 package com.cjboyett.boardgamestats.data;
 
-import android.content.Context;
+import android.app.Application;
 import android.os.AsyncTask;
-import android.util.Log;
 
+import com.cjboyett.boardgamestats.MyApp;
 import com.cjboyett.boardgamestats.data.games.GamesDbHelper;
 import com.cjboyett.boardgamestats.data.games.GamesDbUtility;
 import com.cjboyett.boardgamestats.data.games.HotnessXmlParser;
@@ -23,7 +23,7 @@ import java.util.List;
 public class DataManager
 {
 	private static DataManager instance = null;
-	private Context context;
+	private Application application;
 
 	private List<String> allGamesCombined;
 	private List<String> allPlayedGamesCombined;
@@ -32,14 +32,14 @@ public class DataManager
 
 	private List<HotnessXmlParser.Item> allHotnessItems;
 
-	private DataManager(Context context)
+	private DataManager(Application application)
 	{
-		this.context = context;
+		this.application = application;
 	}
 
-	public static DataManager getInstance(Context context)
+	public static DataManager getInstance(Application application)
 	{
-		if (instance == null || ActivityUtilities.databaseChanged(context)) instance = new DataManager(context);
+		if (instance == null || ActivityUtilities.databaseChanged(application)) instance = new DataManager(application);
 		return instance;
 	}
 
@@ -55,7 +55,7 @@ public class DataManager
 	{
 		if (allGamesCombined == null)
 		{
-			GamesDbHelper dbHelper = new GamesDbHelper(context);
+			GamesDbHelper dbHelper = new GamesDbHelper(application);
 			allGamesCombined = GamesDbUtility.getAllGamesSortedWithType(dbHelper);
 			dbHelper.close();
 		}
@@ -67,7 +67,7 @@ public class DataManager
 	{
 		if (allPlayedGamesCombined == null)
 		{
-			GamesDbHelper dbHelper = new GamesDbHelper(context);
+			GamesDbHelper dbHelper = new GamesDbHelper(application);
 			allPlayedGamesCombined = GamesDbUtility.getAllPlayedGamesSortedWithType(dbHelper);
 			dbHelper.close();
 		}
@@ -79,7 +79,7 @@ public class DataManager
 	{
 		if (allPlayers == null)
 		{
-			GamesDbHelper dbHelper = new GamesDbHelper(context);
+			GamesDbHelper dbHelper = new GamesDbHelper(application);
 			allPlayers = GamesDbUtility.getAllPlayersSorted(dbHelper, threeMonthsAgo());
 			dbHelper.close();
 		}
@@ -91,7 +91,7 @@ public class DataManager
 	{
 		if (allLocations == null)
 		{
-			GamesDbHelper dbHelper = new GamesDbHelper(context);
+			GamesDbHelper dbHelper = new GamesDbHelper(application);
 			allLocations = GamesDbUtility.getAllLocationsSorted(dbHelper, threeMonthsAgo());
 			dbHelper.close();
 		}
@@ -115,17 +115,13 @@ public class DataManager
 	{
 		if (allHotnessItems == null)
 		{
-			Log.d("HOTMESS", "1");
-			if (Preferences.getLastHotnessDownload(context) < System.currentTimeMillis() - 1000 * 60 * 60 * 24)
+			if (((MyApp)application).isConnectedToInternet() && Preferences.getLastHotnessDownload(application) < System.currentTimeMillis() - 1000 * 60 * 60 * 24)
 			{
-				Log.d("HOTMESS", "2");
-
 				new AsyncTask<String, Void, List<HotnessXmlParser.Item>>()
 				{
 					@Override
 					protected List<HotnessXmlParser.Item> doInBackground(String... params)
 					{
-						Log.d("HOTMESS", "Yes it is");
 						List<HotnessXmlParser.Item> items = new ArrayList<>();
 						for (String url : params) items.addAll(UrlUtilities.loadHotnessXmlFromNetwork(url));
 						return items;
@@ -135,25 +131,22 @@ public class DataManager
 					protected void onPostExecute(List<HotnessXmlParser.Item> items)
 					{
 						allHotnessItems = items;
-						GamesDbHelper dbHelper = new GamesDbHelper(context);
+						GamesDbHelper dbHelper = new GamesDbHelper(application);
 						BoardGameDbUtility.clearHotnessTable(dbHelper);
 						BoardGameDbUtility.populateHotnessTable(dbHelper, items);
 						dbHelper.close();
-						Preferences.setLastHotnessDownload(context, System.currentTimeMillis());
+						Preferences.setLastHotnessDownload(application, System.currentTimeMillis());
 					}
 				}.execute("https://www.boardgamegeek.com/xmlapi2/hot?type=boardgame",
 				          "https://www.boardgamegeek.com/xmlapi2/hot?type=rpg",
 				          "https://www.boardgamegeek.com/xmlapi2/hot?type=videogame");
 
-				Log.d("HOTMESS", "3");
 			}
 			else
 			{
-				Log.d("HOTMESS", "4");
-				GamesDbHelper dbHelper = new GamesDbHelper(context);
+				GamesDbHelper dbHelper = new GamesDbHelper(application);
 				allHotnessItems = BoardGameDbUtility.getHotnessItems(dbHelper);
 			    dbHelper.close();
-				Log.d("HOTMESS", "5");
 			}
 		}
 

@@ -126,7 +126,7 @@ public class RecommendationActivity extends BaseAdActivity
 		progressDialog = new ProgressDialog(activity);
 //		linearLayout.addView(addGameForRecommendationView);
 
-		DataManager dataManager = DataManager.getInstance(this);
+		DataManager dataManager = DataManager.getInstance(getApplication());
 		List<String> games = dataManager.getAllGamesCombined();
 		Iterator iter = games.iterator();
 		while (iter.hasNext())
@@ -144,12 +144,14 @@ public class RecommendationActivity extends BaseAdActivity
 			@Override
 			public void onClick(View v)
 			{
-				progressDialog.setMessage("Analyzing your games...");
-				progressDialog.show();
+				if (((MyApp)getApplication()).isConnectedToInternet())
+				{
+					progressDialog.setMessage("Analyzing your games...");
+					progressDialog.show();
 
-				boolean hasGames = false;
-				Map<BoardGame, Double> seeds = new HashMap<>();
-				GamesDbHelper dbHelper = new GamesDbHelper(activity);
+					boolean hasGames = false;
+					Map<BoardGame, Double> seeds = new HashMap<>();
+					GamesDbHelper dbHelper = new GamesDbHelper(activity);
 
 /*
 				if (!TextUtils.isEmpty(addGameForRecommendationView.getGame()))
@@ -159,20 +161,23 @@ public class RecommendationActivity extends BaseAdActivity
 					hasGames = true;
 				}
 */
-				for (AddGameForRecommendationView addGameView : addGameForRecommendationViews.values())
-				{
-					if (!TextUtils.isEmpty(addGameView.getGame()))
+					for (AddGameForRecommendationView addGameView : addGameForRecommendationViews.values())
 					{
-						BoardGame game = BoardGameDbUtility.getBoardGame(dbHelper, addGameView.getGame());
-						seeds.put(game, addGameView.getWeight());
-						hasGames = true;
+						if (!TextUtils.isEmpty(addGameView.getGame()))
+						{
+							BoardGame game = BoardGameDbUtility.getBoardGame(dbHelper, addGameView.getGame());
+							seeds.put(game, addGameView.getWeight());
+							hasGames = true;
+						}
 					}
+
+					dbHelper.close();
+
+					if (hasGames) analyzeGamesWithDataAnalyzer(seeds);
+					else analyzeAllGames();
 				}
-
-				dbHelper.close();
-
-				if (hasGames) analyzeGamesWithDataAnalyzer(seeds);
-				else analyzeAllGames();
+				else
+					ViewUtilities.errorDialog(activity).show();
 			}
 		});
 	}

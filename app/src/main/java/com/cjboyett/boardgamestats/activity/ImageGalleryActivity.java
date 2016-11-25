@@ -56,7 +56,7 @@ public class ImageGalleryActivity extends AppCompatActivity
 		recyclerView.setLayoutManager(layoutManager);
 
 		final GamesDbHelper dbHelper = new GamesDbHelper(this);
-		DataManager dataManager = DataManager.getInstance(this);
+		DataManager dataManager = DataManager.getInstance(getApplication());
 		final List<String> games = dataManager.getAllGamesCombined();;
 		final List<String> keys = new ArrayList<>();
 		new AsyncTask<String, Void, Void>()

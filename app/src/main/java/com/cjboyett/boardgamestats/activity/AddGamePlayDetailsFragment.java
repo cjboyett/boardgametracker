@@ -138,7 +138,7 @@ public class AddGamePlayDetailsFragment extends Fragment
 			}
 		});
 
-		DataManager dataManager = DataManager.getInstance(getActivity());
+		DataManager dataManager = DataManager.getInstance(getActivity().getApplication());
 		games = dataManager.getAllGamesCombined();
 		gameEditText.setAdapter(new FilteredArrayAdapter(parent, android.R.layout.simple_list_item_1, new ArrayList<>(games), true));
 		gameEditText.setThreshold(2);

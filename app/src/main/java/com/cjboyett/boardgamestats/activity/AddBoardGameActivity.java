@@ -30,6 +30,7 @@ import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.cjboyett.boardgamestats.MyApp;
 import com.cjboyett.boardgamestats.R;
 import com.cjboyett.boardgamestats.data.games.GamesDbHelper;
 import com.cjboyett.boardgamestats.data.games.board.BoardGameDbUtility;
@@ -497,44 +498,50 @@ public class AddBoardGameActivity extends BaseActivity
 			@Override
 			public boolean onQueryTextSubmit(String query)
 			{
-				try
-				{
-					dummyView.requestFocus();
-					InputMethodManager inputManager = (InputMethodManager)
-							getSystemService(Context.INPUT_METHOD_SERVICE);
-
-					inputManager.hideSoftInputFromWindow(gameSearchView.getWindowToken(),
-					                                     InputMethodManager.HIDE_NOT_ALWAYS);
-				}
-				catch (Exception e)
-				{
-					e.printStackTrace();
-				}
-
-				listView.setAdapter(new ArrayAdapter<String>(activity, android.R.layout.simple_list_item_1));
-
-				if (gameType != Game.GameType.RPG)
+				if (((MyApp)getApplication()).isConnectedToInternet())
 				{
 					try
 					{
-						exact = exactMatch.isChecked();
-						String url = "https://www.boardgamegeek.com/xmlapi2/search?query=" +
-						             URLEncoder.encode(query) + "&type=" + gameType.getType();
-						if (exact) url += "&exact=1";
+						dummyView.requestFocus();
+						InputMethodManager inputManager = (InputMethodManager)
+								getSystemService(Context.INPUT_METHOD_SERVICE);
 
-						if (gameType == Game.GameType.BOARD)
-							new DownloadBoardGameXmlItemsTask().execute(url);
-						else if (gameType == Game.GameType.VIDEO)
-							new DownloadVideoGameXmlItemsTask().execute(url);
+						inputManager.hideSoftInputFromWindow(gameSearchView.getWindowToken(),
+						                                     InputMethodManager.HIDE_NOT_ALWAYS);
 					}
 					catch (Exception e)
 					{
+						e.printStackTrace();
+					}
+
+					listView.setAdapter(new ArrayAdapter<String>(activity, android.R.layout.simple_list_item_1));
+
+					if (gameType != Game.GameType.RPG)
+					{
+						try
+						{
+							exact = exactMatch.isChecked();
+							String url = "https://www.boardgamegeek.com/xmlapi2/search?query=" +
+							             URLEncoder.encode(query) + "&type=" + gameType.getType();
+							if (exact) url += "&exact=1";
+
+							if (gameType == Game.GameType.BOARD)
+								new DownloadBoardGameXmlItemsTask().execute(url);
+							else if (gameType == Game.GameType.VIDEO)
+								new DownloadVideoGameXmlItemsTask().execute(url);
+						}
+						catch (Exception e)
+						{
+						}
+					}
+					else
+					{
+						new DownloadRPGsTask().execute(query);
 					}
 				}
 				else
-				{
-					new DownloadRPGsTask().execute(query);
-				}
+					ViewUtilities.errorDialog(activity).show();
+
 				return false;
 			}
 

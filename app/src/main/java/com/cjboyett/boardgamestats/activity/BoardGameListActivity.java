@@ -117,7 +117,7 @@ public class BoardGameListActivity extends BaseAdActivity
 		gamesList = new ArrayList<>();
 
 		// TODO Move to a background thread
-		DataManager dataManager = DataManager.getInstance(this);
+		DataManager dataManager = DataManager.getInstance(getApplication());
 		gamesList = dataManager.getAllGamesCombined();
 
 		populateGrid(gamesList);

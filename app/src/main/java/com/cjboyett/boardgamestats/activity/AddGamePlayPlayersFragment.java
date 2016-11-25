@@ -71,7 +71,7 @@ public class AddGamePlayPlayersFragment extends Fragment
 
 		tempDataManager = TempDataManager.getInstance(getActivity().getApplication());
 
-		DataManager dataManager = DataManager.getInstance(getActivity());
+		DataManager dataManager = DataManager.getInstance(getActivity().getApplication());
 		List<String> players = new ArrayList<>(dataManager.getAllPlayers());
 		if (players.contains("master_user")) players.remove("master_user");
 		arrayAdapter = new FilteredArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, players, false);

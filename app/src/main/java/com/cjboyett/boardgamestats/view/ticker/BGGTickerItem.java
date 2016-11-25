@@ -1,5 +1,6 @@
 package com.cjboyett.boardgamestats.view.ticker;
 
+import android.app.Application;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -28,7 +29,7 @@ public class BGGTickerItem extends TickerItem
 	{
 		super(context);
 
-		List<HotnessXmlParser.Item> items = DataManager.getInstance(context).getAllHotnessItems();
+		List<HotnessXmlParser.Item> items = DataManager.getInstance((Application)context.getApplicationContext()).getAllHotnessItems();
 		if (items != null && !items.isEmpty())
 		{
 			// Get a random Hot List Item!!!

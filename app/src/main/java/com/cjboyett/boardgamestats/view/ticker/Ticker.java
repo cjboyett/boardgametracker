@@ -2,6 +2,7 @@ package com.cjboyett.boardgamestats.view.ticker;
 
 import android.animation.Animator;
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
@@ -14,6 +15,7 @@ import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.cjboyett.boardgamestats.MyApp;
 import com.cjboyett.boardgamestats.activity.AddBoardGameActivity;
 import com.cjboyett.boardgamestats.activity.AddGamePlayTabbedActivity;
 import com.cjboyett.boardgamestats.activity.GameStatsActivity;
@@ -225,12 +227,13 @@ public class Ticker extends RelativeLayout
 		do
 		{
 			int r = new Random().nextInt(THRESHOLD + 3);
-			if (r == 0 && DataManager.getInstance(getContext())
-			                         .getAllHotnessItems() != null)
+			if (r == 0 &&
+			    ((MyApp)getContext().getApplicationContext()).isConnectedToInternet() &&
+			    DataManager.getInstance((Application) getContext().getApplicationContext()).getAllHotnessItems() != null)
 				tickerItems[position] = new BGGTickerItem(getContext());
-			else if (r <= 2 && DataManager.getInstance(getContext()).getAllPlayers().size() > 1)
+			else if (r <= 2 && DataManager.getInstance((Application) getContext().getApplicationContext()).getAllPlayers().size() > 1)
 			{
-				List<String> players = new ArrayList<>(DataManager.getInstance(getContext()).getAllPlayers());
+				List<String> players = new ArrayList<>(DataManager.getInstance((Application) getContext().getApplicationContext()).getAllPlayers());
 				players.remove("master_user");
 				tickerItems[position] = new PlayerTickerItem(getContext(), players.get(new Random().nextInt(players.size())));
 			}

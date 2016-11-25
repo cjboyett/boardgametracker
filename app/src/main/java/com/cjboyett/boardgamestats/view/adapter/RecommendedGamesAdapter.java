@@ -63,7 +63,10 @@ public class RecommendedGamesAdapter extends BaseAdapter
 		view.findViewById(R.id.imageview_win_icon).setVisibility(View.GONE);
 		((TextView)view.findViewById(R.id.textview_name)).setTextColor(foregroundColor);
 		((TextView)view.findViewById(R.id.textview_name)).setText(gameNames.get(key));
-		((ImageView) view.findViewById(R.id.imageview_avatar)).setImageBitmap(thumbnails.get(key));
+		if (thumbnails.get(key) != null)
+			((ImageView) view.findViewById(R.id.imageview_avatar)).setImageBitmap(thumbnails.get(key));
+		else
+			view.findViewById(R.id.imageview_avatar).setVisibility(View.GONE);
 		return view;
 	}
 

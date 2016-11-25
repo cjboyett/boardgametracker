@@ -569,7 +569,7 @@ public class ViewUtilities
 	{
 		AlertDialog errorDialog = new DialogBuilder(context)
 				.setTitle("Error")
-				.setMessage("It looks like you are not connected to the Internet.  Please connect and try again later.")
+				.setMessage("It looks like you are not connected to the Internet.  Please connect and try again.")
 				.setPositiveButton("Okay", null)
 				.create();
 		return errorDialog;

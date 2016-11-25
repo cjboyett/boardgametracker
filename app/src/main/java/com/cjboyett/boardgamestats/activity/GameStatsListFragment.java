@@ -105,7 +105,7 @@ public class GameStatsListFragment extends Fragment
 		gridView = (GridView)view.findViewById(R.id.listview_game_stats);
 		gamesSearchView = (SearchView)view.findViewById(R.id.searchview_games_stats);
 
-		DataManager dataManager = DataManager.getInstance(activity);
+		DataManager dataManager = DataManager.getInstance(activity.getApplication());
 		List<String> gamesList = dataManager.getAllPlayedGamesCombined();
 
 		final List<String> finalGamesList = gamesList;

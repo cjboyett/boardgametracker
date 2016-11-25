@@ -1,6 +1,7 @@
 package com.cjboyett.boardgamestats.utility;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -96,7 +97,7 @@ public class ActivityUtilities
 
 		if (preference)
 		{
-			DataManager.getInstance(context)
+			DataManager.getInstance((Application)context.getApplicationContext())
 			           .initialize();
 			StatisticsManager.getInstance(context)
 			                 .reset();
