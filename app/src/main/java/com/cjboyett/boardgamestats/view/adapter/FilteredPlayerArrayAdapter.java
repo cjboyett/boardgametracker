@@ -21,6 +21,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Created by Casey on 11/26/2016.
@@ -28,20 +30,19 @@ import java.util.Map;
 public class FilteredPlayerArrayAdapter extends ArrayAdapter<String>
 {
 	private Activity activity;
-	private List<String> items, suggestions;
+	private Set<String> items;
+	private List<String> suggestions;
 	private Filter filter;
 	private boolean useThumbnails;
 
-	private float SCALE_FACTOR;
 	private Map<String, Bitmap> thumbnails;
-	private Map<String, String> thumbnailUrls;
 
 	public FilteredPlayerArrayAdapter(final Activity activity, int resource, List<String> players, boolean useThumbnails)
 	{
 		super(activity, resource, players);
 		this.activity = activity;
 		this.useThumbnails = useThumbnails;
-		items = new ArrayList<>(players);
+		items = new TreeSet<>(players);
 
 		Iterator<String> iterator = items.iterator();
 		while(iterator.hasNext())
@@ -53,13 +54,10 @@ public class FilteredPlayerArrayAdapter extends ArrayAdapter<String>
 
 		if (useThumbnails)
 		{
-			SCALE_FACTOR = Preferences.scaleFactor(activity);
-
 			thumbnails = new HashMap<>();
 
 			for (String player : players)
 			{
-//			Log.d("PLAYER", data.toString());
 				new AsyncTask<String, Void, Bitmap>()
 				{
 					@Override
@@ -81,6 +79,20 @@ public class FilteredPlayerArrayAdapter extends ArrayAdapter<String>
 			}
 		}
 
+	}
+
+	@Override
+	public void add(String object)
+	{
+		super.add(object);
+		items.add(object);
+	}
+
+	@Override
+	public void remove(String object)
+	{
+		super.remove(object);
+		items.remove(object);
 	}
 
 	@Override
@@ -159,13 +171,7 @@ public class FilteredPlayerArrayAdapter extends ArrayAdapter<String>
 				clear();
 				for (String s : filterList)
 				{
-/*
-					if (useThumbnails)
-						add(s.substring(0, s.length() - 2).replaceAll("<b>", "").replaceAll("</b>", ""));
-					else
-*/
-						add(s.replaceAll("<b>", "").replaceAll("</b>", ""));
-
+					add(s.replaceAll("<b>", "").replaceAll("</b>", ""));
 					notifyDataSetChanged();
 				}
 			}

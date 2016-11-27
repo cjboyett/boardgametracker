@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.transition.Fade;
 import android.transition.TransitionManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,7 @@ public class AddGamePlayPlayersFragment extends Fragment
 {
 	private View view;
 	private LinearLayout linearLayout;
+	private List<String> playersInAdpater, allPlayers;
 	private AddPlayerView addPlayerView;
 	private List<GamePlayerData> gamePlayerDatas;
 	private Map<DatedTextView, AddPlayerView> playerViews;
@@ -70,9 +72,10 @@ public class AddGamePlayPlayersFragment extends Fragment
 		tempDataManager = TempDataManager.getInstance(getActivity().getApplication());
 
 		DataManager dataManager = DataManager.getInstance(getActivity().getApplication());
-		List<String> players = new ArrayList<>(dataManager.getAllPlayers());
-		if (players.contains("master_user")) players.remove("master_user");
-		arrayAdapter = new FilteredPlayerArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, players, true);
+		allPlayers = new ArrayList<>(dataManager.getAllPlayers());
+		playersInAdpater = new ArrayList<>(allPlayers);
+		if (playersInAdpater.contains("master_user")) playersInAdpater.remove("master_user");
+		arrayAdapter = new FilteredPlayerArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, playersInAdpater, true);
 
 		addPlayerView = new AddPlayerView(getContext());
 		linearLayout = (LinearLayout) view.findViewById(R.id.linearlayout_add_players);
@@ -258,10 +261,26 @@ public class AddGamePlayPlayersFragment extends Fragment
 		@Override
 		public void onClick(View v)
 		{
-			AddPlayerView newAddPlayerView = new AddPlayerView(view.getContext());
+			final AddPlayerView newAddPlayerView = new AddPlayerView(view.getContext());
 			newAddPlayerView.colorComponents(backgroundColor, foregroundColor, hintTextColor);
 			((AutoCompleteTextView) newAddPlayerView.findViewById(R.id.edittext_other_player)).setAdapter(arrayAdapter);
 			((AutoCompleteTextView) newAddPlayerView.findViewById(R.id.edittext_other_player)).setThreshold(2);
+
+			newAddPlayerView.findViewById(R.id.edittext_other_player).setOnFocusChangeListener(new View.OnFocusChangeListener()
+			{
+				@Override
+				public void onFocusChange(View view, boolean b)
+				{
+					Log.d("HI", "Removing");
+					String player = ((TextView)newAddPlayerView.findViewById(R.id.edittext_other_player)).getText().toString();
+					if (allPlayers.contains(player))
+					{
+						playersInAdpater.remove(player);
+						arrayAdapter.remove(player);
+					}
+					arrayAdapter.notifyDataSetChanged();				}
+			});
+
 			newAddPlayerView.findViewById(R.id.button_remove_player)
 			                .setOnClickListener(new View.OnClickListener()
 			                {
@@ -272,6 +291,13 @@ public class AddGamePlayPlayersFragment extends Fragment
 					                {
 						                TransitionManager.beginDelayedTransition((ViewGroup)view);
 					                }
+									String player = ((TextView)newAddPlayerView.findViewById(R.id.edittext_other_player)).getText().toString();
+					                if (allPlayers.contains(player))
+					                {
+						                playersInAdpater.add(player);
+						                arrayAdapter.add(player);
+					                }
+					                arrayAdapter.notifyDataSetChanged();
 
 					                linearLayout.removeView(playerViews.remove(v));
 				                }
