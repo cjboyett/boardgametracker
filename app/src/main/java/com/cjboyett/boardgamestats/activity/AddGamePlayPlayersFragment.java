@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.transition.Fade;
 import android.transition.TransitionManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -271,7 +270,6 @@ public class AddGamePlayPlayersFragment extends Fragment
 				@Override
 				public void onFocusChange(View view, boolean b)
 				{
-					Log.d("HI", "Removing");
 					String player = ((TextView)newAddPlayerView.findViewById(R.id.edittext_other_player)).getText().toString();
 					if (allPlayers.contains(player))
 					{
