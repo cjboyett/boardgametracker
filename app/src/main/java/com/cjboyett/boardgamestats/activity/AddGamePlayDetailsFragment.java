@@ -36,7 +36,7 @@ import com.cjboyett.boardgamestats.model.games.rpg.RolePlayingGame;
 import com.cjboyett.boardgamestats.model.games.video.VideoGame;
 import com.cjboyett.boardgamestats.utility.Preferences;
 import com.cjboyett.boardgamestats.utility.data.StringUtilities;
-import com.cjboyett.boardgamestats.view.adapter.FilteredArrayAdapter;
+import com.cjboyett.boardgamestats.view.adapter.FilteredGameArrayAdapter;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -140,7 +140,7 @@ public class AddGamePlayDetailsFragment extends Fragment
 
 		DataManager dataManager = DataManager.getInstance(getActivity().getApplication());
 		games = dataManager.getAllGamesCombined();
-		gameEditText.setAdapter(new FilteredArrayAdapter(parent, android.R.layout.simple_list_item_1, new ArrayList<>(games), true));
+		gameEditText.setAdapter(new FilteredGameArrayAdapter(parent, android.R.layout.simple_list_item_1, new ArrayList<>(games), true));
 		gameEditText.setThreshold(2);
 //		gameEditText.setDropDownHeight();
 
@@ -158,7 +158,7 @@ public class AddGamePlayDetailsFragment extends Fragment
 		final Calendar c = Calendar.getInstance();
 
 		List<String> locations = dataManager.getAllLocations();
-		locationEditText.setAdapter(new FilteredArrayAdapter(parent, android.R.layout.simple_list_item_1, locations, false));
+		locationEditText.setAdapter(new FilteredGameArrayAdapter(parent, android.R.layout.simple_list_item_1, locations, false));
 		locationEditText.setThreshold(1);
 
 		if (date == null || date.equals(""))

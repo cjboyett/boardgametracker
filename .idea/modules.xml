@@ -6,7 +6,6 @@
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/colorpicker/colorpicker.iml" filepath="$PROJECT_DIR$/colorpicker/colorpicker.iml" />
       <module fileurl="file://$PROJECT_DIR$/floatingactionmenu/floatingactionmenu.iml" filepath="$PROJECT_DIR$/floatingactionmenu/floatingactionmenu.iml" />
-      <module fileurl="file://$PROJECT_DIR$/holograph/holograph.iml" filepath="$PROJECT_DIR$/holograph/holograph.iml" />
     </modules>
   </component>
 </project>

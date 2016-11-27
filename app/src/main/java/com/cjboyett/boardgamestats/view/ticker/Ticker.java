@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.AnticipateOvershootInterpolator;
@@ -241,9 +240,6 @@ public class Ticker extends RelativeLayout
 				tickerItems[position] = new LocalTickerItem(getContext());
 		} while (++count <= 10 && (tickerItems[position] == null || previousTickerItems.contains(tickerItems[position].getID())));
 
-		// Debug logger
-		Log.d("TICKER", count + "");
-
 		// If previous loop failed, then pause ticker
 		if (count >= 10) failedToLoad = true;
 
@@ -252,7 +248,6 @@ public class Ticker extends RelativeLayout
 		else
 		{
 			previousTickerItems.add(tickerItems[position].getID());
-			Log.d("ITEMS", previousTickerItems.toString());
 			if (previousTickerItems.size() >= THRESHOLD) previousTickerItems.poll();
 
 			if (tickerItems[position] instanceof LocalTickerItem && StringUtilities.isRPG(((LocalTickerItem) tickerItems[position]).getGameType()))

@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.transition.Fade;
 import android.transition.TransitionManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +23,7 @@ import com.cjboyett.boardgamestats.model.games.GamePlayerData;
 import com.cjboyett.boardgamestats.utility.Preferences;
 import com.cjboyett.boardgamestats.view.AddPlayerView;
 import com.cjboyett.boardgamestats.view.DatedTextView;
-import com.cjboyett.boardgamestats.view.adapter.FilteredArrayAdapter;
+import com.cjboyett.boardgamestats.view.adapter.FilteredPlayerArrayAdapter;
 
 import org.apache.commons.lang3.math.NumberUtils;
 
@@ -57,7 +56,6 @@ public class AddGamePlayPlayersFragment extends Fragment
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	                         Bundle savedInstanceState)
 	{
-		Log.d("CREATE", "Making players");
 		if (playerViews == null) playerViews = new TreeMap<>(new Comparator<DatedTextView>()
 		{
 			@Override
@@ -74,7 +72,7 @@ public class AddGamePlayPlayersFragment extends Fragment
 		DataManager dataManager = DataManager.getInstance(getActivity().getApplication());
 		List<String> players = new ArrayList<>(dataManager.getAllPlayers());
 		if (players.contains("master_user")) players.remove("master_user");
-		arrayAdapter = new FilteredArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, players, false);
+		arrayAdapter = new FilteredPlayerArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, players, true);
 
 		addPlayerView = new AddPlayerView(getContext());
 		linearLayout = (LinearLayout) view.findViewById(R.id.linearlayout_add_players);
@@ -120,7 +118,6 @@ public class AddGamePlayPlayersFragment extends Fragment
 		{
 			if (!initializing)
 			{
-				Log.d("TEMPDATA", "Setting players");
 				tempDataManager.clearTempPlayers();
 				tempDataManager.getTempPlayers()
 				               .clear();
@@ -151,14 +148,6 @@ public class AddGamePlayPlayersFragment extends Fragment
 			@Override
 			protected void onPostExecute(List<GamePlayerData> gamePlayerDataList)
 			{
-				try
-				{
-					for (GamePlayerData gamePlayerData : gamePlayerDataList) Log.d("PLAYER ASYNC", gamePlayerData.toString());
-				}
-				catch (Exception e)
-				{
-					e.printStackTrace();
-				}
 				if (gamePlayerDataList.size() > 0)
 				{
 					playerViews.clear();
@@ -195,7 +184,6 @@ public class AddGamePlayPlayersFragment extends Fragment
 
 	private void addPlayer(GamePlayerData player)
 	{
-		Log.d("ADD PLAYER", "Adding " + player.getPlayerName());
 		if (player.getPlayerName()
 		          .equals("master_user"))
 		{
@@ -214,7 +202,7 @@ public class AddGamePlayPlayersFragment extends Fragment
 		{
 			AddPlayerView newAddPlayerView = new AddPlayerView(view.getContext());
 			((AutoCompleteTextView) newAddPlayerView.findViewById(R.id.edittext_other_player)).setAdapter(arrayAdapter);
-			((AutoCompleteTextView) newAddPlayerView.findViewById(R.id.edittext_other_player)).setThreshold(1);
+			((AutoCompleteTextView) newAddPlayerView.findViewById(R.id.edittext_other_player)).setThreshold(2);
 			((AutoCompleteTextView) newAddPlayerView.findViewById(R.id.edittext_other_player)).setText(player.getPlayerName());
 			double score = player.getScore();
 			if (score > -10000)
@@ -273,7 +261,7 @@ public class AddGamePlayPlayersFragment extends Fragment
 			AddPlayerView newAddPlayerView = new AddPlayerView(view.getContext());
 			newAddPlayerView.colorComponents(backgroundColor, foregroundColor, hintTextColor);
 			((AutoCompleteTextView) newAddPlayerView.findViewById(R.id.edittext_other_player)).setAdapter(arrayAdapter);
-			((AutoCompleteTextView) newAddPlayerView.findViewById(R.id.edittext_other_player)).setThreshold(1);
+			((AutoCompleteTextView) newAddPlayerView.findViewById(R.id.edittext_other_player)).setThreshold(2);
 			newAddPlayerView.findViewById(R.id.button_remove_player)
 			                .setOnClickListener(new View.OnClickListener()
 			                {

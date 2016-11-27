@@ -36,7 +36,7 @@ import com.cjboyett.boardgamestats.utility.data.UrlUtilities;
 import com.cjboyett.boardgamestats.utility.view.ViewUtilities;
 import com.cjboyett.boardgamestats.view.AddGameForRecommendationView;
 import com.cjboyett.boardgamestats.view.DatedTextView;
-import com.cjboyett.boardgamestats.view.adapter.FilteredArrayAdapter;
+import com.cjboyett.boardgamestats.view.adapter.FilteredGameArrayAdapter;
 import com.cjboyett.boardgamestats.view.adapter.RecommendedGamesAdapter;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -59,12 +59,14 @@ public class RecommendationActivity extends BaseAdActivity
 	private Activity activity = this;
 	private View view;
 	private LinearLayout linearLayout;
-//	private AddGameForRecommendationView addGameForRecommendationView;
 	private Map<DatedTextView, AddGameForRecommendationView> addGameForRecommendationViews;
-	private FilteredArrayAdapter filteredArrayAdapter;
+	private FilteredGameArrayAdapter filteredArrayAdapter;
 
 	private ProgressDialog progressDialog;
 	private DataAnalyzer dataAnalyzer;
+
+	private int progress, totalProgress;
+	private boolean downloading;
 
 	public RecommendationActivity()
 	{
@@ -121,10 +123,9 @@ public class RecommendationActivity extends BaseAdActivity
 
 	void generateLayout()
 	{
-//		addGameForRecommendationView = new AddGameForRecommendationView(this);
 		linearLayout = (LinearLayout) view.findViewById(R.id.linearlayout_add_games);
 		progressDialog = new ProgressDialog(activity);
-//		linearLayout.addView(addGameForRecommendationView);
+		progressDialog.setMessage("Analyzing your games...");
 
 		DataManager dataManager = DataManager.getInstance(getApplication());
 		List<String> games = dataManager.getAllGamesCombined();
@@ -134,10 +135,11 @@ public class RecommendationActivity extends BaseAdActivity
 			String s = (String)iter.next();
 			if (s.endsWith(":v") || s.endsWith(":r")) iter.remove();
 		}
-		filteredArrayAdapter = new FilteredArrayAdapter(this, android.R.layout.simple_list_item_1, new ArrayList<>(games), true);
-//		addGameForRecommendationView.setAdapter(filteredArrayAdapter);
+		filteredArrayAdapter = new FilteredGameArrayAdapter(this, android.R.layout.simple_list_item_1, new ArrayList<>(games), true);
 
 		view.findViewById(R.id.button_add_game).setOnClickListener(new AddGameForRecommendationViewClickListener());
+
+		// TODO Get the stupid progress dialog to show properly
 
 		view.findViewById(R.id.button_recommend_games).setOnClickListener(new View.OnClickListener()
 		{
@@ -146,35 +148,43 @@ public class RecommendationActivity extends BaseAdActivity
 			{
 				if (((MyApp)getApplication()).isConnectedToInternet())
 				{
-					progressDialog.setMessage("Analyzing your games...");
-					progressDialog.show();
-
-					boolean hasGames = false;
-					Map<BoardGame, Double> seeds = new HashMap<>();
-					GamesDbHelper dbHelper = new GamesDbHelper(activity);
-
-/*
-				if (!TextUtils.isEmpty(addGameForRecommendationView.getGame()))
-				{
-					BoardGame game = BoardGameDbUtility.getBoardGame(dbHelper, addGameForRecommendationView.getGame());
-					seeds.put(game, addGameForRecommendationView.getWeight());
-					hasGames = true;
-				}
-*/
-					for (AddGameForRecommendationView addGameView : addGameForRecommendationViews.values())
+					new AsyncTask<String, Void, Void>()
 					{
-						if (!TextUtils.isEmpty(addGameView.getGame()))
+						@Override
+						protected void onPreExecute()
 						{
-							BoardGame game = BoardGameDbUtility.getBoardGame(dbHelper, addGameView.getGame());
-							seeds.put(game, addGameView.getWeight());
-							hasGames = true;
+							progressDialog.show();
 						}
-					}
 
-					dbHelper.close();
+						@Override
+						protected Void doInBackground(String... strings)
+						{
+							return null;
+						}
 
-					if (hasGames) analyzeGamesWithDataAnalyzer(seeds);
-					else analyzeAllGames();
+						@Override
+						protected void onPostExecute(Void aVoid)
+						{
+							boolean hasGames = false;
+							Map<BoardGame, Double> seeds = new HashMap<>();
+							GamesDbHelper dbHelper = new GamesDbHelper(activity);
+
+							for (AddGameForRecommendationView addGameView : addGameForRecommendationViews.values())
+							{
+								if (!TextUtils.isEmpty(addGameView.getGame()))
+								{
+									BoardGame game = BoardGameDbUtility.getBoardGame(dbHelper, addGameView.getGame());
+									seeds.put(game, addGameView.getWeight());
+									hasGames = true;
+								}
+							}
+
+							dbHelper.close();
+
+							if (hasGames) analyzeGamesWithDataAnalyzer(seeds);
+							else analyzeAllGames();
+						}
+					}.execute("");
 				}
 				else
 					ViewUtilities.errorDialog(activity).show();
@@ -194,80 +204,6 @@ public class RecommendationActivity extends BaseAdActivity
 			addGameView.colorComponents(backgroundColor, foregroundColor, hintTextColor);
 	}
 
-	private int progress, totalProgress;
-	private boolean downloading;
-
-	private void downloadTextFiles()
-	{
-		progressDialog.setMessage("Downloading files...");
-		progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-		progress = 0;
-		totalProgress = 6;
-		progressDialog.setProgress(progress * 100 / totalProgress);
-		progressDialog.show();
-
-		downloading = true;
-		downloadTextFile("game.txt", "games.txt");
-		downloadTextFile("mechanics.txt", "mechanics.txt");
-		downloadTextFile("categories.txt", "categories.txt");
-		downloadTextFile("types.txt", "types.txt");
-		downloadTextFile("pairs.txt", "pairs.txt");
-		downloadTextFile("triples.txt", "triples.txt");
-	}
-
-	private void downloadTextFile(String fileUrl, String filePath)
-	{
-		if (downloading)
-		{
-			long ONE_MEGABYTE = 1024 * 1024;
-			final FileController fileController = new FileController(this);
-			fileController.setFileName(filePath);
-
-			FirebaseStorage storage = FirebaseStorage.getInstance();
-			StorageReference storageReference = storage.getReferenceFromUrl("gs://games-tracker-53f3f.appspot.com");
-			storageReference.child(fileUrl)
-			                .getBytes(2 * ONE_MEGABYTE)
-			                .addOnSuccessListener(new OnSuccessListener<byte[]>()
-			                {
-				                @Override
-				                public void onSuccess(byte[] bytes)
-				                {
-					                fileController.save(bytes);
-					                dataAnalyzer = new DataAnalyzer(activity);
-
-					                progress++;
-					                if (progress < totalProgress)
-						                progressDialog.setProgress(progress * 100 / totalProgress);
-					                else
-						                progressDialog.dismiss();
-				                }
-			                })
-			                .addOnFailureListener(new OnFailureListener()
-			                {
-				                @Override
-				                public void onFailure(@NonNull Exception e)
-				                {
-					                progressDialog.dismiss();
-					                downloading = false;
-					                AlertDialog alertDialog = new ViewUtilities.DialogBuilder(activity)
-							                .setTitle("Error")
-							                .setMessage("Something went wrong while downloading your files.  Please try again later.")
-							                .setPositiveButton("Okay", new View.OnClickListener()
-							                {
-								                @Override
-								                public void onClick(View v)
-								                {
-									                onBackPressed();
-								                }
-							                })
-							                .create();
-					                alertDialog.setCancelable(false);
-					                alertDialog.show();
-				                }
-			                });
-		}
-	}
-
 	private void analyzeGamesWithDataAnalyzer(Map<BoardGame, Double> seeds)
 	{
 		List<RecBoardGame> recommendations = dataAnalyzer.recommendationsFromGames(dataAnalyzer.convertToRecBoardGame(seeds));
@@ -279,7 +215,6 @@ public class RecommendationActivity extends BaseAdActivity
 		Iterator<RecBoardGame> iter = recommendations.iterator();
 		while (iter.hasNext())
 			if (games.contains(iter.next().getName())) iter.remove();
-//		for (RecBoardGame game : recommendations) Log.d("GAME", game.getRank() + " " + game.getName() + " " + game.getRecommendationLevel());
 		final RecBoardGame[] toShow = new RecBoardGame[3];
 		Random r = new Random();
 		int recSizeStep = Math.min(recommendations.size() / 10, 50);
@@ -378,7 +313,6 @@ public class RecommendationActivity extends BaseAdActivity
 									AlertDialog alertDialog = new ViewUtilities.DialogBuilder(activity)
 											.setTitle("Recommendation")
 											.setView(view)
-//											.setMessage(toShow[0].getName() + "\n" + toShow[1].getName() + "\n" + toShow[2].getName())
 											.setPositiveButton("Okay", null)
 											.withYancey(false)
 											.create();
@@ -409,6 +343,77 @@ public class RecommendationActivity extends BaseAdActivity
 		}
 		dbHelper.close();
 		analyzeGamesWithDataAnalyzer(seeds);
+	}
+
+	private void downloadTextFiles()
+	{
+		progressDialog.setMessage("Downloading files...");
+		progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+		progress = 0;
+		totalProgress = 6;
+		progressDialog.setProgress(progress * 100 / totalProgress);
+		progressDialog.show();
+
+		downloading = true;
+		downloadTextFile("game.txt", "games.txt");
+		downloadTextFile("mechanics.txt", "mechanics.txt");
+		downloadTextFile("categories.txt", "categories.txt");
+		downloadTextFile("types.txt", "types.txt");
+		downloadTextFile("pairs.txt", "pairs.txt");
+		downloadTextFile("triples.txt", "triples.txt");
+	}
+
+	private void downloadTextFile(String fileUrl, String filePath)
+	{
+		if (downloading)
+		{
+			long ONE_MEGABYTE = 1024 * 1024;
+			final FileController fileController = new FileController(this);
+			fileController.setFileName(filePath);
+
+			FirebaseStorage storage = FirebaseStorage.getInstance();
+			StorageReference storageReference = storage.getReferenceFromUrl("gs://games-tracker-53f3f.appspot.com");
+			storageReference.child(fileUrl)
+			                .getBytes(2 * ONE_MEGABYTE)
+			                .addOnSuccessListener(new OnSuccessListener<byte[]>()
+			                {
+				                @Override
+				                public void onSuccess(byte[] bytes)
+				                {
+					                fileController.save(bytes);
+					                dataAnalyzer = new DataAnalyzer(activity);
+
+					                progress++;
+					                if (progress < totalProgress)
+						                progressDialog.setProgress(progress * 100 / totalProgress);
+					                else
+						                progressDialog.dismiss();
+				                }
+			                })
+			                .addOnFailureListener(new OnFailureListener()
+			                {
+				                @Override
+				                public void onFailure(@NonNull Exception e)
+				                {
+					                progressDialog.dismiss();
+					                downloading = false;
+					                AlertDialog alertDialog = new ViewUtilities.DialogBuilder(activity)
+							                .setTitle("Error")
+							                .setMessage("Something went wrong while downloading your files.  Please try again later.")
+							                .setPositiveButton("Okay", new View.OnClickListener()
+							                {
+								                @Override
+								                public void onClick(View v)
+								                {
+									                onBackPressed();
+								                }
+							                })
+							                .create();
+					                alertDialog.setCancelable(false);
+					                alertDialog.show();
+				                }
+			                });
+		}
 	}
 
 	@Override

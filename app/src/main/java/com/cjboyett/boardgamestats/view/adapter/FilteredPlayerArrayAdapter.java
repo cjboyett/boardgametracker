@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.text.Html;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -12,13 +13,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cjboyett.boardgamestats.R;
-import com.cjboyett.boardgamestats.data.games.GamesDbHelper;
-import com.cjboyett.boardgamestats.data.games.board.BoardGameDbUtility;
-import com.cjboyett.boardgamestats.data.games.rpg.RPGDbUtility;
-import com.cjboyett.boardgamestats.data.games.video.VideoGameDbUtility;
-import com.cjboyett.boardgamestats.utility.view.ImageController;
 import com.cjboyett.boardgamestats.utility.Preferences;
-import com.cjboyett.boardgamestats.utility.view.StringToBitmapBuilder;
+import com.cjboyett.boardgamestats.utility.view.ViewUtilities;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,9 +23,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by Casey on 4/7/2016.
+ * Created by Casey on 11/26/2016.
  */
-public class FilteredArrayAdapter extends ArrayAdapter<String>
+public class FilteredPlayerArrayAdapter extends ArrayAdapter<String>
 {
 	private Activity activity;
 	private List<String> items, suggestions;
@@ -40,23 +36,13 @@ public class FilteredArrayAdapter extends ArrayAdapter<String>
 	private Map<String, Bitmap> thumbnails;
 	private Map<String, String> thumbnailUrls;
 
-	public FilteredArrayAdapter(final Activity activity, int resource, List<String> games, boolean useThumbnails)
+	public FilteredPlayerArrayAdapter(final Activity activity, int resource, List<String> players, boolean useThumbnails)
 	{
-		super(activity, resource, games);
+		super(activity, resource, players);
 		this.activity = activity;
 		this.useThumbnails = useThumbnails;
-		items = new ArrayList<>(games);
-/*
-		for (int i=0;i<items.size();i++)
-		{
-			String s = items.get(i);
-			if (s.endsWith(":b") || s.endsWith(":r") || s.endsWith(":v"))
-			{
-				s = s.substring(0, s.length() - 2);
-				items.set(i, s);
-			}
-		}
-*/
+		items = new ArrayList<>(players);
+
 		Iterator<String> iterator = items.iterator();
 		while(iterator.hasNext())
 		{
@@ -70,69 +56,20 @@ public class FilteredArrayAdapter extends ArrayAdapter<String>
 			SCALE_FACTOR = Preferences.scaleFactor(activity);
 
 			thumbnails = new HashMap<>();
-			final ImageController imageController = new ImageController(activity).setDirectoryName("thumbnails");
-			//DisplayMetrics metrics = new DisplayMetrics();
-			//activity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
-			//float ratio = metrics.density;
 
-			GamesDbHelper dbHelper = new GamesDbHelper(activity);
-			thumbnailUrls = new HashMap<>();
-			for (String game : items)
+			for (String player : players)
 			{
-				if (game.startsWith("---")) thumbnailUrls.put(game, game.substring(3));
-				else
-				{
-					int l = game.length();
-					String gameType = game.substring(l - 1);
-					game = game.substring(0, l - 2);
-					switch (gameType)
-					{
-						case "b":
-							thumbnailUrls.put(game + ":b", "http://" + BoardGameDbUtility.getThumbnailUrl(dbHelper, game));
-							break;
-						case "r":
-							thumbnailUrls.put(game + ":r", "http://" + RPGDbUtility.getThumbnailUrl(dbHelper, game));
-							break;
-						case "v":
-							thumbnailUrls.put(game + ":v", "http://" + VideoGameDbUtility.getThumbnailUrl(dbHelper, game));
-							break;
-					}
-				}
-			}
-
-
-			for (int i = 0; i < thumbnailUrls.size(); i++)
-			{
-				String game = items.get(i);
-				String thumbnailUrl = thumbnailUrls.get(game);
+//			Log.d("PLAYER", data.toString());
 				new AsyncTask<String, Void, Bitmap>()
 				{
 					@Override
 					protected Bitmap doInBackground(String... params)
 					{
-						Bitmap thumbnail;
-						String thumbnailUrl = params[0];
-						String game = params[1];
-						if (thumbnailUrl.length() > 1)
-							thumbnail = imageController.setFileName(thumbnailUrl.substring(thumbnailUrl.lastIndexOf("/") + 1))
-							                           .load();
-						else
-							thumbnail = new StringToBitmapBuilder(activity)
-									.setTextSize(90 * SCALE_FACTOR)
-									.buildBitmap(thumbnailUrl.charAt(0) + "");
-
-						boolean noThumbnail = (thumbnail == null);
-
-//						if (!noThumbnail) Log.d("THUMBNAIL SIZE", thumbnail.getByteCount() / 1024 + " KB");
-
-						if (noThumbnail)
-							thumbnail = new StringToBitmapBuilder(activity)
-									.setTextSize(16)
-//								.setTextWidth(10)
-//								.setAlign(Paint.Align.CENTER)
-									.buildBitmap(game.substring(0, game.length() - 2));
-						thumbnails.put(game, thumbnail);
-						return thumbnail;
+						String name = params[0];
+						if (name.equals(Preferences.getUsername(activity))) name = "master_user";
+						Log.d("PLAYER", name);
+						thumbnails.put(params[0], ViewUtilities.createAvatar(activity, name, true));
+						return null;
 					}
 
 					@Override
@@ -140,7 +77,7 @@ public class FilteredArrayAdapter extends ArrayAdapter<String>
 					{
 						notifyDataSetChanged();
 					}
-				}.execute(thumbnailUrl, game);
+				}.execute(player);
 			}
 		}
 
@@ -165,7 +102,7 @@ public class FilteredArrayAdapter extends ArrayAdapter<String>
 				String suggestionUrl = suggestion.replace("<b>", "").replace("</b>", "");
 				view.findViewById(R.id.textview_score).setVisibility(View.GONE);
 				view.findViewById(R.id.imageview_win_icon).setVisibility(View.GONE);
-				((TextView)view.findViewById(R.id.textview_name)).setText(Html.fromHtml(suggestion.substring(0, suggestion.length()-2)));
+				((TextView)view.findViewById(R.id.textview_name)).setText(Html.fromHtml(suggestion));
 				((ImageView) view.findViewById(R.id.imageview_avatar)).setImageBitmap(thumbnails.get(suggestionUrl));
 			}
 			else
@@ -179,7 +116,6 @@ public class FilteredArrayAdapter extends ArrayAdapter<String>
 		}
 
 		return view;
-//		return super.getView(position, convertView, parent);
 	}
 
 	@Override
@@ -201,8 +137,8 @@ public class FilteredArrayAdapter extends ArrayAdapter<String>
 					{
 						int index = s.toLowerCase().indexOf(constraint.toString().toLowerCase());
 						String boldedString = s.substring(0, index) + "<b>" +
-								s.substring(index, index + constraint.length()) + "</b>" +
-								s.substring(index + constraint.length());
+						                      s.substring(index, index + constraint.length()) + "</b>" +
+						                      s.substring(index + constraint.length());
 						suggestions.add(boldedString);
 					}
 
@@ -223,9 +159,11 @@ public class FilteredArrayAdapter extends ArrayAdapter<String>
 				clear();
 				for (String s : filterList)
 				{
+/*
 					if (useThumbnails)
 						add(s.substring(0, s.length() - 2).replaceAll("<b>", "").replaceAll("</b>", ""));
 					else
+*/
 						add(s.replaceAll("<b>", "").replaceAll("</b>", ""));
 
 					notifyDataSetChanged();
