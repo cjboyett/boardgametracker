@@ -45,7 +45,7 @@ public class TimerNotificationBuilder
 
 		timeView.setTextColor(R.id.textview_title, Color.DKGRAY);
 		timeView.setTextColor(R.id.textview_game, Color.GRAY);
-		timeView.setTextViewText(R.id.textview_game, TextUtils.isEmpty(game) ? "Game is running" : game);
+		timeView.setTextViewText(R.id.textview_game, TextUtils.isEmpty(game) ? "Game in progress" : game);
 
 		timeView.setChronometer(R.id.chronometer, timerStart, null, true);
 		timeView.setTextColor(R.id.chronometer, Color.DKGRAY);
@@ -64,6 +64,8 @@ public class TimerNotificationBuilder
 			timeView.setImageViewBitmap(R.id.imageview_thumbnail, imageController.setFileName(thumbnailUrl.substring(thumbnailUrl.lastIndexOf("/") + 1))
 			                                                                     .load());
 		}
+		else
+			timeView.setImageViewBitmap(R.id.imageview_thumbnail, BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher));
 
 		builder.setContentTitle("Timer")
 		       .setAutoCancel(true)
@@ -99,7 +101,6 @@ public class TimerNotificationBuilder
 
 	public void toggleTimerNotification(Context context, NotificationCompat.Builder builder)
 	{
-//		timeView.setImageViewBitmap();
 		TempDataManager tempDataManager = TempDataManager.getInstance(context);
 
 		List<Long> timer = tempDataManager.getTimer();
