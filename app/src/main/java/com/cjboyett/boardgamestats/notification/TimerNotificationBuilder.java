@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.SystemClock;
 import android.support.v7.app.NotificationCompat;
@@ -67,7 +68,7 @@ public class TimerNotificationBuilder
 		builder.setContentTitle("Timer")
 		       .setAutoCancel(true)
 		       .setColor(context.getResources().getColor(R.color.colorAccent))
-		       .setContentText(TextUtils.isEmpty(game) ? "Game is running" : game)
+		       .setContentText(TextUtils.isEmpty(game) ? "Game in progress" : game)
 		       .setSmallIcon(R.mipmap.ic_launcher)
 		       .setPriority(Notification.PRIORITY_MAX)
 		       .setOngoing(true)
@@ -111,6 +112,7 @@ public class TimerNotificationBuilder
 		{
 			lastStopTime = SystemClock.elapsedRealtime();
 			tempDataManager.setTimer(timerBase, lastStartTime, lastStopTime, diff);
+			timeView.setImageViewBitmap(R.id.imageview_pause, BitmapFactory.decodeResource(context.getResources(), android.R.drawable.ic_media_play));
 		}
 		else
 		{
@@ -118,6 +120,7 @@ public class TimerNotificationBuilder
 			timerBase = SystemClock.elapsedRealtime() - diff;
 			lastStartTime = SystemClock.elapsedRealtime();
 			tempDataManager.setTimer(timerBase, lastStartTime, lastStopTime, diff);
+			timeView.setImageViewBitmap(R.id.imageview_pause, BitmapFactory.decodeResource(context.getResources(), android.R.drawable.ic_media_pause));
 		}
 
 		timerRunning = !timerRunning;
