@@ -28,8 +28,6 @@ import android.widget.TextView;
 import com.cjboyett.boardgamestats.R;
 import com.cjboyett.boardgamestats.data.DataManager;
 import com.cjboyett.boardgamestats.data.TempDataManager;
-//import com.cjboyett.boardgamestats.data.games.GamesDbHelper;
-//import com.cjboyett.boardgamestats.data.games.GamesDbUtility;
 import com.cjboyett.boardgamestats.model.games.Game;
 import com.cjboyett.boardgamestats.model.games.board.BoardGame;
 import com.cjboyett.boardgamestats.model.games.rpg.RolePlayingGame;
@@ -300,6 +298,13 @@ public class AddGamePlayDetailsFragment extends Fragment
 			textViewStartTimer.setText("Pause");
 		}
 
+		else if (timerBase != 0)
+		{
+			long tempTimerBase = SystemClock.elapsedRealtime() - (diff + (lastStopTime - lastStartTime));
+			timer.setBase(tempTimerBase);
+			timePlayedEditText.setText(timer.getText());
+		}
+
 		addPicturesButton.requestFocus();
 	}
 
@@ -339,30 +344,22 @@ public class AddGamePlayDetailsFragment extends Fragment
 		{
 			if (parent != null)
 			{
-				parent.setData(gameEditText.getText()
-				                           .toString(),
+				parent.setData(gameEditText.getText().toString(),
 				               gameType,
-				               timePlayedEditText.getText()
-				                                 .toString(),
+				               timePlayedEditText.getText().toString(),
 				               date,
-				               locationEditText.getText()
-				                               .toString(),
-				               notesEditText.getText()
-				                            .toString());
+				               locationEditText.getText().toString(),
+				               notesEditText.getText().toString());
 			}
 
 			TempDataManager tempDataManager = TempDataManager.getInstance();
 			tempDataManager.clearTempGamePlayData();
-			tempDataManager.setTempGamePlayData(gameEditText.getText()
-			                                                .toString(),
+			tempDataManager.setTempGamePlayData(gameEditText.getText().toString(),
 			                                    gameType,
-			                                    timePlayedEditText.getText()
-			                                                      .toString(),
+			                                    timePlayedEditText.getText().toString(),
 			                                    date,
-			                                    locationEditText.getText()
-			                                                    .toString(),
-			                                    notesEditText.getText()
-			                                                 .toString());
+			                                    locationEditText.getText().toString(),
+			                                    notesEditText.getText().toString());
 			tempDataManager.saveTempGamePlayData();
 
 			tempDataManager.setTimer(timerBase, lastStartTime, lastStopTime, diff);

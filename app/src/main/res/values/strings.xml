@@ -103,6 +103,9 @@
 	<string name="timer_running">com.cjboyett.boardgamestats.TIMER_RUNNING</string>
 	<string name="timer_started">com.cjboyett.boardgamestats.TIMER_STARTED</string>
 	<string name="timer_stopped">com.cjboyett.boardgamestats.TIMER_STOPPED</string>
+	<string name="timer_base">com.cjboyett.boardgamestats.TIMER_BASE</string>
+	<string name="last_timer_started">com.cjboyett.boardgamestats.LAST_TIMER_STARTED</string>
+	<string name="last_timer_stopped">com.cjboyett.boardgamestats.LAST_TIMER_STOPPED</string>
 	<string name="timer_diff">com.cjboyett.boardgamestats.TIMER_DIFF</string>
 	<string name="theme_background_preference">com.cjboyett.boardgamestats.THEME_BACKGROUND_PREFERENCE</string>
 	<string name="theme_foreground_preference">com.cjboyett.boardgamestats.THEME_FOREGROUND_PREFERENCE</string>

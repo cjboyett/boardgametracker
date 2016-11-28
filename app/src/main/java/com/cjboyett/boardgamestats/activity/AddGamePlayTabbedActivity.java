@@ -445,98 +445,9 @@ public class AddGamePlayTabbedActivity extends AppCompatActivity
 		if (!submitted && !times.isEmpty() && times.get(0) > 0 && times.get(1) > times.get(2))
 		{
 			String game = TempDataManager.getInstance(getApplication()).getTempGamePlayData().get(0);
-/*			final NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
-
-*//*
-			builder.setContentTitle("Timer")
-			       .setAutoCancel(true)
-			       .setColor(getResources().getColor(R.color.colorAccent))
-			       .setContentText(TextUtils.isEmpty(game) ? "Game is running" : game)
-			       .setSmallIcon(R.mipmap.ic_launcher)
-			       .setPriority(Notification.PRIORITY_MAX)
-			       .setOngoing(true)
-			       .setUsesChronometer(true)
-			       .setWhen(times.get(0) - SystemClock.elapsedRealtime() + System.currentTimeMillis())
-			       .setStyle(new android.support.v4.app.NotificationCompat.BigTextStyle()
-					                 .setBigContentTitle("Timer")
-					                 .bigText(TextUtils.isEmpty(game) ? "Game is running" : game))
-			       .addAction(android.R.drawable.ic_media_pause, "Pause", null);
-*//*
-			RemoteViews timeView = new RemoteViews(this.getPackageName(), R.layout.notification_timer);
-
-//			timeView = new RemoteViews()
-
-			builder.setContentTitle("Timer")
-			       .setAutoCancel(true)
-			       .setColor(getResources().getColor(R.color.colorAccent))
-			       .setContentText(TextUtils.isEmpty(game) ? "Game is running" : game)
-			       .setSmallIcon(R.mipmap.ic_launcher)
-			       .setPriority(Notification.PRIORITY_MAX)
-			       .setOngoing(true)
-//			       .setUsesChronometer(true)
-//			       .setWhen(times.get(0) - SystemClock.elapsedRealtime() + System.currentTimeMillis())
-//			       .setStyle(new android.support.v4.app.NotificationCompat.BigTextStyle()
-//					                 .setBigContentTitle("Timer")
-//					                 .bigText(TextUtils.isEmpty(game) ? "Game is running" : game))
-			       .setContent(timeView);
-//			       .addAction(android.R.drawable.ic_media_pause, "Pause", null);
-
-			timeView.setTextColor(R.id.textview_title, Color.DKGRAY);
-			timeView.setTextColor(R.id.textview_game, Color.GRAY);
-			timeView.setTextViewText(R.id.textview_game, TextUtils.isEmpty(game) ? "Game is running" : game);
-
-			timeView.setChronometer(R.id.chronometer, times.get(0), null, true);
-			timeView.setTextColor(R.id.chronometer, Color.DKGRAY);*/
-
-/*
-			PendingIntent pauseIntent = PendingIntent.getService(this,
-			                                                     0,
-			                                                     new Intent("com.cjboyett.boardgamestats.ACTION_PAUSE_TIMER"),
-			                                                     PendingIntent.FLAG_UPDATE_CURRENT);
-
-			timeView.setOnClickPendingIntent(R.id.imageview_pause, pauseIntent);
-
-			String thumbnailUrl = null;
-
-			thumbnailUrl = BoardGameDbUtility.getThumbnailUrl(dbHelper, game);
-			if (TextUtils.isEmpty(thumbnailUrl)) thumbnailUrl = RPGDbUtility.getThumbnailUrl(dbHelper, game);
-			if (TextUtils.isEmpty(thumbnailUrl)) thumbnailUrl = VideoGameDbUtility.getThumbnailUrl(dbHelper, game);
-
-			if (!TextUtils.isEmpty(thumbnailUrl))
-			{
-				ImageController imageController = new ImageController(activity).setDirectoryName("thumbnails");
-				timeView.setImageViewBitmap(R.id.imageview_thumbnail, imageController.setFileName(thumbnailUrl.substring(thumbnailUrl.lastIndexOf("/") + 1))
-				                                                                     .load());
-			}
-*/
-
-/*
-			PendingIntent pendingIntent = PendingIntent.getActivity(this,
-			                                                        NOTIFICATION_ID,
-			                                                        new Intent(this, AddGamePlayTabbedActivity.class),
-			                                                        PendingIntent.FLAG_UPDATE_CURRENT);
-*/
-
 			TimerNotificationBuilder timerNotificationBuilder = new TimerNotificationBuilder();
 			NotificationCompat.Builder builder = timerNotificationBuilder.createTimerNotification(this, game, true, times.get(0));
-//			builder.setContentIntent(pendingIntent);
 			timerNotificationBuilder.createTimerNotification(this, builder);
-
-/*
-			builder.setContentIntent(pendingIntent);
-
-			final NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-			manager.notify(NOTIFICATION_ID, builder.build());
-
-			try
-			{
-				Thread.sleep(5000);
-				builder.setUsesChronometer(false);
-				manager.notify(NOTIFICATION_ID, builder.build());
-			}
-			catch (Exception e)
-			{}
-*/
 		}
 	}
 

@@ -106,9 +106,6 @@ public class TimerNotificationBuilder
 		long timerBase = timer.get(0), lastStartTime = timer.get(1), lastStopTime = timer.get(2), diff = timer.get(3);
 
 		boolean timerRunning = Preferences.isTimerRunning(context);
-		timerRunning = !timerRunning;
-
-		timeView.setChronometer(R.id.chronometer, timerBase, null, timerRunning);
 
 		if (timerRunning)
 		{
@@ -123,7 +120,11 @@ public class TimerNotificationBuilder
 			tempDataManager.setTimer(timerBase, lastStartTime, lastStopTime, diff);
 		}
 
+		timerRunning = !timerRunning;
+		timeView.setChronometer(R.id.chronometer, timerBase, null, timerRunning);
+
 		Preferences.setTimerRunning(context, timerRunning);
+		tempDataManager.saveTimer();
 
 		final NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 		manager.notify(NOTIFICATION_ID, builder.build());
