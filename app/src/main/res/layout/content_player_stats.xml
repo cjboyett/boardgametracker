@@ -55,6 +55,23 @@
             android:lines="1"
             android:layout_toRightOf="@+id/imageview_avatar"/>
 
+	    <ScrollView
+		    android:layout_width="match_parent"
+		    android:layout_height="match_parent"
+		    android:id="@+id/scrollview_player_notes"
+		    android:layout_alignParentRight="true"
+		    android:layout_alignLeft="@+id/textview_player_name"
+		    android:layout_below="@+id/textview_player_name"
+		    android:layout_alignParentBottom="false"
+		    android:layout_alignBottom="@+id/imageview_avatar">
+
+		    <TextView
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:id="@+id/textview_player_notes"
+			    android:padding="5dp"/>
+	    </ScrollView>
+
     </RelativeLayout>
 
 	<TextView

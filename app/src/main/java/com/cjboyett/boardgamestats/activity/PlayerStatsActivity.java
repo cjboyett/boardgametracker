@@ -59,7 +59,7 @@ public class PlayerStatsActivity extends BaseAdActivity
 	private Activity activity = this;
 	private View view;
 	private ImageView avatarImageView, editAvatarImageView, deleteAvatarImageView;
-	private TextView nameTextView;//, timePlayedTextView;
+	private TextView nameTextView, playerNotesTextView;//, timePlayedTextView;
 	private ListView listView;
 
 	private FloatingActionMenu fabMenu;
@@ -180,6 +180,7 @@ public class PlayerStatsActivity extends BaseAdActivity
 		view.setBackgroundColor(backgroundColor);
 
 		nameTextView.setTextColor(foregroundColor);
+		playerNotesTextView.setTextColor(foregroundColor);
 
 		for (StatsView statsView : statsViews)
 			statsView.colorComponents(backgroundColor, foregroundColor);
@@ -202,6 +203,7 @@ public class PlayerStatsActivity extends BaseAdActivity
 		editAvatarImageView = (ImageView)view.findViewById(R.id.imageview_edit_avatar);
 		deleteAvatarImageView = (ImageView)view.findViewById(R.id.imageview_delete_avatar);
 		nameTextView = (TextView)view.findViewById(R.id.textview_player_name);
+		playerNotesTextView = (TextView)view.findViewById(R.id.textview_player_notes);
 		listView = (ListView)view.findViewById(R.id.listview_gameplay);
 
 		fabMenu = (FloatingActionMenu)view.findViewById(R.id.floating_menu);
@@ -218,6 +220,7 @@ public class PlayerStatsActivity extends BaseAdActivity
 
 			avatarImageView.setImageBitmap(ViewUtilities.createAvatar(this, name, false));
 			nameTextView.setText(name);
+			playerNotesTextView.setText(playerData.getNotes());
 
 			statsViews.add(new StatsView(activity, "Play count", playerData.getTimesPlayedWith() + ""));
 			statsViews.add(new StatsView(activity, "Play time", StringUtilities.convertMinutes(playerData.getTimePlayedWith())));
@@ -380,7 +383,7 @@ public class PlayerStatsActivity extends BaseAdActivity
 						          @Override
 						          public void onClick(View v)
 						          {
-							          String notes = editText.getText().toString();
+							          final String notes = editText.getText().toString();
 							          if (!TextUtils.isEmpty(notes))
 							          {
 								          new AsyncTask<String, Void, Void>()
@@ -396,7 +399,7 @@ public class PlayerStatsActivity extends BaseAdActivity
 									          protected void onPostExecute(Void aVoid)
 									          {
 										          ActivityUtilities.setDatabaseChanged(activity, true);
-//										          onBackPressed();
+										          playerNotesTextView.setText(notes);
 									          }
 								          }.execute(name, notes);
 							          }
