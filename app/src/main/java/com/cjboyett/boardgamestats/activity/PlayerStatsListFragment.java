@@ -173,8 +173,6 @@ public class PlayerStatsListFragment extends Fragment
 
 	private void populateListView(final List<String> playersList)
 	{
-		Log.d("POPULATE", "Doing it");
-		for (String player : playersList) Log.d("PLAYER", player);
 		listView.setAdapter(new PlayerListAdapter(getActivity(), playersList));
 		listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
 		{

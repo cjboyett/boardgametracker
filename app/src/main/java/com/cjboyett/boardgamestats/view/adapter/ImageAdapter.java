@@ -14,11 +14,13 @@ import com.cjboyett.boardgamestats.data.games.GamesDbHelper;
 import com.cjboyett.boardgamestats.data.games.board.BoardGameDbUtility;
 import com.cjboyett.boardgamestats.data.games.rpg.RPGDbUtility;
 import com.cjboyett.boardgamestats.data.games.video.VideoGameDbUtility;
-import com.cjboyett.boardgamestats.utility.view.ImageController;
+import com.cjboyett.boardgamestats.utility.BitmapCache;
 import com.cjboyett.boardgamestats.utility.Preferences;
 import com.cjboyett.boardgamestats.utility.data.StringMatcher;
+import com.cjboyett.boardgamestats.utility.view.ImageController;
 import com.cjboyett.boardgamestats.utility.view.StringToBitmapBuilder;
 
+import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +32,8 @@ public class ImageAdapter extends BaseAdapter implements SectionIndexer
 {
 	private Activity activity;
 	private Map<String, String> thumbnailUrls;
-	private Map<String, Bitmap> thumbnails;
+	private BitmapCache thumbnails;
+//	private Map<String, Bitmap> thumbnails;
 	private List<String> games;
 	private ImageController imageController;
 	private float ratio = 1f;
@@ -44,7 +47,8 @@ public class ImageAdapter extends BaseAdapter implements SectionIndexer
 
 		SCALE_FACTOR = Preferences.scaleFactor(activity);
 
-		thumbnails = new HashMap<>();
+		thumbnails = new BitmapCache();
+//		thumbnails = new HashMap<>();
 		imageController = new ImageController(activity).setDirectoryName("thumbnails");
 		DisplayMetrics metrics = new DisplayMetrics();
 		activity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
@@ -75,7 +79,10 @@ public class ImageAdapter extends BaseAdapter implements SectionIndexer
 			}
 		}
 
+		for (int i=0;i<=Math.min(30, thumbnailUrls.size());i++) new BitmapWorkerTask(null, games.get(i)).execute(thumbnailUrls.get(games.get(i)));
+		for (int i=thumbnailUrls.size()-1;i>30;i--) new BitmapWorkerTask(null, games.get(i)).execute(thumbnailUrls.get(games.get(i)));
 
+/*
 		for (int i=0;i<thumbnailUrls.size();i++)
 		{
 			String game = games.get(i);
@@ -114,6 +121,7 @@ public class ImageAdapter extends BaseAdapter implements SectionIndexer
 				}
 			}.execute(thumbnailUrl, game);
 		}
+*/
 	}
 
 	@Override
@@ -152,6 +160,7 @@ public class ImageAdapter extends BaseAdapter implements SectionIndexer
 		Bitmap thumbnail = thumbnails.get(game);
 
 		if (thumbnail != null) setImage(imageView, thumbnail, game);
+		else new BitmapWorkerTask(imageView, game).execute(thumbnailUrls.get(game));
 
 		return imageView;
 	}
@@ -215,5 +224,51 @@ public class ImageAdapter extends BaseAdapter implements SectionIndexer
 		for (int i = 0; i < mSections.length(); i++)
 			sections[i] = String.valueOf(mSections.charAt(i));
 		return sections;
+	}
+
+	private class BitmapWorkerTask extends AsyncTask<String, Void, Bitmap>
+	{
+		private final WeakReference<ImageView> imageViewReference;
+		private final String game;
+
+		public BitmapWorkerTask(ImageView imageView, String game)
+		{
+			imageViewReference = new WeakReference<>(imageView);
+			this.game = game;
+		}
+
+		@Override
+		protected Bitmap doInBackground(String... params)
+		{
+			Bitmap thumbnail;
+			String thumbnailUrl = params[0];
+			if (thumbnailUrl.length() > 1)
+				thumbnail = imageController.setFileName(thumbnailUrl.substring(thumbnailUrl.lastIndexOf("/") + 1)).load();
+			else
+				thumbnail = new StringToBitmapBuilder(activity)
+						.setTextSize(90 * SCALE_FACTOR)
+						.buildBitmap(thumbnailUrl.charAt(0) + "");
+
+			boolean noThumbnail = (thumbnail == null);
+
+			if (noThumbnail)
+				thumbnail = new StringToBitmapBuilder(activity)
+						.setTextSize(16)
+//								.setTextWidth(10)
+//								.setAlign(Paint.Align.CENTER)
+						.buildBitmap(game.substring(0, game.length() - 2));
+			thumbnails.addBitmapToCache(game, thumbnail);
+			return thumbnail;
+		}
+
+		@Override
+		protected void onPostExecute(Bitmap bitmap)
+		{
+			if (imageViewReference != null && bitmap != null)
+			{
+				final ImageView imageView = imageViewReference.get();
+				if (imageView != null) setImage(imageView, bitmap, game);
+			}
+		}
 	}
 }
