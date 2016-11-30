@@ -16,10 +16,12 @@ import com.cjboyett.boardgamestats.data.games.GamesDbHelper;
 import com.cjboyett.boardgamestats.data.games.board.BoardGameDbUtility;
 import com.cjboyett.boardgamestats.data.games.rpg.RPGDbUtility;
 import com.cjboyett.boardgamestats.data.games.video.VideoGameDbUtility;
-import com.cjboyett.boardgamestats.utility.view.ImageController;
+import com.cjboyett.boardgamestats.utility.BitmapCache;
 import com.cjboyett.boardgamestats.utility.Preferences;
+import com.cjboyett.boardgamestats.utility.view.ImageController;
 import com.cjboyett.boardgamestats.utility.view.StringToBitmapBuilder;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -37,8 +39,11 @@ public class FilteredGameArrayAdapter extends ArrayAdapter<String>
 	private boolean useThumbnails;
 
 	private float SCALE_FACTOR;
-	private Map<String, Bitmap> thumbnails;
+	private BitmapCache thumbnails;
+//	private Map<String, Bitmap> thumbnails;
 	private Map<String, String> thumbnailUrls;
+
+	final ImageController imageController;
 
 	public FilteredGameArrayAdapter(final Activity activity, int resource, List<String> games, boolean useThumbnails)
 	{
@@ -55,11 +60,14 @@ public class FilteredGameArrayAdapter extends ArrayAdapter<String>
 		suggestions = new ArrayList<>();
 		filter = new StringFilter();
 
+		imageController = new ImageController(activity).setDirectoryName("thumbnails");
+
 		if (useThumbnails)
 		{
 			SCALE_FACTOR = Preferences.scaleFactor(activity);
 
-			thumbnails = new HashMap<>();
+			thumbnails = new BitmapCache();
+//			thumbnails = new HashMap<>();
 			final ImageController imageController = new ImageController(activity).setDirectoryName("thumbnails");
 
 			GamesDbHelper dbHelper = new GamesDbHelper(activity);
@@ -92,6 +100,8 @@ public class FilteredGameArrayAdapter extends ArrayAdapter<String>
 			{
 				String game = items.get(i);
 				String thumbnailUrl = thumbnailUrls.get(game);
+				new BitmapWorkerTask(null).execute(thumbnailUrl, game);
+/*
 				new AsyncTask<String, Void, Bitmap>()
 				{
 					@Override
@@ -128,6 +138,7 @@ public class FilteredGameArrayAdapter extends ArrayAdapter<String>
 						notifyDataSetChanged();
 					}
 				}.execute(thumbnailUrl, game);
+*/
 			}
 		}
 
@@ -220,4 +231,52 @@ public class FilteredGameArrayAdapter extends ArrayAdapter<String>
 			}
 		}
 	}
+
+	private class BitmapWorkerTask extends AsyncTask<String, Void, Bitmap>
+	{
+		private final WeakReference<ImageView> imageViewReference;
+
+		public BitmapWorkerTask(ImageView imageView)
+		{
+			imageViewReference = new WeakReference<>(imageView);
+		}
+
+		@Override
+		protected Bitmap doInBackground(String... params)
+		{
+			Bitmap thumbnail;
+			String thumbnailUrl = params[0];
+			String game = params[1];
+			if (thumbnailUrl.length() > 1)
+				thumbnail = imageController.setFileName(thumbnailUrl.substring(thumbnailUrl.lastIndexOf("/") + 1))
+				                           .load();
+			else
+				thumbnail = new StringToBitmapBuilder(activity)
+						.setTextSize(90 * SCALE_FACTOR)
+						.buildBitmap(thumbnailUrl.charAt(0) + "");
+
+			boolean noThumbnail = (thumbnail == null);
+
+			if (noThumbnail)
+				thumbnail = new StringToBitmapBuilder(activity)
+						.setTextSize(16)
+//								.setTextWidth(10)
+//								.setAlign(Paint.Align.CENTER)
+						.buildBitmap(game.substring(0, game.length() - 2));
+			thumbnails.put(game, thumbnail);
+			return thumbnail;
+		}
+
+		@Override
+		protected void onPostExecute(Bitmap bitmap)
+		{
+			if (imageViewReference != null && bitmap != null)
+			{
+				final ImageView imageView = imageViewReference.get();
+				if (imageView != null) imageView.setImageBitmap(bitmap);
+				notifyDataSetChanged();
+			}
+		}
+	}
+
 }

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.text.Html;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -13,14 +12,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cjboyett.boardgamestats.R;
+import com.cjboyett.boardgamestats.utility.BitmapCache;
 import com.cjboyett.boardgamestats.utility.Preferences;
 import com.cjboyett.boardgamestats.utility.view.ViewUtilities;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -35,7 +34,8 @@ public class FilteredPlayerArrayAdapter extends ArrayAdapter<String>
 	private Filter filter;
 	private boolean useThumbnails;
 
-	private Map<String, Bitmap> thumbnails;
+//	private Map<String, Bitmap> thumbnails;
+	private BitmapCache thumbnails;
 
 	public FilteredPlayerArrayAdapter(final Activity activity, int resource, List<String> players, boolean useThumbnails)
 	{
@@ -54,10 +54,13 @@ public class FilteredPlayerArrayAdapter extends ArrayAdapter<String>
 
 		if (useThumbnails)
 		{
-			thumbnails = new HashMap<>();
+			thumbnails = new BitmapCache();
+//			thumbnails = new HashMap<>();
 
 			for (String player : players)
 			{
+				new BitmapWorkerTask(null).execute(player);
+/*
 				new AsyncTask<String, Void, Bitmap>()
 				{
 					@Override
@@ -76,6 +79,7 @@ public class FilteredPlayerArrayAdapter extends ArrayAdapter<String>
 						notifyDataSetChanged();
 					}
 				}.execute(player);
+*/
 			}
 		}
 
@@ -115,7 +119,12 @@ public class FilteredPlayerArrayAdapter extends ArrayAdapter<String>
 				view.findViewById(R.id.textview_score).setVisibility(View.GONE);
 				view.findViewById(R.id.imageview_win_icon).setVisibility(View.GONE);
 				((TextView)view.findViewById(R.id.textview_name)).setText(Html.fromHtml(suggestion));
-				((ImageView) view.findViewById(R.id.imageview_avatar)).setImageBitmap(thumbnails.get(suggestionUrl));
+
+				Bitmap bitmap = thumbnails.get(suggestionUrl);
+				if (bitmap != null)
+					((ImageView) view.findViewById(R.id.imageview_avatar)).setImageBitmap(thumbnails.get(suggestionUrl));
+				else
+					new BitmapWorkerTask((ImageView) view.findViewById(R.id.imageview_avatar)).execute(suggestionUrl);
 			}
 			else
 			{
@@ -177,4 +186,36 @@ public class FilteredPlayerArrayAdapter extends ArrayAdapter<String>
 			}
 		}
 	}
+
+	private class BitmapWorkerTask extends AsyncTask<String, Void, Bitmap>
+	{
+		private final WeakReference<ImageView> imageViewReference;
+
+		public BitmapWorkerTask(ImageView imageView)
+		{
+			imageViewReference = new WeakReference<>(imageView);
+		}
+
+		@Override
+		protected Bitmap doInBackground(String... params)
+		{
+			String name = params[0];
+			if (name.equals(Preferences.getUsername(activity))) name = "master_user";
+			Bitmap bitmap = ViewUtilities.createAvatar(activity, name, true);
+			thumbnails.addBitmapToCache(params[0], bitmap);
+			return bitmap;
+		}
+
+		@Override
+		protected void onPostExecute(Bitmap bitmap)
+		{
+			if (imageViewReference != null && bitmap != null)
+			{
+				final ImageView imageView = imageViewReference.get();
+				if (imageView != null) imageView.setImageBitmap(bitmap);
+				notifyDataSetChanged();
+			}
+		}
+	}
+
 }

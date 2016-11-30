@@ -268,6 +268,7 @@ public class ImageAdapter extends BaseAdapter implements SectionIndexer
 			{
 				final ImageView imageView = imageViewReference.get();
 				if (imageView != null) setImage(imageView, bitmap, game);
+				notifyDataSetChanged();
 			}
 		}
 	}
