@@ -3,8 +3,11 @@ package com.cjboyett.boardgamestats.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
@@ -32,6 +35,8 @@ public class ExtrasActivity extends BaseAdActivity
 	private AccessTokenTracker accessTokenTracker;
 	private FirebaseUtility firebaseUtility;
 
+	private GestureDetectorCompat gestureDetector;
+
 	public ExtrasActivity()
 	{
 		super("ca-app-pub-1437859753538305/8564017075");
@@ -45,6 +50,7 @@ public class ExtrasActivity extends BaseAdActivity
 		setContentView(view);
 
 		firebaseUtility = new FirebaseUtility(this);
+		gestureDetector = new GestureDetectorCompat(this, new ScrollGestureListener());
 
 		generateLayout();
 		setColors();
@@ -85,9 +91,11 @@ public class ExtrasActivity extends BaseAdActivity
 	@Override
 	void generateLayout()
 	{
-		if (!firebaseUtility.signedInFrom().equals("Email"))
+		if (!firebaseUtility.signedInFrom()
+		                    .equals("Email"))
 		{
-			view.findViewById(R.id.textview_email_logout).setVisibility(View.GONE);
+			view.findViewById(R.id.textview_email_logout)
+			    .setVisibility(View.GONE);
 			// TODO Check authentication/reauthenticate
 //			Log.d("LOGGED IN FROM", firebaseUtility.signedInFrom());
 
@@ -134,66 +142,70 @@ public class ExtrasActivity extends BaseAdActivity
 
 		else
 		{
-			view.findViewById(R.id.login_button).setVisibility(View.INVISIBLE);
-			view.findViewById(R.id.textview_email_logout).setOnClickListener(new View.OnClickListener()
-			{
-				@Override
-				public void onClick(View v)
-				{
-					AlertDialog dialog = new ViewUtilities.DialogBuilder(activity)
-							.setTitle("Logout")
-							.setMessage("Would you like to log out?")
-							.withYancey(true)
-							.setPositiveButton("Log Out", new View.OnClickListener()
-							{
-								@Override
-								public void onClick(View v)
-								{
-									firebaseUtility.signOut();
-									onBackPressed();
-								}
-							})
-							.setNegativeButton("Cancel", null)
-							.create();
+			view.findViewById(R.id.login_button)
+			    .setVisibility(View.INVISIBLE);
+			view.findViewById(R.id.textview_email_logout)
+			    .setOnClickListener(new View.OnClickListener()
+			    {
+				    @Override
+				    public void onClick(View v)
+				    {
+					    AlertDialog dialog = new ViewUtilities.DialogBuilder(activity)
+							    .setTitle("Logout")
+							    .setMessage("Would you like to log out?")
+							    .withYancey(true)
+							    .setPositiveButton("Log Out", new View.OnClickListener()
+							    {
+								    @Override
+								    public void onClick(View v)
+								    {
+									    firebaseUtility.signOut();
+									    onBackPressed();
+								    }
+							    })
+							    .setNegativeButton("Cancel", null)
+							    .create();
 
-					dialog.show();
-				}
-			});
+					    dialog.show();
+				    }
+			    });
 		}
 
-		view.findViewById(R.id.textview_backup_database).setOnClickListener(new View.OnClickListener()
-		{
-			@Override
-			public void onClick(View v)
-			{
+		view.findViewById(R.id.textview_backup_database)
+		    .setOnClickListener(new View.OnClickListener()
+		    {
+			    @Override
+			    public void onClick(View v)
+			    {
 //				startActivity(new Intent(activity, ImageGalleryActivity.class));
-				AlertDialog alertDialog = new ViewUtilities.DialogBuilder(activity)
-						.setTitle("Backup Database")
-						.setMessage("Would you like me to back up your database online?")
-						.withYancey(true)
-						.setPositiveButton("Yes", new View.OnClickListener()
-						{
-							@Override
-							public void onClick(View v)
-							{
-								firebaseUtility.backupDatabase();
-							}
-						})
-						.setNegativeButton("No", null)
-						.create();
-				alertDialog.show();
-			}
-		});
+				    AlertDialog alertDialog = new ViewUtilities.DialogBuilder(activity)
+						    .setTitle("Backup Database")
+						    .setMessage("Would you like me to back up your database online?")
+						    .withYancey(true)
+						    .setPositiveButton("Yes", new View.OnClickListener()
+						    {
+							    @Override
+							    public void onClick(View v)
+							    {
+								    firebaseUtility.backupDatabase();
+							    }
+						    })
+						    .setNegativeButton("No", null)
+						    .create();
+				    alertDialog.show();
+			    }
+		    });
 
-		view.findViewById(R.id.textview_board_game_recommendation).setOnClickListener(new View.OnClickListener()
-		{
-			@Override
-			public void onClick(View v)
-			{
-				startActivity(new Intent(activity, RecommendationActivity.class));
-				ActivityUtilities.exitRight(activity);
-			}
-		});
+		view.findViewById(R.id.textview_board_game_recommendation)
+		    .setOnClickListener(new View.OnClickListener()
+		    {
+			    @Override
+			    public void onClick(View v)
+			    {
+				    startActivity(new Intent(activity, RecommendationActivity.class));
+				    ActivityUtilities.exitRight(activity);
+			    }
+		    });
 	}
 
 	void colorComponents()
@@ -202,20 +214,26 @@ public class ExtrasActivity extends BaseAdActivity
 
 		if (Preferences.lightUI(this))
 		{
-			view.findViewById(R.id.textview_backup_database).setBackgroundResource(R.drawable.main_button_background_dark);
-			view.findViewById(R.id.textview_board_game_recommendation).setBackgroundResource(R.drawable.main_button_background_dark);
-			view.findViewById(R.id.textview_email_logout).setBackgroundResource(R.drawable.main_button_background_dark);
+			view.findViewById(R.id.textview_backup_database)
+			    .setBackgroundResource(R.drawable.main_button_background_dark);
+			view.findViewById(R.id.textview_board_game_recommendation)
+			    .setBackgroundResource(R.drawable.main_button_background_dark);
+			view.findViewById(R.id.textview_email_logout)
+			    .setBackgroundResource(R.drawable.main_button_background_dark);
 		}
 		else
 		{
-			view.findViewById(R.id.textview_backup_database).setBackgroundResource(R.drawable.main_button_background_light);
-			view.findViewById(R.id.textview_board_game_recommendation).setBackgroundResource(R.drawable.main_button_background_light);
-			view.findViewById(R.id.textview_email_logout).setBackgroundResource(R.drawable.main_button_background_light);
+			view.findViewById(R.id.textview_backup_database)
+			    .setBackgroundResource(R.drawable.main_button_background_light);
+			view.findViewById(R.id.textview_board_game_recommendation)
+			    .setBackgroundResource(R.drawable.main_button_background_light);
+			view.findViewById(R.id.textview_email_logout)
+			    .setBackgroundResource(R.drawable.main_button_background_light);
 		}
 
-		((TextView)view.findViewById(R.id.textview_backup_database)).setTextColor(foregroundColor);
-		((TextView)view.findViewById(R.id.textview_board_game_recommendation)).setTextColor(foregroundColor);
-		((TextView)view.findViewById(R.id.textview_email_logout)).setTextColor(foregroundColor);
+		((TextView) view.findViewById(R.id.textview_backup_database)).setTextColor(foregroundColor);
+		((TextView) view.findViewById(R.id.textview_board_game_recommendation)).setTextColor(foregroundColor);
+		((TextView) view.findViewById(R.id.textview_email_logout)).setTextColor(foregroundColor);
 
 	}
 
@@ -228,7 +246,9 @@ public class ExtrasActivity extends BaseAdActivity
 		{
 			accessTokenTracker.stopTracking();
 		}
-		catch (Exception e) {}
+		catch (Exception e)
+		{
+		}
 	}
 
 	@Override
@@ -239,13 +259,53 @@ public class ExtrasActivity extends BaseAdActivity
 	}
 
 	@Override
+	public boolean onTouchEvent(MotionEvent event)
+	{
+		if (Preferences.useSwipes(this)) gestureDetector.onTouchEvent(event);
+		return super.onTouchEvent(event);
+	}
+
+	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data)
 	{
 		try
 		{
 			callbackManager.onActivityResult(requestCode, resultCode, data);
 		}
-		catch (Exception e){}
+		catch (Exception e)
+		{
+		}
 	}
 
+	private class ScrollGestureListener extends GestureDetector.SimpleOnGestureListener
+	{
+		@Override
+		public boolean onDown(MotionEvent e)
+		{
+			return super.onDown(e);
+		}
+
+		@Override
+		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY)
+		{
+			if (Math.abs(velocityX) > Math.abs(velocityY))
+			{
+				if (Math.abs(e1.getX() - e2.getX()) >= 200)
+				{
+					if (velocityX < -2000)
+					{
+						onBackPressed();
+						return true;
+					}
+					else if (velocityX > 2000)
+					{
+						startActivity(new Intent(activity, RecommendationActivity.class));
+						ActivityUtilities.exitRight(activity);
+						return true;
+					}
+				}
+			}
+			return false;
+		}
+	}
 }

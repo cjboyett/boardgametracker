@@ -3,12 +3,16 @@ package com.cjboyett.boardgamestats.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.GestureDetectorCompat;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
 import com.cjboyett.boardgamestats.R;
 import com.cjboyett.boardgamestats.utility.ActivityUtilities;
+import com.cjboyett.boardgamestats.utility.Preferences;
 import com.cjboyett.boardgamestats.utility.firebase.FirebaseUtility;
 import com.cjboyett.boardgamestats.utility.view.ViewUtilities;
 import com.facebook.AccessToken;
@@ -30,6 +34,8 @@ public class LoginActivity extends BaseAdActivity
 	private AccessTokenTracker accessTokenTracker;
 	private FirebaseUtility firebaseUtility;
 
+	private GestureDetectorCompat gestureDetector;
+
 	public LoginActivity()
 	{
 		super("");
@@ -43,6 +49,7 @@ public class LoginActivity extends BaseAdActivity
 		setContentView(view);
 
 		firebaseUtility = new FirebaseUtility(this);
+		gestureDetector = new GestureDetectorCompat(this, new ScrollGestureListener());
 
 		generateLayout();
 		setColors();
@@ -137,6 +144,13 @@ public class LoginActivity extends BaseAdActivity
 	}
 
 	@Override
+	public boolean onTouchEvent(MotionEvent event)
+	{
+		if (Preferences.useSwipes(this)) gestureDetector.onTouchEvent(event);
+		return super.onTouchEvent(event);
+	}
+
+	@Override
 	public void onBackPressed()
 	{
 		super.onBackPressed();
@@ -147,6 +161,32 @@ public class LoginActivity extends BaseAdActivity
 	protected void onActivityResult(int requestCode, int resultCode, Intent data)
 	{
 		callbackManager.onActivityResult(requestCode, resultCode, data);
+	}
+
+	private class ScrollGestureListener extends GestureDetector.SimpleOnGestureListener
+	{
+		@Override
+		public boolean onDown(MotionEvent e)
+		{
+			return super.onDown(e);
+		}
+
+		@Override
+		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY)
+		{
+			if (Math.abs(velocityX) > Math.abs(velocityY))
+			{
+				if (Math.abs(e1.getX() - e2.getX()) >= 200)
+				{
+					if (velocityX < -2000)
+					{
+						onBackPressed();
+						return true;
+					}
+				}
+			}
+			return false;
+		}
 	}
 
 }

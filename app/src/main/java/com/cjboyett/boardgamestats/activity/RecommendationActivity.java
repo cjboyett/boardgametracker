@@ -9,10 +9,13 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.transition.Fade;
 import android.transition.TransitionManager;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -31,6 +34,7 @@ import com.cjboyett.boardgamestats.model.games.board.BoardGame;
 import com.cjboyett.boardgamestats.recommendations.DataAnalyzer;
 import com.cjboyett.boardgamestats.recommendations.RecBoardGame;
 import com.cjboyett.boardgamestats.utility.ActivityUtilities;
+import com.cjboyett.boardgamestats.utility.Preferences;
 import com.cjboyett.boardgamestats.utility.data.FileController;
 import com.cjboyett.boardgamestats.utility.data.UrlUtilities;
 import com.cjboyett.boardgamestats.utility.view.ViewUtilities;
@@ -68,6 +72,8 @@ public class RecommendationActivity extends BaseAdActivity
 	private int progress, totalProgress;
 	private boolean downloading;
 
+	private GestureDetectorCompat gestureDetector;
+
 	public RecommendationActivity()
 	{
 		super("ca-app-pub-1437859753538305/8564017075");
@@ -79,6 +85,8 @@ public class RecommendationActivity extends BaseAdActivity
 		super.onCreate(savedInstanceState);
 		view = getLayoutInflater().inflate(R.layout.activity_recommendation, null);
 		setContentView(view);
+
+		gestureDetector = new GestureDetectorCompat(this, new ScrollGestureListener());
 
 		addGameForRecommendationViews = new HashMap<>();
 
@@ -188,6 +196,17 @@ public class RecommendationActivity extends BaseAdActivity
 				}
 				else
 					ViewUtilities.errorDialog(activity).show();
+			}
+		});
+
+		view.findViewById(R.id.scrollview_board_game_data).setOnTouchListener(new View.OnTouchListener()
+		{
+			@Override
+			public boolean onTouch(View v, MotionEvent event)
+			{
+				if (Preferences.useSwipes(v.getContext()))
+					return gestureDetector.onTouchEvent(event);
+				return false;
 			}
 		});
 	}
@@ -417,6 +436,13 @@ public class RecommendationActivity extends BaseAdActivity
 	}
 
 	@Override
+	public boolean onTouchEvent(MotionEvent event)
+	{
+		if (Preferences.useSwipes(this)) gestureDetector.onTouchEvent(event);
+		return super.onTouchEvent(event);
+	}
+
+	@Override
 	public void onBackPressed()
 	{
 		super.onBackPressed();
@@ -467,6 +493,32 @@ public class RecommendationActivity extends BaseAdActivity
 			if (jumpToNewView) newAddGameForRecommendationView.findViewById(R.id.edittext_add_game)
 			                                                  .requestFocus();
 			addGameForRecommendationViews.put((DatedTextView) newAddGameForRecommendationView.findViewById(R.id.button_remove_game), newAddGameForRecommendationView);
+		}
+	}
+
+	private class ScrollGestureListener extends GestureDetector.SimpleOnGestureListener
+	{
+		@Override
+		public boolean onDown(MotionEvent e)
+		{
+			return super.onDown(e);
+		}
+
+		@Override
+		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY)
+		{
+			if (Math.abs(velocityX) > Math.abs(velocityY))
+			{
+				if (Math.abs(e1.getX() - e2.getX()) >= 200)
+				{
+					if (velocityX < -2000)
+					{
+						onBackPressed();
+						return true;
+					}
+				}
+			}
+			return false;
 		}
 	}
 }
