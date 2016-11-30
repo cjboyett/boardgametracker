@@ -78,7 +78,8 @@
 				android:layout_marginTop="2dp"
 				android:layout_marginBottom="10dp"
 				android:padding="5dp"
-				android:layout_below="@+id/textview_extras"/>
+				android:layout_below="@+id/textview_extras"
+				android:layout_centerHorizontal="true"/>
 
 			<android.support.v7.widget.AppCompatImageView
 				android:layout_width="wrap_content"
@@ -90,7 +91,8 @@
 				android:layout_marginBottom="10dp"
 				android:padding="5dp"
 				android:layout_centerHorizontal="true"
-				android:layout_below="@+id/textview_extras"/>
+				android:layout_below="@+id/textview_extras"
+				android:visibility="gone"/>
 
 			<android.support.v7.widget.AppCompatImageView
 				android:layout_width="wrap_content"
@@ -102,7 +104,8 @@
 				android:layout_marginBottom="10dp"
 				android:padding="5dp"
 				android:layout_below="@+id/textview_extras"
-				android:layout_alignRight="@+id/textview_stats"/>
+				android:layout_alignRight="@+id/textview_stats"
+				android:visibility="gone"/>
 
 		</RelativeLayout>
 

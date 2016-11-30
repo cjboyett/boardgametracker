@@ -354,14 +354,14 @@ public class Preferences
 	public static boolean showNotifications(Context context)
 	{
 		SharedPreferences sharedPreferences = getSharedPreferences(context);
-		return sharedPreferences.getBoolean(context.getString(R.string.show_notification), true);// && !isSuperUser(context);
+		return sharedPreferences.getBoolean(context.getString(R.string.allow_notifications_preference), true);// && !isSuperUser(context);
 	}
 
 	public static void setShowNotifications(Context context, boolean preference)
 	{
 		SharedPreferences sharedPreferences = getSharedPreferences(context);
 		sharedPreferences.edit()
-		                 .putBoolean(context.getString(R.string.show_notification), preference)
+		                 .putBoolean(context.getString(R.string.allow_notifications_preference), preference)
 		                 .apply();
 	}
 

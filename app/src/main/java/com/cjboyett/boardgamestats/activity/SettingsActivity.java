@@ -110,6 +110,20 @@ public class SettingsActivity extends AppCompatPreferenceActivity
 						}
 					});
 
+			((CheckBoxPreference)findPreference(getString(R.string.allow_notifications_preference)))
+					.setChecked(Preferences.showNotifications(getActivity()));
+			findPreference(getString(R.string.allow_notifications_preference))
+					.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener()
+					{
+						@Override
+						public boolean onPreferenceChange(Preference preference, Object newValue)
+						{
+							Preferences.setShowNotifications(getActivity(), (boolean) newValue);
+							((CheckBoxPreference) preference).setChecked((boolean) newValue);
+							return false;
+						}
+					});
+
 			((ListPreference)findPreference(getString(R.string.thumbnail_size_preference)))
 					.setValueIndex(Preferences.getThumbnailSize(getActivity()));
 			findPreference(getString(R.string.thumbnail_size_preference))
