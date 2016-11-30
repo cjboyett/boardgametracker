@@ -79,8 +79,13 @@ public class ImageAdapter extends BaseAdapter implements SectionIndexer
 			}
 		}
 
-		for (int i=0;i<=Math.min(30, thumbnailUrls.size());i++) new BitmapWorkerTask(null, games.get(i)).execute(thumbnailUrls.get(games.get(i)));
-		for (int i=thumbnailUrls.size()-1;i>30;i--) new BitmapWorkerTask(null, games.get(i)).execute(thumbnailUrls.get(games.get(i)));
+		try
+		{
+			for (int i = 0; i <= Math.min(30, thumbnailUrls.size()); i++)
+				new BitmapWorkerTask(null, games.get(i)).execute(thumbnailUrls.get(games.get(i)));
+			for (int i = thumbnailUrls.size() - 1; i > 30; i--) new BitmapWorkerTask(null, games.get(i)).execute(thumbnailUrls.get(games.get(i)));
+		}
+		catch (Exception e){}
 
 /*
 		for (int i=0;i<thumbnailUrls.size();i++)

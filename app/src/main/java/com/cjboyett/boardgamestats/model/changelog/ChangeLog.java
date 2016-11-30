@@ -9,7 +9,16 @@ public class ChangeLog
 {
 	private ChangeLog(){}
 
-	public static LogEntry[] entries = {new LogEntry("1.0.9b", "Bug fix related to crash coming from ticker" +
+	public static LogEntry[] entries = {new LogEntry("1.1.0", "Major update:\n" +
+	                                                          "UI overhaul\n" +
+	                                                          "Player avatars\n" +
+	                                                          "Facebook integration\n" +
+	                                                          "Stats filtering by game type\n" +
+	                                                          "Extras:\n" +
+	                                                          "- Database backup\n" +
+	                                                          "- Board game recommendations\n" +
+	                                                          "Various background optimizations", new Date(2016, 10, 29)),
+	                                    new LogEntry("1.0.9b", "Bug fix related to crash coming from ticker" +
 	                                                           "" /* Changed way most won games is handled */, new Date(2016, 4, 27)),
 	                                    new LogEntry("1.0.9", "UI updates:\n" +
 	                                                          "- Added ticker to home screen\n" +

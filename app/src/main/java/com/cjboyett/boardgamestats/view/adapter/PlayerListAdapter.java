@@ -48,8 +48,12 @@ public class PlayerListAdapter extends BaseAdapter
 //		avatars = new HashMap<>();
 //		int maxMemory = (int)(Runtime.getRuntime().maxMemory() / 1024);
 
-		for (int i=0;i<=Math.min(10, players.size());i++) new BitmapWorkerTask(null).execute(players.get(i));
-		for (int i=players.size()-1;i>10;i--) new BitmapWorkerTask(null).execute(players.get(i));
+		try
+		{
+			for (int i = 0; i <= Math.min(10, players.size()); i++) new BitmapWorkerTask(null).execute(players.get(i));
+			for (int i = players.size() - 1; i > 10; i--) new BitmapWorkerTask(null).execute(players.get(i));
+		}
+		catch (Exception e){}
 
 /*
 		for (int i=0;i<players.size();i++)
