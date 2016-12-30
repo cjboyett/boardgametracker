@@ -23,6 +23,7 @@
 			android:key="@string/edit_avatar_preference"/>
 
 		<com.cjboyett.boardgamestats.view.preferences.ImportCollectionDialogPreference
+			android:enabled="false"
 			android:capitalize="words"
 			android:inputType="textCapWords"
 			android:key="@string/import_collection_preference"
@@ -33,6 +34,7 @@
 			android:title="@string/pref_title_import_collection"/>
 
 		<com.cjboyett.boardgamestats.view.preferences.ImportGamePlaysDialogPreference
+			android:enabled="false"
 			android:capitalize="words"
 			android:inputType="textCapWords"
 			android:key="@string/import_game_plays_preference"
@@ -43,7 +45,7 @@
 			android:title="@string/pref_title_import_game_plays"/>
 
 		<com.cjboyett.boardgamestats.view.preferences.SyncBggDataDialogPreference
-			android:capitalize="words"
+			android:enabled="false"			android:capitalize="words"
 			android:inputType="textCapWords"
 			android:key="@string/sync_bgg_preference"
 			android:maxLines="1"

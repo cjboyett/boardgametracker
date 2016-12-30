@@ -32,6 +32,7 @@ public class TimerNotificationBuilder
 	private static final int NOTIFICATION_ID = 0;
 
 	private RemoteViews timeView;
+	private int smallIcon = R.drawable.meeple_play;
 
 	public NotificationCompat.Builder createTimerNotification(Context context, String game, boolean timerRunning, long timerStart)
 	{
@@ -71,7 +72,7 @@ public class TimerNotificationBuilder
 		       .setAutoCancel(true)
 		       .setColor(context.getResources().getColor(R.color.colorAccent))
 		       .setContentText(TextUtils.isEmpty(game) ? "Game in progress" : game)
-		       .setSmallIcon(R.mipmap.ic_launcher)
+		       .setSmallIcon(smallIcon)
 		       .setPriority(Notification.PRIORITY_MAX)
 		       .setOngoing(true)
                .setContent(timeView);
@@ -114,6 +115,7 @@ public class TimerNotificationBuilder
 			lastStopTime = SystemClock.elapsedRealtime();
 			tempDataManager.setTimer(timerBase, lastStartTime, lastStopTime, diff);
 			timeView.setImageViewBitmap(R.id.imageview_pause, BitmapFactory.decodeResource(context.getResources(), android.R.drawable.ic_media_play));
+			smallIcon = R.drawable.meeple_pause;
 		}
 		else
 		{
@@ -122,6 +124,7 @@ public class TimerNotificationBuilder
 			lastStartTime = SystemClock.elapsedRealtime();
 			tempDataManager.setTimer(timerBase, lastStartTime, lastStopTime, diff);
 			timeView.setImageViewBitmap(R.id.imageview_pause, BitmapFactory.decodeResource(context.getResources(), android.R.drawable.ic_media_pause));
+			smallIcon = R.drawable.meeple_play;
 		}
 
 		timerRunning = !timerRunning;
@@ -131,6 +134,7 @@ public class TimerNotificationBuilder
 		tempDataManager.saveTimer();
 
 		final NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+		builder.setSmallIcon(smallIcon);
 		manager.notify(NOTIFICATION_ID, builder.build());
 	}
 }

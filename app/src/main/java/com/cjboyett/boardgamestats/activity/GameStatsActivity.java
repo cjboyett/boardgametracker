@@ -263,8 +263,9 @@ public class GameStatsActivity extends BaseAdActivity
 
 		((TextView)view.findViewById(R.id.textview_game_name)).setTextColor(foregroundColor);
 
-		for (StatsView statsView : statsViews)
-			statsView.colorComponents(backgroundColor, foregroundColor);
+		if (statsViews != null)
+			for (StatsView statsView : statsViews)
+				if (statsView != null) statsView.colorComponents(backgroundColor, foregroundColor);
 
 		((TextView)view.findViewById(R.id.textview_stats)).setTextColor(foregroundColor);
 		view.findViewById(R.id.textview_stats).setBackgroundColor(backgroundColor);
