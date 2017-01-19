@@ -171,4 +171,13 @@ public class VideoGame extends Game
 
 		return game;
 	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		return obj instanceof VideoGame &&
+		       ((VideoGame) obj).getBggId() == getBggId() &&
+		       ((VideoGame) obj).getName().equalsIgnoreCase(getName());
+	}
+
 }

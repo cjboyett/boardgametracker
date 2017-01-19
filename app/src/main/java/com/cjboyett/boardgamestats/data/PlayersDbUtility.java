@@ -301,7 +301,7 @@ public class PlayersDbUtility
 
 		for (GamePlayData gamePlayData : gamePlayDataList)
 		{
-			if (gamePlayData.isCountForStats())
+			if (gamePlayData.isCountForStats() && gamePlayData.getGame() != null)
 			{
 				String gameName = gamePlayData.getGame().getName();
 

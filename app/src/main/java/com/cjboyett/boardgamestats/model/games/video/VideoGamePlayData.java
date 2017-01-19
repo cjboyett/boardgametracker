@@ -2,6 +2,8 @@ package com.cjboyett.boardgamestats.model.games.video;
 
 import com.cjboyett.boardgamestats.model.Date;
 import com.cjboyett.boardgamestats.model.games.GamePlayData;
+import com.cjboyett.boardgamestats.model.games.GamePlayerData;
+import com.cjboyett.boardgamestats.utility.data.StringUtilities;
 
 /**
  * Created by Casey on 4/10/2016.
@@ -47,5 +49,18 @@ public class VideoGamePlayData extends GamePlayData
 	{
 		return getGame().getName() + " " + score + " " + win + " " + getTimePlayed() + " " + getDate() + " " + getNotes() + " " + getOtherPlayers().values().toString();
 	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		return obj instanceof VideoGamePlayData &&
+		       ((VideoGamePlayData)obj).getGame().equals(getGame()) &&
+		       ((VideoGamePlayData)obj).getTimePlayed() == getTimePlayed() &&
+		       ((VideoGamePlayData)obj).getDate().equals(getDate()) &&
+		       StringUtilities.blankIfNull(((VideoGamePlayData)obj).getLocation()).equalsIgnoreCase(StringUtilities.blankIfNull(getLocation())) &&
+		       ((VideoGamePlayData)obj).isCountForStats() == isCountForStats() &&
+		       GamePlayerData.equalPlayerMaps(((VideoGamePlayData)obj).getOtherPlayers(), getOtherPlayers());
+	}
+
 
 }

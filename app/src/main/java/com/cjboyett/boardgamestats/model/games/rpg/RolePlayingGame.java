@@ -67,4 +67,12 @@ public class RolePlayingGame extends Game
 		return game;
 	}
 
+	@Override
+	public boolean equals(Object obj)
+	{
+		return obj instanceof RolePlayingGame &&
+		       ((RolePlayingGame) obj).getBggId() == getBggId() &&
+		       ((RolePlayingGame) obj).getName().equalsIgnoreCase(getName());
+	}
+
 }

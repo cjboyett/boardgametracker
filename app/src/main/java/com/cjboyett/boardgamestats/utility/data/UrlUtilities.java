@@ -127,7 +127,7 @@ public class UrlUtilities
 		{
 			URL url = new URL(urlString);
 			HttpURLConnection connection = (HttpURLConnection)url.openConnection();
-			connection.setReadTimeout(10000);
+			connection.setReadTimeout(15000);
 			connection.setConnectTimeout(15000);
 			connection.setRequestMethod("GET");
 			connection.setDoInput(true);

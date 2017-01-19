@@ -10,9 +10,6 @@ import com.cjboyett.boardgamestats.data.games.video.VideoGameContract.VideoGameE
 import com.cjboyett.boardgamestats.model.Date;
 import com.cjboyett.boardgamestats.model.games.GamePlayData;
 import com.cjboyett.boardgamestats.model.games.GamePlayerData;
-import com.cjboyett.boardgamestats.model.games.rpg.RPGFamily;
-import com.cjboyett.boardgamestats.model.games.rpg.RPGMechanic;
-import com.cjboyett.boardgamestats.model.games.rpg.RolePlayingGame;
 import com.cjboyett.boardgamestats.model.games.video.VideoGame;
 import com.cjboyett.boardgamestats.model.games.video.VideoGameCompilation;
 import com.cjboyett.boardgamestats.model.games.video.VideoGameDeveloper;
@@ -213,6 +210,7 @@ public class VideoGameDbUtility
 				VideoGameEntry.PUBLISHER,
 				VideoGameEntry.SERIES,
 				VideoGameEntry.THEME,
+		        VideoGameEntry.BGG_ID
 		};
 		Cursor gameCursor = dbHelper.getReadableDatabase()
 				.query(VideoGameEntry.TABLE_NAME,
@@ -230,6 +228,7 @@ public class VideoGameDbUtility
 			game.setReleaseDate(gameCursor.getString(2));
 			game.setDescription(gameCursor.getString(3));
 			game.setThumbnailUrl(gameCursor.getString(4));
+			game.setBggId(gameCursor.getInt(14));
 
 			addCompilation(game, gameCursor.getString(5));
 			addDeveloper(game, gameCursor.getString(6));
@@ -437,6 +436,56 @@ public class VideoGameDbUtility
 		addImages(dbHelper, id, images);
 		addPlayers(dbHelper, id, gamePlayerData);
 	}
+
+	public static boolean addGamePlayIfNotPresent(GamesDbHelper dbHelper, VideoGamePlayData videoGamePlayData)
+	{
+		if (!containsGamePlayData(dbHelper, videoGamePlayData))
+		{
+			addGamePlay(dbHelper, videoGamePlayData);
+			return true;
+		}
+		return false;
+	}
+
+	private static boolean containsGamePlayData(GamesDbHelper dbHelper, VideoGamePlayData videoGamePlayData)
+	{
+		Cursor playCursor = dbHelper.getReadableDatabase()
+		                            .query(GamePlayEntry.TABLE_NAME,
+		                                   new String[]{GamePlayEntry._ID},
+		                                   GamePlayEntry.GAME + " = ? AND " +
+		                                   GamePlayEntry.TIME_PLAYED + " = ? AND " +
+		                                   GamePlayEntry.DATE + " = ? AND " +
+		                                   GamePlayEntry.NOTES + " = ? AND " +
+		                                   GamePlayEntry.LOCATION + " = ? AND " +
+		                                   GamePlayEntry.COUNT_FOR_STATS + " = ?",
+		                                   new String[]{videoGamePlayData.getGame().getName(),
+		                                                videoGamePlayData.getTimePlayed() + "",
+		                                                videoGamePlayData.getDate().rawDate(),
+		                                                videoGamePlayData.getNotes(),
+		                                                videoGamePlayData.getLocation(),
+		                                                videoGamePlayData.isCountForStats() ? "y" : "n"},
+		                                   null,
+		                                   null,
+		                                   null);
+
+		if (playCursor.moveToFirst())
+		{
+			while (playCursor.moveToNext())
+			{
+				VideoGamePlayData gamePlayData = getGamePlay(dbHelper, playCursor.getLong(0));
+				if (videoGamePlayData.equals(gamePlayData))
+				{
+					playCursor.close();
+					return true;
+				}
+			}
+		}
+		playCursor.close();
+
+		return false;
+
+	}
+
 
 	public static void updateGamePlay(GamesDbHelper dbHelper, long gamePlayId, VideoGamePlayData gamePlayData)
 	{

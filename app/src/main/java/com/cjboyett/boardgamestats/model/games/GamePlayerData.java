@@ -1,5 +1,7 @@
 package com.cjboyett.boardgamestats.model.games;
 
+import java.util.Map;
+
 /**
  * Created by Casey on 3/10/2016.
  */
@@ -62,5 +64,27 @@ public class GamePlayerData
 		}
 		toReturn += " " + (win ? "win" : "lose");
 		return toReturn;
+	}
+
+	public static boolean equalPlayerMaps(Map<String, GamePlayerData> map1, Map<String, GamePlayerData> map2)
+	{
+		boolean equal = true;
+		for (String player : map1.keySet())
+		{
+			if (map2.containsKey(player))
+				equal = equal && map1.get(player).equals(map2.get(player));
+			else equal = false;
+			if (!equal) break;
+		}
+		return equal;
+	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		return obj instanceof GamePlayerData &&
+		       ((GamePlayerData)obj).getPlayerName().equalsIgnoreCase(getPlayerName()) &&
+		       ((GamePlayerData)obj).getScore() == getScore() &&
+		       ((GamePlayerData)obj).isWin() == isWin();
 	}
 }

@@ -123,4 +123,12 @@ public class BoardGame extends Game
 		return toReturn;
 	}
 
+	@Override
+	public boolean equals(Object obj)
+	{
+		return obj instanceof BoardGame &&
+		       ((BoardGame) obj).getBggId() == getBggId() &&
+		       ((BoardGame) obj).getName().equalsIgnoreCase(getName());
+	}
+
 }

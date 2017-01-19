@@ -13,6 +13,7 @@ import java.util.Map;
 public class FirebaseGamePlayData
 {
 	public String game, gameType;
+	public int gameId;
 	public int timePlayed;
 	public String notes;
 	public String date;
@@ -27,10 +28,11 @@ public class FirebaseGamePlayData
 	{
 	}
 
-	public FirebaseGamePlayData(String game, String gameType, int timePlayed, String notes, String date, String location, Map<String, FirebasePlayerData> otherPlayers, long id, String bggPlayId, boolean ignoreWinData)
+	public FirebaseGamePlayData(String game, String gameType, int gameId, int timePlayed, String notes, String date, String location, Map<String, FirebasePlayerData> otherPlayers, long id, String bggPlayId, boolean ignoreWinData)
 	{
 		this.game = game;
 		this.gameType = gameType;
+		this.gameId = gameId;
 		this.timePlayed = timePlayed;
 		this.notes = notes;
 		this.date = date;
@@ -50,6 +52,7 @@ public class FirebaseGamePlayData
 
 		return  new FirebaseGamePlayData(gamePlayData.getGame().getName(),
 		                                 gameType,
+		                                 gamePlayData.getGame().getBggId(),
 		                                 gamePlayData.getTimePlayed(),
 		                                 gamePlayData.getNotes(),
 		                                 gamePlayData.getDate().rawDate(),
@@ -57,6 +60,15 @@ public class FirebaseGamePlayData
 		                                 FirebasePlayerData.makeFirebaseData(gamePlayData.getOtherPlayers()),
 		                                 gamePlayData.getId(),
 		                                 gamePlayData.getBggPlayId(),
-		                                 false);
+		                                 !gamePlayData.isCountForStats());
 	}
+
+	@Override
+	public String toString()
+	{
+		String toReturn = "[" + game + ", " + gameType + ", " + gameId + ", " + timePlayed + ", " + notes + ", " + date + ", " + location +
+		                  ", " + otherPlayers.toString() + ", " + id + ", " + bggPlayId + ", " + ignoreWinData + "]";
+		return toReturn;
+	}
+
 }

@@ -9,11 +9,6 @@ import com.cjboyett.boardgamestats.data.games.GamesDbHelper;
 import com.cjboyett.boardgamestats.model.Date;
 import com.cjboyett.boardgamestats.model.games.GamePlayData;
 import com.cjboyett.boardgamestats.model.games.GamePlayerData;
-import com.cjboyett.boardgamestats.model.games.board.BoardGame;
-import com.cjboyett.boardgamestats.model.games.board.BoardGameCategory;
-import com.cjboyett.boardgamestats.model.games.board.BoardGameFamily;
-import com.cjboyett.boardgamestats.model.games.board.BoardGameMechanic;
-import com.cjboyett.boardgamestats.model.games.board.BoardGamePublisher;
 import com.cjboyett.boardgamestats.model.games.rpg.RPGFamily;
 import com.cjboyett.boardgamestats.model.games.rpg.RPGMechanic;
 import com.cjboyett.boardgamestats.model.games.rpg.RPGPlayData;
@@ -178,6 +173,7 @@ public class RPGDbUtility
 				RPGEntry.THUMBNAIL,
 				RPGEntry.MECHANICS,
 				RPGEntry.FAMILIES,
+		        RPGEntry.BGG_ID
 		};
 		Cursor gameCursor = dbHelper.getReadableDatabase()
 				.query(RPGEntry.TABLE_NAME,
@@ -194,6 +190,7 @@ public class RPGDbUtility
 			game.setYearPublished(gameCursor.getInt(1));
 			game.setDescription(gameCursor.getString(2));
 			game.setThumbnailUrl(gameCursor.getString(3));
+			game.setBggId(gameCursor.getInt(6));
 
 			addMechanics(game, gameCursor.getString(4));
 			addFamilies(game, gameCursor.getString(5));
@@ -328,6 +325,55 @@ public class RPGDbUtility
 		gamePlayCursor.close();
 		addImages(dbHelper, id, images);
 		addPlayers(dbHelper, id, gamePlayerData);
+	}
+
+	public static boolean addGamePlayIfNotPresent(GamesDbHelper dbHelper, RPGPlayData rpgPlayData)
+	{
+		if (!containsGamePlayData(dbHelper, rpgPlayData))
+		{
+			addGamePlay(dbHelper, rpgPlayData);
+			return true;
+		}
+		return false;
+	}
+
+	private static boolean containsGamePlayData(GamesDbHelper dbHelper, RPGPlayData rpgPlayData)
+	{
+		Cursor playCursor = dbHelper.getReadableDatabase()
+		                            .query(GamePlayEntry.TABLE_NAME,
+		                                   new String[]{GamePlayEntry._ID},
+		                                   GamePlayEntry.GAME + " = ? AND " +
+		                                   GamePlayEntry.TIME_PLAYED + " = ? AND " +
+		                                   GamePlayEntry.DATE + " = ? AND " +
+		                                   GamePlayEntry.NOTES + " = ? AND " +
+		                                   GamePlayEntry.LOCATION + " = ? AND " +
+		                                   GamePlayEntry.COUNT_FOR_STATS + " = ?",
+		                                   new String[]{rpgPlayData.getGame().getName(),
+		                                                rpgPlayData.getTimePlayed() + "",
+		                                                rpgPlayData.getDate().rawDate(),
+		                                                rpgPlayData.getNotes(),
+		                                                rpgPlayData.getLocation(),
+		                                                rpgPlayData.isCountForStats() ? "y" : "n"},
+		                                   null,
+		                                   null,
+		                                   null);
+
+		if (playCursor.moveToFirst())
+		{
+			while (playCursor.moveToNext())
+			{
+				RPGPlayData gamePlayData = getGamePlay(dbHelper, playCursor.getLong(0));
+				if (rpgPlayData.equals(gamePlayData))
+				{
+					playCursor.close();
+					return true;
+				}
+			}
+		}
+		playCursor.close();
+
+		return false;
+
 	}
 
 	public static void updateGamePlay(GamesDbHelper dbHelper, long gamePlayId, RPGPlayData gamePlayData)

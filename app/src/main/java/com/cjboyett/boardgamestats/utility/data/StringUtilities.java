@@ -134,4 +134,9 @@ public class StringUtilities
 
 		return games;
 	}
+
+	public static String blankIfNull(String string)
+	{
+		return string == null ? "" : string;
+	}
 }

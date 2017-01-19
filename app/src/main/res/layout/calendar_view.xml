@@ -20,7 +20,8 @@
             android:paddingRight="15dp"
             android:paddingLeft="3dp"
             android:paddingTop="3dp"
-            android:paddingBottom="3dp"/>
+            android:paddingBottom="3dp"
+            android:src="@drawable/back"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -43,7 +44,8 @@
             android:paddingRight="15dp"
             android:paddingLeft="3dp"
             android:paddingTop="3dp"
-            android:paddingBottom="3dp"/>
+            android:paddingBottom="3dp"
+            android:src="@drawable/back"/>
 
     </TableRow>
 

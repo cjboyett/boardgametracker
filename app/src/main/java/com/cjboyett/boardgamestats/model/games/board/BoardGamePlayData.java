@@ -2,6 +2,8 @@ package com.cjboyett.boardgamestats.model.games.board;
 
 import com.cjboyett.boardgamestats.model.Date;
 import com.cjboyett.boardgamestats.model.games.GamePlayData;
+import com.cjboyett.boardgamestats.model.games.GamePlayerData;
+import com.cjboyett.boardgamestats.utility.data.StringUtilities;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,4 +65,15 @@ public class BoardGamePlayData extends GamePlayData
 		return getGame().getName() + " " + score + " " + win + " " + getTimePlayed() + " " + getDate() + " " + getNotes() + " " + getOtherPlayers().values().toString();
 	}
 
+	@Override
+	public boolean equals(Object obj)
+	{
+		return obj instanceof BoardGamePlayData &&
+		       ((BoardGamePlayData)obj).getGame().equals(getGame()) &&
+		       ((BoardGamePlayData)obj).getTimePlayed() == getTimePlayed() &&
+		       ((BoardGamePlayData)obj).getDate().equals(getDate()) &&
+		       StringUtilities.blankIfNull(((BoardGamePlayData)obj).getLocation()).equalsIgnoreCase(StringUtilities.blankIfNull(getLocation())) &&
+		       ((BoardGamePlayData)obj).isCountForStats() == isCountForStats() &&
+		       GamePlayerData.equalPlayerMaps(((BoardGamePlayData)obj).getOtherPlayers(), getOtherPlayers());
+	}
 }

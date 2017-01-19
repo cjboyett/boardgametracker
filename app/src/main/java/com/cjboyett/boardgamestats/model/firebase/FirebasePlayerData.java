@@ -37,4 +37,10 @@ public class FirebasePlayerData
 			firebasePlayerDataMap.put(player, makeFirebaseData(playerDataMap.get(player)));
 		return firebasePlayerDataMap;
 	}
+
+	@Override
+	public String toString()
+	{
+		return "[" + name + ", " + score + ", " + win + "]";
+	}
 }

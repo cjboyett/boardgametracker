@@ -365,6 +365,55 @@ public class BoardGameDbUtility
 		addPlayers(dbHelper, id, gamePlayerData);
 	}
 
+	public static boolean addGamePlayIfNotPresent(GamesDbHelper dbHelper, BoardGamePlayData boardGamePlayData)
+	{
+		if (!containsGamePlayData(dbHelper, boardGamePlayData))
+		{
+			addGamePlay(dbHelper, boardGamePlayData);
+			return true;
+		}
+		return false;
+	}
+
+	private static boolean containsGamePlayData(GamesDbHelper dbHelper, BoardGamePlayData boardGamePlayData)
+	{
+		Cursor playCursor = dbHelper.getReadableDatabase()
+		                            .query(GamePlayEntry.TABLE_NAME,
+		                                   new String[]{GamePlayEntry._ID},
+		                                   GamePlayEntry.GAME + " = ? AND " +
+		                                   GamePlayEntry.TIME_PLAYED + " = ? AND " +
+		                                   GamePlayEntry.DATE + " = ? AND " +
+		                                   GamePlayEntry.NOTES + " = ? AND " +
+		                                   GamePlayEntry.LOCATION + " = ? AND " +
+		                                   GamePlayEntry.COUNT_FOR_STATS + " = ?",
+		                                   new String[]{boardGamePlayData.getGame().getName(),
+		                                                boardGamePlayData.getTimePlayed() + "",
+		                                                boardGamePlayData.getDate().rawDate(),
+		                                                boardGamePlayData.getNotes(),
+		                                                boardGamePlayData.getLocation(),
+		                                                boardGamePlayData.isCountForStats() ? "y" : "n"},
+		                                   null,
+		                                   null,
+		                                   null);
+
+		if (playCursor.moveToFirst())
+		{
+			while (playCursor.moveToNext())
+			{
+				BoardGamePlayData gamePlayData = getGamePlay(dbHelper, playCursor.getLong(0));
+				if (boardGamePlayData.equals(gamePlayData))
+				{
+					playCursor.close();
+					return true;
+				}
+			}
+		}
+		playCursor.close();
+
+		return false;
+
+	}
+
 	public static void updateGamePlay(GamesDbHelper dbHelper, long gamePlayId, BoardGamePlayData boardGamePlayData)
 	{
 		updateGamePlay(dbHelper, gamePlayId, boardGamePlayData.getGame().getName(), boardGamePlayData.getScore(),

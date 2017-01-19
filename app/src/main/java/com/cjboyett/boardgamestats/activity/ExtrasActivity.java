@@ -73,7 +73,7 @@ public class ExtrasActivity extends BaseAdActivity
 
 			AlertDialog backupDialog = new ViewUtilities.DialogBuilder(this)
 					.setTitle("Extras")
-					.setMessage("Here you can back up your game play records to an online database.  In a future update the ability to restore your database from the online storage will be added.")
+					.setMessage("Here you can back up your game play records to an online database or restore your records from the online database.")
 					.setPositiveButton("Okay", new View.OnClickListener()
 					{
 						@Override
@@ -196,6 +196,31 @@ public class ExtrasActivity extends BaseAdActivity
 			    }
 		    });
 
+		view.findViewById(R.id.textview_restore_database)
+		    .setOnClickListener(new View.OnClickListener()
+		    {
+			    @Override
+			    public void onClick(View v)
+			    {
+//				startActivity(new Intent(activity, ImageGalleryActivity.class));
+				    AlertDialog alertDialog = new ViewUtilities.DialogBuilder(activity)
+						    .setTitle("Restore Database")
+						    .setMessage("Would you like me to restore your database from the online backup?")
+						    .withYancey(true)
+						    .setPositiveButton("Yes", new View.OnClickListener()
+						    {
+							    @Override
+							    public void onClick(View v)
+							    {
+								    firebaseUtility.readFromDatabase();
+							    }
+						    })
+						    .setNegativeButton("No", null)
+						    .create();
+				    alertDialog.show();
+			    }
+		    });
+
 		view.findViewById(R.id.textview_board_game_recommendation)
 		    .setOnClickListener(new View.OnClickListener()
 		    {
@@ -216,6 +241,8 @@ public class ExtrasActivity extends BaseAdActivity
 		{
 			view.findViewById(R.id.textview_backup_database)
 			    .setBackgroundResource(R.drawable.main_button_background_dark);
+			view.findViewById(R.id.textview_restore_database)
+			    .setBackgroundResource(R.drawable.main_button_background_dark);
 			view.findViewById(R.id.textview_board_game_recommendation)
 			    .setBackgroundResource(R.drawable.main_button_background_dark);
 			view.findViewById(R.id.textview_email_logout)
@@ -225,6 +252,8 @@ public class ExtrasActivity extends BaseAdActivity
 		{
 			view.findViewById(R.id.textview_backup_database)
 			    .setBackgroundResource(R.drawable.main_button_background_light);
+			view.findViewById(R.id.textview_restore_database)
+			    .setBackgroundResource(R.drawable.main_button_background_light);
 			view.findViewById(R.id.textview_board_game_recommendation)
 			    .setBackgroundResource(R.drawable.main_button_background_light);
 			view.findViewById(R.id.textview_email_logout)
@@ -232,6 +261,7 @@ public class ExtrasActivity extends BaseAdActivity
 		}
 
 		((TextView) view.findViewById(R.id.textview_backup_database)).setTextColor(foregroundColor);
+		((TextView) view.findViewById(R.id.textview_restore_database)).setTextColor(foregroundColor);
 		((TextView) view.findViewById(R.id.textview_board_game_recommendation)).setTextColor(foregroundColor);
 		((TextView) view.findViewById(R.id.textview_email_logout)).setTextColor(foregroundColor);
 
