@@ -16,10 +16,12 @@ public class PlayerData
 	private String mostPlayedGameByTime;
 	private String mostWonGame;
 	private String mostLostGame;
+	private String mostTiedGame;
 	private double winPercentage;
 	private double losePercentage;
+	private double tiePercentage;
 
-	public PlayerData(String name, String facebookid, String notes, String imageFilePath, int timesPlayedWith, int timePlayedWith, String mostPlayedGameByTimes, String mostPlayedGameByTime, String mostWonGame, String mostLostGame, double winPercentage, double losePercentage)
+	public PlayerData(String name, String facebookid, String notes, String imageFilePath, int timesPlayedWith, int timePlayedWith, String mostPlayedGameByTimes, String mostPlayedGameByTime, String mostWonGame, String mostLostGame, String mostTiedGame, double winPercentage, double losePercentage, double tiePercentage)
 	{
 		this.name = name;
 		this.facebookid = facebookid;
@@ -31,8 +33,10 @@ public class PlayerData
 		this.mostPlayedGameByTime = mostPlayedGameByTime;
 		this.mostWonGame = mostWonGame;
 		this.mostLostGame = mostLostGame;
+		this.mostTiedGame = mostTiedGame;
 		this.winPercentage = winPercentage;
 		this.losePercentage = losePercentage;
+		this.tiePercentage = tiePercentage;
 	}
 
 	public String getName()
@@ -160,6 +164,6 @@ public class PlayerData
 	{
 		return name + ":[" + facebookid + ", " + notes + ", " + timesPlayedWith + ", " + timePlayedWith
 		       + ", " + mostPlayedGameByTimes + ", " + mostPlayedGameByTime + ", "
-		       + mostWonGame + ", " + mostLostGame + ", " + winPercentage + ", " + losePercentage + "]";
+		       + mostWonGame + ", " + mostLostGame + ", " + mostTiedGame + ", " + winPercentage + ", " + losePercentage + ", " + tiePercentage + "]";
 	}
 }

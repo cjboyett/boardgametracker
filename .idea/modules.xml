@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/BoardGameStats.iml" filepath="$PROJECT_DIR$/BoardGameStats.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/boardgametracker.iml" filepath="$PROJECT_DIR$/boardgametracker.iml" />
       <module fileurl="file://$PROJECT_DIR$/colorpicker/colorpicker.iml" filepath="$PROJECT_DIR$/colorpicker/colorpicker.iml" />
       <module fileurl="file://$PROJECT_DIR$/floatingactionmenu/floatingactionmenu.iml" filepath="$PROJECT_DIR$/floatingactionmenu/floatingactionmenu.iml" />
     </modules>

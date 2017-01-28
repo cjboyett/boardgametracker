@@ -45,25 +45,22 @@ import me.nereo.multi_image_selector.MultiImageSelectorActivity;
  * href="http://developer.android.com/guide/topics/ui/settings.html">Settings
  * API Guide</a> for more information on developing a Settings UI.
  */
-public class SettingsActivity extends AppCompatPreferenceActivity
-{
+public class SettingsActivity extends AppCompatPreferenceActivity {
 	private static final int REQUEST_IMAGE = 200;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState)
-	{
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		getFragmentManager().beginTransaction()
-				.replace(android.R.id.content, new GeneralPreferenceFragment())
-				.commit();
+							.replace(android.R.id.content, new GeneralPreferenceFragment())
+							.commit();
 	}
 
 	/**
 	 * Helper method to determine if the device has an extra-large screen. For
 	 * example, 10" tablets are extra-large.
 	 */
-	private static boolean isXLargeTablet(Context context)
-	{
+	private static boolean isXLargeTablet(Context context) {
 		return (context.getResources().getConfiguration().screenLayout
 				& Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_XLARGE;
 	}
@@ -72,8 +69,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean onIsMultiPane()
-	{
+	public boolean onIsMultiPane() {
 		return isXLargeTablet(this);
 	}
 
@@ -81,60 +77,50 @@ public class SettingsActivity extends AppCompatPreferenceActivity
 	 * This method stops fragment injection in malicious applications.
 	 * Make sure to deny any unknown fragments here.
 	 */
-	protected boolean isValidFragment(String fragmentName)
-	{
+	protected boolean isValidFragment(String fragmentName) {
 		return PreferenceFragment.class.getName().equals(fragmentName)
 				|| GeneralPreferenceFragment.class.getName().equals(fragmentName);
 	}
 
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
-	public static class GeneralPreferenceFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener
-	{
+	public static class GeneralPreferenceFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener {
 		@Override
-		public void onCreate(Bundle savedInstanceState)
-		{
+		public void onCreate(Bundle savedInstanceState) {
 			super.onCreate(savedInstanceState);
 			addPreferencesFromResource(R.xml.pref_main);
 
-			((CheckBoxPreference)findPreference(getString(R.string.generate_palette_preference)))
+			((CheckBoxPreference) findPreference(getString(R.string.generate_palette_preference)))
 					.setChecked(Preferences.generatePalette(getActivity()));
 			findPreference(getString(R.string.generate_palette_preference))
-					.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener()
-					{
+					.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 						@Override
-						public boolean onPreferenceChange(Preference preference, Object newValue)
-						{
+						public boolean onPreferenceChange(Preference preference, Object newValue) {
 							Preferences.setGeneratePalettePreference(getActivity(), (boolean) newValue);
 							((CheckBoxPreference) preference).setChecked((boolean) newValue);
 							return false;
 						}
 					});
 
-			((CheckBoxPreference)findPreference(getString(R.string.allow_notifications_preference)))
+			((CheckBoxPreference) findPreference(getString(R.string.allow_notifications_preference)))
 					.setChecked(Preferences.showNotifications(getActivity()));
 			findPreference(getString(R.string.allow_notifications_preference))
-					.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener()
-					{
+					.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 						@Override
-						public boolean onPreferenceChange(Preference preference, Object newValue)
-						{
+						public boolean onPreferenceChange(Preference preference, Object newValue) {
 							Preferences.setShowNotifications(getActivity(), (boolean) newValue);
 							((CheckBoxPreference) preference).setChecked((boolean) newValue);
 							return false;
 						}
 					});
 
-			((ListPreference)findPreference(getString(R.string.thumbnail_size_preference)))
+			((ListPreference) findPreference(getString(R.string.thumbnail_size_preference)))
 					.setValueIndex(Preferences.getThumbnailSize(getActivity()));
 			findPreference(getString(R.string.thumbnail_size_preference))
-					.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener()
-					{
+					.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 						@Override
-						public boolean onPreferenceChange(Preference preference, Object newValue)
-						{
+						public boolean onPreferenceChange(Preference preference, Object newValue) {
 							int size = Preferences.THUMBNAIL_NORMAL;
-							switch ((String) newValue)
-							{
+							switch ((String) newValue) {
 								case "Dovber":
 									size = Preferences.THUMBNAIL_STUPID_SMALL;
 									break;
@@ -159,32 +145,27 @@ public class SettingsActivity extends AppCompatPreferenceActivity
 					});
 
 
-			((CheckBoxPreference)findPreference(getString(R.string.sort_winners_first_preference)))
+			((CheckBoxPreference) findPreference(getString(R.string.sort_winners_first_preference)))
 					.setChecked(Preferences.sortWinnersFirst(getActivity()));
 			findPreference(getString(R.string.sort_winners_first_preference))
-					.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener()
-					{
+					.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 						@Override
-						public boolean onPreferenceChange(Preference preference, Object newValue)
-						{
+						public boolean onPreferenceChange(Preference preference, Object newValue) {
 							Preferences.setSortWinnersFirstPreference(getActivity(), (boolean) newValue);
 							((CheckBoxPreference) preference).setChecked((boolean) newValue);
 							return false;
 						}
 					});
 
-			((CheckBoxPreference)findPreference(getString(R.string.activity_transition_preference)))
+			((CheckBoxPreference) findPreference(getString(R.string.activity_transition_preference)))
 					.setChecked(Preferences.useActivityTransitions(getActivity()));
 			findPreference(getString(R.string.activity_transition_preference))
-					.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener()
-					{
+					.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 						@Override
-						public boolean onPreferenceChange(Preference preference, Object newValue)
-						{
+						public boolean onPreferenceChange(Preference preference, Object newValue) {
 							Preferences.setActivityTransitionPreference(getActivity(), (boolean) newValue);
 							((CheckBoxPreference) preference).setChecked((boolean) newValue);
-							if (!(boolean) newValue)
-							{
+							if (!(boolean) newValue) {
 								Preferences.setUseSwipesPreference(getActivity(), (boolean) newValue);
 								((CheckBoxPreference) findPreference(getString(R.string.swipe_preference)))
 										.setChecked((boolean) newValue);
@@ -194,69 +175,58 @@ public class SettingsActivity extends AppCompatPreferenceActivity
 					});
 
 			findPreference(getString(R.string.swipe_preference)).setDependency(getString(R.string.activity_transition_preference));
-			((CheckBoxPreference)findPreference(getString(R.string.swipe_preference)))
+			((CheckBoxPreference) findPreference(getString(R.string.swipe_preference)))
 					.setChecked(Preferences.useSwipes(getActivity()));
 			findPreference(getString(R.string.swipe_preference))
-					.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener()
-					{
+					.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 						@Override
-						public boolean onPreferenceChange(Preference preference, Object newValue)
-						{
+						public boolean onPreferenceChange(Preference preference, Object newValue) {
 							Preferences.setUseSwipesPreference(getActivity(), (boolean) newValue);
 							((CheckBoxPreference) preference).setChecked((boolean) newValue);
 							return false;
 						}
 					});
 
-			((EditTextPreference)findPreference(getString(R.string.display_name_preference)))
+			((EditTextPreference) findPreference(getString(R.string.display_name_preference)))
 					.setText(Preferences.getUsername(getActivity()));
 			findPreference(getString(R.string.display_name_preference))
-					.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener()
-					{
+					.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 						@Override
-						public boolean onPreferenceChange(Preference preference, Object newValue)
-						{
+						public boolean onPreferenceChange(Preference preference, Object newValue) {
 							Preferences.setUsername(getActivity(), (String) newValue);
-							((EditTextPreference)findPreference(getString(R.string.display_name_preference)))
-									.setText((String)newValue);
+							((EditTextPreference) findPreference(getString(R.string.display_name_preference)))
+									.setText((String) newValue);
 							return false;
 						}
 					});
 
-			((EditTextPreference)findPreference(getString(R.string.threshold_preference)))
+			((EditTextPreference) findPreference(getString(R.string.threshold_preference)))
 					.setText(Preferences.gamePlayThreshold(getActivity()) + "");
 			findPreference(getString(R.string.threshold_preference))
-					.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener()
-					{
+					.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 						@Override
-						public boolean onPreferenceChange(Preference preference, Object newValue)
-						{
-							if (NumberUtils.isParsable((String)newValue))
-							{
+						public boolean onPreferenceChange(Preference preference, Object newValue) {
+							if (NumberUtils.isParsable((String) newValue)) {
 								Preferences.setGamePlayThreshold(getActivity(), Integer.parseInt((String) newValue));
-								((EditTextPreference)findPreference(getString(R.string.threshold_preference)))
-										.setText((String)newValue);
+								((EditTextPreference) findPreference(getString(R.string.threshold_preference)))
+										.setText((String) newValue);
 							}
 							return false;
 						}
 					});
 
-			findPreference(getString(R.string.choose_theme_preference)).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener()
-			{
+			findPreference(getString(R.string.choose_theme_preference)).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 				@Override
-				public boolean onPreferenceChange(Preference preference, Object newValue)
-				{
-					Integer[] colors = (Integer[])newValue;
+				public boolean onPreferenceChange(Preference preference, Object newValue) {
+					Integer[] colors = (Integer[]) newValue;
 					setColorPreferences(colors[0], colors[1]);
 					return false;
 				}
 			});
 
-			findPreference(getString(R.string.pref_recalculate_stats)).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener()
-			{
+			findPreference(getString(R.string.pref_recalculate_stats)).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 				@Override
-				public boolean onPreferenceClick(Preference preference)
-				{
+				public boolean onPreferenceClick(Preference preference) {
 					GamesDbHelper dbHelper = new GamesDbHelper(getActivity());
 					PlayersDbUtility.populateAllPlayersTable(dbHelper);
 					dbHelper.close();
@@ -264,24 +234,20 @@ public class SettingsActivity extends AppCompatPreferenceActivity
 				}
 			});
 
-			findPreference(getString(R.string.email_preference)).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener()
-			{
+			findPreference(getString(R.string.email_preference)).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 				@Override
-				public boolean onPreferenceClick(Preference preference)
-				{
+				public boolean onPreferenceClick(Preference preference) {
 					openEmail();
 					return false;
 				}
 			});
 
-			findPreference(getString(R.string.edit_avatar_preference)).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener()
-			{
+			findPreference(getString(R.string.edit_avatar_preference)).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 				@Override
-				public boolean onPreferenceClick(Preference preference)
-				{
+				public boolean onPreferenceClick(Preference preference) {
 					MultiImageSelector.create()
-					                  .single()
-					                  .start(getActivity(), REQUEST_IMAGE);
+									  .single()
+									  .start(getActivity(), REQUEST_IMAGE);
 
 					return false;
 				}
@@ -291,19 +257,18 @@ public class SettingsActivity extends AppCompatPreferenceActivity
 
 			bindPreferenceSummaryToValue(findPreference(getString(R.string.theme_background_preference)));
 			bindPreferenceSummaryToValue(findPreference(getString(R.string.theme_foreground_preference)));
-			setColorPreferences(Preferences.getBackgroundColor(getActivity()), Preferences.getForegroundColor(getActivity()));
+			setColorPreferences(Preferences.getBackgroundColor(getActivity()),
+								Preferences.getForegroundColor(getActivity()));
 		}
 
 		@Override
 		public boolean onPreferenceChange(Preference preference, Object newValue) {
-			if (preference instanceof ColorPickerPreference)
-			{
+			if (preference instanceof ColorPickerPreference) {
 				String key = preference.getKey();
-				String colorString = "#" + Integer.toHexString((int)newValue).substring(2).toUpperCase();
-				switch (key)
-				{
+				String colorString = "#" + Integer.toHexString((int) newValue).substring(2).toUpperCase();
+				switch (key) {
 					case "com.cjboyett.boardgamestats.THEME_BACKGROUND_PREFERENCE":
-						Preferences.setThemeBackgroundPreference(preference.getContext(), (int)newValue);
+						Preferences.setThemeBackgroundPreference(preference.getContext(), (int) newValue);
 						findPreference(getString(R.string.theme_background_preference))
 								.setSummary(colorString);
 						break;
@@ -319,28 +284,25 @@ public class SettingsActivity extends AppCompatPreferenceActivity
 			return true;
 		}
 
-		private void bindPreferenceSummaryToValue(Preference preference)
-		{
+		private void bindPreferenceSummaryToValue(Preference preference) {
 			preference.setOnPreferenceChangeListener(this);
 		}
 
-		private void setColorPreferences(int backgroundColor, int foregroundColor)
-		{
+		private void setColorPreferences(int backgroundColor, int foregroundColor) {
 			String backgroundColorString = "#" + Integer.toHexString(backgroundColor).substring(2).toUpperCase();
 			String foregroundColorString = "#" + Integer.toHexString(foregroundColor).substring(2).toUpperCase();
 
-			((ColorPickerPreference)findPreference(getString(R.string.theme_background_preference)))
+			((ColorPickerPreference) findPreference(getString(R.string.theme_background_preference)))
 					.setValue(backgroundColor);
 			findPreference(getString(R.string.theme_background_preference))
 					.setSummary(backgroundColorString);
-			((ColorPickerPreference)findPreference(getString(R.string.theme_foreground_preference)))
+			((ColorPickerPreference) findPreference(getString(R.string.theme_foreground_preference)))
 					.setValue(foregroundColor);
 			findPreference(getString(R.string.theme_foreground_preference))
 					.setSummary(foregroundColorString);
 		}
 
-		private void openEmail()
-		{
+		private void openEmail() {
 			Intent intent = new Intent(Intent.ACTION_SENDTO);
 			intent.setData(Uri.parse("mailto:")); // only email apps should handle this
 			intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"casey@cjboyett.com"});
@@ -351,8 +313,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity
 	}
 
 	@Override
-	public void onBackPressed()
-	{
+	public void onBackPressed() {
 		super.onBackPressed();
 //		ActivityUtilities.exitLeft(this);
 	}
@@ -360,25 +321,21 @@ public class SettingsActivity extends AppCompatPreferenceActivity
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		if(requestCode == REQUEST_IMAGE){
-			if(resultCode == RESULT_OK)
-			{
+		if (requestCode == REQUEST_IMAGE) {
+			if (resultCode == RESULT_OK) {
 				List<String> paths = data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
 
 				final GamesDbHelper dbHelper = new GamesDbHelper(this);
 				final Activity activity = this;
 
-				new AsyncTask<String, Void, Bitmap>()
-				{
+				new AsyncTask<String, Void, Bitmap>() {
 					@Override
-					protected Bitmap doInBackground(String... params)
-					{
+					protected Bitmap doInBackground(String... params) {
 						Bitmap bitmap = BitmapFactory.decodeFile(params[0]);
 						BitmapFactory.Options options = new BitmapFactory.Options();
 
-						if (bitmap.getByteCount() > 256 * 1024)
-						{
-							options.inSampleSize = (int)Math.ceil(Math.sqrt((bitmap.getByteCount() / 1024) / 256));
+						if (bitmap.getByteCount() > 256 * 1024) {
+							options.inSampleSize = (int) Math.ceil(Math.sqrt((bitmap.getByteCount() / 1024) / 256));
 							bitmap = BitmapFactory.decodeFile(params[0], options);
 						}
 
@@ -386,16 +343,15 @@ public class SettingsActivity extends AppCompatPreferenceActivity
 
 						ImageController imageController = new ImageController(activity);
 						imageController.setDirectoryName("avatars")
-						               .setFileName("master_user.jpg")
-						               .setFileType("JPG")
-						               .save(bitmap);
+									   .setFileName("master_user.jpg")
+									   .setFileType("JPG")
+									   .save(bitmap);
 
 						return bitmap;
 					}
 
 					@Override
-					protected void onPostExecute(Bitmap bitmap)
-					{
+					protected void onPostExecute(Bitmap bitmap) {
 						ActivityUtilities.setDatabaseChanged(activity, true);
 						dbHelper.close();
 					}

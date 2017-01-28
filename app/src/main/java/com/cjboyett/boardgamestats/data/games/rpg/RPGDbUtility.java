@@ -679,7 +679,7 @@ public class RPGDbUtility
 		return new ArrayList<>(players);
 	}
 
-	public static List<String> getAllLocations(GamesDbHelper dbHelper, Date since)
+	public static List<String> getAllLocations(GamesDbHelper dbHelper)
 	{
 		Set<String> locations = new TreeSet<>();
 
@@ -687,8 +687,8 @@ public class RPGDbUtility
 				.query(true,
 						GamePlayEntry.TABLE_NAME,
 						new String[]{GamePlayEntry.LOCATION},
-						GamePlayEntry.DATE + " >= ?",
-						new String[]{since.rawDate()},
+						null,
+						null,
 						null,
 						null,
 						null,

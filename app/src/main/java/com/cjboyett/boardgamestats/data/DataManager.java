@@ -80,7 +80,7 @@ public class DataManager
 		if (allPlayers == null)
 		{
 			GamesDbHelper dbHelper = new GamesDbHelper(application);
-			allPlayers = GamesDbUtility.getAllPlayersSorted(dbHelper, threeMonthsAgo());
+			allPlayers = GamesDbUtility.getAllPlayersSorted(dbHelper);
 			dbHelper.close();
 		}
 
@@ -92,23 +92,11 @@ public class DataManager
 		if (allLocations == null)
 		{
 			GamesDbHelper dbHelper = new GamesDbHelper(application);
-			allLocations = GamesDbUtility.getAllLocationsSorted(dbHelper, threeMonthsAgo());
+			allLocations = GamesDbUtility.getAllLocationsSorted(dbHelper);
 			dbHelper.close();
 		}
 
 		return allLocations;
-	}
-
-	private Date threeMonthsAgo()
-	{
-		Calendar c = Calendar.getInstance();
-		int year = c.get(Calendar.YEAR);
-		int month = c.get(Calendar.MONTH);
-		int day = c.get(Calendar.DAY_OF_MONTH);
-		Date tempDate;
-		if (month >= 3) tempDate = new Date(year, month - 3, day);
-		else tempDate = new Date(year - 1, month + 9, day);
-		return tempDate;
 	}
 
 	public List<HotnessXmlParser.Item> getAllHotnessItems()

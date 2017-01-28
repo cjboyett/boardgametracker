@@ -42,11 +42,11 @@ public class GamesDbUtility
 		return gamesList;
 	}
 
-	public static List<String> getAllLocationsSorted(GamesDbHelper dbHelper, Date date)
+	public static List<String> getAllLocationsSorted(GamesDbHelper dbHelper)
 	{
-		List<String> boardGameLocations = BoardGameDbUtility.getAllLocations(dbHelper, date);
-		List<String> rpgLocations = RPGDbUtility.getAllLocations(dbHelper, date);
-		List<String> videoGameLocations = VideoGameDbUtility.getAllLocations(dbHelper, date);
+		List<String> boardGameLocations = BoardGameDbUtility.getAllLocations(dbHelper);
+		List<String> rpgLocations = RPGDbUtility.getAllLocations(dbHelper);
+		List<String> videoGameLocations = VideoGameDbUtility.getAllLocations(dbHelper);
 
 		Set<String> locationSet = new TreeSet<>();
 		locationSet.addAll(boardGameLocations);
@@ -56,6 +56,22 @@ public class GamesDbUtility
 		StringUtilities.sortList(locations);
 
 		return locations;
+	}
+
+	public static List<String> getAllPlayersSorted(GamesDbHelper dbHelper)
+	{
+		List<String> boardGamePlayers = BoardGameDbUtility.getAllPlayers(dbHelper);
+		List<String> rpgPlayers = RPGDbUtility.getAllPlayers(dbHelper);
+		List<String> videoGamePlayers = VideoGameDbUtility.getAllPlayers(dbHelper);
+
+		Set<String> playerSet = new TreeSet<>();
+		playerSet.addAll(boardGamePlayers);
+		playerSet.addAll(rpgPlayers);
+		playerSet.addAll(videoGamePlayers);
+		List<String> players = new ArrayList<>(playerSet);
+		StringUtilities.sortList(players);
+
+		return players;
 	}
 
 	public static List<String> getAllPlayersSorted(GamesDbHelper dbHelper, Date date)

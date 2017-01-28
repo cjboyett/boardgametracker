@@ -1,5 +1,6 @@
 package com.cjboyett.boardgamestats.activity;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -42,14 +43,13 @@ import java.util.List;
 
 import me.nereo.multi_image_selector.MultiImageSelector;
 
-public class AddGamePlayDetailsFragment extends Fragment
-{
+public class AddGamePlayDetailsFragment extends Fragment {
 	private TextView gameTextView, timePlayedTextView, dateTextView, locationTextView, notesTextView;
 	private AddGamePlayTabbedActivity parent;
 	private EditText timePlayedEditText, notesEditText;
 	private AutoCompleteTextView gameEditText;
-	private static AutoCompleteTextView locationEditText;
-	private static EditText dateEditText;
+	private AutoCompleteTextView locationEditText;
+	private EditText dateEditText;
 
 	private TextView textViewStartTimer;
 	private Chronometer timer;
@@ -57,7 +57,6 @@ public class AddGamePlayDetailsFragment extends Fragment
 	private long timerBase, lastStartTime, lastStopTime, diff;
 
 	private ImageButton addPicturesButton;
-	private List<String> picturePaths;
 
 	private List<String> games;
 
@@ -69,15 +68,13 @@ public class AddGamePlayDetailsFragment extends Fragment
 
 	private static final int REQUEST_IMAGE = 201;
 
-	public AddGamePlayDetailsFragment()
-	{
+	public AddGamePlayDetailsFragment() {
 		// Required empty public constructor
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-	                         Bundle savedInstanceState)
-	{
+							 Bundle savedInstanceState) {
 
 		view = inflater.inflate(R.layout.fragment_add_game_play_details, container, false);
 
@@ -93,26 +90,20 @@ public class AddGamePlayDetailsFragment extends Fragment
 		dateEditText = (EditText) view.findViewById(R.id.edittext_date);
 
 		addPicturesButton = (ImageButton) view.findViewById(R.id.imagebutton_add_pictures);
-		picturePaths = new ArrayList<>();
 
 		textViewStartTimer = (TextView) view.findViewById(R.id.textview_start_timer);
 		timer = (Chronometer) view.findViewById(R.id.timer);
 
-		View.OnClickListener timerListener = new View.OnClickListener()
-		{
+		View.OnClickListener timerListener = new View.OnClickListener() {
 			@Override
-			public void onClick(View v)
-			{
+			public void onClick(View v) {
 				timer.setTextColor(Color.TRANSPARENT);
 
-				if (timerRunning)
-				{
+				if (timerRunning) {
 					lastStopTime = SystemClock.elapsedRealtime();
 					timer.stop();
 					textViewStartTimer.setText("Start");
-				}
-				else
-				{
+				} else {
 					diff += (lastStopTime - lastStartTime);
 					timer.setBase(SystemClock.elapsedRealtime() - diff);
 					timerBase = timer.getBase();
@@ -127,23 +118,23 @@ public class AddGamePlayDetailsFragment extends Fragment
 		timer.setOnClickListener(timerListener);
 		textViewStartTimer.setOnClickListener(timerListener);
 
-		timer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener()
-		{
+		timer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
 			@Override
-			public void onChronometerTick(Chronometer chronometer)
-			{
+			public void onChronometerTick(Chronometer chronometer) {
 				timePlayedEditText.setText(chronometer.getText());
 			}
 		});
 
 		DataManager dataManager = DataManager.getInstance(getActivity().getApplication());
 		games = dataManager.getAllGamesCombined();
-		gameEditText.setAdapter(new FilteredGameArrayAdapter(parent, android.R.layout.simple_list_item_1, new ArrayList<>(games), true));
+		gameEditText.setAdapter(new FilteredGameArrayAdapter(parent,
+															 android.R.layout.simple_list_item_1,
+															 new ArrayList<>(games),
+															 true));
 		gameEditText.setThreshold(2);
 //		gameEditText.setDropDownHeight();
 
-		if (parent.getGame() != null)
-		{
+		if (parent.getGame() != null) {
 			Game game = parent.getGame();
 			gameEditText.setText(game.getName());
 			if (game instanceof BoardGame) gameType = Game.GameType.BOARD.getType();
@@ -151,48 +142,41 @@ public class AddGamePlayDetailsFragment extends Fragment
 			else if (game instanceof VideoGame) gameType = Game.GameType.VIDEO.getType();
 		}
 
-		final DialogFragment newFragment = new DatePickerFragment();
+		final DialogFragment newFragment = new DatePickerFragment(dateEditText, locationEditText);
 
 		final Calendar c = Calendar.getInstance();
 
 		List<String> locations = dataManager.getAllLocations();
-		locationEditText.setAdapter(new FilteredGameArrayAdapter(parent, android.R.layout.simple_list_item_1, locations, false));
-		locationEditText.setThreshold(1);
+		locationEditText.setAdapter(new FilteredGameArrayAdapter(parent,
+																 android.R.layout.simple_list_item_1,
+																 locations,
+																 false));
+		locationEditText.setThreshold(2);
 
-		if (date == null || date.equals(""))
-		{
+		if (date == null || date.equals("")) {
 			date = formatDate(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
 			dateEditText.setText(StringUtilities.dateToString(date));
 		}
-		dateEditText.setOnClickListener(new View.OnClickListener()
-		{
+		dateEditText.setOnClickListener(new View.OnClickListener() {
 			@Override
-			public void onClick(View v)
-			{
+			public void onClick(View v) {
 				newFragment.show(getActivity().getSupportFragmentManager(), "datePicker");
 			}
 		});
-		dateEditText.setOnFocusChangeListener(new View.OnFocusChangeListener()
-		{
+		dateEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 			@Override
-			public void onFocusChange(View v, boolean hasFocus)
-			{
+			public void onFocusChange(View v, boolean hasFocus) {
 				if (v.equals(dateEditText) && hasFocus)
 					newFragment.show(getActivity().getSupportFragmentManager(), "datePicker");
 			}
 		});
 
-		gameEditText.setOnFocusChangeListener(new View.OnFocusChangeListener()
-		{
+		gameEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 			@Override
-			public void onFocusChange(View v, boolean hasFocus)
-			{
-				if (!hasFocus)
-				{
-					for (String game : games)
-					{
-						if (game.startsWith(gameEditText.getText().toString()))
-						{
+			public void onFocusChange(View v, boolean hasFocus) {
+				if (!hasFocus) {
+					for (String game : games) {
+						if (game.startsWith(gameEditText.getText().toString())) {
 							String type = game.substring(game.length() - 1);
 							if (type.equals("b")) gameType = Game.GameType.BOARD.getType();
 							else if (type.equals("r")) gameType = Game.GameType.RPG.getType();
@@ -204,34 +188,28 @@ public class AddGamePlayDetailsFragment extends Fragment
 			}
 		});
 
-		timePlayedEditText.addTextChangedListener(new TextWatcher()
-		{
+		timePlayedEditText.addTextChangedListener(new TextWatcher() {
 			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count, int after)
-			{
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
 			}
 
 			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count)
-			{
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				if (s.length() > 0) timer.setTextColor(Color.TRANSPARENT);
 				else timer.setTextColor(hintTextColor);
 			}
 
 			@Override
-			public void afterTextChanged(Editable s)
-			{
+			public void afterTextChanged(Editable s) {
 
 			}
 		});
 
 		addPicturesButton.setVisibility(View.GONE);
-		addPicturesButton.setOnClickListener(new View.OnClickListener()
-		{
+		addPicturesButton.setOnClickListener(new View.OnClickListener() {
 			@Override
-			public void onClick(View v)
-			{
+			public void onClick(View v) {
 				MultiImageSelector.create().start(parent, REQUEST_IMAGE);
 			}
 		});
@@ -252,25 +230,20 @@ public class AddGamePlayDetailsFragment extends Fragment
 	}
 
 	@Override
-	public void onResume()
-	{
+	public void onResume() {
 		super.onResume();
 		TempDataManager tempDataManager = TempDataManager.getInstance();
 		List<String> gameData = tempDataManager.getTempGamePlayData();
 		List<Long> timerData = tempDataManager.getTimer();
 
-		try
-		{
+		try {
 			Log.d("GAME", gameData.toString());
 			Log.d("TIMER", timerData.toString());
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		if (gameData != null && gameData.size() >= 6)
-		{
+		if (gameData != null && gameData.size() >= 6) {
 			if (!TextUtils.isEmpty(gameData.get(0))) gameEditText.setText(gameData.get(0));
 			if (!TextUtils.isEmpty(gameData.get(1))) gameType = gameData.get(1);
 			if (!TextUtils.isEmpty(gameData.get(2))) timePlayedEditText.setText(gameData.get(2));
@@ -280,8 +253,7 @@ public class AddGamePlayDetailsFragment extends Fragment
 			if (!TextUtils.isEmpty(gameData.get(5))) notesEditText.setText(gameData.get(5));
 		}
 
-		if (timerData != null && timerData.size() >= 4)
-		{
+		if (timerData != null && timerData.size() >= 4) {
 			timerBase = timerData.get(0);
 			lastStartTime = timerData.get(1);
 			lastStopTime = timerData.get(2);
@@ -289,17 +261,13 @@ public class AddGamePlayDetailsFragment extends Fragment
 			timerRunning = lastStartTime > lastStopTime;
 		}
 
-		if (timerRunning)
-		{
+		if (timerRunning) {
 			timer.setTextColor(Color.TRANSPARENT);
 			timer.stop();
 			timer.setBase(timerBase);
 			timer.start();
 			textViewStartTimer.setText("Pause");
-		}
-
-		else if (timerBase != 0)
-		{
+		} else if (timerBase != 0) {
 			long tempTimerBase = SystemClock.elapsedRealtime() - (diff + (lastStopTime - lastStartTime));
 			timer.setBase(tempTimerBase);
 			timePlayedEditText.setText(timer.getText());
@@ -309,8 +277,7 @@ public class AddGamePlayDetailsFragment extends Fragment
 	}
 
 	@Override
-	public void onPause()
-	{
+	public void onPause() {
 		super.onPause();
 
 		updateData();
@@ -318,68 +285,58 @@ public class AddGamePlayDetailsFragment extends Fragment
 
 
 	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data)
-	{
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		parent.onActivityResult(requestCode, resultCode, data);
 	}
 
-	public void setGame(String gameName, String gameType)
-	{
+	public void setGame(String gameName, String gameType) {
 		gameEditText.setText(gameName);
 		this.gameType = gameType;
 		updateData();
 	}
 
-	public void setData(int timePlayed, String date, String location, String notes)
-	{
+	public void setData(int timePlayed, String date, String location, String notes) {
 		if (timePlayed > 0) this.timePlayed = timePlayed + "";
 		this.location = location;
 		this.notes = notes;
 		AddGamePlayDetailsFragment.date = date;
 	}
 
-	public void updateData()
-	{
-		try
-		{
-			if (parent != null)
-			{
+	public void updateData() {
+		try {
+			if (parent != null) {
 				parent.setData(gameEditText.getText().toString(),
-				               gameType,
-				               timePlayedEditText.getText().toString(),
-				               date,
-				               locationEditText.getText().toString(),
-				               notesEditText.getText().toString());
+							   gameType,
+							   timePlayedEditText.getText().toString(),
+							   date,
+							   locationEditText.getText().toString(),
+							   notesEditText.getText().toString());
 			}
 
 			TempDataManager tempDataManager = TempDataManager.getInstance();
 			tempDataManager.clearTempGamePlayData();
 			tempDataManager.setTempGamePlayData(gameEditText.getText().toString(),
-			                                    gameType,
-			                                    timePlayedEditText.getText().toString(),
-			                                    date,
-			                                    locationEditText.getText().toString(),
-			                                    notesEditText.getText().toString());
+												gameType,
+												timePlayedEditText.getText().toString(),
+												date,
+												locationEditText.getText().toString(),
+												notesEditText.getText().toString());
 			tempDataManager.saveTempGamePlayData();
 
 			tempDataManager.setTimer(timerBase, lastStartTime, lastStopTime, diff);
 			tempDataManager.saveTimer();
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 
 		}
 	}
 
-	private void setColors()
-	{
+	private void setColors() {
 		backgroundColor = Preferences.getBackgroundColor(parent);
 		foregroundColor = Preferences.getForegroundColor(parent);
 		hintTextColor = Preferences.getHintTextColor(parent);
 	}
 
-	private void colorComponents()
-	{
+	private void colorComponents() {
 		view.setBackgroundColor(backgroundColor);
 		//gameEditText.setBackgroundColor(ColorUtilities.adjustBasedOnHSV(backgroundColor));
 		gameEditText.setTextColor(foregroundColor);
@@ -419,22 +376,19 @@ public class AddGamePlayDetailsFragment extends Fragment
 	}
 
 	@Override
-	public void onAttach(Context context)
-	{
+	public void onAttach(Context context) {
 		parent = (AddGamePlayTabbedActivity) context;
 		super.onAttach(context);
 	}
 
 	@Override
-	public void onDestroy()
-	{
+	public void onDestroy() {
 		super.onDestroy();
 //		if (dbHelper != null) dbHelper.close();
 		date = "";
 	}
 
-	private static String formatDate(int year, int month, int day)
-	{
+	private static String formatDate(int year, int month, int day) {
 		String date = "";
 		date += year;
 		date += month < 10 ? 0 + "" + month : month;
@@ -442,24 +396,29 @@ public class AddGamePlayDetailsFragment extends Fragment
 		return date;
 	}
 
-	public boolean isTimerRunning()
-	{
+	public boolean isTimerRunning() {
 		return timerBase > 0;
 	}
 
+	@SuppressLint("ValidFragment")
 	public static class DatePickerFragment extends DialogFragment
-			implements DatePickerDialog.OnDateSetListener
-	{
+			implements DatePickerDialog.OnDateSetListener {
+
+		private EditText dateEditText;
+		private EditText locationEditText;
+		public DatePickerFragment(EditText dateEditText, EditText locationEditText) {
+			super();
+			this.dateEditText = dateEditText;
+			this.locationEditText = locationEditText;
+		}
 
 		@Override
-		public Dialog onCreateDialog(Bundle savedInstanceState)
-		{
+		public Dialog onCreateDialog(Bundle savedInstanceState) {
 			Dialog dateDialog;
 			// Use the current date as the default date in the picker
 			if (dateEditText.getText()
-			                .toString()
-			                .equals(""))
-			{
+							.toString()
+							.equals("")) {
 				final Calendar c = Calendar.getInstance();
 				int year = c.get(Calendar.YEAR);
 				int month = c.get(Calendar.MONTH);
@@ -467,45 +426,40 @@ public class AddGamePlayDetailsFragment extends Fragment
 
 				// Create a new instance of DatePickerDialog and return it
 				dateDialog = new DatePickerDialog(getActivity(), this, year, month, day);
-			}
-			else
-			{
+			} else {
 				dateDialog = new DatePickerDialog(getActivity(), this,
-				                                  Integer.parseInt(date.substring(0, 4)),
-				                                  Integer.parseInt(date.substring(4, 6)),
-				                                  Integer.parseInt(date.substring(6)));
+												  Integer.parseInt(date.substring(0, 4)),
+												  Integer.parseInt(date.substring(4, 6)),
+												  Integer.parseInt(date.substring(6)));
 			}
 			return dateDialog;
 		}
 
 		@Override
-		public void onDismiss(DialogInterface dialog)
-		{
+		public void onDismiss(DialogInterface dialog) {
 			super.onDismiss(dialog);
 		}
 
 		@Override
-		public void onCancel(DialogInterface dialog)
-		{
+		public void onCancel(DialogInterface dialog) {
 			super.onCancel(dialog);
 			InputMethodManager inputManager = (InputMethodManager)
 					dateEditText.getContext()
-					            .getSystemService(Context.INPUT_METHOD_SERVICE);
+								.getSystemService(Context.INPUT_METHOD_SERVICE);
 			inputManager.hideSoftInputFromWindow(dateEditText.getWindowToken(),
-			                                     InputMethodManager.HIDE_NOT_ALWAYS);
+												 InputMethodManager.HIDE_NOT_ALWAYS);
 		}
 
-		public void onDateSet(DatePicker view, int year, int month, int day)
-		{
+		public void onDateSet(DatePicker view, int year, int month, int day) {
 			date = formatDate(year, month, day);
 			dateEditText.setText(StringUtilities.dateToString(date));
 
 			locationEditText.requestFocus();
 			InputMethodManager inputManager = (InputMethodManager)
 					view.getContext()
-					    .getSystemService(Context.INPUT_METHOD_SERVICE);
+						.getSystemService(Context.INPUT_METHOD_SERVICE);
 			inputManager.showSoftInputFromInputMethod(locationEditText.getWindowToken(),
-			                                          InputMethodManager.SHOW_IMPLICIT);
+													  InputMethodManager.SHOW_IMPLICIT);
 		}
 	}
 }

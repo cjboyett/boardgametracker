@@ -277,7 +277,7 @@ public class GameStatsActivity extends BaseAdActivity
 		ViewUtilities.tintLayoutBackground(view.findViewById(R.id.listview_gameplay), foregroundColor);
 		ViewUtilities.tintLayoutBackground(view.findViewById(R.id.scrollView), foregroundColor);
 
-		ViewUtilities.tintRatingBar(((RatingBar)view.findViewById(R.id.ratingBar)), foregroundColor, Preferences.getHintTextColor(this));
+//		ViewUtilities.tintRatingBar(((RatingBar)view.findViewById(R.id.ratingBar)), foregroundColor, Preferences.getHintTextColor(this));
 	}
 
 	private class ScrollGestureListener extends GestureDetector.SimpleOnGestureListener

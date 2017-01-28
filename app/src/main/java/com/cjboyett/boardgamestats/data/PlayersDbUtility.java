@@ -68,10 +68,12 @@ public class PlayersDbUtility
 			                            playerCursor.getString(7),
 			                            playerCursor.getString(8),
 			                            playerCursor.getString(9),
+										"",
 			                            playerCursor.getDouble(10),
-			                            playerCursor.getDouble(11));
+			                            playerCursor.getDouble(11),
+										0);
 		}
-		else playerData = new PlayerData("", "", "", "", 0, 0, "", "", "", "", 0, 0);
+		else playerData = new PlayerData("", "", "", "", 0, 0, "", "", "", "", "", 0, 0, 0);
 
 		playerCursor.close();
 		return playerData;
@@ -297,7 +299,8 @@ public class PlayersDbUtility
 		Map<String, Integer> gamesTimeMap = new HashMap<>();
 		Map<String, Integer> gamesWinMap = new HashMap<>();
 		Map<String, Integer> gamesLoseMap = new HashMap<>();
-		int gamesCount = 0, winnableGamesCount = 0, totalTime = 0, winCount = 0, loseCount = 0;
+		Map<String, Integer> gamesTieMap = new HashMap<>();
+		int gamesCount = 0, winnableGamesCount = 0, totalTime = 0, winCount = 0, loseCount = 0, tieCount = 0;
 
 		for (GamePlayData gamePlayData : gamePlayDataList)
 		{
@@ -338,11 +341,19 @@ public class PlayersDbUtility
 						gamesLoseMap.put(gameName, gamesLoseMap.get(gameName) + 1);
 						loseCount++;
 					}
+
+					if (!gamesTieMap.containsKey(gameName))
+						gamesTieMap.put(gameName, 0);
+					if (userWin && playerWin)
+					{
+						gamesTieMap.put(gameName, gamesTieMap.get(gameName) + 1);
+						tieCount++;
+					}
 				}
 			}
 		}
 
-		int maxPlay = 0, maxTime = 0, maxWin = 0, maxLose = 0;
+		int maxPlay = 0, maxTime = 0, maxWin = 0, maxLose = 0, maxTie = 0;
 		for (String game : gamesCountMap.keySet())
 		{
 			maxPlay = Math.max(maxPlay, gamesCountMap.get(game));
@@ -351,12 +362,15 @@ public class PlayersDbUtility
 				maxWin = Math.max(maxWin, gamesWinMap.get(game));
 			if (gamesLoseMap.containsKey(game))
 				maxLose = Math.max(maxLose, gamesLoseMap.get(game));
+			if (gamesTieMap.containsKey(game))
+				maxTie = Math.max(maxTie, gamesTieMap.get(game));
 		}
 
 		List<String> mostPlayedGamesByTimes = new ArrayList<>();
 		List<String> mostPlayedGamesByTime = new ArrayList<>();
 		List<String> mostWonGames = new ArrayList<>();
 		List<String> mostLostGames = new ArrayList<>();
+		List<String> mostTiedGames = new ArrayList<>();
 
 		for (String game : gamesCountMap.keySet())
 		{
@@ -366,15 +380,18 @@ public class PlayersDbUtility
 				if (maxWin > 0 && gamesWinMap.get(game) == maxWin) mostWonGames.add(game);
 			if (gamesLoseMap.containsKey(game))
 				if (maxLose > 0 && gamesLoseMap.get(game) == maxLose) mostLostGames.add(game);
+			if (gamesTieMap.containsKey(game))
+				if (maxTie > 0 && gamesTieMap.get(game) == maxTie) mostTiedGames.add(game);
 		}
 
 		Random r = new Random();
 
-		String mostPlayedGameByTimes = "", mostPlayedGameByTime = "", mostWonGame = "", mostLostGame = "";
+		String mostPlayedGameByTimes = "", mostPlayedGameByTime = "", mostWonGame = "", mostLostGame = "", mostTiedGame = "";
 		if (!mostPlayedGamesByTimes.isEmpty()) mostPlayedGameByTimes = mostPlayedGamesByTimes.get(r.nextInt(mostPlayedGamesByTimes.size()));
 		if (!mostPlayedGamesByTime.isEmpty()) mostPlayedGameByTime = mostPlayedGamesByTime.get(r.nextInt(mostPlayedGamesByTime.size()));
 		if (!mostWonGames.isEmpty()) mostWonGame = mostWonGames.get(r.nextInt(mostWonGames.size()));
 		if (!mostLostGames.isEmpty()) mostLostGame = mostLostGames.get(r.nextInt(mostLostGames.size()));
+		if (!mostTiedGames.isEmpty()) mostTiedGame = mostTiedGames.get(r.nextInt(mostTiedGames.size()));
 
 		String facebookId, avatarImagePath, notes;
 		try
@@ -415,8 +432,10 @@ public class PlayersDbUtility
 		                                       mostPlayedGameByTime,
 		                                       mostWonGame,
 		                                       mostLostGame,
+											   mostTiedGame,
 		                                       (100. * winCount) / winnableGamesCount,
-		                                       (100. * loseCount) / winnableGamesCount);
+											   (100. * loseCount) / winnableGamesCount,
+											   (100. * tieCount) / winnableGamesCount);
 
 		addPlayerData(dbHelper, playerData);
 	}

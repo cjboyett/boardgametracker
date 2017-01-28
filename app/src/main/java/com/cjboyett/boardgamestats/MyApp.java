@@ -14,6 +14,7 @@ import com.cjboyett.boardgamestats.utility.Preferences;
 import com.facebook.FacebookSdk;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
+import com.squareup.leakcanary.LeakCanary;
 
 /**
  * Created by Casey on 4/14/2016.
@@ -71,6 +72,13 @@ public class MyApp extends Application
 			// Enable automatic activity tracking for your app
 			tracker.enableAutoActivityTracking(true);
 		}
+
+		if (LeakCanary.isInAnalyzerProcess(this)) {
+			// This process is dedicated to LeakCanary for heap analysis.
+			// You should not init your app in this process.
+			return;
+		}
+		LeakCanary.install(this);
 
 		// Initialize data managers for quickly navigation
 		final DataManager dataManager = DataManager.getInstance(this);

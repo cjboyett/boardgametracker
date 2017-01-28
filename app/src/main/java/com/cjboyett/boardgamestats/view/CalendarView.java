@@ -56,7 +56,7 @@ public class CalendarView extends TableLayout
 		dailyGamePlayViews = new ArrayList<>();
 		days = new CalendarDayView[7*6];
 
-		TableRow.LayoutParams layoutParams = new TableRow.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+		TableRow.LayoutParams layoutParams = new TableRow.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 		layoutParams.span = 7;
 
 		for (int i=0;i<6;i++)

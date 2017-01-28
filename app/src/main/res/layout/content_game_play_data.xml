@@ -81,25 +81,26 @@
 
     <ListView
         android:layout_width="wrap_content"
-        android:layout_height="250dp"
+        android:layout_height="wrap_content"
         android:id="@+id/listview_players"
         android:layout_weight="1"
         android:layout_below="@+id/textview_players"
         android:background="@drawable/content_background_medium_border"
         android:padding="5dp"
         android:fastScrollAlwaysVisible="false"
-        android:scrollIndicators="top|bottom"/>
+        android:scrollIndicators="top|bottom"
+        android:layout_above="@+id/textview_notes"/>
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/textview_notes"
+        android:layout_height="150dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:id="@+id/linearlayout_notes"
         android:background="@drawable/content_background_medium_border"
-        android:padding="2dp">
+        android:padding="2dp"
+        android:layout_alignParentBottom="true">
 
         <ScrollView
             android:layout_width="match_parent"
@@ -165,8 +166,8 @@
         android:layout_height="wrap_content"
         android:text="Notes"
         android:id="@+id/textview_notes"
-        android:layout_below="@+id/listview_players"
         android:textSize="12dp"
-        android:paddingTop="3dp"/>
+        android:paddingTop="3dp"
+        android:layout_above="@+id/linearlayout_notes"/>
 
 </RelativeLayout>
