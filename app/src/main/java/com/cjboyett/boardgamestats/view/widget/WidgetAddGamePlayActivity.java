@@ -10,11 +10,9 @@ import com.cjboyett.boardgamestats.data.TempDataManager;
 /**
  * Created by Casey on 4/20/2016.
  */
-public class WidgetAddGamePlayActivity extends Activity
-{
+public class WidgetAddGamePlayActivity extends Activity {
 	@Override
-	protected void onCreate(Bundle savedInstanceState)
-	{
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		TempDataManager tempDataManager = TempDataManager.getInstance(getApplication());

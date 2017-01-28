@@ -25,8 +25,7 @@ import com.facebook.login.widget.LoginButton;
 
 import java.util.Arrays;
 
-public class LoginActivity extends BaseAdActivity
-{
+public class LoginActivity extends BaseAdActivity {
 	private Activity activity = this;
 	private View view;
 
@@ -36,14 +35,12 @@ public class LoginActivity extends BaseAdActivity
 
 	private GestureDetectorCompat gestureDetector;
 
-	public LoginActivity()
-	{
+	public LoginActivity() {
 		super("");
 	}
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState)
-	{
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		view = getLayoutInflater().inflate(R.layout.activity_login, null);
 		setContentView(view);
@@ -57,39 +54,31 @@ public class LoginActivity extends BaseAdActivity
 	}
 
 	@Override
-	void generateLayout()
-	{
+	void generateLayout() {
 		callbackManager = CallbackManager.Factory.create();
-		LoginButton loginButton = (LoginButton)view.findViewById(R.id.login_button);
+		LoginButton loginButton = (LoginButton) view.findViewById(R.id.login_button);
 		loginButton.setReadPermissions(Arrays.asList("public_profile", "user_friends"));
-		loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>()
-		{
+		loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
 			@Override
-			public void onSuccess(LoginResult loginResult)
-			{
+			public void onSuccess(LoginResult loginResult) {
 				firebaseUtility.facebookSignIn(loginResult);
 			}
 
 			@Override
-			public void onCancel()
-			{
+			public void onCancel() {
 				Log.d("CANCEL", "Canceled");
 			}
 
 			@Override
-			public void onError(FacebookException error)
-			{
+			public void onError(FacebookException error) {
 				Log.d("ERROR", error.toString());
 			}
 		});
 
-		accessTokenTracker = new AccessTokenTracker()
-		{
+		accessTokenTracker = new AccessTokenTracker() {
 			@Override
-			protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken)
-			{
-				if (currentAccessToken != null)
-				{
+			protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
+				if (currentAccessToken != null) {
 //					firebaseUtility.signOut();
 					Log.d("ACCESS TOKEN", currentAccessToken.getExpires().toString());
 					loginSuccessful();
@@ -98,88 +87,72 @@ public class LoginActivity extends BaseAdActivity
 		};
 		accessTokenTracker.startTracking();
 
-		view.findViewById(R.id.textview_sign_up_email).setOnClickListener(new View.OnClickListener()
-		{
+		view.findViewById(R.id.textview_sign_up_email).setOnClickListener(new View.OnClickListener() {
 			@Override
-			public void onClick(View v)
-			{
+			public void onClick(View v) {
 				firebaseUtility.showEmailSignup();
 			}
 		});
 
-		view.findViewById(R.id.textview_sign_in_email).setOnClickListener(new View.OnClickListener()
-		{
+		view.findViewById(R.id.textview_sign_in_email).setOnClickListener(new View.OnClickListener() {
 			@Override
-			public void onClick(View v)
-			{
-				firebaseUtility.showEmailSignIn((LoginActivity)activity);
+			public void onClick(View v) {
+				firebaseUtility.showEmailSignIn((LoginActivity) activity);
 			}
 		});
 	}
 
-	void colorComponents()
-	{
+	void colorComponents() {
 		view.setBackgroundColor(backgroundColor);
 
 		ViewUtilities.tintLayoutBackground(view.findViewById(R.id.textview_sign_in_email), foregroundColor);
-		((TextView)view.findViewById(R.id.textview_sign_in_email)).setTextColor(foregroundColor);
+		((TextView) view.findViewById(R.id.textview_sign_in_email)).setTextColor(foregroundColor);
 
 		ViewUtilities.tintLayoutBackground(view.findViewById(R.id.textview_sign_up_email), foregroundColor);
-		((TextView)view.findViewById(R.id.textview_sign_up_email)).setTextColor(foregroundColor);
+		((TextView) view.findViewById(R.id.textview_sign_up_email)).setTextColor(foregroundColor);
 	}
 
-	public void loginSuccessful()
-	{
+	public void loginSuccessful() {
 		finish();
 		startActivity(new Intent(this, ExtrasActivity.class));
 		ActivityUtilities.exitRight(this);
 	}
 
 	@Override
-	protected void onDestroy()
-	{
+	protected void onDestroy() {
 		super.onDestroy();
 		firebaseUtility.close();
 		accessTokenTracker.stopTracking();
 	}
 
 	@Override
-	public boolean onTouchEvent(MotionEvent event)
-	{
+	public boolean onTouchEvent(MotionEvent event) {
 		if (Preferences.useSwipes(this)) gestureDetector.onTouchEvent(event);
 		return super.onTouchEvent(event);
 	}
 
 	@Override
-	public void onBackPressed()
-	{
+	public void onBackPressed() {
 		super.onBackPressed();
 		ActivityUtilities.exitLeft(activity);
 	}
 
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data)
-	{
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		callbackManager.onActivityResult(requestCode, resultCode, data);
 	}
 
-	private class ScrollGestureListener extends GestureDetector.SimpleOnGestureListener
-	{
+	private class ScrollGestureListener extends GestureDetector.SimpleOnGestureListener {
 		@Override
-		public boolean onDown(MotionEvent e)
-		{
+		public boolean onDown(MotionEvent e) {
 			return super.onDown(e);
 		}
 
 		@Override
-		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY)
-		{
-			if (Math.abs(velocityX) > Math.abs(velocityY))
-			{
-				if (Math.abs(e1.getX() - e2.getX()) >= 200)
-				{
-					if (velocityX < -2000)
-					{
+		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+			if (Math.abs(velocityX) > Math.abs(velocityY)) {
+				if (Math.abs(e1.getX() - e2.getX()) >= 200) {
+					if (velocityX < -2000) {
 						onBackPressed();
 						return true;
 					}

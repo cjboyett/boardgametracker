@@ -16,8 +16,8 @@ import com.cjboyett.boardgamestats.data.games.GamesDbHelper;
 import com.cjboyett.boardgamestats.data.games.board.BoardGameDbUtility;
 import com.cjboyett.boardgamestats.data.games.rpg.RPGDbUtility;
 import com.cjboyett.boardgamestats.data.games.video.VideoGameDbUtility;
-import com.cjboyett.boardgamestats.utility.view.ImageController;
 import com.cjboyett.boardgamestats.utility.Preferences;
+import com.cjboyett.boardgamestats.utility.view.ImageController;
 import com.cjboyett.boardgamestats.utility.view.StringToBitmapBuilder;
 
 import java.util.ArrayList;
@@ -26,8 +26,7 @@ import java.util.List;
 /**
  * Created by Casey on 4/23/2016.
  */
-public class ImageRecyclerAdapter extends RecyclerView.Adapter<ImageRecyclerAdapter.ViewHolder>
-{
+public class ImageRecyclerAdapter extends RecyclerView.Adapter<ImageRecyclerAdapter.ViewHolder> {
 	private Activity activity;
 	private List<String> thumbnailUrls;
 	private List<Bitmap> thumbnails;
@@ -37,8 +36,7 @@ public class ImageRecyclerAdapter extends RecyclerView.Adapter<ImageRecyclerAdap
 
 	private float SCALE_FACTOR;
 
-	public ImageRecyclerAdapter(Activity activity, List<String> games)
-	{
+	public ImageRecyclerAdapter(Activity activity, List<String> games) {
 		this.activity = activity;
 		this.games = games;
 
@@ -52,16 +50,13 @@ public class ImageRecyclerAdapter extends RecyclerView.Adapter<ImageRecyclerAdap
 
 		GamesDbHelper dbHelper = new GamesDbHelper(activity);
 		thumbnailUrls = new ArrayList<>();
-		for (String game : games)
-		{
+		for (String game : games) {
 			if (game.startsWith("---")) thumbnailUrls.add(game.substring(3));
-			else
-			{
+			else {
 				int l = game.length();
-				String gameType = game.substring(l-1);
-				game = game.substring(0, l-2);
-				switch (gameType)
-				{
+				String gameType = game.substring(l - 1);
+				game = game.substring(0, l - 2);
+				switch (gameType) {
 					case "b":
 						thumbnailUrls.add("http://" + BoardGameDbUtility.getThumbnailUrl(dbHelper, game));
 						break;
@@ -77,28 +72,24 @@ public class ImageRecyclerAdapter extends RecyclerView.Adapter<ImageRecyclerAdap
 	}
 
 	@Override
-	public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
-	{
+	public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 		View linearLayout = LayoutInflater.from(parent.getContext())
-				.inflate(R.layout.simple_linear_layout, parent, false);
+										  .inflate(R.layout.simple_linear_layout, parent, false);
 		ViewHolder viewHolder = new ViewHolder(linearLayout);
 		return viewHolder;
 	}
 
 	@Override
-	public void onBindViewHolder(ViewHolder holder, int position)
-	{
+	public void onBindViewHolder(ViewHolder holder, int position) {
 		Bitmap thumbnail = null;
-		try
-		{
+		try {
 			thumbnail = thumbnails.get(position);
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			Log.d("THUMBNAIL", "Making thumbnail for " + position);
 			String thumbnailUrl = thumbnailUrls.get(position);
 			if (thumbnailUrl.length() > 1)
-				thumbnail = imageController.setFileName(thumbnailUrl.substring(thumbnailUrl.lastIndexOf("/") + 1)).load();
+				thumbnail =
+						imageController.setFileName(thumbnailUrl.substring(thumbnailUrl.lastIndexOf("/") + 1)).load();
 			else
 				thumbnail = new StringToBitmapBuilder(activity)
 						.setTextSize(90 * SCALE_FACTOR)
@@ -128,27 +119,23 @@ public class ImageRecyclerAdapter extends RecyclerView.Adapter<ImageRecyclerAdap
 			imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
 		imageView.setImageBitmap(thumbnail);
-		((LinearLayout)holder.view).addView(imageView);
+		((LinearLayout) holder.view).addView(imageView);
 	}
 
 	@Override
-	public int getItemCount()
-	{
+	public int getItemCount() {
 		return games.size();
 	}
 
 	@Override
-	public void onViewRecycled(ViewHolder holder)
-	{
-		((LinearLayout)holder.view).removeAllViews();
+	public void onViewRecycled(ViewHolder holder) {
+		((LinearLayout) holder.view).removeAllViews();
 	}
 
-	public static class ViewHolder extends RecyclerView.ViewHolder
-	{
+	public static class ViewHolder extends RecyclerView.ViewHolder {
 		public View view;
 
-		public ViewHolder(View view)
-		{
+		public ViewHolder(View view) {
 			super(view);
 			this.view = view;
 		}

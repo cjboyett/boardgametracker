@@ -33,8 +33,7 @@ import com.cjboyett.boardgamestats.view.adapter.PlayerListAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlayerStatsListFragment extends Fragment
-{
+public class PlayerStatsListFragment extends Fragment {
 	private View view;
 	private ListView listView;
 	private LinearLayout dummyView;
@@ -51,12 +50,11 @@ public class PlayerStatsListFragment extends Fragment
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-	                         Bundle savedInstanceState)
-	{
+							 Bundle savedInstanceState) {
 		view = inflater.inflate(R.layout.activity_player_stats_list, null);
-		listView = (ListView)view.findViewById(R.id.listview_player_stats);
-		dummyView = (LinearLayout)view.findViewById(R.id.dummyview);
-		searchView = (SearchView)view.findViewById(R.id.searchview_players);
+		listView = (ListView) view.findViewById(R.id.listview_player_stats);
+		dummyView = (LinearLayout) view.findViewById(R.id.dummyview);
+		searchView = (SearchView) view.findViewById(R.id.searchview_players);
 
 		dbHelper = new GamesDbHelper(getActivity());
 		gestureDetector = new GestureDetectorCompat(getContext(), new ScrollGestureListener());
@@ -67,45 +65,40 @@ public class PlayerStatsListFragment extends Fragment
 		foregroundColor = Preferences.getForegroundColor(getContext());
 		hintTextColor = Preferences.getHintTextColor(getContext());
 
-		colorComponents();;
+		colorComponents();
+		;
 
 //		Log.d("MAX MEMORY" ,(int)(Runtime.getRuntime().maxMemory() / 1024) + "");
 		return view;
 	}
 
 	@Override
-	public void onResume()
-	{
+	public void onResume() {
 		super.onResume();
 		dbHelper = new GamesDbHelper(getActivity());
-		if (regenerateLayout)
-		{
+		if (regenerateLayout) {
 			generateLayout();
 			regenerateLayout = false;
 		}
 	}
 
 	@Override
-	public void onPause()
-	{
+	public void onPause() {
 		super.onPause();
 		dbHelper.close();
 	}
 
 	@Override
-	public void onDestroy()
-	{
+	public void onDestroy() {
 		super.onDestroy();
 		if (dbHelper != null) dbHelper.close();
 	}
 
-	private void colorComponents()
-	{
+	private void colorComponents() {
 		view.setBackgroundColor(backgroundColor);
 
 		searchView.setBackgroundColor(backgroundColor);
-		for (TextView textView : ViewUtilities.findChildrenByClass(searchView, TextView.class))
-		{
+		for (TextView textView : ViewUtilities.findChildrenByClass(searchView, TextView.class)) {
 //			textView.setBackgroundColor(ColorUtilities.adjustBasedOnHSV(backgroundColor));
 			textView.setTextColor(foregroundColor);
 			textView.setHintTextColor(hintTextColor);
@@ -115,47 +108,38 @@ public class PlayerStatsListFragment extends Fragment
 
 	}
 
-	public void setRegenerateLayout(boolean regenerateLayout)
-	{
+	public void setRegenerateLayout(boolean regenerateLayout) {
 		this.regenerateLayout = regenerateLayout;
 	}
 
-	private void generateLayout()
-	{
+	private void generateLayout() {
 		finalPlayersList = new ArrayList<>();
 
-		new AsyncTask<String, Void, List<String>>()
-		{
+		new AsyncTask<String, Void, List<String>>() {
 			@Override
-			protected List<String> doInBackground(String... params)
-			{
+			protected List<String> doInBackground(String... params) {
 				final List<String> playersList = GamesDbUtility.getAllPlayersSorted(dbHelper, new Date(1970, 0, 1));
 				playersList.remove("master_user");
 				return playersList;
 			}
 
 			@Override
-			protected void onPostExecute(final List<String> playersList)
-			{
+			protected void onPostExecute(final List<String> playersList) {
 //				listView.setAdapter(new CustomArrayAdapter<String>(getContext(), R.layout.player_list_item, playersList));
 				finalPlayersList = new ArrayList<String>(playersList);
 				populateListView(playersList);
 			}
 		}.execute("");
 
-		searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener()
-		{
+		searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 			@Override
-			public boolean onQueryTextSubmit(String query)
-			{
+			public boolean onQueryTextSubmit(String query) {
 				return false;
 			}
 
 			@Override
-			public boolean onQueryTextChange(String newText)
-			{
-				if (newText != null && !newText.equals(""))
-				{
+			public boolean onQueryTextChange(String newText) {
+				if (newText != null && !newText.equals("")) {
 					List<String> players = new ArrayList<>();
 					for (String player : finalPlayersList)
 						if (player.toLowerCase().contains(newText.toLowerCase()))
@@ -171,23 +155,19 @@ public class PlayerStatsListFragment extends Fragment
 		ActivityUtilities.setDatabaseChanged(getActivity(), false);
 	}
 
-	private void populateListView(final List<String> playersList)
-	{
+	private void populateListView(final List<String> playersList) {
 		listView.setAdapter(new PlayerListAdapter(getActivity(), playersList));
-		listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
-		{
+		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-			{
-				startActivity(new Intent(view.getContext(), PlayerStatsActivity.class).putExtra("NAME", playersList.get(position)));
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				startActivity(new Intent(view.getContext(), PlayerStatsActivity.class).putExtra("NAME",
+																								playersList.get(position)));
 				ActivityUtilities.exitUp(getActivity());
 			}
 		});
-		listView.setOnTouchListener(new View.OnTouchListener()
-		{
+		listView.setOnTouchListener(new View.OnTouchListener() {
 			@Override
-			public boolean onTouch(View v, MotionEvent event)
-			{
+			public boolean onTouch(View v, MotionEvent event) {
 				if (Preferences.useSwipes(v.getContext()))
 					return gestureDetector.onTouchEvent(event);
 				return false;
@@ -196,11 +176,9 @@ public class PlayerStatsListFragment extends Fragment
 
 	}
 
-	private class ScrollGestureListener extends GestureDetector.SimpleOnGestureListener
-	{
+	private class ScrollGestureListener extends GestureDetector.SimpleOnGestureListener {
 		@Override
-		public boolean onDown(MotionEvent e)
-		{
+		public boolean onDown(MotionEvent e) {
 			View c = listView.getChildAt(0);
 			scrollY = -c.getTop() + listView.getFirstVisiblePosition() * c.getHeight();
 			Log.d("DOWN", scrollY + "");
@@ -208,15 +186,11 @@ public class PlayerStatsListFragment extends Fragment
 		}
 
 		@Override
-		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY)
-		{
+		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
 			Log.d("FLING", scrollY + "");
-			if (Math.abs(velocityX) < Math.abs(velocityY))
-			{
-				if (Math.abs(e1.getY() - e2.getY()) >= 200)
-				{
-					if (velocityY > 2000 && scrollY <= 0)
-					{
+			if (Math.abs(velocityX) < Math.abs(velocityY)) {
+				if (Math.abs(e1.getY() - e2.getY()) >= 200) {
+					if (velocityY > 2000 && scrollY <= 0) {
 						getActivity().onBackPressed();
 						return true;
 					}
@@ -226,20 +200,17 @@ public class PlayerStatsListFragment extends Fragment
 		}
 	}
 
-	private class CustomArrayAdapter<String> extends ArrayAdapter<String>
-	{
-		public CustomArrayAdapter(Context context, int resource, List<String> objects)
-		{
+	private class CustomArrayAdapter<String> extends ArrayAdapter<String> {
+		public CustomArrayAdapter(Context context, int resource, List<String> objects) {
 			super(context, resource, objects);
 		}
 
 		@Override
-		public View getView(int position, View convertView, ViewGroup parent)
-		{
+		public View getView(int position, View convertView, ViewGroup parent) {
 			View view = super.getView(position, convertView, parent);
 			view.setBackgroundColor(backgroundColor);
 			view.findViewById(android.R.id.text1).setBackgroundColor(backgroundColor);
-			((TextView)view.findViewById(android.R.id.text1)).setTextColor(foregroundColor);
+			((TextView) view.findViewById(android.R.id.text1)).setTextColor(foregroundColor);
 			return view;
 		}
 	}

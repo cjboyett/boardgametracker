@@ -26,39 +26,35 @@ import java.util.TreeSet;
 /**
  * Created by Casey on 11/26/2016.
  */
-public class FilteredPlayerArrayAdapter extends ArrayAdapter<String>
-{
+public class FilteredPlayerArrayAdapter extends ArrayAdapter<String> {
 	private Activity activity;
 	private Set<String> items;
 	private List<String> suggestions;
 	private Filter filter;
 	private boolean useThumbnails;
 
-//	private Map<String, Bitmap> thumbnails;
+	//	private Map<String, Bitmap> thumbnails;
 	private BitmapCache thumbnails;
 
-	public FilteredPlayerArrayAdapter(final Activity activity, int resource, List<String> players, boolean useThumbnails)
-	{
+	public FilteredPlayerArrayAdapter(final Activity activity, int resource, List<String> players,
+									  boolean useThumbnails) {
 		super(activity, resource, players);
 		this.activity = activity;
 		this.useThumbnails = useThumbnails;
 		items = new TreeSet<>(players);
 
 		Iterator<String> iterator = items.iterator();
-		while(iterator.hasNext())
-		{
+		while (iterator.hasNext()) {
 			if (iterator.next().startsWith("---")) iterator.remove();
 		}
 		suggestions = new ArrayList<>();
 		filter = new StringFilter();
 
-		if (useThumbnails)
-		{
+		if (useThumbnails) {
 			thumbnails = new BitmapCache();
 //			thumbnails = new HashMap<>();
 
-			for (String player : players)
-			{
+			for (String player : players) {
 				new BitmapWorkerTask(null).execute(player);
 /*
 				new AsyncTask<String, Void, Bitmap>()
@@ -86,53 +82,45 @@ public class FilteredPlayerArrayAdapter extends ArrayAdapter<String>
 	}
 
 	@Override
-	public void add(String object)
-	{
+	public void add(String object) {
 		super.add(object);
 		items.add(object);
 	}
 
 	@Override
-	public void remove(String object)
-	{
+	public void remove(String object) {
 		super.remove(object);
 		items.remove(object);
 	}
 
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent)
-	{
+	public View getView(int position, View convertView, ViewGroup parent) {
 		View view = null;
 
-		try
-		{
-			if (useThumbnails) view = activity.getLayoutInflater().inflate(R.layout.linear_layout_game_play_player_info, null);
-			else
-			{
-				if (convertView == null) view = activity.getLayoutInflater().inflate(android.R.layout.simple_list_item_1, null);
+		try {
+			if (useThumbnails)
+				view = activity.getLayoutInflater().inflate(R.layout.linear_layout_game_play_player_info, null);
+			else {
+				if (convertView == null)
+					view = activity.getLayoutInflater().inflate(android.R.layout.simple_list_item_1, null);
 				else view = convertView;
 			}
 			String suggestion = suggestions.get(position);
-			if (useThumbnails)
-			{
+			if (useThumbnails) {
 				String suggestionUrl = suggestion.replace("<b>", "").replace("</b>", "");
 				view.findViewById(R.id.textview_score).setVisibility(View.GONE);
 				view.findViewById(R.id.imageview_win_icon).setVisibility(View.GONE);
-				((TextView)view.findViewById(R.id.textview_name)).setText(Html.fromHtml(suggestion));
+				((TextView) view.findViewById(R.id.textview_name)).setText(Html.fromHtml(suggestion));
 
 				Bitmap bitmap = thumbnails.get(suggestionUrl);
 				if (bitmap != null)
 					((ImageView) view.findViewById(R.id.imageview_avatar)).setImageBitmap(thumbnails.get(suggestionUrl));
 				else
 					new BitmapWorkerTask((ImageView) view.findViewById(R.id.imageview_avatar)).execute(suggestionUrl);
+			} else {
+				((TextView) view).setText(Html.fromHtml(suggestion));
 			}
-			else
-			{
-				((TextView)view).setText(Html.fromHtml(suggestion));
-			}
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
@@ -140,26 +128,21 @@ public class FilteredPlayerArrayAdapter extends ArrayAdapter<String>
 	}
 
 	@Override
-	public Filter getFilter()
-	{
+	public Filter getFilter() {
 		return filter;
 	}
 
-	private class StringFilter extends Filter
-	{
+	private class StringFilter extends Filter {
 		@Override
-		protected FilterResults performFiltering(CharSequence constraint)
-		{
-			if (constraint != null)
-			{
+		protected FilterResults performFiltering(CharSequence constraint) {
+			if (constraint != null) {
 				suggestions.clear();
 				for (String s : items)
-					if (s.toLowerCase().contains(constraint.toString().toLowerCase()))
-					{
+					if (s.toLowerCase().contains(constraint.toString().toLowerCase())) {
 						int index = s.toLowerCase().indexOf(constraint.toString().toLowerCase());
 						String boldedString = s.substring(0, index) + "<b>" +
-						                      s.substring(index, index + constraint.length()) + "</b>" +
-						                      s.substring(index + constraint.length());
+								s.substring(index, index + constraint.length()) + "</b>" +
+								s.substring(index + constraint.length());
 						suggestions.add(boldedString);
 					}
 
@@ -167,19 +150,15 @@ public class FilteredPlayerArrayAdapter extends ArrayAdapter<String>
 				filterResults.values = suggestions;
 				filterResults.count = suggestions.size();
 				return filterResults;
-			}
-			else return new FilterResults();
+			} else return new FilterResults();
 		}
 
 		@Override
-		protected void publishResults(CharSequence constraint, FilterResults results)
-		{
-			if (results != null && results.count > 0)
-			{
+		protected void publishResults(CharSequence constraint, FilterResults results) {
+			if (results != null && results.count > 0) {
 				List<String> filterList = (ArrayList<String>) results.values;
 				clear();
-				for (String s : filterList)
-				{
+				for (String s : filterList) {
 					add(s.replaceAll("<b>", "").replaceAll("</b>", ""));
 					notifyDataSetChanged();
 				}
@@ -187,18 +166,15 @@ public class FilteredPlayerArrayAdapter extends ArrayAdapter<String>
 		}
 	}
 
-	private class BitmapWorkerTask extends AsyncTask<String, Void, Bitmap>
-	{
+	private class BitmapWorkerTask extends AsyncTask<String, Void, Bitmap> {
 		private final WeakReference<ImageView> imageViewReference;
 
-		public BitmapWorkerTask(ImageView imageView)
-		{
+		public BitmapWorkerTask(ImageView imageView) {
 			imageViewReference = new WeakReference<>(imageView);
 		}
 
 		@Override
-		protected Bitmap doInBackground(String... params)
-		{
+		protected Bitmap doInBackground(String... params) {
 			String name = params[0];
 			if (name.equals(Preferences.getUsername(activity))) name = "master_user";
 			Bitmap bitmap = ViewUtilities.createAvatar(activity, name, true);
@@ -207,10 +183,8 @@ public class FilteredPlayerArrayAdapter extends ArrayAdapter<String>
 		}
 
 		@Override
-		protected void onPostExecute(Bitmap bitmap)
-		{
-			if (imageViewReference != null && bitmap != null)
-			{
+		protected void onPostExecute(Bitmap bitmap) {
+			if (imageViewReference != null && bitmap != null) {
 				final ImageView imageView = imageViewReference.get();
 				if (imageView != null) imageView.setImageBitmap(bitmap);
 				notifyDataSetChanged();

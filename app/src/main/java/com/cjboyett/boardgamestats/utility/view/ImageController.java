@@ -13,8 +13,7 @@ import java.io.IOException;
 /**
  * Created by Ilya Gazman on 3/6/2016.
  */
-public class ImageController
-{
+public class ImageController {
 	private String directoryName = "images";
 	private String fileName = "image.png";
 	private String fileType = "PNG";
@@ -35,14 +34,12 @@ public class ImageController
 		return this;
 	}
 
-	public ImageController setFileType(String fileType)
-	{
+	public ImageController setFileType(String fileType) {
 		this.fileType = fileType;
 		return this;
 	}
 
-	public ImageController setCompressionLevel(int compressionLevel)
-	{
+	public ImageController setCompressionLevel(int compressionLevel) {
 		if (compressionLevel > 0 && compressionLevel <= 100)
 			compress = compressionLevel;
 		return this;
@@ -52,8 +49,7 @@ public class ImageController
 		FileOutputStream fileOutputStream = null;
 		try {
 			fileOutputStream = new FileOutputStream(createFile());
-			switch (fileType)
-			{
+			switch (fileType) {
 				case "JPG":
 				case "JPEG":
 					bitmapImage.compress(Bitmap.CompressFormat.JPEG, compress, fileOutputStream);
@@ -103,14 +99,10 @@ public class ImageController
 		return null;
 	}
 
-	public void delete()
-	{
-		try
-		{
+	public void delete() {
+		try {
 			createFile().delete();
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

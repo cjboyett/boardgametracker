@@ -7,19 +7,19 @@
                 android:layout_marginTop="2dp"
                 android:layout_marginBottom="2dp">
 
-	<TextView
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:text="Title"
-		android:id="@+id/textview_stat_title"
-		android:textStyle="bold"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Title"
+        android:id="@+id/textview_stat_title"
+        android:textStyle="bold"/>
 
-	<TextView
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:textAppearance="?android:attr/textAppearanceSmall"
-		android:text="Description"
-		android:id="@+id/textview_stat_description"
-		android:layout_below="@+id/textview_stat_title"
-		android:layout_marginLeft="5dp"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Description"
+        android:id="@+id/textview_stat_description"
+        android:layout_below="@+id/textview_stat_title"
+        android:layout_marginLeft="5dp"/>
 </RelativeLayout>

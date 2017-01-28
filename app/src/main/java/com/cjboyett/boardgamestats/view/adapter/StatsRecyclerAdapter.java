@@ -16,13 +16,12 @@ import java.util.List;
 /**
  * Created by Casey on 4/21/2016.
  */
-public class StatsRecyclerAdapter extends RecyclerView.Adapter<StatsRecyclerAdapter.ViewHolder>
-{
+public class StatsRecyclerAdapter extends RecyclerView.Adapter<StatsRecyclerAdapter.ViewHolder> {
 	private List<Statistic> statsList;
 	private int backgroundColor, foregroundColor, hintTextColor;
 
-	public StatsRecyclerAdapter(List<Statistic> statsList, int backgroundColor, int foregroundColor, int hintTextColor)
-	{
+	public StatsRecyclerAdapter(List<Statistic> statsList, int backgroundColor, int foregroundColor,
+								int hintTextColor) {
 		this.statsList = new ArrayList<>(statsList);
 		this.backgroundColor = backgroundColor;
 		this.foregroundColor = foregroundColor;
@@ -30,20 +29,17 @@ public class StatsRecyclerAdapter extends RecyclerView.Adapter<StatsRecyclerAdap
 	}
 
 	@Override
-	public StatsRecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
-	{
+	public StatsRecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 		View linearLayout = LayoutInflater.from(parent.getContext())
-				.inflate(R.layout.simple_linear_layout, parent, false);
+										  .inflate(R.layout.simple_linear_layout, parent, false);
 		ViewHolder viewHolder = new ViewHolder(linearLayout);
 		return viewHolder;
 	}
 
 	@Override
-	public void onBindViewHolder(ViewHolder holder, final int position)
-	{
+	public void onBindViewHolder(ViewHolder holder, final int position) {
 		final View view = statsList.get(position).getView();
-		if (position > 0)
-		{
+		if (position > 0) {
 			((TextView) view.findViewById(R.id.textview_title)).setText(statsList.get(position).getTitle());
 			((TextView) view.findViewById(R.id.textview_title)).setTextColor(foregroundColor);
 			((TextView) view.findViewById(R.id.textview_stats)).setTextColor(foregroundColor);
@@ -53,22 +49,19 @@ public class StatsRecyclerAdapter extends RecyclerView.Adapter<StatsRecyclerAdap
 
 			((TextView) view.findViewById(R.id.textview_more_stats)).setTextColor(hintTextColor);
 			holder.view.findViewById(R.id.textview_more_stats)
-			           .setBackgroundColor(backgroundColor);
+					   .setBackgroundColor(backgroundColor);
 
 			((TextView) view.findViewById(R.id.textview_fewer_stats)).setTextColor(hintTextColor);
 			holder.view.findViewById(R.id.textview_fewer_stats)
-			           .setBackgroundColor(backgroundColor);
+					   .setBackgroundColor(backgroundColor);
 
-			if (statsList.get(position).hasMoreStats())
-			{
+			if (statsList.get(position).hasMoreStats()) {
 				view.findViewById(R.id.textview_more_stats).setVisibility(View.VISIBLE);
 				view.findViewById(R.id.textview_fewer_stats).setVisibility(View.VISIBLE);
 			}
-			view.findViewById(R.id.textview_more_stats).setOnClickListener(new View.OnClickListener()
-			{
+			view.findViewById(R.id.textview_more_stats).setOnClickListener(new View.OnClickListener() {
 				@Override
-				public void onClick(View v)
-				{
+				public void onClick(View v) {
 					statsList.get(position).getMoreStats();
 
 /*
@@ -81,12 +74,11 @@ public class StatsRecyclerAdapter extends RecyclerView.Adapter<StatsRecyclerAdap
 				}
 			});
 
-			if (statsList.get(position).hasFewerStats()) view.findViewById(R.id.textview_fewer_stats).setVisibility(View.VISIBLE);
-			view.findViewById(R.id.textview_fewer_stats).setOnClickListener(new View.OnClickListener()
-			{
+			if (statsList.get(position).hasFewerStats())
+				view.findViewById(R.id.textview_fewer_stats).setVisibility(View.VISIBLE);
+			view.findViewById(R.id.textview_fewer_stats).setOnClickListener(new View.OnClickListener() {
 				@Override
-				public void onClick(View v)
-				{
+				public void onClick(View v) {
 					statsList.get(position).getFewerStats();
 
 /*
@@ -102,23 +94,19 @@ public class StatsRecyclerAdapter extends RecyclerView.Adapter<StatsRecyclerAdap
 	}
 
 	@Override
-	public int getItemCount()
-	{
+	public int getItemCount() {
 		return statsList.size();
 	}
 
 	@Override
-	public void onViewRecycled(ViewHolder holder)
-	{
-		((LinearLayout)holder.view).removeAllViews();
+	public void onViewRecycled(ViewHolder holder) {
+		((LinearLayout) holder.view).removeAllViews();
 	}
 
-	public static class ViewHolder extends RecyclerView.ViewHolder
-	{
+	public static class ViewHolder extends RecyclerView.ViewHolder {
 		public View view;
 
-		public ViewHolder(View view)
-		{
+		public ViewHolder(View view) {
 			super(view);
 			this.view = view;
 		}

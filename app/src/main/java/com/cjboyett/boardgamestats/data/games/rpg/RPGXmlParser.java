@@ -13,76 +13,57 @@ import java.util.List;
 /**
  * Created by Casey on 4/10/2016.
  */
-public class RPGXmlParser
-{
+public class RPGXmlParser {
 	private static final String namespace = null;
 
-	public List<Item> parse(InputStream in)
-	{
-		try
-		{
+	public List<Item> parse(InputStream in) {
+		try {
 			XmlPullParser parser = Xml.newPullParser();
 			parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
 			parser.setInput(in, null);
 			parser.nextTag();
 			return readFeed(parser);
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			Log.e("PARSER", e.getMessage());
-		}
-		finally
-		{
-			try
-			{
+		} finally {
+			try {
 				in.close();
-			}
-			catch (Exception e)
-			{
+			} catch (Exception e) {
 			}
 		}
 		return new ArrayList<>();
 	}
 
-	private List<Item> readFeed(XmlPullParser parser)
-	{
+	private List<Item> readFeed(XmlPullParser parser) {
 		List<Item> entries = new ArrayList<>();
 
-		try
-		{
+		try {
 			parser.require(XmlPullParser.START_TAG, namespace, "items");
-			while (parser.next() != XmlPullParser.END_TAG)
-			{
+			while (parser.next() != XmlPullParser.END_TAG) {
 				if (parser.getEventType() != XmlPullParser.START_TAG) continue;
 				String name = parser.getName();
 				if (name.equals("item")) entries.add(readItem(parser));
 				else skip(parser);
 			}
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			Log.e("PARSER", e.getMessage());
 		}
 		return entries;
 	}
 
-	private Item readItem(XmlPullParser parser)
-	{
+	private Item readItem(XmlPullParser parser) {
 		int id = 0, yearPublished = 0;
 		String name = null, thumbnailUrl = null, description = null;
 		List<String[]> links = new ArrayList<>();
-		try
-		{
+		try {
 			parser.require(XmlPullParser.START_TAG, namespace, "item");
 			id = Integer.parseInt(parser.getAttributeValue(null, "id"));
 
-			while (parser.next() != XmlPullParser.END_TAG)
-			{
+			while (parser.next() != XmlPullParser.END_TAG) {
 				if (parser.getEventType() != XmlPullParser.START_TAG) continue;
 				String entryName = parser.getName();
 
-				switch (entryName)
-				{
+				switch (entryName) {
 					case "name":
 						if (parser.getAttributeValue(null, "type").equals("primary")) name = readName(parser);
 						else skip(parser);
@@ -101,108 +82,85 @@ public class RPGXmlParser
 						break;
 				}
 			}
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			Log.e("PARSER", e.getMessage());
 		}
 		return new Item(id, name, thumbnailUrl, description, links);
 	}
 
-	private String readName(XmlPullParser parser)
-	{
+	private String readName(XmlPullParser parser) {
 		String name = null;
 
-		try
-		{
+		try {
 			parser.require(XmlPullParser.START_TAG, namespace, "name");
 			name = parser.getAttributeValue(null, "value");
 			parser.nextTag();
 			parser.require(XmlPullParser.END_TAG, namespace, "name");
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			Log.e("PARSER", e.getMessage());
 		}
 
 		return name;
 	}
 
-	private String readThumbnailUrl(XmlPullParser parser)
-	{
+	private String readThumbnailUrl(XmlPullParser parser) {
 		String thumbnailUrl = null;
 
-		try
-		{
+		try {
 			parser.require(XmlPullParser.START_TAG, namespace, "thumbnail");
 			parser.next();
 			thumbnailUrl = parser.getText();
 			while (thumbnailUrl.startsWith("/")) thumbnailUrl = thumbnailUrl.substring(1);
 			parser.nextTag();
 			parser.require(XmlPullParser.END_TAG, namespace, "thumbnail");
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			Log.e("PARSER", e.getMessage());
 		}
 
 		return thumbnailUrl;
 	}
 
-	private String readDescription(XmlPullParser parser)
-	{
+	private String readDescription(XmlPullParser parser) {
 		String description = null;
 
-		try
-		{
+		try {
 			parser.require(XmlPullParser.START_TAG, namespace, "description");
 			parser.next();
 			description = StringEscapeUtils.unescapeHtml4(parser.getText());
 			parser.nextTag();
 			parser.require(XmlPullParser.END_TAG, namespace, "description");
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			Log.e("PARSER", e.getMessage());
 		}
 
 		return description;
 	}
 
-	private String[] readLink(XmlPullParser parser)
-	{
+	private String[] readLink(XmlPullParser parser) {
 		String[] link = new String[3];
 
-		try
-		{
+		try {
 			parser.require(XmlPullParser.START_TAG, namespace, "link");
 			link[0] = parser.getAttributeValue(null, "type");
 			link[1] = parser.getAttributeValue(null, "id");
 			link[2] = parser.getAttributeValue(null, "value");
 			parser.nextTag();
 			parser.require(XmlPullParser.END_TAG, namespace, "link");
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			Log.e("PARSER", e.getMessage());
 		}
 
 		return link;
 	}
 
-	private void skip(XmlPullParser parser)
-	{
-		try
-		{
-			if (parser.getEventType() != XmlPullParser.START_TAG)
-			{
+	private void skip(XmlPullParser parser) {
+		try {
+			if (parser.getEventType() != XmlPullParser.START_TAG) {
 				throw new IllegalStateException();
 			}
 			int depth = 1;
-			while (depth != 0)
-			{
-				switch (parser.next())
-				{
+			while (depth != 0) {
+				switch (parser.next()) {
 					case XmlPullParser.END_TAG:
 						depth--;
 						break;
@@ -211,21 +169,17 @@ public class RPGXmlParser
 						break;
 				}
 			}
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			Log.e("PARSER", e.getMessage());
 		}
 	}
 
-	public static class Item
-	{
+	public static class Item {
 		public final int id;
 		public final String name, thumbnailUrl, description;
 		public final List<String[]> links;
 
-		public Item(int id, String name, String thumbnailUrl, String description, List<String[]> links)
-		{
+		public Item(int id, String name, String thumbnailUrl, String description, List<String[]> links) {
 			this.id = id;
 			this.name = name;
 			this.thumbnailUrl = thumbnailUrl;
@@ -234,8 +188,7 @@ public class RPGXmlParser
 		}
 
 		@Override
-		public String toString()
-		{
+		public String toString() {
 			return name + " " + id;
 		}
 	}

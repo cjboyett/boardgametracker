@@ -26,7 +26,7 @@
                 android:padding="5dp"
                 android:lines="2"
                 android:maxLines="2"/>
-            </ScrollView>
+        </ScrollView>
 
         <ImageView
             android:layout_width="75dp"

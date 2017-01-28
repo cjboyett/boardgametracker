@@ -26,8 +26,7 @@ import com.cjboyett.boardgamestats.utility.data.StringUtilities;
 import com.cjboyett.boardgamestats.utility.view.ViewUtilities;
 import com.cjboyett.boardgamestats.view.adapter.PlayerDataAdapter;
 
-public class GamePlayDataActivity extends BaseAdActivity
-{
+public class GamePlayDataActivity extends BaseAdActivity {
 	private Activity activity = this;
 	private View view;
 
@@ -39,19 +38,17 @@ public class GamePlayDataActivity extends BaseAdActivity
 	private GamePlayData gamePlayData;
 	private GamesDbHelper dbHelper;
 
-	public GamePlayDataActivity()
-	{
+	public GamePlayDataActivity() {
 		super("");
 	}
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState)
-	{
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		view = getLayoutInflater().inflate(R.layout.activity_game_play_data, null);
 		setContentView(view);
 
-		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
 			getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
 
 		dbHelper = new GamesDbHelper(this);
@@ -62,64 +59,55 @@ public class GamePlayDataActivity extends BaseAdActivity
 	}
 
 	@Override
-	protected void onResume()
-	{
+	protected void onResume() {
 		super.onResume();
 		dbHelper = new GamesDbHelper(this);
 		if (ActivityUtilities.databaseChanged(this)) generateLayout();
 	}
 
 	@Override
-	protected void onPause()
-	{
+	protected void onPause() {
 		super.onPause();
 		dbHelper.close();
 	}
 
 	@Override
-	protected void onDestroy()
-	{
+	protected void onDestroy() {
 		super.onDestroy();
 		if (dbHelper != null) dbHelper.close();
 	}
 
 	@Override
-	public void onBackPressed()
-	{
+	public void onBackPressed() {
 		super.onBackPressed();
 		ActivityUtilities.exitDown(this);
 	}
 
 	@Override
-	protected void setColors()
-	{
-		if (Preferences.generatePalette(this))
-		{
+	protected void setColors() {
+		if (Preferences.generatePalette(this)) {
 			backgroundColor = Preferences.getGeneratedBackgroundColor(this);
 			foregroundColor = Preferences.getGeneratedForegroundColor(this);
-		}
-		else
-		{
+		} else {
 			backgroundColor = Preferences.getBackgroundColor(this);
 			foregroundColor = Preferences.getForegroundColor(this);
 		}
 	}
 
-	void colorComponents()
-	{
+	void colorComponents() {
 		((TextView) view.findViewById(R.id.textview_game_name)).setTextColor(foregroundColor);
 		view.findViewById(R.id.textview_game_name).setBackgroundColor(backgroundColor);
-		((TextView)view.findViewById(R.id.textview_game_date)).setTextColor(foregroundColor);
+		((TextView) view.findViewById(R.id.textview_game_date)).setTextColor(foregroundColor);
 		view.findViewById(R.id.textview_game_date).setBackgroundColor(backgroundColor);
-		((TextView)view.findViewById(R.id.textview_timeplayed)).setTextColor(foregroundColor);
+		((TextView) view.findViewById(R.id.textview_timeplayed)).setTextColor(foregroundColor);
 		view.findViewById(R.id.textview_timeplayed).setBackgroundColor(backgroundColor);
-		((TextView)view.findViewById(R.id.textview_location)).setTextColor(foregroundColor);
+		((TextView) view.findViewById(R.id.textview_location)).setTextColor(foregroundColor);
 		view.findViewById(R.id.textview_location).setBackgroundColor(backgroundColor);
-		((TextView)view.findViewById(R.id.textview_players)).setTextColor(foregroundColor);
+		((TextView) view.findViewById(R.id.textview_players)).setTextColor(foregroundColor);
 		view.findViewById(R.id.textview_players).setBackgroundColor(backgroundColor);
-		((TextView)view.findViewById(R.id.textview_notes)).setTextColor(foregroundColor);
+		((TextView) view.findViewById(R.id.textview_notes)).setTextColor(foregroundColor);
 		view.findViewById(R.id.textview_notes).setBackgroundColor(backgroundColor);
-		((TextView)view.findViewById(R.id.textview_game_notes)).setTextColor(foregroundColor);
+		((TextView) view.findViewById(R.id.textview_game_notes)).setTextColor(foregroundColor);
 		view.findViewById(R.id.textview_game_notes).setBackgroundColor(backgroundColor);
 		view.setBackgroundColor(backgroundColor);
 
@@ -128,65 +116,57 @@ public class GamePlayDataActivity extends BaseAdActivity
 		ViewUtilities.tintLayoutBackground(view.findViewById(R.id.linearlayout_notes), foregroundColor);
 	}
 
-	void generateLayout()
-	{
+	void generateLayout() {
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 
 		fab = (FloatingActionButton) findViewById(R.id.fab);
-		fab.setOnClickListener(new View.OnClickListener()
-		{
+		fab.setOnClickListener(new View.OnClickListener() {
 			@Override
-			public void onClick(View view)
-			{
+			public void onClick(View view) {
 				toggleFabs();
 			}
 		});
 
 		editFab = (FloatingActionButton) findViewById(R.id.fab_edit_game_play);
-		editFab.setOnClickListener(new View.OnClickListener()
-		{
+		editFab.setOnClickListener(new View.OnClickListener() {
 			@Override
-			public void onClick(View view)
-			{
+			public void onClick(View view) {
 				toggleFabs();
 				long gamePlayId = getIntent().getLongExtra("ID", -1l);
 				startActivity(new Intent(view.getContext(), AddGamePlayTabbedActivity.class)
-						              .putExtra("GAME", gamePlayData.getGame().getName())
-						              .putExtra("TYPE", getIntent().getStringExtra("TYPE"))
-						              .putExtra("ID", gamePlayId)
-						              .putExtra("EXIT", "DOWN"));
+									  .putExtra("GAME", gamePlayData.getGame().getName())
+									  .putExtra("TYPE", getIntent().getStringExtra("TYPE"))
+									  .putExtra("ID", gamePlayId)
+									  .putExtra("EXIT", "DOWN"));
 				ActivityUtilities.exitUp(activity);
 			}
 		});
 
 		deleteFab = (FloatingActionButton) findViewById(R.id.fab_delete_game_play);
-		deleteFab.setOnClickListener(new View.OnClickListener()
-		{
+		deleteFab.setOnClickListener(new View.OnClickListener() {
 			@Override
-			public void onClick(View view)
-			{
+			public void onClick(View view) {
 				final View finalView = view;
 				toggleFabs();
 				AlertDialog dialog = new ViewUtilities.DialogBuilder(view.getContext())
 						.setTitle("Delete Game Play")
 						.setMessage("Are you sure you want to delete this game play?")
-						.setPositiveButton("Delete", new View.OnClickListener()
-						{
+						.setPositiveButton("Delete", new View.OnClickListener() {
 							@Override
-							public void onClick(View v)
-							{
+							public void onClick(View v) {
 								String gameType = getIntent().getStringExtra("TYPE");
-								switch (gameType)
-								{
+								switch (gameType) {
 									case "b":
-										BoardGameDbUtility.deleteGamePlay(dbHelper, getIntent().getLongExtra("ID", -1l));
+										BoardGameDbUtility.deleteGamePlay(dbHelper,
+																		  getIntent().getLongExtra("ID", -1l));
 										break;
 									case "r":
 										RPGDbUtility.deleteGamePlay(dbHelper, getIntent().getLongExtra("ID", -1l));
 										break;
 									case "v":
-										VideoGameDbUtility.deleteGamePlay(dbHelper, getIntent().getLongExtra("ID", -1l));
+										VideoGameDbUtility.deleteGamePlay(dbHelper,
+																		  getIntent().getLongExtra("ID", -1l));
 										break;
 								}
 								ActivityUtilities.setDatabaseChanged(activity, true);
@@ -206,8 +186,7 @@ public class GamePlayDataActivity extends BaseAdActivity
 		findViewById(R.id.fab_invisible).setScaleX(0.7f);
 
 		String gameType = getIntent().getStringExtra("TYPE");
-		switch (gameType)
-		{
+		switch (gameType) {
 			case "b":
 				gamePlayData = BoardGameDbUtility.getGamePlay(dbHelper, getIntent().getLongExtra("ID", -1l));
 				break;
@@ -219,46 +198,41 @@ public class GamePlayDataActivity extends BaseAdActivity
 				break;
 		}
 
-		((TextView)view.findViewById(R.id.textview_game_name)).setText(gamePlayData.getGame().getName());
-		((TextView)view.findViewById(R.id.textview_game_date)).setText(gamePlayData.getDate().toString());
+		((TextView) view.findViewById(R.id.textview_game_name)).setText(gamePlayData.getGame().getName());
+		((TextView) view.findViewById(R.id.textview_game_date)).setText(gamePlayData.getDate().toString());
 
 		if (gamePlayData.getTimePlayed() > 0)
-			((TextView)view.findViewById(R.id.textview_timeplayed))
+			((TextView) view.findViewById(R.id.textview_timeplayed))
 					.setText(StringUtilities.convertMinutes(gamePlayData.getTimePlayed()));
 		else view.findViewById(R.id.textview_timeplayed).setVisibility(View.GONE);
 
 		String location = gamePlayData.getLocation();
 		if (location != null && !location.equals(""))
-			((TextView)view.findViewById(R.id.textview_location)).setText(location);
+			((TextView) view.findViewById(R.id.textview_location)).setText(location);
 		else view.findViewById(R.id.textview_location).setVisibility(View.GONE);
-		((TextView)view.findViewById(R.id.textview_game_notes)).setText(gamePlayData.getNotes() + "\n\n\n");
+		((TextView) view.findViewById(R.id.textview_game_notes)).setText(gamePlayData.getNotes() + "\n\n\n");
 
-		((ListView)view.findViewById(R.id.listview_players))
-				.setAdapter(new PlayerDataAdapter(this, gamePlayData.getOtherPlayers().values(), !getIntent().getStringExtra("TYPE").equals("r")));
+		((ListView) view.findViewById(R.id.listview_players))
+				.setAdapter(new PlayerDataAdapter(this,
+												  gamePlayData.getOtherPlayers().values(),
+												  !getIntent().getStringExtra("TYPE").equals("r")));
 
-		try
-		{
+		try {
 			Bitmap thumbnailBitmap = getIntent().getParcelableExtra("BITMAP");
-			((ImageView)findViewById(R.id.imageview_avatar)).setImageBitmap(thumbnailBitmap);
-		}
-		catch (Exception e)
-		{
+			((ImageView) findViewById(R.id.imageview_avatar)).setImageBitmap(thumbnailBitmap);
+		} catch (Exception e) {
 		}
 
 		ActivityUtilities.setDatabaseChanged(this, false);
 	}
 
-	private void toggleFabs()
-	{
-		if (fabsShowing)
-		{
+	private void toggleFabs() {
+		if (fabsShowing) {
 			fab.setScaleY(1);
 			editFab.hide();
 			deleteFab.hide();
 			fabsShowing = false;
-		}
-		else
-		{
+		} else {
 			fab.setScaleY(-1f);
 			editFab.show();
 			deleteFab.show();

@@ -31,8 +31,7 @@ import java.util.Map;
 /**
  * Created by Casey on 4/7/2016.
  */
-public class FilteredGameArrayAdapter extends ArrayAdapter<String>
-{
+public class FilteredGameArrayAdapter extends ArrayAdapter<String> {
 	private Activity activity;
 	private List<String> items, suggestions;
 	private Filter filter;
@@ -40,21 +39,19 @@ public class FilteredGameArrayAdapter extends ArrayAdapter<String>
 
 	private float SCALE_FACTOR;
 	private BitmapCache thumbnails;
-//	private Map<String, Bitmap> thumbnails;
+	//	private Map<String, Bitmap> thumbnails;
 	private Map<String, String> thumbnailUrls;
 
 	final ImageController imageController;
 
-	public FilteredGameArrayAdapter(final Activity activity, int resource, List<String> games, boolean useThumbnails)
-	{
+	public FilteredGameArrayAdapter(final Activity activity, int resource, List<String> games, boolean useThumbnails) {
 		super(activity, resource, games);
 		this.activity = activity;
 		this.useThumbnails = useThumbnails;
 		items = new ArrayList<>(games);
 
 		Iterator<String> iterator = items.iterator();
-		while(iterator.hasNext())
-		{
+		while (iterator.hasNext()) {
 			if (iterator.next().startsWith("---")) iterator.remove();
 		}
 		suggestions = new ArrayList<>();
@@ -62,8 +59,7 @@ public class FilteredGameArrayAdapter extends ArrayAdapter<String>
 
 		imageController = new ImageController(activity).setDirectoryName("thumbnails");
 
-		if (useThumbnails)
-		{
+		if (useThumbnails) {
 			SCALE_FACTOR = Preferences.scaleFactor(activity);
 
 			thumbnails = new BitmapCache();
@@ -72,32 +68,30 @@ public class FilteredGameArrayAdapter extends ArrayAdapter<String>
 
 			GamesDbHelper dbHelper = new GamesDbHelper(activity);
 			thumbnailUrls = new HashMap<>();
-			for (String game : items)
-			{
+			for (String game : items) {
 				if (game.startsWith("---")) thumbnailUrls.put(game, game.substring(3));
-				else
-				{
+				else {
 					int l = game.length();
 					String gameType = game.substring(l - 1);
 					game = game.substring(0, l - 2);
-					switch (gameType)
-					{
+					switch (gameType) {
 						case "b":
-							thumbnailUrls.put(game + ":b", "http://" + BoardGameDbUtility.getThumbnailUrl(dbHelper, game));
+							thumbnailUrls.put(game + ":b",
+											  "http://" + BoardGameDbUtility.getThumbnailUrl(dbHelper, game));
 							break;
 						case "r":
 							thumbnailUrls.put(game + ":r", "http://" + RPGDbUtility.getThumbnailUrl(dbHelper, game));
 							break;
 						case "v":
-							thumbnailUrls.put(game + ":v", "http://" + VideoGameDbUtility.getThumbnailUrl(dbHelper, game));
+							thumbnailUrls.put(game + ":v",
+											  "http://" + VideoGameDbUtility.getThumbnailUrl(dbHelper, game));
 							break;
 					}
 				}
 			}
 
 
-			for (int i = 0; i < thumbnailUrls.size(); i++)
-			{
+			for (int i = 0; i < thumbnailUrls.size(); i++) {
 				String game = items.get(i);
 				String thumbnailUrl = thumbnailUrls.get(game);
 				new BitmapWorkerTask(null).execute(thumbnailUrl, game);
@@ -145,34 +139,31 @@ public class FilteredGameArrayAdapter extends ArrayAdapter<String>
 	}
 
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent)
-	{
+	public View getView(int position, View convertView, ViewGroup parent) {
 		View view = null;
 
-		try
-		{
-			if (useThumbnails) view = activity.getLayoutInflater().inflate(R.layout.linear_layout_game_play_player_info, null);
-			else
-			{
-				if (convertView == null) view = activity.getLayoutInflater().inflate(android.R.layout.simple_list_item_1, null);
+		try {
+			if (useThumbnails)
+				view = activity.getLayoutInflater().inflate(R.layout.linear_layout_game_play_player_info, null);
+			else {
+				if (convertView == null)
+					view = activity.getLayoutInflater().inflate(android.R.layout.simple_list_item_1, null);
 				else view = convertView;
 			}
 			String suggestion = suggestions.get(position);
-			if (useThumbnails)
-			{
+			if (useThumbnails) {
 				String suggestionUrl = suggestion.replace("<b>", "").replace("</b>", "");
 				view.findViewById(R.id.textview_score).setVisibility(View.GONE);
 				view.findViewById(R.id.imageview_win_icon).setVisibility(View.GONE);
-				((TextView)view.findViewById(R.id.textview_name)).setText(Html.fromHtml(suggestion.substring(0, suggestion.length()-2)));
+				((TextView) view.findViewById(R.id.textview_name)).setText(Html.fromHtml(suggestion.substring(0,
+																											  suggestion
+																													  .length() -
+																													  2)));
 				((ImageView) view.findViewById(R.id.imageview_avatar)).setImageBitmap(thumbnails.get(suggestionUrl));
+			} else {
+				((TextView) view).setText(Html.fromHtml(suggestion));
 			}
-			else
-			{
-				((TextView)view).setText(Html.fromHtml(suggestion));
-			}
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
@@ -181,22 +172,17 @@ public class FilteredGameArrayAdapter extends ArrayAdapter<String>
 	}
 
 	@Override
-	public Filter getFilter()
-	{
+	public Filter getFilter() {
 		return filter;
 	}
 
-	private class StringFilter extends Filter
-	{
+	private class StringFilter extends Filter {
 		@Override
-		protected FilterResults performFiltering(CharSequence constraint)
-		{
-			if (constraint != null)
-			{
+		protected FilterResults performFiltering(CharSequence constraint) {
+			if (constraint != null) {
 				suggestions.clear();
 				for (String s : items)
-					if (s.toLowerCase().contains(constraint.toString().toLowerCase()))
-					{
+					if (s.toLowerCase().contains(constraint.toString().toLowerCase())) {
 						int index = s.toLowerCase().indexOf(constraint.toString().toLowerCase());
 						String boldedString = s.substring(0, index) + "<b>" +
 								s.substring(index, index + constraint.length()) + "</b>" +
@@ -208,19 +194,15 @@ public class FilteredGameArrayAdapter extends ArrayAdapter<String>
 				filterResults.values = suggestions;
 				filterResults.count = suggestions.size();
 				return filterResults;
-			}
-			else return new FilterResults();
+			} else return new FilterResults();
 		}
 
 		@Override
-		protected void publishResults(CharSequence constraint, FilterResults results)
-		{
-			if (results != null && results.count > 0)
-			{
+		protected void publishResults(CharSequence constraint, FilterResults results) {
+			if (results != null && results.count > 0) {
 				List<String> filterList = (ArrayList<String>) results.values;
 				clear();
-				for (String s : filterList)
-				{
+				for (String s : filterList) {
 					if (useThumbnails)
 						add(s.substring(0, s.length() - 2).replaceAll("<b>", "").replaceAll("</b>", ""));
 					else
@@ -232,24 +214,21 @@ public class FilteredGameArrayAdapter extends ArrayAdapter<String>
 		}
 	}
 
-	private class BitmapWorkerTask extends AsyncTask<String, Void, Bitmap>
-	{
+	private class BitmapWorkerTask extends AsyncTask<String, Void, Bitmap> {
 		private final WeakReference<ImageView> imageViewReference;
 
-		public BitmapWorkerTask(ImageView imageView)
-		{
+		public BitmapWorkerTask(ImageView imageView) {
 			imageViewReference = new WeakReference<>(imageView);
 		}
 
 		@Override
-		protected Bitmap doInBackground(String... params)
-		{
+		protected Bitmap doInBackground(String... params) {
 			Bitmap thumbnail;
 			String thumbnailUrl = params[0];
 			String game = params[1];
 			if (thumbnailUrl.length() > 1)
 				thumbnail = imageController.setFileName(thumbnailUrl.substring(thumbnailUrl.lastIndexOf("/") + 1))
-				                           .load();
+										   .load();
 			else
 				thumbnail = new StringToBitmapBuilder(activity)
 						.setTextSize(90 * SCALE_FACTOR)
@@ -268,10 +247,8 @@ public class FilteredGameArrayAdapter extends ArrayAdapter<String>
 		}
 
 		@Override
-		protected void onPostExecute(Bitmap bitmap)
-		{
-			if (imageViewReference != null && bitmap != null)
-			{
+		protected void onPostExecute(Bitmap bitmap) {
+			if (imageViewReference != null && bitmap != null) {
 				final ImageView imageView = imageViewReference.get();
 				if (imageView != null) imageView.setImageBitmap(bitmap);
 				notifyDataSetChanged();

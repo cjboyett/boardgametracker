@@ -39,14 +39,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class StatsOverviewFragment extends Fragment
-{
+public class StatsOverviewFragment extends Fragment {
 	private View view;
 	private RecyclerView recyclerView;
 	private ImageView boardGamesLightLens, rpgsLightLens, videoGamesLightLens;
 	private AppCompatImageView boardGamesLight, rpgsLight, videoGamesLight;
 	private int backgroundColor, foregroundColor, hintTextColor;
-	private int boardGamesLightOnColor, boardGamesLightOffColor, rpgsLightOnColor, rpgsLightOffColor, videoGamesLightOnColor, videoGamesLightOffColor;
+	private int boardGamesLightOnColor, boardGamesLightOffColor, rpgsLightOnColor, rpgsLightOffColor,
+			videoGamesLightOnColor, videoGamesLightOffColor;
 	private boolean boardGamesLightOn, rpgsLightOn, videoGamesLightOn;
 
 	private GamesDbHelper dbHelper;
@@ -57,27 +57,23 @@ public class StatsOverviewFragment extends Fragment
 	private GestureDetectorCompat gestureDetector;
 	private int scrollY;
 
-	public StatsOverviewFragment()
-	{
+	public StatsOverviewFragment() {
 		// Required empty public constructor
 	}
 
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-	                         Bundle savedInstanceState)
-	{
+							 Bundle savedInstanceState) {
 
 		dbHelper = new GamesDbHelper(getContext());
 		view = inflater.inflate(R.layout.fragment_stats_overview, container, false);
-		recyclerView = (RecyclerView)view.findViewById(R.id.recyclerview_stats_overview);
+		recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview_stats_overview);
 		gestureDetector = new GestureDetectorCompat(getActivity(), new ScrollGestureListener());
 
-		recyclerView.setOnTouchListener(new View.OnTouchListener()
-		{
+		recyclerView.setOnTouchListener(new View.OnTouchListener() {
 			@Override
-			public boolean onTouch(View v, MotionEvent event)
-			{
+			public boolean onTouch(View v, MotionEvent event) {
 				if (Preferences.useSwipes(v.getContext()))
 					return gestureDetector.onTouchEvent(event);
 				return false;
@@ -89,33 +85,28 @@ public class StatsOverviewFragment extends Fragment
 	}
 
 	@Override
-	public void onResume()
-	{
+	public void onResume() {
 		super.onResume();
 		dbHelper = new GamesDbHelper(getActivity());
-		if (regenerateLayout)
-		{
+		if (regenerateLayout) {
 			generateLayout();
 			regenerateLayout = false;
 		}
 	}
 
 	@Override
-	public void onPause()
-	{
+	public void onPause() {
 		super.onPause();
 		dbHelper.close();
 	}
 
 	@Override
-	public void onDestroy()
-	{
+	public void onDestroy() {
 		super.onDestroy();
 		if (dbHelper != null) dbHelper.close();
 	}
 
-	private void generateLayout()
-	{
+	private void generateLayout() {
 		setColors();
 
 		statisticsManager = StatisticsManager.getInstance(getActivity());
@@ -126,19 +117,17 @@ public class StatsOverviewFragment extends Fragment
 		rpgsLightOn = Preferences.useRPGsForStats(getActivity());
 		videoGamesLightOn = Preferences.useVideoGamesForStats(getActivity());
 
-		boardGamesLightLens = (ImageView)view.findViewById(R.id.imageview_board_games_light_lens);
-		rpgsLightLens = (ImageView)view.findViewById(R.id.imageview_rpgs_light_lens);
-		videoGamesLightLens = (ImageView)view.findViewById(R.id.imageview_video_games_light_lens);
+		boardGamesLightLens = (ImageView) view.findViewById(R.id.imageview_board_games_light_lens);
+		rpgsLightLens = (ImageView) view.findViewById(R.id.imageview_rpgs_light_lens);
+		videoGamesLightLens = (ImageView) view.findViewById(R.id.imageview_video_games_light_lens);
 
-		boardGamesLight = (AppCompatImageView)view.findViewById(R.id.imageview_board_games_light);
-		rpgsLight = (AppCompatImageView)view.findViewById(R.id.imageview_rpgs_light);
-		videoGamesLight = (AppCompatImageView)view.findViewById(R.id.imageview_video_games_light);
+		boardGamesLight = (AppCompatImageView) view.findViewById(R.id.imageview_board_games_light);
+		rpgsLight = (AppCompatImageView) view.findViewById(R.id.imageview_rpgs_light);
+		videoGamesLight = (AppCompatImageView) view.findViewById(R.id.imageview_video_games_light);
 
-		boardGamesLightLens.setOnClickListener(new View.OnClickListener()
-		{
+		boardGamesLightLens.setOnClickListener(new View.OnClickListener() {
 			@Override
-			public void onClick(View v)
-			{
+			public void onClick(View v) {
 				if (boardGamesLightOn)
 					ViewUtilities.tintImageView(boardGamesLight, boardGamesLightOffColor);
 				else
@@ -151,11 +140,9 @@ public class StatsOverviewFragment extends Fragment
 			}
 		});
 
-		rpgsLightLens.setOnClickListener(new View.OnClickListener()
-		{
+		rpgsLightLens.setOnClickListener(new View.OnClickListener() {
 			@Override
-			public void onClick(View v)
-			{
+			public void onClick(View v) {
 				if (rpgsLightOn)
 					ViewUtilities.tintImageView(rpgsLight, rpgsLightOffColor);
 				else
@@ -168,11 +155,9 @@ public class StatsOverviewFragment extends Fragment
 			}
 		});
 
-		videoGamesLightLens.setOnClickListener(new View.OnClickListener()
-		{
+		videoGamesLightLens.setOnClickListener(new View.OnClickListener() {
 			@Override
-			public void onClick(View v)
-			{
+			public void onClick(View v) {
 				if (videoGamesLightOn)
 					ViewUtilities.tintImageView(videoGamesLight, videoGamesLightOffColor);
 				else
@@ -188,13 +173,11 @@ public class StatsOverviewFragment extends Fragment
 		colorComponents();
 	}
 
-	private void resetLayout()
-	{
+	private void resetLayout() {
 		List<Statistic> statisticList = new ArrayList<>();
 		statisticList.add(new BlankStatistic(getActivity()));
 		statisticList.add(new GamePlayStatistics(getActivity(), statisticsManager));
-		if (statisticsManager.getGamesTimesPlayed() > 0)
-		{
+		if (statisticsManager.getGamesTimesPlayed() > 0) {
 //		statisticList.add(new GameMetricStatistic(getActivity(), statisticsManager));
 			statisticList.add(new HScoreStatistic(getActivity(), statisticsManager));
 			statisticList.add(new MostPlayedGamesStatistic(getActivity(), statisticsManager));
@@ -207,17 +190,18 @@ public class StatsOverviewFragment extends Fragment
 		LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
 		recyclerView.setLayoutManager(layoutManager);
 
-		StatsRecyclerAdapter adapter = new StatsRecyclerAdapter(statisticList, ColorUtilities.adjustBasedOnHSV(backgroundColor), foregroundColor, hintTextColor);
+		StatsRecyclerAdapter adapter = new StatsRecyclerAdapter(statisticList,
+																ColorUtilities.adjustBasedOnHSV(backgroundColor),
+																foregroundColor,
+																hintTextColor);
 		recyclerView.setAdapter(adapter);
 	}
 
-	public void setRegenerateLayout(boolean regenerateLayout)
-	{
+	public void setRegenerateLayout(boolean regenerateLayout) {
 		this.regenerateLayout = regenerateLayout;
 	}
 
-	private void setColors()
-	{
+	private void setColors() {
 		backgroundColor = Preferences.getBackgroundColor(getActivity());
 		foregroundColor = Preferences.getForegroundColor(getActivity());
 		hintTextColor = Preferences.getHintTextColor(getActivity());
@@ -231,8 +215,7 @@ public class StatsOverviewFragment extends Fragment
 		videoGamesLightOffColor = ColorUtilities.mixWithBaseColor(videoGamesLightOnColor, 2, Color.BLACK, 3);
 	}
 
-	private void colorComponents()
-	{
+	private void colorComponents() {
 
 		view.setBackgroundColor(backgroundColor);
 
@@ -252,39 +235,31 @@ public class StatsOverviewFragment extends Fragment
 			ViewUtilities.tintImageView(videoGamesLight, videoGamesLightOffColor);
 	}
 
-	private class ScrollGestureListener extends GestureDetector.SimpleOnGestureListener
-	{
+	private class ScrollGestureListener extends GestureDetector.SimpleOnGestureListener {
 		@Override
-		public boolean onDown(MotionEvent e)
-		{
-			LinearLayout l = (LinearLayout)recyclerView.getChildAt(0);
+		public boolean onDown(MotionEvent e) {
+			LinearLayout l = (LinearLayout) recyclerView.getChildAt(0);
 
 			// Works here because we set the first stat as blank in adapter.
-			scrollY = l.getChildCount(); //recyclerView.getScrollY(); //-c.getTop() + recyclerView.getFirstVisiblePosition() * c.getHeight();
+			scrollY =
+					l.getChildCount(); //recyclerView.getScrollY(); //-c.getTop() + recyclerView.getFirstVisiblePosition() * c.getHeight();
 			Log.d("DOWN", scrollY + "");
 			return super.onDown(e);
 		}
 
 		@Override
-		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY)
-		{
+		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
 			Log.d("FLING", scrollY + "");
-			try
-			{
-				if (Math.abs(velocityX) < Math.abs(velocityY))
-				{
-					if (Math.abs(e1.getY() - e2.getY()) >= 200)
-					{
-						if (velocityY > 2000 && scrollY == 0)
-						{
+			try {
+				if (Math.abs(velocityX) < Math.abs(velocityY)) {
+					if (Math.abs(e1.getY() - e2.getY()) >= 200) {
+						if (velocityY > 2000 && scrollY == 0) {
 							getActivity().onBackPressed();
 							return true;
 						}
 					}
 				}
-			}
-			catch (Exception e)
-			{
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			return false;

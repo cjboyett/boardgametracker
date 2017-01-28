@@ -34,8 +34,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class AddGamePlayPlayersFragment extends Fragment
-{
+public class AddGamePlayPlayersFragment extends Fragment {
 	private View view;
 	private LinearLayout linearLayout;
 	private List<String> playersInAdpater, allPlayers;
@@ -49,19 +48,15 @@ public class AddGamePlayPlayersFragment extends Fragment
 
 	private int backgroundColor, foregroundColor, hintTextColor;
 
-	public AddGamePlayPlayersFragment()
-	{
+	public AddGamePlayPlayersFragment() {
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-	                         Bundle savedInstanceState)
-	{
-		if (playerViews == null) playerViews = new TreeMap<>(new Comparator<DatedTextView>()
-		{
+							 Bundle savedInstanceState) {
+		if (playerViews == null) playerViews = new TreeMap<>(new Comparator<DatedTextView>() {
 			@Override
-			public int compare(DatedTextView lhs, DatedTextView rhs)
-			{
+			public int compare(DatedTextView lhs, DatedTextView rhs) {
 				return (int) (lhs.getDateStamp() - rhs.getDateStamp());
 			}
 		});
@@ -74,7 +69,10 @@ public class AddGamePlayPlayersFragment extends Fragment
 		allPlayers = new ArrayList<>(dataManager.getAllPlayers());
 		playersInAdpater = new ArrayList<>(allPlayers);
 		if (playersInAdpater.contains("master_user")) playersInAdpater.remove("master_user");
-		arrayAdapter = new FilteredPlayerArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, playersInAdpater, true);
+		arrayAdapter = new FilteredPlayerArrayAdapter(getActivity(),
+													  android.R.layout.simple_list_item_1,
+													  playersInAdpater,
+													  true);
 
 		addPlayerView = new AddPlayerView(getContext());
 		linearLayout = (LinearLayout) view.findViewById(R.id.linearlayout_add_players);
@@ -85,18 +83,17 @@ public class AddGamePlayPlayersFragment extends Fragment
 
 		playerViews.put((DatedTextView) addPlayerView.findViewById(R.id.button_remove_player), addPlayerView);
 		addPlayerView.findViewById(R.id.button_remove_player)
-		             .setVisibility(View.INVISIBLE);
-		((AutoCompleteTextView) addPlayerView.findViewById(R.id.edittext_other_player)).setText(Preferences.getUsername(getContext()));
+					 .setVisibility(View.INVISIBLE);
+		((AutoCompleteTextView) addPlayerView.findViewById(R.id.edittext_other_player)).setText(Preferences.getUsername(
+				getContext()));
 		addPlayerView.findViewById(R.id.edittext_other_player)
-		             .setEnabled(false);
+					 .setEnabled(false);
 		addPlayerView.findViewById(R.id.textview_name)
-		             .setVisibility(View.VISIBLE);
+					 .setVisibility(View.VISIBLE);
 
 		if (gamePlayerDatas == null) gamePlayerDatas = new ArrayList<>();
-		if (!gamePlayerDatas.isEmpty())
-		{
-			for (GamePlayerData player : gamePlayerDatas)
-			{
+		if (!gamePlayerDatas.isEmpty()) {
+			for (GamePlayerData player : gamePlayerDatas) {
 				addPlayer(player);
 			}
 		}
@@ -108,52 +105,42 @@ public class AddGamePlayPlayersFragment extends Fragment
 	}
 
 	@Override
-	public void onPause()
-	{
+	public void onPause() {
 		super.onPause();
 		addTempPlayers();
 	}
 
-	public void addTempPlayers()
-	{
-		try
-		{
-			if (!initializing)
-			{
+	public void addTempPlayers() {
+		try {
+			if (!initializing) {
 				tempDataManager.clearTempPlayers();
 				tempDataManager.getTempPlayers()
-				               .clear();
+							   .clear();
 				for (GamePlayerData gamePlayerData : getPlayerData()) tempDataManager.addTempPlayer(gamePlayerData);
 				tempDataManager.saveTempPlayers();
 			}
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 
 		}
 	}
 
 	@Override
-	public void onResume()
-	{
+	public void onResume() {
 		super.onResume();
-		new AsyncTask<String, Void, List<GamePlayerData>>()
-		{
+		new AsyncTask<String, Void, List<GamePlayerData>>() {
 			@Override
-			protected List<GamePlayerData> doInBackground(String... params)
-			{
+			protected List<GamePlayerData> doInBackground(String... params) {
 				initializing = true;
 				tempDataManager.loadTempPlayers();
 				return tempDataManager.getTempPlayers();
 			}
 
 			@Override
-			protected void onPostExecute(List<GamePlayerData> gamePlayerDataList)
-			{
-				if (gamePlayerDataList.size() > 0)
-				{
+			protected void onPostExecute(List<GamePlayerData> gamePlayerDataList) {
+				if (gamePlayerDataList.size() > 0) {
 					playerViews.clear();
-					playerViews.put((DatedTextView) addPlayerView.findViewById(R.id.button_remove_player), addPlayerView);
+					playerViews.put((DatedTextView) addPlayerView.findViewById(R.id.button_remove_player),
+									addPlayerView);
 					linearLayout.removeAllViews();
 					linearLayout.addView(addPlayerView);
 					for (int i = 0; i < gamePlayerDataList.size(); i++)
@@ -166,49 +153,42 @@ public class AddGamePlayPlayersFragment extends Fragment
 		}.execute("");
 	}
 
-	private void setColors()
-	{
+	private void setColors() {
 		backgroundColor = Preferences.getBackgroundColor(getContext());
 		foregroundColor = Preferences.getForegroundColor(getContext());
 		hintTextColor = Preferences.getHintTextColor(getContext());
 	}
 
-	private void colorComponents()
-	{
+	private void colorComponents() {
 		view.setBackgroundColor(backgroundColor);
 		view.findViewById(R.id.button_add_player)
-		    .setBackgroundColor(backgroundColor);
+			.setBackgroundColor(backgroundColor);
 		((TextView) view.findViewById(R.id.button_add_player)).setTextColor(foregroundColor);
 		addPlayerView.colorComponents(backgroundColor, foregroundColor, hintTextColor);
 		for (AddPlayerView playerView : playerViews.values())
 			playerView.colorComponents(backgroundColor, foregroundColor, hintTextColor);
 	}
 
-	private void addPlayer(GamePlayerData player)
-	{
+	private void addPlayer(GamePlayerData player) {
 		if (player.getPlayerName()
-		          .equals("master_user"))
-		{
-			((EditText) addPlayerView.findViewById(R.id.edittext_other_player)).setText(Preferences.getUsername(getActivity()));
+				  .equals("master_user")) {
+			((EditText) addPlayerView.findViewById(R.id.edittext_other_player)).setText(Preferences.getUsername(
+					getActivity()));
 			double score = player.getScore();
-			if (score > -10000)
-			{
+			if (score > -10000) {
 				if (score == (int) score)
 					((EditText) addPlayerView.findViewById(R.id.edittext_other_score)).setText((int) score + "");
 				else
 					((EditText) addPlayerView.findViewById(R.id.edittext_other_score)).setText(score + "");
 			}
 			((CheckBox) addPlayerView.findViewById(R.id.checkbox_other_win)).setChecked(player.isWin());
-		}
-		else
-		{
+		} else {
 			AddPlayerView newAddPlayerView = new AddPlayerView(view.getContext());
 			((AutoCompleteTextView) newAddPlayerView.findViewById(R.id.edittext_other_player)).setAdapter(arrayAdapter);
 			((AutoCompleteTextView) newAddPlayerView.findViewById(R.id.edittext_other_player)).setThreshold(2);
 			((AutoCompleteTextView) newAddPlayerView.findViewById(R.id.edittext_other_player)).setText(player.getPlayerName());
 			double score = player.getScore();
-			if (score > -10000)
-			{
+			if (score > -10000) {
 				if (score == (int) score)
 					((EditText) newAddPlayerView.findViewById(R.id.edittext_other_score)).setText((int) score + "");
 				else
@@ -216,111 +196,102 @@ public class AddGamePlayPlayersFragment extends Fragment
 			}
 			((CheckBox) newAddPlayerView.findViewById(R.id.checkbox_other_win)).setChecked(player.isWin());
 			newAddPlayerView.findViewById(R.id.button_remove_player)
-			                .setOnClickListener(new View.OnClickListener()
-			                {
-				                @Override
-				                public void onClick(View v)
-				                {
-					                linearLayout.removeView(playerViews.remove(v));
-				                }
-			                });
+							.setOnClickListener(new View.OnClickListener() {
+								@Override
+								public void onClick(View v) {
+									linearLayout.removeView(playerViews.remove(v));
+								}
+							});
 			linearLayout.addView(newAddPlayerView);
 			playerViews.put((DatedTextView) newAddPlayerView.findViewById(R.id.button_remove_player), newAddPlayerView);
 		}
 	}
 
-	public List<GamePlayerData> getPlayerData()
-	{
+	public List<GamePlayerData> getPlayerData() {
 		List<GamePlayerData> players = new ArrayList<>();
 
-		for (AddPlayerView view : playerViews.values())
-		{
+		for (AddPlayerView view : playerViews.values()) {
 			String name = ((EditText) view.findViewById(R.id.edittext_other_player)).getText()
-			                                                                        .toString();
+																					.toString();
 			if (name.equals("")) name = "OTHER";
 			else if (name.equals(Preferences.getUsername(getContext()))) name = "master_user";
 
 			String scoreString = ((EditText) view.findViewById(R.id.edittext_other_score)).getText()
-			                                                                              .toString();
+																						  .toString();
 			double score = -10000;
 			if (NumberUtils.isParsable(scoreString)) score = Double.parseDouble(scoreString);
-			players.add(new GamePlayerData(name, score, ((CheckBox) view.findViewById(R.id.checkbox_other_win)).isChecked()));
+			players.add(new GamePlayerData(name,
+										   score,
+										   ((CheckBox) view.findViewById(R.id.checkbox_other_win)).isChecked()));
 		}
 
 		return players;
 	}
 
-	public void setPlayers(Collection<GamePlayerData> players)
-	{
+	public void setPlayers(Collection<GamePlayerData> players) {
 		gamePlayerDatas = new ArrayList<>(players);
 	}
 
-	private class AddPlayerViewClickListener implements View.OnClickListener
-	{
+	private class AddPlayerViewClickListener implements View.OnClickListener {
 		@Override
-		public void onClick(View v)
-		{
+		public void onClick(View v) {
 			final AddPlayerView newAddPlayerView = new AddPlayerView(view.getContext());
 			newAddPlayerView.colorComponents(backgroundColor, foregroundColor, hintTextColor);
 			((AutoCompleteTextView) newAddPlayerView.findViewById(R.id.edittext_other_player)).setAdapter(arrayAdapter);
 			((AutoCompleteTextView) newAddPlayerView.findViewById(R.id.edittext_other_player)).setThreshold(2);
 
-			newAddPlayerView.findViewById(R.id.edittext_other_player).setOnFocusChangeListener(new View.OnFocusChangeListener()
-			{
-				@Override
-				public void onFocusChange(View view, boolean b)
-				{
-					String player = ((TextView)newAddPlayerView.findViewById(R.id.edittext_other_player)).getText().toString();
-					if (allPlayers.contains(player))
-					{
-						playersInAdpater.remove(player);
-						arrayAdapter.remove(player);
-					}
-					arrayAdapter.notifyDataSetChanged();				}
-			});
+			newAddPlayerView.findViewById(R.id.edittext_other_player)
+							.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+								@Override
+								public void onFocusChange(View view, boolean b) {
+									String player =
+											((TextView) newAddPlayerView.findViewById(R.id.edittext_other_player)).getText()
+																												  .toString();
+									if (allPlayers.contains(player)) {
+										playersInAdpater.remove(player);
+										arrayAdapter.remove(player);
+									}
+									arrayAdapter.notifyDataSetChanged();
+								}
+							});
 
 			newAddPlayerView.findViewById(R.id.button_remove_player)
-			                .setOnClickListener(new View.OnClickListener()
-			                {
-				                @Override
-				                public void onClick(View v)
-				                {
-					                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
-					                {
-						                TransitionManager.beginDelayedTransition((ViewGroup)view);
-					                }
-									String player = ((TextView)newAddPlayerView.findViewById(R.id.edittext_other_player)).getText().toString();
-					                if (allPlayers.contains(player))
-					                {
-						                playersInAdpater.add(player);
-						                arrayAdapter.add(player);
-					                }
-					                arrayAdapter.notifyDataSetChanged();
+							.setOnClickListener(new View.OnClickListener() {
+								@Override
+								public void onClick(View v) {
+									if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+										TransitionManager.beginDelayedTransition((ViewGroup) view);
+									}
+									String player =
+											((TextView) newAddPlayerView.findViewById(R.id.edittext_other_player)).getText()
+																												  .toString();
+									if (allPlayers.contains(player)) {
+										playersInAdpater.add(player);
+										arrayAdapter.add(player);
+									}
+									arrayAdapter.notifyDataSetChanged();
 
-					                linearLayout.removeView(playerViews.remove(v));
-				                }
-			                });
+									linearLayout.removeView(playerViews.remove(v));
+								}
+							});
 
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
-			{
-				TransitionManager.beginDelayedTransition((ViewGroup)view, new Fade(Fade.IN));
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+				TransitionManager.beginDelayedTransition((ViewGroup) view, new Fade(Fade.IN));
 			}
 
 			linearLayout.addView(newAddPlayerView);
 
 			boolean jumpToNewView = true;
-			for (AddPlayerView playerView : playerViews.values())
-			{
+			for (AddPlayerView playerView : playerViews.values()) {
 				String text = ((TextView) playerView.findViewById(R.id.edittext_other_player)).getText()
-				                                                                              .toString();
-				if (text == null || text.equals(""))
-				{
+																							  .toString();
+				if (text == null || text.equals("")) {
 					jumpToNewView = false;
 					break;
 				}
 			}
 			if (jumpToNewView) newAddPlayerView.findViewById(R.id.edittext_other_player)
-			                                   .requestFocus();
+											   .requestFocus();
 			playerViews.put((DatedTextView) newAddPlayerView.findViewById(R.id.button_remove_player), newAddPlayerView);
 		}
 	}

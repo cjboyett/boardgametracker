@@ -1,45 +1,45 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
               android:orientation="vertical"
-             tools:context=".activity.StatsOverviewFragment">
+              tools:context=".activity.StatsOverviewFragment">
 
     <RelativeLayout
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:layout_marginRight="5dp"
-	    android:layout_marginTop="3dp">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="3dp">
 
-	    <android.support.v7.widget.AppCompatImageView
-		    android:layout_width="@dimen/games_light_width_and_height"
-		    android:layout_height="@dimen/games_light_width_and_height"
-		    android:id="@+id/imageview_board_games_light"
-		    android:src="@drawable/games_light_background"
-		    android:layout_centerVertical="true"
-		    android:layout_alignLeft="@+id/imageview_board_games_light_lens"/>
+        <android.support.v7.widget.AppCompatImageView
+            android:layout_width="@dimen/games_light_width_and_height"
+            android:layout_height="@dimen/games_light_width_and_height"
+            android:id="@+id/imageview_board_games_light"
+            android:src="@drawable/games_light_background"
+            android:layout_centerVertical="true"
+            android:layout_alignLeft="@+id/imageview_board_games_light_lens"/>
 
-	    <android.support.v7.widget.AppCompatImageView
-		    android:layout_width="@dimen/games_light_width_and_height"
-		    android:layout_height="@dimen/games_light_width_and_height"
-		    android:id="@+id/imageview_rpgs_light"
-		    android:layout_margin="0dp"
-		    android:src="@drawable/games_light_background"
-		    android:layout_centerVertical="true"
-		    android:layout_alignLeft="@+id/imageview_rpgs_light_lens"/>
+        <android.support.v7.widget.AppCompatImageView
+            android:layout_width="@dimen/games_light_width_and_height"
+            android:layout_height="@dimen/games_light_width_and_height"
+            android:id="@+id/imageview_rpgs_light"
+            android:layout_margin="0dp"
+            android:src="@drawable/games_light_background"
+            android:layout_centerVertical="true"
+            android:layout_alignLeft="@+id/imageview_rpgs_light_lens"/>
 
-	    <android.support.v7.widget.AppCompatImageView
-		    android:layout_width="@dimen/games_light_width_and_height"
-		    android:layout_height="@dimen/games_light_width_and_height"
-		    android:id="@+id/imageview_video_games_light"
-		    android:layout_margin="0dp"
-		    android:src="@drawable/games_light_background"
-		    android:layout_centerVertical="true"
-		    android:layout_alignLeft="@+id/imageview_video_games_light_lens"/>
+        <android.support.v7.widget.AppCompatImageView
+            android:layout_width="@dimen/games_light_width_and_height"
+            android:layout_height="@dimen/games_light_width_and_height"
+            android:id="@+id/imageview_video_games_light"
+            android:layout_margin="0dp"
+            android:src="@drawable/games_light_background"
+            android:layout_centerVertical="true"
+            android:layout_alignLeft="@+id/imageview_video_games_light_lens"/>
 
-	    <ImageView
-		    android:layout_width="@dimen/games_light_width_and_height"
-		    android:layout_height="@dimen/games_light_width_and_height"
+        <ImageView
+            android:layout_width="@dimen/games_light_width_and_height"
+            android:layout_height="@dimen/games_light_width_and_height"
             android:id="@+id/imageview_board_games_light_lens"
             android:background="@drawable/games_light_background_border"
             android:src="@drawable/button_lens"
@@ -48,8 +48,8 @@
             android:layout_margin="2dp"/>
 
         <ImageView
-	        android:layout_width="@dimen/games_light_width_and_height"
-	        android:layout_height="@dimen/games_light_width_and_height"
+            android:layout_width="@dimen/games_light_width_and_height"
+            android:layout_height="@dimen/games_light_width_and_height"
             android:id="@+id/imageview_rpgs_light_lens"
             android:background="@drawable/games_light_background_border"
             android:src="@drawable/button_lens"
@@ -58,8 +58,8 @@
             android:layout_margin="2dp"/>
 
         <ImageView
-	        android:layout_width="@dimen/games_light_width_and_height"
-	        android:layout_height="@dimen/games_light_width_and_height"
+            android:layout_width="@dimen/games_light_width_and_height"
+            android:layout_height="@dimen/games_light_width_and_height"
             android:id="@+id/imageview_video_games_light_lens"
             android:background="@drawable/games_light_background_border"
             android:src="@drawable/button_lens"
@@ -69,16 +69,16 @@
     </RelativeLayout>
 
     <android.support.v7.widget.RecyclerView
-	    android:id="@+id/recyclerview_stats_overview"
-	    android:layout_width="match_parent"
-	    android:layout_height="match_parent"
-	    android:paddingTop="5dp"
-	    android:paddingBottom="5dp"
-	    android:layout_weight="1"
-	    android:layout_marginLeft="5dp"
-	    android:layout_marginTop="3dp"
-	    android:layout_marginRight="5dp"
-	    android:layout_marginBottom="5dp">
+        android:id="@+id/recyclerview_stats_overview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:layout_weight="1"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="5dp">
 
     </android.support.v7.widget.RecyclerView>
 </LinearLayout>

@@ -23,8 +23,8 @@ import com.cjboyett.boardgamestats.data.PlayersDbUtility;
 import com.cjboyett.boardgamestats.data.games.GamesDbHelper;
 import com.cjboyett.boardgamestats.model.changelog.ChangeLog;
 import com.cjboyett.boardgamestats.utility.ActivityUtilities;
-import com.cjboyett.boardgamestats.utility.view.ImageController;
 import com.cjboyett.boardgamestats.utility.Preferences;
+import com.cjboyett.boardgamestats.utility.view.ImageController;
 import com.flask.colorpicker.ColorPickerPreference;
 
 import org.apache.commons.lang3.math.NumberUtils;

@@ -51,12 +51,11 @@ import com.google.android.gms.ads.AdView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GamePlayDetailsTabbedActivity extends AppCompatActivity
-{
+public class GamePlayDetailsTabbedActivity extends AppCompatActivity {
 	private Activity activity = this;
-    private SectionsPagerAdapter mSectionsPagerAdapter;
+	private SectionsPagerAdapter mSectionsPagerAdapter;
 
-    private ViewPager mViewPager;
+	private ViewPager mViewPager;
 
 	private static ImageController imageController;
 
@@ -69,571 +68,525 @@ public class GamePlayDetailsTabbedActivity extends AppCompatActivity
 
 	private AdView googleAdView;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 
-	    View view = getLayoutInflater().inflate(R.layout.activity_game_play_details_tabbed, null);
-	    setContentView(view);
-	    view.setBackgroundColor(ColorUtilities.darken(Preferences.getBackgroundColor(this)));
+		View view = getLayoutInflater().inflate(R.layout.activity_game_play_details_tabbed, null);
+		setContentView(view);
+		view.setBackgroundColor(ColorUtilities.darken(Preferences.getBackgroundColor(this)));
 
-	    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
-		    getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+			getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
 
-	    mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+		mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
-        mViewPager = (ViewPager) findViewById(R.id.container);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
-	    mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener()
-	    {
-		    @Override
-		    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels)
-		    {
-			    if (fabMenu.isOpened()) fabMenu.close(true);
-		    }
+		mViewPager = (ViewPager) findViewById(R.id.container);
+		mViewPager.setAdapter(mSectionsPagerAdapter);
+		mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+			@Override
+			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+				if (fabMenu.isOpened()) fabMenu.close(true);
+			}
 
-		    @Override
-		    public void onPageSelected(int position)
-		    {
-			    if (fabMenu.isOpened()) fabMenu.close(true);
-		    }
+			@Override
+			public void onPageSelected(int position) {
+				if (fabMenu.isOpened()) fabMenu.close(true);
+			}
 
-		    @Override
-		    public void onPageScrollStateChanged(int state)
-		    {
-			    if (fabMenu.isOpened()) fabMenu.close(true);
-		    }
-	    });
+			@Override
+			public void onPageScrollStateChanged(int state) {
+				if (fabMenu.isOpened()) fabMenu.close(true);
+			}
+		});
 
-	    fabMenu = (FloatingActionMenu) findViewById(R.id.floating_menu);
+		fabMenu = (FloatingActionMenu) findViewById(R.id.floating_menu);
 
-	    view.findViewById(R.id.fab_share).setOnClickListener(new View.OnClickListener()
-	    {
-		    @Override
-		    public void onClick(View v)
-		    {
-			    String gameType = gameTypes.get(mViewPager.getCurrentItem());
-			    String gameName = gameNames.get(mViewPager.getCurrentItem());
-			    long id = gamePlayIds.get(mViewPager.getCurrentItem());
-			    GamePlayData gamePlayData = null;
-			    String location = "";
-			    List<GamePlayerData> gamePlayerDataList;
-			    switch (gameType)
-			    {
-				    case "b":
-					    gamePlayData = BoardGameDbUtility.getGamePlay(dbHelper, id);
-					    break;
-				    case "r":
-					    gamePlayData = RPGDbUtility.getGamePlay(dbHelper, id);
-					    break;
-				    case "v":
-					    gamePlayData = VideoGameDbUtility.getGamePlay(dbHelper, id);
-					    break;
-			    }
+		view.findViewById(R.id.fab_share).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				String gameType = gameTypes.get(mViewPager.getCurrentItem());
+				String gameName = gameNames.get(mViewPager.getCurrentItem());
+				long id = gamePlayIds.get(mViewPager.getCurrentItem());
+				GamePlayData gamePlayData = null;
+				String location = "";
+				List<GamePlayerData> gamePlayerDataList;
+				switch (gameType) {
+					case "b":
+						gamePlayData = BoardGameDbUtility.getGamePlay(dbHelper, id);
+						break;
+					case "r":
+						gamePlayData = RPGDbUtility.getGamePlay(dbHelper, id);
+						break;
+					case "v":
+						gamePlayData = VideoGameDbUtility.getGamePlay(dbHelper, id);
+						break;
+				}
 
-			    if (gamePlayData != null)
-			    {
-				    location = gamePlayData.getLocation();
-				    gamePlayerDataList = new ArrayList<>(gamePlayData.getOtherPlayers()
-				                                                     .values());
+				if (gamePlayData != null) {
+					location = gamePlayData.getLocation();
+					gamePlayerDataList = new ArrayList<>(gamePlayData.getOtherPlayers()
+																	 .values());
 
-				    ShareDialog shareDialog = new ShareDialog(activity);
-				    if (ShareDialog.canShow(ShareLinkContent.class))
-				    {
-					    ShareLinkContent feedContent =
-							    ViewUtilities.createShareLinkContent(activity, gameName, gameType, location, gamePlayerDataList, false);
-					    shareDialog.show(feedContent, ShareDialog.Mode.AUTOMATIC);
-				    }
-			    }
-		    }
-	    });
+					ShareDialog shareDialog = new ShareDialog(activity);
+					if (ShareDialog.canShow(ShareLinkContent.class)) {
+						ShareLinkContent feedContent =
+								ViewUtilities.createShareLinkContent(activity,
+																	 gameName,
+																	 gameType,
+																	 location,
+																	 gamePlayerDataList,
+																	 false);
+						shareDialog.show(feedContent, ShareDialog.Mode.AUTOMATIC);
+					}
+				}
+			}
+		});
 
-	    editFab = (FloatingActionButton) findViewById(R.id.fab_edit);
-	    editFab.setOnClickListener(new View.OnClickListener()
-	    {
-		    @Override
-		    public void onClick(View view)
-		    {
-			    fabMenu.close(true);
-			    TempDataManager tempDataManager = TempDataManager.getInstance(getApplication());
-			    tempDataManager.initialize();
-			    int position = mViewPager.getCurrentItem();
-			    startActivity(new Intent(view.getContext(), AddGamePlayTabbedActivity.class)
-					    .putExtra("GAME", gameNames.get(position))
-					    .putExtra("TYPE", gameTypes.get(position))
-					    .putExtra("ID", gamePlayIds.get(position))
-					    .putExtra("EXIT", "DOWN"));
-			    ActivityUtilities.exitUp(activity);
-		    }
-	    });
+		editFab = (FloatingActionButton) findViewById(R.id.fab_edit);
+		editFab.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				fabMenu.close(true);
+				TempDataManager tempDataManager = TempDataManager.getInstance(getApplication());
+				tempDataManager.initialize();
+				int position = mViewPager.getCurrentItem();
+				startActivity(new Intent(view.getContext(), AddGamePlayTabbedActivity.class)
+									  .putExtra("GAME", gameNames.get(position))
+									  .putExtra("TYPE", gameTypes.get(position))
+									  .putExtra("ID", gamePlayIds.get(position))
+									  .putExtra("EXIT", "DOWN"));
+				ActivityUtilities.exitUp(activity);
+			}
+		});
 
-	    deleteFab = (FloatingActionButton) findViewById(R.id.fab_delete);
-	    deleteFab.setOnClickListener(new View.OnClickListener()
-	    {
-		    @Override
-		    public void onClick(View view)
-		    {
-			    final View finalView = view;
-			    fabMenu.close(true);
-			    AlertDialog dialog = new ViewUtilities.DialogBuilder(view.getContext())
-					    .setTitle("Delete Game Play")
-					    .setMessage("Are you sure you want to delete this game play?")
-					    .setPositiveButton("Delete", new View.OnClickListener()
-					    {
-						    @Override
-						    public void onClick(View v)
-						    {
-							    int position = mViewPager.getCurrentItem();
-							    long id = gamePlayIds.remove(position);
-							    String gameType = gameTypes.remove(position);
-							    gameNames.remove(position);
+		deleteFab = (FloatingActionButton) findViewById(R.id.fab_delete);
+		deleteFab.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				final View finalView = view;
+				fabMenu.close(true);
+				AlertDialog dialog = new ViewUtilities.DialogBuilder(view.getContext())
+						.setTitle("Delete Game Play")
+						.setMessage("Are you sure you want to delete this game play?")
+						.setPositiveButton("Delete", new View.OnClickListener() {
+							@Override
+							public void onClick(View v) {
+								int position = mViewPager.getCurrentItem();
+								long id = gamePlayIds.remove(position);
+								String gameType = gameTypes.remove(position);
+								gameNames.remove(position);
 
-							    GamePlayData playData = null;
+								GamePlayData playData = null;
 
-							    switch (gameType)
-							    {
-								    case "b":
-									    playData = BoardGameDbUtility.getGamePlay(dbHelper, id);
-									    BoardGameDbUtility.deleteGamePlay(dbHelper, id);
-									    break;
-								    case "r":
-									    playData = RPGDbUtility.getGamePlay(dbHelper, id);
-									    RPGDbUtility.deleteGamePlay(dbHelper, id);
-									    break;
-								    case "v":
-									    playData = VideoGameDbUtility.getGamePlay(dbHelper, id);
-									    VideoGameDbUtility.deleteGamePlay(dbHelper, id);
-									    break;
-							    }
+								switch (gameType) {
+									case "b":
+										playData = BoardGameDbUtility.getGamePlay(dbHelper, id);
+										BoardGameDbUtility.deleteGamePlay(dbHelper, id);
+										break;
+									case "r":
+										playData = RPGDbUtility.getGamePlay(dbHelper, id);
+										RPGDbUtility.deleteGamePlay(dbHelper, id);
+										break;
+									case "v":
+										playData = VideoGameDbUtility.getGamePlay(dbHelper, id);
+										VideoGameDbUtility.deleteGamePlay(dbHelper, id);
+										break;
+								}
 
-							    if (playData != null)
-								    for (String player : playData.getOtherPlayers().keySet())
-									    if (!player.equalsIgnoreCase("master_user"))
-										    PlayersDbUtility.generateNewPlayer(dbHelper, player);
+								if (playData != null)
+									for (String player : playData.getOtherPlayers().keySet())
+										if (!player.equalsIgnoreCase("master_user"))
+											PlayersDbUtility.generateNewPlayer(dbHelper, player);
 
-							    ActivityUtilities.setDatabaseChanged(activity, true);
-							    if (gamePlayIds.isEmpty()) onBackPressed();
-							    else
-							    {
-								    if (position > 0) mViewPager.setCurrentItem(position-1, true);
-								    mSectionsPagerAdapter.setCount(gamePlayIds.size());
-								    mSectionsPagerAdapter.notifyDataSetChanged();
-							    }
-						    }
-					    })
-					    .setNegativeButton("Cancel", null)
-					    .create();
-			    dialog.show();
-		    }
-	    });
+								ActivityUtilities.setDatabaseChanged(activity, true);
+								if (gamePlayIds.isEmpty()) onBackPressed();
+								else {
+									if (position > 0) mViewPager.setCurrentItem(position - 1, true);
+									mSectionsPagerAdapter.setCount(gamePlayIds.size());
+									mSectionsPagerAdapter.notifyDataSetChanged();
+								}
+							}
+						})
+						.setNegativeButton("Cancel", null)
+						.create();
+				dialog.show();
+			}
+		});
 
-	    imageController = new ImageController(this).setDirectoryName("thumbnails");
-	    dbHelper = new GamesDbHelper(this);
+		imageController = new ImageController(this).setDirectoryName("thumbnails");
+		dbHelper = new GamesDbHelper(this);
 
-	    gamePlayIds = new ArrayList<>();
-	    long[] ids = getIntent().getLongArrayExtra("IDS");
-	    for (long id : ids) gamePlayIds.add(id);
-	    gameNames = getIntent().getStringArrayListExtra("NAMES");
-	    gameTypes = getIntent().getStringArrayListExtra("TYPES");
+		gamePlayIds = new ArrayList<>();
+		long[] ids = getIntent().getLongArrayExtra("IDS");
+		for (long id : ids) gamePlayIds.add(id);
+		gameNames = getIntent().getStringArrayListExtra("NAMES");
+		gameTypes = getIntent().getStringArrayListExtra("TYPES");
 
-	    mViewPager.setCurrentItem(getIntent().getIntExtra("POSITION", 1), true);
-	    mViewPager.setPageTransformer(true, new ZoomOutPageTransformer());
-	    mViewPager.setOffscreenPageLimit(2);
+		mViewPager.setCurrentItem(getIntent().getIntExtra("POSITION", 1), true);
+		mViewPager.setPageTransformer(true, new ZoomOutPageTransformer());
+		mViewPager.setOffscreenPageLimit(2);
 
-	    int backgroundColor = Preferences.getBackgroundColor(activity);
-	    int foregroundColor = Preferences.getForegroundColor(activity);
-	    boolean oneGame;
+		int backgroundColor = Preferences.getBackgroundColor(activity);
+		int foregroundColor = Preferences.getForegroundColor(activity);
+		boolean oneGame;
 
-	    if (Preferences.generatePalette(activity))
-	    {
-		    oneGame = true;
+		if (Preferences.generatePalette(activity)) {
+			oneGame = true;
 
-		    if (gameNames.size() > 1)
-		    {
-			    for (int i=0;i<gameNames.size()-1;i++)
-			    {
-				    for (int j=i+1;j<gameNames.size();j++)
-				    {
-					    if (!gameNames.get(i).equals(gameNames.get(j)))
-					    {
-						    oneGame = false;
-						    i = gameNames.size();
-						    break;
-					    }
-				    }
-			    }
-		    }
+			if (gameNames.size() > 1) {
+				for (int i = 0; i < gameNames.size() - 1; i++) {
+					for (int j = i + 1; j < gameNames.size(); j++) {
+						if (!gameNames.get(i).equals(gameNames.get(j))) {
+							oneGame = false;
+							i = gameNames.size();
+							break;
+						}
+					}
+				}
+			}
 
-		    if (oneGame && gameNames.size() > 0)
-		    {
-			    String thumbnailUrl = null;
-			    String gameType = gameTypes.get(0);
-			    switch (gameType)
-			    {
-				    case "b":
-					    thumbnailUrl = BoardGameDbUtility.getThumbnailUrl(dbHelper, gameNames.get(0));
-					    break;
-				    case "r":
-					    thumbnailUrl = RPGDbUtility.getThumbnailUrl(dbHelper, gameNames.get(0));
-					    break;
-				    case "v":
-					    thumbnailUrl = VideoGameDbUtility.getThumbnailUrl(dbHelper, gameNames.get(0));
-					    break;
-			    }
-			    if (thumbnailUrl != null)
-			    {
-				    Log.d("THUMBNAIL", thumbnailUrl);
-				    Bitmap thumbnail = imageController.setFileName(thumbnailUrl.substring(thumbnailUrl.lastIndexOf("/") + 1)).load();
-				    Palette palette = Palette.generate(thumbnail);
-				    List<Palette.Swatch> swatchList = new ArrayList<>();
-				    if (palette.getDarkVibrantSwatch() != null)
-					    swatchList.add(palette.getDarkVibrantSwatch());
-				    if (palette.getDarkMutedSwatch() != null)
-					    swatchList.add(palette.getDarkMutedSwatch());
-				    if (palette.getMutedSwatch() != null)
-					    swatchList.add(palette.getMutedSwatch());
-				    if (palette.getVibrantSwatch() != null)
-					    swatchList.add(palette.getVibrantSwatch());
-				    if (palette.getLightMutedSwatch() != null)
-					    swatchList.add(palette.getLightMutedSwatch());
-				    if (palette.getLightVibrantSwatch() != null)
-					    swatchList.add(palette.getLightVibrantSwatch());
+			if (oneGame && gameNames.size() > 0) {
+				String thumbnailUrl = null;
+				String gameType = gameTypes.get(0);
+				switch (gameType) {
+					case "b":
+						thumbnailUrl = BoardGameDbUtility.getThumbnailUrl(dbHelper, gameNames.get(0));
+						break;
+					case "r":
+						thumbnailUrl = RPGDbUtility.getThumbnailUrl(dbHelper, gameNames.get(0));
+						break;
+					case "v":
+						thumbnailUrl = VideoGameDbUtility.getThumbnailUrl(dbHelper, gameNames.get(0));
+						break;
+				}
+				if (thumbnailUrl != null) {
+					Log.d("THUMBNAIL", thumbnailUrl);
+					Bitmap thumbnail =
+							imageController.setFileName(thumbnailUrl.substring(thumbnailUrl.lastIndexOf("/") + 1))
+										   .load();
+					Palette palette = Palette.generate(thumbnail);
+					List<Palette.Swatch> swatchList = new ArrayList<>();
+					if (palette.getDarkVibrantSwatch() != null)
+						swatchList.add(palette.getDarkVibrantSwatch());
+					if (palette.getDarkMutedSwatch() != null)
+						swatchList.add(palette.getDarkMutedSwatch());
+					if (palette.getMutedSwatch() != null)
+						swatchList.add(palette.getMutedSwatch());
+					if (palette.getVibrantSwatch() != null)
+						swatchList.add(palette.getVibrantSwatch());
+					if (palette.getLightMutedSwatch() != null)
+						swatchList.add(palette.getLightMutedSwatch());
+					if (palette.getLightVibrantSwatch() != null)
+						swatchList.add(palette.getLightVibrantSwatch());
 
-				    Palette.Swatch swatch;
-				    if (Preferences.lightUI(activity))
-					    swatch = swatchList.get(swatchList.size() - 1);
-				    else swatch = swatchList.get(0);
+					Palette.Swatch swatch;
+					if (Preferences.lightUI(activity))
+						swatch = swatchList.get(swatchList.size() - 1);
+					else swatch = swatchList.get(0);
 
-				    backgroundColor = swatch.getRgb();
-				    foregroundColor = swatch.getBodyTextColor();
-			    }
-		    }
-	    }
+					backgroundColor = swatch.getRgb();
+					foregroundColor = swatch.getBodyTextColor();
+				}
+			}
+		}
 
-	    view.setBackgroundColor(ColorUtilities.darken(backgroundColor));
+		view.setBackgroundColor(ColorUtilities.darken(backgroundColor));
 
-	    if (Preferences.showAds(this))
-	    {
-		    final RelativeLayout adViewContainer = (RelativeLayout) view.findViewById(R.id.ad_container);
+		if (Preferences.showAds(this)) {
+			final RelativeLayout adViewContainer = (RelativeLayout) view.findViewById(R.id.ad_container);
 
-		    googleAdView = new AdView(this);
-		    googleAdView.setAdSize(AdSize.SMART_BANNER);
-		    googleAdView.setAdUnitId("ca-app-pub-1437859753538305/3524647072");
-		    googleAdView.setVisibility(View.GONE);
-		    adViewContainer.addView(googleAdView);
-		    RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-		    googleAdView.setLayoutParams(layoutParams);
-		    adViewContainer.setGravity(RelativeLayout.CENTER_IN_PARENT);
+			googleAdView = new AdView(this);
+			googleAdView.setAdSize(AdSize.SMART_BANNER);
+			googleAdView.setAdUnitId("ca-app-pub-1437859753538305/3524647072");
+			googleAdView.setVisibility(View.GONE);
+			adViewContainer.addView(googleAdView);
+			RelativeLayout.LayoutParams layoutParams =
+					new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+													ViewGroup.LayoutParams.WRAP_CONTENT);
+			googleAdView.setLayoutParams(layoutParams);
+			adViewContainer.setGravity(RelativeLayout.CENTER_IN_PARENT);
 
-		    AdRequest adRequest = new AdRequest.Builder()
+			AdRequest adRequest = new AdRequest.Builder()
 //				    .addTestDevice("A7AC3AA36B47EF166BA856BD3C6009BF")
-				    .build();
-		    googleAdView.setAdListener(new AdListener()
-		    {
-			    @Override
-			    public void onAdLoaded()
-			    {
-				    super.onAdLoaded();
-				    googleAdView.setVisibility(View.VISIBLE);
-			    }
+.build();
+			googleAdView.setAdListener(new AdListener() {
+				@Override
+				public void onAdLoaded() {
+					super.onAdLoaded();
+					googleAdView.setVisibility(View.VISIBLE);
+				}
 
-			    @Override
-			    public void onAdFailedToLoad(int errorCode)
-			    {
-				    super.onAdFailedToLoad(errorCode);
-				    googleAdView.setVisibility(View.GONE);
-			    }
-		    });
-		    googleAdView.loadAd(adRequest);
-	    }
-    }
+				@Override
+				public void onAdFailedToLoad(int errorCode) {
+					super.onAdFailedToLoad(errorCode);
+					googleAdView.setVisibility(View.GONE);
+				}
+			});
+			googleAdView.loadAd(adRequest);
+		}
+	}
 
 	@Override
-	protected void onDestroy()
-	{
+	protected void onDestroy() {
 		if (dbHelper != null) dbHelper.close();
 		if (googleAdView != null) googleAdView.destroy();
 		super.onDestroy();
 	}
 
 	@Override
-	protected void onPause()
-	{
+	protected void onPause() {
 		super.onPause();
 		if (googleAdView != null) googleAdView.pause();
 		dbHelper.close();
 	}
 
 	@Override
-	protected void onResume()
-	{
+	protected void onResume() {
 		super.onResume();
 		dbHelper = new GamesDbHelper(this);
 		if (googleAdView != null) googleAdView.pause();
 	}
 
 	@Override
-	public void onBackPressed()
-	{
+	public void onBackPressed() {
 		super.onBackPressed();
 		ActivityUtilities.exitDown(this);
 	}
 
-	public class SectionsPagerAdapter extends FragmentPagerAdapter
-    {
-	    private int count = -1;
+	public class SectionsPagerAdapter extends FragmentPagerAdapter {
+		private int count = -1;
 
-        public SectionsPagerAdapter(FragmentManager fm)
-        {
-            super(fm);
-        }
+		public SectionsPagerAdapter(FragmentManager fm) {
+			super(fm);
+		}
 
-        @Override
-        public Fragment getItem(int position)
-        {
-	        return GamePlayDataFragment.newInstance(gameTypes.get(position), gamePlayIds.get(position));
-        }
+		@Override
+		public Fragment getItem(int position) {
+			return GamePlayDataFragment.newInstance(gameTypes.get(position), gamePlayIds.get(position));
+		}
 
-        @Override
-        public int getCount()
-        {
-	        if (count == -1)
-		        count = getIntent().getIntExtra("COUNT", 1);
-	        return count;
-        }
+		@Override
+		public int getCount() {
+			if (count == -1)
+				count = getIntent().getIntExtra("COUNT", 1);
+			return count;
+		}
 
-        @Override
-        public CharSequence getPageTitle(int position)
-        {
-            return "SECTION " + position;
-        }
+		@Override
+		public CharSequence getPageTitle(int position) {
+			return "SECTION " + position;
+		}
 
-	    public void setCount(int count)
-	    {
-		    this.count = count;
-	    }
+		public void setCount(int count) {
+			this.count = count;
+		}
 
-	    @Override
-	    public long getItemId(int position)
-	    {
-		    String gameType = gameTypes.get(position);
-		    switch(gameType)
-		    {
-			    case "b":
-				    return 3 * gamePlayIds.get(position);
-			    case "r":
-				    return 3 * gamePlayIds.get(position) + 1;
-			    case "v":
-				    return 3 * gamePlayIds.get(position) + 2;
-		    }
-		    return position;
-	    }
+		@Override
+		public long getItemId(int position) {
+			String gameType = gameTypes.get(position);
+			switch (gameType) {
+				case "b":
+					return 3 * gamePlayIds.get(position);
+				case "r":
+					return 3 * gamePlayIds.get(position) + 1;
+				case "v":
+					return 3 * gamePlayIds.get(position) + 2;
+			}
+			return position;
+		}
 
-	    @Override
-	    public int getItemPosition(Object object)
-	    {
-		    return POSITION_NONE;
-	    }
-    }
+		@Override
+		public int getItemPosition(Object object) {
+			return POSITION_NONE;
+		}
+	}
 
-    public static class GamePlayDataFragment extends Fragment
-    {
-	    private static final String GAME_TYPE = "game_type";
-	    private static final String GAME_PLAY_ID = "game_play_id";
+	public static class GamePlayDataFragment extends Fragment {
+		private static final String GAME_TYPE = "game_type";
+		private static final String GAME_PLAY_ID = "game_play_id";
 
-	    private View view;
+		private View view;
 
-	    private int backgroundColor;
-	    private int foregroundColor;
+		private int backgroundColor;
+		private int foregroundColor;
 
-	    private GamePlayData gamePlayData;
-	    private String gameName, gameType;
+		private GamePlayData gamePlayData;
+		private String gameName, gameType;
 
-	    public static GamePlayDataFragment newInstance(String gameType, long gamePlayId)
-        {
-            GamePlayDataFragment fragment = new GamePlayDataFragment();
-            Bundle args = new Bundle();
-	        args.putString(GAME_TYPE, gameType);
-	        args.putLong(GAME_PLAY_ID, gamePlayId);
-            fragment.setArguments(args);
-            return fragment;
-        }
+		public static GamePlayDataFragment newInstance(String gameType, long gamePlayId) {
+			GamePlayDataFragment fragment = new GamePlayDataFragment();
+			Bundle args = new Bundle();
+			args.putString(GAME_TYPE, gameType);
+			args.putLong(GAME_PLAY_ID, gamePlayId);
+			fragment.setArguments(args);
+			return fragment;
+		}
 
-        public GamePlayDataFragment() {}
+		public GamePlayDataFragment() {
+		}
 
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState)
-        {
-            view = inflater.inflate(R.layout.content_game_play_data, container, false);
-	        Bundle args = getArguments();
-	        generateLayout(args.getString(GAME_TYPE), args.getLong(GAME_PLAY_ID));
-	        return view;
-        }
+		@Override
+		public View onCreateView(LayoutInflater inflater, ViewGroup container,
+								 Bundle savedInstanceState) {
+			view = inflater.inflate(R.layout.content_game_play_data, container, false);
+			Bundle args = getArguments();
+			generateLayout(args.getString(GAME_TYPE), args.getLong(GAME_PLAY_ID));
+			return view;
+		}
 
-	    @Override
-	    public void onResume()
-	    {
-		    super.onResume();
-		    if (ActivityUtilities.databaseChanged(getContext()))
-		    {
-			    Bundle args = getArguments();
-			    generateLayout(args.getString(GAME_TYPE), args.getLong(GAME_PLAY_ID));
-		    }
-	    }
+		@Override
+		public void onResume() {
+			super.onResume();
+			if (ActivityUtilities.databaseChanged(getContext())) {
+				Bundle args = getArguments();
+				generateLayout(args.getString(GAME_TYPE), args.getLong(GAME_PLAY_ID));
+			}
+		}
 
-	    private void generateLayout(String gameType, long id)
-	    {
-		    Log.d("GAME", gameType + " " + id);
-		    gamePlayData = null;
-		    this.gameType = gameType;
-		    switch (gameType)
-		    {
-			    case "b":
-				    gamePlayData = BoardGameDbUtility.getGamePlay(dbHelper, id);
-				    break;
-			    case "r":
-				    gamePlayData = RPGDbUtility.getGamePlay(dbHelper, id);
-				    break;
-			    case "v":
-				    gamePlayData = VideoGameDbUtility.getGamePlay(dbHelper, id);
-				    break;
-		    }
-		    gameName = gamePlayData.getGame().getName();
+		private void generateLayout(String gameType, long id) {
+			Log.d("GAME", gameType + " " + id);
+			gamePlayData = null;
+			this.gameType = gameType;
+			switch (gameType) {
+				case "b":
+					gamePlayData = BoardGameDbUtility.getGamePlay(dbHelper, id);
+					break;
+				case "r":
+					gamePlayData = RPGDbUtility.getGamePlay(dbHelper, id);
+					break;
+				case "v":
+					gamePlayData = VideoGameDbUtility.getGamePlay(dbHelper, id);
+					break;
+			}
+			gameName = gamePlayData.getGame().getName();
 
-		    ((TextView)view.findViewById(R.id.textview_game_name)).setText(gamePlayData.getGame().getName());
-		    ((TextView)view.findViewById(R.id.textview_game_date)).setText(gamePlayData.getDate().useShortMonth(true).toString());
+			((TextView) view.findViewById(R.id.textview_game_name)).setText(gamePlayData.getGame().getName());
+			((TextView) view.findViewById(R.id.textview_game_date)).setText(gamePlayData.getDate()
+																						.useShortMonth(true)
+																						.toString());
 
-		    if (gamePlayData.getTimePlayed() > 0)
-			    ((TextView)view.findViewById(R.id.textview_timeplayed))
-					    .setText(StringUtilities.convertMinutes(gamePlayData.getTimePlayed()));
-		    else view.findViewById(R.id.textview_timeplayed).setVisibility(View.GONE);
+			if (gamePlayData.getTimePlayed() > 0)
+				((TextView) view.findViewById(R.id.textview_timeplayed))
+						.setText(StringUtilities.convertMinutes(gamePlayData.getTimePlayed()));
+			else view.findViewById(R.id.textview_timeplayed).setVisibility(View.GONE);
 
-		    String location = gamePlayData.getLocation();
-		    if (location != null && !location.equals(""))
-			    ((TextView)view.findViewById(R.id.textview_location)).setText(location);
-		    else view.findViewById(R.id.textview_location).setVisibility(View.GONE);
-		    ((TextView)view.findViewById(R.id.textview_game_notes)).setText(gamePlayData.getNotes() + "\n\n\n\n");
+			String location = gamePlayData.getLocation();
+			if (location != null && !location.equals(""))
+				((TextView) view.findViewById(R.id.textview_location)).setText(location);
+			else view.findViewById(R.id.textview_location).setVisibility(View.GONE);
+			((TextView) view.findViewById(R.id.textview_game_notes)).setText(gamePlayData.getNotes() + "\n\n\n\n");
 
-		    try
-		    {
-			    Bitmap thumbnailBitmap;
-			    String thumbnailUrl = "";
-			    String game = gamePlayData.getGame().getName();
-			    switch (gameType)
-			    {
-				    case "b":
-					    thumbnailUrl = "http://" + BoardGameDbUtility.getThumbnailUrl(dbHelper, game);
-					    break;
-				    case "r":
-					    thumbnailUrl = "http://" + RPGDbUtility.getThumbnailUrl(dbHelper, game);
-					    break;
-				    case "v":
-					    thumbnailUrl = "http://" + VideoGameDbUtility.getThumbnailUrl(dbHelper, game);
-					    break;
-			    }
+			try {
+				Bitmap thumbnailBitmap;
+				String thumbnailUrl = "";
+				String game = gamePlayData.getGame().getName();
+				switch (gameType) {
+					case "b":
+						thumbnailUrl = "http://" + BoardGameDbUtility.getThumbnailUrl(dbHelper, game);
+						break;
+					case "r":
+						thumbnailUrl = "http://" + RPGDbUtility.getThumbnailUrl(dbHelper, game);
+						break;
+					case "v":
+						thumbnailUrl = "http://" + VideoGameDbUtility.getThumbnailUrl(dbHelper, game);
+						break;
+				}
 
-			    thumbnailBitmap = imageController.setFileName(thumbnailUrl.substring(thumbnailUrl.lastIndexOf("/") + 1)).load();
+				thumbnailBitmap =
+						imageController.setFileName(thumbnailUrl.substring(thumbnailUrl.lastIndexOf("/") + 1)).load();
 
-			    ((ImageView) view.findViewById(R.id.imageview_avatar)).setImageBitmap(thumbnailBitmap);
-		    }
-		    catch (Exception e)
-		    {
-		    }
+				((ImageView) view.findViewById(R.id.imageview_avatar)).setImageBitmap(thumbnailBitmap);
+			} catch (Exception e) {
+			}
 
-		    setColors();
-		    colorComponents();
-	    }
+			setColors();
+			colorComponents();
+		}
 
-	    private void setColors()
-	    {
-		    if (Preferences.generatePalette(getActivity()))
-		    {
-			    String thumbnailUrl = null;
-			    switch (gameType)
-			    {
-				    case "b":
-					    thumbnailUrl = BoardGameDbUtility.getThumbnailUrl(dbHelper, gameName);
-					    break;
-				    case "r":
-					    thumbnailUrl = RPGDbUtility.getThumbnailUrl(dbHelper, gameName);
-					    break;
-				    case "v":
-					    thumbnailUrl = VideoGameDbUtility.getThumbnailUrl(dbHelper, gameName);
-					    break;
-			    }
-			    if (thumbnailUrl != null)
-			    {
-				    Bitmap thumbnail = imageController.setFileName(thumbnailUrl.substring(thumbnailUrl.lastIndexOf("/") + 1)).load();
-				    Palette palette = Palette.generate(thumbnail);
-				    List<Palette.Swatch> swatchList = new ArrayList<>();
-				    if (palette.getDarkVibrantSwatch() != null)
-					    swatchList.add(palette.getDarkVibrantSwatch());
-				    if (palette.getDarkMutedSwatch() != null)
-					    swatchList.add(palette.getDarkMutedSwatch());
-				    if (palette.getMutedSwatch() != null)
-					    swatchList.add(palette.getMutedSwatch());
-				    if (palette.getVibrantSwatch() != null)
-					    swatchList.add(palette.getVibrantSwatch());
-				    if (palette.getLightMutedSwatch() != null)
-					    swatchList.add(palette.getLightMutedSwatch());
-				    if (palette.getLightVibrantSwatch() != null)
-					    swatchList.add(palette.getLightVibrantSwatch());
+		private void setColors() {
+			if (Preferences.generatePalette(getActivity())) {
+				String thumbnailUrl = null;
+				switch (gameType) {
+					case "b":
+						thumbnailUrl = BoardGameDbUtility.getThumbnailUrl(dbHelper, gameName);
+						break;
+					case "r":
+						thumbnailUrl = RPGDbUtility.getThumbnailUrl(dbHelper, gameName);
+						break;
+					case "v":
+						thumbnailUrl = VideoGameDbUtility.getThumbnailUrl(dbHelper, gameName);
+						break;
+				}
+				if (thumbnailUrl != null) {
+					Bitmap thumbnail =
+							imageController.setFileName(thumbnailUrl.substring(thumbnailUrl.lastIndexOf("/") + 1))
+										   .load();
+					Palette palette = Palette.generate(thumbnail);
+					List<Palette.Swatch> swatchList = new ArrayList<>();
+					if (palette.getDarkVibrantSwatch() != null)
+						swatchList.add(palette.getDarkVibrantSwatch());
+					if (palette.getDarkMutedSwatch() != null)
+						swatchList.add(palette.getDarkMutedSwatch());
+					if (palette.getMutedSwatch() != null)
+						swatchList.add(palette.getMutedSwatch());
+					if (palette.getVibrantSwatch() != null)
+						swatchList.add(palette.getVibrantSwatch());
+					if (palette.getLightMutedSwatch() != null)
+						swatchList.add(palette.getLightMutedSwatch());
+					if (palette.getLightVibrantSwatch() != null)
+						swatchList.add(palette.getLightVibrantSwatch());
 
-				    Palette.Swatch swatch;
-				    if (Preferences.lightUI(getActivity()))
-					    swatch = swatchList.get(swatchList.size() - 1);
-				    else swatch = swatchList.get(0);
+					Palette.Swatch swatch;
+					if (Preferences.lightUI(getActivity()))
+						swatch = swatchList.get(swatchList.size() - 1);
+					else swatch = swatchList.get(0);
 
-				    if (thumbnail != null)
-				    {
-					    backgroundColor = swatch.getRgb();
-					    foregroundColor = swatch.getBodyTextColor();
-				    }
-				    else
-				    {
-					    backgroundColor = Preferences.getBackgroundColor(getContext());
-					    foregroundColor = Preferences.getForegroundColor(getContext());
-				    }
-			    }
-			    else
-			    {
-				    backgroundColor = Preferences.getBackgroundColor(getContext());
-				    foregroundColor = Preferences.getForegroundColor(getContext());
-			    }
-		    }
-		    else
-		    {
-			    backgroundColor = Preferences.getBackgroundColor(getContext());
-			    foregroundColor = Preferences.getForegroundColor(getContext());
-		    }
-	    }
+					if (thumbnail != null) {
+						backgroundColor = swatch.getRgb();
+						foregroundColor = swatch.getBodyTextColor();
+					} else {
+						backgroundColor = Preferences.getBackgroundColor(getContext());
+						foregroundColor = Preferences.getForegroundColor(getContext());
+					}
+				} else {
+					backgroundColor = Preferences.getBackgroundColor(getContext());
+					foregroundColor = Preferences.getForegroundColor(getContext());
+				}
+			} else {
+				backgroundColor = Preferences.getBackgroundColor(getContext());
+				foregroundColor = Preferences.getForegroundColor(getContext());
+			}
+		}
 
-	    private void colorComponents()
-	    {
-		    ((TextView) view.findViewById(R.id.textview_game_name)).setTextColor(foregroundColor);
-		    view.findViewById(R.id.textview_game_name).setBackgroundColor(backgroundColor);
-		    ((TextView)view.findViewById(R.id.textview_game_date)).setTextColor(foregroundColor);
-		    view.findViewById(R.id.textview_game_date).setBackgroundColor(backgroundColor);
-		    ((TextView)view.findViewById(R.id.textview_timeplayed)).setTextColor(foregroundColor);
-		    view.findViewById(R.id.textview_timeplayed).setBackgroundColor(backgroundColor);
-		    ((TextView)view.findViewById(R.id.textview_location)).setTextColor(foregroundColor);
-		    view.findViewById(R.id.textview_location).setBackgroundColor(backgroundColor);
-		    ((TextView)view.findViewById(R.id.textview_players)).setTextColor(foregroundColor);
-		    view.findViewById(R.id.textview_players).setBackgroundColor(backgroundColor);
-		    ((TextView)view.findViewById(R.id.textview_notes)).setTextColor(foregroundColor);
-		    view.findViewById(R.id.textview_notes).setBackgroundColor(backgroundColor);
-		    ((TextView)view.findViewById(R.id.textview_game_notes)).setTextColor(foregroundColor);
-		    view.findViewById(R.id.textview_game_notes).setBackgroundColor(backgroundColor);
-		    view.setBackgroundColor(backgroundColor);
+		private void colorComponents() {
+			((TextView) view.findViewById(R.id.textview_game_name)).setTextColor(foregroundColor);
+			view.findViewById(R.id.textview_game_name).setBackgroundColor(backgroundColor);
+			((TextView) view.findViewById(R.id.textview_game_date)).setTextColor(foregroundColor);
+			view.findViewById(R.id.textview_game_date).setBackgroundColor(backgroundColor);
+			((TextView) view.findViewById(R.id.textview_timeplayed)).setTextColor(foregroundColor);
+			view.findViewById(R.id.textview_timeplayed).setBackgroundColor(backgroundColor);
+			((TextView) view.findViewById(R.id.textview_location)).setTextColor(foregroundColor);
+			view.findViewById(R.id.textview_location).setBackgroundColor(backgroundColor);
+			((TextView) view.findViewById(R.id.textview_players)).setTextColor(foregroundColor);
+			view.findViewById(R.id.textview_players).setBackgroundColor(backgroundColor);
+			((TextView) view.findViewById(R.id.textview_notes)).setTextColor(foregroundColor);
+			view.findViewById(R.id.textview_notes).setBackgroundColor(backgroundColor);
+			((TextView) view.findViewById(R.id.textview_game_notes)).setTextColor(foregroundColor);
+			view.findViewById(R.id.textview_game_notes).setBackgroundColor(backgroundColor);
+			view.setBackgroundColor(backgroundColor);
 
-		    ViewUtilities.tintLayoutBackground(view.findViewById(R.id.relativelayout_game_play_top), foregroundColor);
-		    ViewUtilities.tintLayoutBackground(view.findViewById(R.id.listview_players), foregroundColor);
-		    ViewUtilities.tintLayoutBackground(view.findViewById(R.id.linearlayout_notes), foregroundColor);
+			ViewUtilities.tintLayoutBackground(view.findViewById(R.id.relativelayout_game_play_top), foregroundColor);
+			ViewUtilities.tintLayoutBackground(view.findViewById(R.id.listview_players), foregroundColor);
+			ViewUtilities.tintLayoutBackground(view.findViewById(R.id.linearlayout_notes), foregroundColor);
 
-		    ((ListView)view.findViewById(R.id.listview_players))
-				    .setAdapter(new PlayerDataAdapter(getActivity(), gamePlayData.getOtherPlayers().values(), !gameType.equals("r"), backgroundColor, foregroundColor));
+			((ListView) view.findViewById(R.id.listview_players))
+					.setAdapter(new PlayerDataAdapter(getActivity(),
+													  gamePlayData.getOtherPlayers().values(),
+													  !gameType.equals("r"),
+													  backgroundColor,
+													  foregroundColor));
 
-	    }
-    }
+		}
+	}
 }

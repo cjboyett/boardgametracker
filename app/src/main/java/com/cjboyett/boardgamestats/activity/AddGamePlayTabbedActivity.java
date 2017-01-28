@@ -60,8 +60,7 @@ import java.util.List;
 
 import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 
-public class AddGamePlayTabbedActivity extends AppCompatActivity
-{
+public class AddGamePlayTabbedActivity extends AppCompatActivity {
 	private Activity activity = this;
 	private AddGamePlayDetailsFragment addGamePlayDetailsFragment;
 	private AddGamePlayPlayersFragment addGamePlayPlayersFragment;
@@ -89,13 +88,12 @@ public class AddGamePlayTabbedActivity extends AppCompatActivity
 	private static int NOTIFICATION_ID = 0;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState)
-	{
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		view = getLayoutInflater().inflate(R.layout.activity_add_game_play_tabbed, null);
 		setContentView(view);
 
-		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
 			getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
 
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -115,8 +113,7 @@ public class AddGamePlayTabbedActivity extends AppCompatActivity
 		gameName = getIntent().getStringExtra("GAME");
 		gameType = getIntent().getStringExtra("TYPE");
 		if (gameType == null) gameType = "";
-		else
-		{
+		else {
 			if (gameType.equals("b")) gameType = Game.GameType.BOARD.getType();
 			else if (gameType.equals("r")) gameType = Game.GameType.RPG.getType();
 			else if (gameType.equals("v")) gameType = Game.GameType.VIDEO.getType();
@@ -125,8 +122,7 @@ public class AddGamePlayTabbedActivity extends AppCompatActivity
 		gamePlayId = getIntent().getLongExtra("ID", -1l);
 
 		Log.d("GAME", gameName + " " + gameType + " " + gamePlayId);
-		if (gameType != null && !gameType.equals("") && gamePlayId != -1l)
-		{
+		if (gameType != null && !gameType.equals("") && gamePlayId != -1l) {
 			if (StringUtilities.isBoardGame(gameType))
 				boardGamePlayData = BoardGameDbUtility.getGamePlay(dbHelper, gamePlayId);
 			else if (StringUtilities.isRPG(gameType))
@@ -139,47 +135,40 @@ public class AddGamePlayTabbedActivity extends AppCompatActivity
 		addGamePlayPlayersFragment = new AddGamePlayPlayersFragment();
 		addGamePlaySubmitFragment = new AddGamePlaySubmitFragment();
 
-		if (StringUtilities.isBoardGame(gameType) && boardGamePlayData != null)
-		{
+		if (StringUtilities.isBoardGame(gameType) && boardGamePlayData != null) {
 			addGamePlayDetailsFragment.setData(boardGamePlayData.getTimePlayed(),
-			                                   boardGamePlayData.getDate()
-			                                                    .rawDate(),
-			                                   boardGamePlayData.getLocation(),
-			                                   boardGamePlayData.getNotes());
+											   boardGamePlayData.getDate()
+																.rawDate(),
+											   boardGamePlayData.getLocation(),
+											   boardGamePlayData.getNotes());
 			addGamePlayPlayersFragment.setPlayers(boardGamePlayData.getOtherPlayers()
-			                                                       .values());
+																   .values());
 			addGamePlaySubmitFragment.setIgnoreCheckBox(!boardGamePlayData.isCountForStats());
-		}
-		else if (StringUtilities.isRPG(gameType) && rpgPlayData != null)
-		{
+		} else if (StringUtilities.isRPG(gameType) && rpgPlayData != null) {
 			addGamePlayDetailsFragment.setData(rpgPlayData.getTimePlayed(),
-			                                   rpgPlayData.getDate()
-			                                              .rawDate(),
-			                                   rpgPlayData.getLocation(),
-			                                   rpgPlayData.getNotes());
+											   rpgPlayData.getDate()
+														  .rawDate(),
+											   rpgPlayData.getLocation(),
+											   rpgPlayData.getNotes());
 			addGamePlayPlayersFragment.setPlayers(rpgPlayData.getOtherPlayers()
-			                                                 .values());
+															 .values());
 			addGamePlaySubmitFragment.setIgnoreCheckBox(!rpgPlayData.isCountForStats());
-		}
-		else if (StringUtilities.isVideoGame(gameType) && videoGamePlayData != null)
-		{
+		} else if (StringUtilities.isVideoGame(gameType) && videoGamePlayData != null) {
 			addGamePlayDetailsFragment.setData(videoGamePlayData.getTimePlayed(),
-			                                   videoGamePlayData.getDate()
-			                                                    .rawDate(),
-			                                   videoGamePlayData.getLocation(),
-			                                   videoGamePlayData.getNotes());
+											   videoGamePlayData.getDate()
+																.rawDate(),
+											   videoGamePlayData.getLocation(),
+											   videoGamePlayData.getNotes());
 			addGamePlayPlayersFragment.setPlayers(videoGamePlayData.getOtherPlayers()
-			                                                       .values());
+																   .values());
 			addGamePlaySubmitFragment.setIgnoreCheckBox(!videoGamePlayData.isCountForStats());
 		}
 
-		if (getIntent().hasExtra("WIDGET"))
-		{
+		if (getIntent().hasExtra("WIDGET")) {
 			TempDataManager tempDataManager = TempDataManager.getInstance(getApplication());
 			tempDataManager.initialize();
 
-			if (getIntent().hasExtra("WIDGET"))
-			{
+			if (getIntent().hasExtra("WIDGET")) {
 				final Calendar c = Calendar.getInstance();
 				int year = c.get(Calendar.YEAR);
 				int month = c.get(Calendar.MONTH);
@@ -190,17 +179,14 @@ public class AddGamePlayTabbedActivity extends AppCompatActivity
 			}
 		}
 
-		mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener()
-		{
+		mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 			@Override
-			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels)
-			{
+			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
 			}
 
 			@Override
-			public void onPageSelected(int position)
-			{
+			public void onPageSelected(int position) {
 				// FIXME
 				if (currentPage == 0) addGamePlayDetailsFragment.updateData();
 				else if (currentPage == 1) addGamePlayPlayersFragment.addTempPlayers();
@@ -208,8 +194,7 @@ public class AddGamePlayTabbedActivity extends AppCompatActivity
 			}
 
 			@Override
-			public void onPageScrollStateChanged(int state)
-			{
+			public void onPageScrollStateChanged(int state) {
 
 			}
 		});
@@ -218,25 +203,22 @@ public class AddGamePlayTabbedActivity extends AppCompatActivity
 		colorComponents();
 	}
 
-	private void setColors()
-	{
+	private void setColors() {
 		backgroundColor = Preferences.getBackgroundColor(this);
 		foregroundColor = Preferences.getForegroundColor(this);
 	}
 
-	private void colorComponents()
-	{
+	private void colorComponents() {
 		view.setBackgroundColor(ColorUtilities.darken(backgroundColor));
 	}
 
-	public Game getGame()
-	{
+	public Game getGame() {
 		TempDataManager tempDataManager = TempDataManager.getInstance(getApplication());
-		if (tempDataManager.getTempGamePlayData().size() >= 6)
-		{
+		if (tempDataManager.getTempGamePlayData().size() >= 6) {
 			gameName = tempDataManager.getTempGamePlayData().get(0);
 			gameType = tempDataManager.getTempGamePlayData().get(1);
-			if (tempDataManager.getTimer().get(0) != 0 && tempDataManager.getTimer().get(1) > tempDataManager.getTimer().get(2))
+			if (tempDataManager.getTimer().get(0) != 0 &&
+					tempDataManager.getTimer().get(1) > tempDataManager.getTimer().get(2))
 				timePlayed = getMinutesFromTimeString(TimerUtility.getElapsedTime(this));
 			else
 				timePlayed = getMinutesFromTimeString(tempDataManager.getTempGamePlayData().get(2));
@@ -246,8 +228,7 @@ public class AddGamePlayTabbedActivity extends AppCompatActivity
 		}
 		Log.d("GAME", gameName + " " + gameType + " " + timePlayed + " " + date + " " + location + " " + notes);
 
-		if (gameName != null && gameType != null)
-		{
+		if (gameName != null && gameType != null) {
 			if (StringUtilities.isBoardGame(gameType))
 				return BoardGameDbUtility.getBoardGame(dbHelper, gameName);
 			else if (StringUtilities.isRPG(gameType))
@@ -258,35 +239,28 @@ public class AddGamePlayTabbedActivity extends AppCompatActivity
 		return null;
 	}
 
-	public void makeGamePlay(boolean exit, boolean ignore)
-	{
+	public void makeGamePlay(boolean exit, boolean ignore) {
 		TempDataManager tempDataManager = TempDataManager.getInstance(getApplication());
 		if (dbHelper == null) dbHelper = new GamesDbHelper(this);
-		try
-		{
+		try {
 			Game game = getGame();
-			if (game != null)
-			{
+			if (game != null) {
 				List<GamePlayerData> players = null;
-				try
-				{
+				try {
 					players = tempDataManager.getTempPlayers();
-				}
-				catch (Exception e)
-				{
+				} catch (Exception e) {
 					e.printStackTrace();
 					players = addGamePlayPlayersFragment.getPlayerData();
 				}
 
-				if (StringUtilities.isBoardGame(gameType))
-				{
+				if (StringUtilities.isBoardGame(gameType)) {
 					boardGamePlayData = new BoardGamePlayData((BoardGame) game,
-					                                          players.get(0).getScore(),
-					                                          players.get(0).isWin(),
-					                                          timePlayed,
-					                                          new Date(date),
-					                                          notes,
-					                                          gamePlayId);
+															  players.get(0).getScore(),
+															  players.get(0).isWin(),
+															  timePlayed,
+															  new Date(date),
+															  notes,
+															  gamePlayId);
 					boardGamePlayData.setLocation(location);
 					boardGamePlayData.setCountForStats(!ignore);
 					for (GamePlayerData player : players)
@@ -295,14 +269,12 @@ public class AddGamePlayTabbedActivity extends AppCompatActivity
 					if (gamePlayId == -1l)
 						BoardGameDbUtility.addGamePlay(dbHelper, boardGamePlayData);
 					else BoardGameDbUtility.updateGamePlay(dbHelper, gamePlayId, boardGamePlayData);
-				}
-				else if (StringUtilities.isRPG(gameType))
-				{
+				} else if (StringUtilities.isRPG(gameType)) {
 					rpgPlayData = new RPGPlayData((RolePlayingGame) game,
-					                              timePlayed,
-					                              new Date(date),
-					                              notes,
-					                              gamePlayId);
+												  timePlayed,
+												  new Date(date),
+												  notes,
+												  gamePlayId);
 					rpgPlayData.setLocation(location);
 					rpgPlayData.setCountForStats(!ignore);
 					for (GamePlayerData player : players)
@@ -310,16 +282,14 @@ public class AddGamePlayTabbedActivity extends AppCompatActivity
 
 					if (gamePlayId == -1l) RPGDbUtility.addGamePlay(dbHelper, rpgPlayData);
 					else RPGDbUtility.updateGamePlay(dbHelper, gamePlayId, rpgPlayData);
-				}
-				else if (StringUtilities.isVideoGame(gameType))
-				{
+				} else if (StringUtilities.isVideoGame(gameType)) {
 					videoGamePlayData = new VideoGamePlayData((VideoGame) game,
-					                                          players.get(0).getScore(),
-					                                          players.get(0).isWin(),
-					                                          timePlayed,
-					                                          new Date(date),
-					                                          notes,
-					                                          gamePlayId);
+															  players.get(0).getScore(),
+															  players.get(0).isWin(),
+															  timePlayed,
+															  new Date(date),
+															  notes,
+															  gamePlayId);
 					videoGamePlayData.setLocation(location);
 					videoGamePlayData.setCountForStats(!ignore);
 					for (GamePlayerData player : players)
@@ -330,38 +300,32 @@ public class AddGamePlayTabbedActivity extends AppCompatActivity
 					else VideoGameDbUtility.updateGamePlay(dbHelper, gamePlayId, videoGamePlayData);
 				}
 
-				for (GamePlayerData player : players)
-				{
-					if (!player.getPlayerName().equalsIgnoreCase("master_user")) PlayersDbUtility.generateNewPlayer(dbHelper, player.getPlayerName());
+				for (GamePlayerData player : players) {
+					if (!player.getPlayerName().equalsIgnoreCase("master_user"))
+						PlayersDbUtility.generateNewPlayer(dbHelper, player.getPlayerName());
 				}
 
 				ActivityUtilities.setDatabaseChanged(this, true);
 
 				Toast.makeText(this, "Game play recorded", Toast.LENGTH_SHORT)
-				     .show();
+					 .show();
 				override = true;
 				submitted = true;
 				Preferences.setTimerRunning(activity, false);
 				if (exit) onBackPressed();
-			}
-			else
-			{
+			} else {
 				final AlertDialog alertDialog = new ViewUtilities.DialogBuilder(this)
 						.setTitle("Game is missing")
 						.setMessage("A game is required.")
-						.setPositiveButton("Okay", new View.OnClickListener()
-						{
+						.setPositiveButton("Okay", new View.OnClickListener() {
 							@Override
-							public void onClick(View v)
-							{
+							public void onClick(View v) {
 								mViewPager.setCurrentItem(0);
 							}
 						})
-						.setNegativeButton("Add New Game", new View.OnClickListener()
-						{
+						.setNegativeButton("Add New Game", new View.OnClickListener() {
 							@Override
-							public void onClick(View v)
-							{
+							public void onClick(View v) {
 								startActivityForResult(
 										new Intent(view.getContext(), AddBoardGameActivity.class)
 												.putExtra("GAME", gameName),
@@ -372,12 +336,9 @@ public class AddGamePlayTabbedActivity extends AppCompatActivity
 						.create();
 				alertDialog.show();
 			}
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			e.printStackTrace();
-			if (Preferences.isSuperUser(activity))
-			{
+			if (Preferences.isSuperUser(activity)) {
 				AlertDialog alertDialog = new ViewUtilities.DialogBuilder(this)
 						.setTitle("Error")
 						.withYancey(true)
@@ -385,14 +346,12 @@ public class AddGamePlayTabbedActivity extends AppCompatActivity
 						.setPositiveButton("Okay", null)
 						.create();
 				alertDialog.show();
-			}
-			else
-			{
+			} else {
 				AlertDialog alertDialog = new ViewUtilities.DialogBuilder(this)
 						.setTitle("Error")
 						.withYancey(true)
 						.setMessage("I apologize, but something seems to have gone wrong.  Please try again.\n\n" +
-						            "If this problem continues, please let my creator know at casey@cjboyett.com.")
+											"If this problem continues, please let my creator know at casey@cjboyett.com.")
 						.setPositiveButton("Okay", null)
 						.create();
 				alertDialog.show();
@@ -400,60 +359,57 @@ public class AddGamePlayTabbedActivity extends AppCompatActivity
 		}
 	}
 
-	public void makeGamePlayAndShare(boolean ignore)
-	{
+	public void makeGamePlayAndShare(boolean ignore) {
 		makeGamePlay(false, ignore);
 		shareGamePlay();
 	}
 
-	private void shareGamePlay()
-	{
+	private void shareGamePlay() {
 		ShareDialog shareDialog = new ShareDialog(activity);
 		callbackManager = CallbackManager.Factory.create();
-		shareDialog.registerCallback(callbackManager, new FacebookCallback<Sharer.Result>()
-		{
+		shareDialog.registerCallback(callbackManager, new FacebookCallback<Sharer.Result>() {
 			@Override
-			public void onSuccess(Sharer.Result result)
-			{
+			public void onSuccess(Sharer.Result result) {
 				onBackPressed();
 			}
 
 			@Override
-			public void onCancel()
-			{
+			public void onCancel() {
 			}
 
 			@Override
-			public void onError(FacebookException error)
-			{
+			public void onError(FacebookException error) {
 			}
 		});
-		if (ShareDialog.canShow(ShareLinkContent.class))
-		{
-			ShareLinkContent feedContent = ViewUtilities.createShareLinkContent(activity, gameName, gameType, location, TempDataManager.getInstance(activity).getTempPlayers(), true);
+		if (ShareDialog.canShow(ShareLinkContent.class)) {
+			ShareLinkContent feedContent = ViewUtilities.createShareLinkContent(activity,
+																				gameName,
+																				gameType,
+																				location,
+																				TempDataManager.getInstance(activity)
+																							   .getTempPlayers(),
+																				true);
 			shareDialog.show(feedContent, ShareDialog.Mode.AUTOMATIC);
 		}
 	}
 
 	@Override
-	protected void onPause()
-	{
+	protected void onPause() {
 		super.onPause();
 		dbHelper.close();
 
 		List<Long> times = TempDataManager.getInstance(getApplication()).getTimer();
-		if (!submitted && !times.isEmpty() && times.get(0) > 0 && times.get(1) > times.get(2))
-		{
+		if (!submitted && !times.isEmpty() && times.get(0) > 0 && times.get(1) > times.get(2)) {
 			String game = TempDataManager.getInstance(getApplication()).getTempGamePlayData().get(0);
 			TimerNotificationBuilder timerNotificationBuilder = new TimerNotificationBuilder();
-			NotificationCompat.Builder builder = timerNotificationBuilder.createTimerNotification(this, game, true, times.get(0));
+			NotificationCompat.Builder builder =
+					timerNotificationBuilder.createTimerNotification(this, game, true, times.get(0));
 			timerNotificationBuilder.createTimerNotification(this, builder);
 		}
 	}
 
 	@Override
-	protected void onResume()
-	{
+	protected void onResume() {
 		super.onResume();
 		dbHelper = new GamesDbHelper(this);
 		final NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -461,57 +417,46 @@ public class AddGamePlayTabbedActivity extends AppCompatActivity
 	}
 
 	@Override
-	protected void onDestroy()
-	{
+	protected void onDestroy() {
 		super.onDestroy();
 		if (dbHelper != null) dbHelper.close();
 	}
 
 	@Override
-	public void onBackPressed()
-	{
+	public void onBackPressed() {
 		GamesDbUtility.clearTempTables(dbHelper);
 
-		if (!override && addGamePlayDetailsFragment.isTimerRunning())
-		{
+		if (!override && addGamePlayDetailsFragment.isTimerRunning()) {
 			AlertDialog dialog = new ViewUtilities.DialogBuilder(this)
 					.setTitle("Woah!")
-					.setMessage("I see you have the timer running.  Would you like to discard this game play?  Or I can keep the timer going for you.")
+					.setMessage(
+							"I see you have the timer running.  Would you like to discard this game play?  Or I can keep the timer going for you.")
 					.setPositiveButton("Stay", null)
-					.setNeutralButton("Discard", new View.OnClickListener()
-					{
+					.setNeutralButton("Discard", new View.OnClickListener() {
 						@Override
-						public void onClick(View v)
-						{
+						public void onClick(View v) {
 							submitted = true;
 							Preferences.setTimerRunning(activity, false);
 							goBack();
 						}
 					})
-					.setNegativeButton("Leave", new View.OnClickListener()
-					{
+					.setNegativeButton("Leave", new View.OnClickListener() {
 						@Override
-						public void onClick(View v)
-						{
+						public void onClick(View v) {
 							Preferences.setTimerRunning(activity, true);
 							goBack();
 						}
 					})
 					.create();
 			dialog.show();
-		}
-		else goBack();
+		} else goBack();
 	}
 
-	private void goBack()
-	{
-		if (getIntent().getBooleanExtra("WIDGET", false) || getIntent().getStringExtra("EXIT") == null)
-		{
+	private void goBack() {
+		if (getIntent().getBooleanExtra("WIDGET", false) || getIntent().getStringExtra("EXIT") == null) {
 			startActivity(new Intent(this, ClearStackMainActivity.class));
 			ActivityUtilities.exitUp(this);
-		}
-		else
-		{
+		} else {
 			super.onBackPressed();
 			String exitActivity = getIntent().getStringExtra("EXIT");
 			ActivityUtilities.exit(this, exitActivity);
@@ -519,29 +464,22 @@ public class AddGamePlayTabbedActivity extends AppCompatActivity
 	}
 
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data)
-	{
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 
-		if (requestCode == 100 && resultCode == RESULT_OK)
-		{
+		if (requestCode == 100 && resultCode == RESULT_OK) {
 			mViewPager.setCurrentItem(0);
 			gameName = data.getStringExtra("GAME");
 			gameType = data.getStringExtra("TYPE");
 			addGamePlayDetailsFragment.setGame(gameName, gameType);
-		}
-
-		else if (requestCode == 201 && requestCode == RESULT_OK)
-		{
+		} else if (requestCode == 201 && requestCode == RESULT_OK) {
 			List<String> paths = data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
 			for (String path : paths) Log.d("PATH", path);
-		}
-
-		else callbackManager.onActivityResult(requestCode, resultCode, data);
+		} else callbackManager.onActivityResult(requestCode, resultCode, data);
 	}
 
-	public void setData(String gameName, String gameType, String timePlayed, String date, String location, String notes)
-	{
+	public void setData(String gameName, String gameType, String timePlayed, String date, String location,
+						String notes) {
 		this.gameName = gameName;
 		this.gameType = gameType;
 		this.timePlayed = getMinutesFromTimeString(timePlayed);
@@ -553,37 +491,31 @@ public class AddGamePlayTabbedActivity extends AppCompatActivity
 		Log.d("TYPE", gameType);
 	}
 
-	private int getMinutesFromTimeString(String time)
-	{
+	private int getMinutesFromTimeString(String time) {
 		Log.d("TIME", "Getting time from " + time);
 		if (NumberUtils.isParsable(time)) return Integer.parseInt(time);
-		else if (time.contains(":"))
-		{
+		else if (time.contains(":")) {
 			String[] parts = time.split(":");
 			Log.d("TIME", Arrays.toString(parts));
 			if (parts.length == 1 && NumberUtils.isParsable(parts[0])) return 1;
 			else if (parts.length == 2 && NumberUtils.isParsable(parts[0]) && NumberUtils.isParsable(parts[1]))
 				return Integer.parseInt(parts[0]) + Integer.parseInt(parts[1]) / 30;
 			else if (parts.length == 3 && NumberUtils.isParsable(parts[0]) && NumberUtils.isParsable(parts[1])
-			         && NumberUtils.isParsable(parts[2]))
+					&& NumberUtils.isParsable(parts[2]))
 				return 60 * Integer.parseInt(parts[0]) + Integer.parseInt(parts[1]) + Integer.parseInt(parts[2]) / 30;
 		}
 		return 0;
 	}
 
-	public class SectionsPagerAdapter extends FragmentPagerAdapter
-	{
+	public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-		public SectionsPagerAdapter(FragmentManager fm)
-		{
+		public SectionsPagerAdapter(FragmentManager fm) {
 			super(fm);
 		}
 
 		@Override
-		public Fragment getItem(int position)
-		{
-			switch (position)
-			{
+		public Fragment getItem(int position) {
+			switch (position) {
 				case 0:
 					return addGamePlayDetailsFragment;
 				case 1:
@@ -595,16 +527,13 @@ public class AddGamePlayTabbedActivity extends AppCompatActivity
 		}
 
 		@Override
-		public int getCount()
-		{
+		public int getCount() {
 			return 3;
 		}
 
 		@Override
-		public CharSequence getPageTitle(int position)
-		{
-			switch (position)
-			{
+		public CharSequence getPageTitle(int position) {
+			switch (position) {
 				case 0:
 					return "DETAILS";
 				case 1:

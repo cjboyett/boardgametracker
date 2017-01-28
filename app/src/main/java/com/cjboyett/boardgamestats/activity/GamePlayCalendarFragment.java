@@ -17,8 +17,8 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
 import com.cjboyett.boardgamestats.R;
-import com.cjboyett.boardgamestats.data.games.board.BoardGameContract;
 import com.cjboyett.boardgamestats.data.games.GamesDbHelper;
+import com.cjboyett.boardgamestats.data.games.board.BoardGameContract;
 import com.cjboyett.boardgamestats.model.Date;
 import com.cjboyett.boardgamestats.utility.ActivityUtilities;
 import com.cjboyett.boardgamestats.utility.Preferences;
@@ -32,8 +32,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class GamePlayCalendarFragment extends Fragment
-{
+public class GamePlayCalendarFragment extends Fragment {
 	private Activity activity;
 	private View view;
 	private ScrollView scrollView;
@@ -49,8 +48,7 @@ public class GamePlayCalendarFragment extends Fragment
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-	                         Bundle savedInstanceState)
-	{
+							 Bundle savedInstanceState) {
 		activity = this.getActivity();
 
 		view = inflater.inflate(R.layout.activity_game_play_list, null);
@@ -60,20 +58,19 @@ public class GamePlayCalendarFragment extends Fragment
 
 		calendarView = new CalendarView(activity);
 		calendarView.setParent(this);
-		LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+		LinearLayout.LayoutParams layoutParams =
+				new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 		layoutParams.gravity = Gravity.CENTER;
 		calendarView.setLayoutParams(layoutParams);
 		((LinearLayout) view.findViewById(R.id.linear_layout_game_plays)).addView(calendarView);
 
 		view.setBackgroundColor(Preferences.getBackgroundColor(activity));
 
-		scrollView = (ScrollView)view.findViewById(R.id.scrollview_game_plays);
+		scrollView = (ScrollView) view.findViewById(R.id.scrollview_game_plays);
 
-		scrollView.setOnTouchListener(new View.OnTouchListener()
-		{
+		scrollView.setOnTouchListener(new View.OnTouchListener() {
 			@Override
-			public boolean onTouch(View v, MotionEvent event)
-			{
+			public boolean onTouch(View v, MotionEvent event) {
 				if (Preferences.useSwipes(v.getContext()))
 					return gestureDetector.onTouchEvent(event);
 				return false;
@@ -84,41 +81,34 @@ public class GamePlayCalendarFragment extends Fragment
 	}
 
 	@Override
-	public void onResume()
-	{
+	public void onResume() {
 		super.onResume();
 		dbHelper = new GamesDbHelper(activity);
-		if (regenerateLayout)
-		{
+		if (regenerateLayout) {
 			generateLayout();
 			regenerateLayout = false;
 		}
 	}
 
 	@Override
-	public void onPause()
-	{
+	public void onPause() {
 		super.onPause();
 		dbHelper.close();
 	}
 
 	@Override
-	public void onDestroy()
-	{
+	public void onDestroy() {
 		super.onDestroy();
 		if (dbHelper != null) dbHelper.close();
 	}
 
-	public void setRegenerateLayout(boolean regenerateLayout)
-	{
+	public void setRegenerateLayout(boolean regenerateLayout) {
 		this.regenerateLayout = regenerateLayout;
 	}
 
-	private void generateLayout()
-	{
+	private void generateLayout() {
 		if (calendarView != null) calendarView.populateCalendar();
-		else
-		{
+		else {
 			((LinearLayout) view.findViewById(R.id.linear_layout_game_plays)).removeAllViews();
 			generatePlayList();
 		}
@@ -126,22 +116,20 @@ public class GamePlayCalendarFragment extends Fragment
 		ActivityUtilities.setDatabaseChanged(activity, false);
 	}
 
-	private void generatePlayList()
-	{
+	private void generatePlayList() {
 		gamePlayDates = new TreeMap<>();
 		gamePlayIds = new ArrayList<>();
 
 		Cursor gamePlayCursor = dbHelper.getReadableDatabase()
-				.query(BoardGameContract.GamePlayEntry.TABLE_NAME,
-						new String[]{BoardGameContract.GamePlayEntry.DATE,
-								BoardGameContract.GamePlayEntry._ID},
-						null,
-						null,
-						null,
-						null,
-						BoardGameContract.GamePlayEntry.DATE + " ASC");
-		while (gamePlayCursor.moveToNext())
-		{
+										.query(BoardGameContract.GamePlayEntry.TABLE_NAME,
+											   new String[]{BoardGameContract.GamePlayEntry.DATE,
+															BoardGameContract.GamePlayEntry._ID},
+											   null,
+											   null,
+											   null,
+											   null,
+											   BoardGameContract.GamePlayEntry.DATE + " ASC");
+		while (gamePlayCursor.moveToNext()) {
 			gamePlayIds.add(gamePlayCursor.getLong(1));
 			gamePlayDates.put(gamePlayCursor.getLong(1), new Date(gamePlayCursor.getString(0)));
 		}
@@ -150,31 +138,25 @@ public class GamePlayCalendarFragment extends Fragment
 		new MakeCalendarTask().execute();
 	}
 
-	private Map<String, List<Long>> sortIds(List<Long> gamePlayIds)
-	{
-		Map<String, List<Long>> sortedIds = new TreeMap<>(new Comparator<String>()
-		{
+	private Map<String, List<Long>> sortIds(List<Long> gamePlayIds) {
+		Map<String, List<Long>> sortedIds = new TreeMap<>(new Comparator<String>() {
 			@Override
-			public int compare(String lhs, String rhs)
-			{
+			public int compare(String lhs, String rhs) {
 				return -lhs.compareTo(rhs);
 			}
 		});
 
-		for (long id : gamePlayIds)
-		{
+		for (long id : gamePlayIds) {
 			Date date = gamePlayDates.get(id);
-			if (!sortedIds.containsKey(date.rawYearAndMonth())) sortedIds.put(date.rawYearAndMonth(), new ArrayList<Long>());
+			if (!sortedIds.containsKey(date.rawYearAndMonth()))
+				sortedIds.put(date.rawYearAndMonth(), new ArrayList<Long>());
 			sortedIds.get(date.rawYearAndMonth()).add(id);
 		}
 
-		for (String date : sortedIds.keySet())
-		{
-			Collections.sort(sortedIds.get(date), new Comparator<Long>()
-			{
+		for (String date : sortedIds.keySet()) {
+			Collections.sort(sortedIds.get(date), new Comparator<Long>() {
 				@Override
-				public int compare(Long lhs, Long rhs)
-				{
+				public int compare(Long lhs, Long rhs) {
 					Date lhsDate = gamePlayDates.get(lhs);
 					Date rhsDate = gamePlayDates.get(rhs);
 					return lhsDate.rawDate().compareTo(rhsDate.rawDate());
@@ -185,28 +167,28 @@ public class GamePlayCalendarFragment extends Fragment
 		return sortedIds;
 	}
 
-	private class MakeCalendarTask extends AsyncTask<String, Void, String>
-	{
+	private class MakeCalendarTask extends AsyncTask<String, Void, String> {
 		private Map<String, List<Long>> idsByDate;
+
 		@Override
-		protected String doInBackground(String... params)
-		{
+		protected String doInBackground(String... params) {
 			idsByDate = sortIds(gamePlayIds);
 			return null;
 		}
 
 		@Override
-		protected void onPostExecute(String string)
-		{
-			LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+		protected void onPostExecute(String string) {
+			LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+																				   ViewGroup.LayoutParams.WRAP_CONTENT);
 			layoutParams.gravity = Gravity.CENTER;
 
-			layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+			layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+														 ViewGroup.LayoutParams.WRAP_CONTENT);
 			layoutParams.setMargins(5, 5, 5, 5);
-			for (String s : idsByDate.keySet())
-			{
+			for (String s : idsByDate.keySet()) {
 				Date monthAndYear = gamePlayDates.get(idsByDate.get(s).get(0));
-				MonthlyGamePlayView monthlyGamePlayView = new MonthlyGamePlayView(activity, monthAndYear.getMonthAndYear());
+				MonthlyGamePlayView monthlyGamePlayView =
+						new MonthlyGamePlayView(activity, monthAndYear.getMonthAndYear());
 				monthlyGamePlayView.setLayoutParams(layoutParams);
 
 				for (long id : idsByDate.get(s)) monthlyGamePlayView.addBoardGamePlayId(id);
@@ -216,35 +198,26 @@ public class GamePlayCalendarFragment extends Fragment
 		}
 	}
 
-	private class ScrollGestureListener extends GestureDetector.SimpleOnGestureListener
-	{
+	private class ScrollGestureListener extends GestureDetector.SimpleOnGestureListener {
 		@Override
-		public boolean onDown(MotionEvent e)
-		{
+		public boolean onDown(MotionEvent e) {
 			scrollY = scrollView.getScrollY(); //scrollView.getScrollY();
 			Log.d("DOWN", scrollY + "");
 			return super.onDown(e);
 		}
 
 		@Override
-		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY)
-		{
+		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
 			Log.d("FLING", scrollY + "");
-			if (Math.abs(velocityX) < Math.abs(velocityY))
-			{
-				try
-				{
-					if (Math.abs(e1.getY() - e2.getY()) >= 200)
-					{
-						if (velocityY > 2000 && scrollY == 0)
-						{
+			if (Math.abs(velocityX) < Math.abs(velocityY)) {
+				try {
+					if (Math.abs(e1.getY() - e2.getY()) >= 200) {
+						if (velocityY > 2000 && scrollY == 0) {
 							getActivity().onBackPressed();
 							return true;
 						}
 					}
-				}
-				catch (Exception e)
-				{
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}

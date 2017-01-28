@@ -17,8 +17,7 @@ import java.util.Map;
 /**
  * Created by Casey on 9/6/2016.
  */
-public class RecommendedGamesAdapter extends BaseAdapter
-{
+public class RecommendedGamesAdapter extends BaseAdapter {
 	private Activity activity;
 	private List<Integer> keys;
 	private Map<Integer, String> gameNames;
@@ -26,8 +25,8 @@ public class RecommendedGamesAdapter extends BaseAdapter
 
 	private int foregroundColor;
 
-	public RecommendedGamesAdapter(Activity activity, Map<Integer, String> gameNames, Map<Integer, Bitmap> thumbnails, List<Integer> order)
-	{
+	public RecommendedGamesAdapter(Activity activity, Map<Integer, String> gameNames, Map<Integer, Bitmap> thumbnails,
+								   List<Integer> order) {
 		this.activity = activity;
 		this.gameNames = gameNames;
 		keys = order;
@@ -37,32 +36,28 @@ public class RecommendedGamesAdapter extends BaseAdapter
 	}
 
 	@Override
-	public int getCount()
-	{
+	public int getCount() {
 		return gameNames.size();
 	}
 
 	@Override
-	public Integer getItem(int position)
-	{
+	public Integer getItem(int position) {
 		return keys.get(position);
 	}
 
 	@Override
-	public long getItemId(int position)
-	{
+	public long getItemId(int position) {
 		return 0;
 	}
 
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent)
-	{
+	public View getView(int position, View convertView, ViewGroup parent) {
 		View view = activity.getLayoutInflater().inflate(R.layout.linear_layout_game_play_player_info, null);
 		Integer key = getItem(position);
 		view.findViewById(R.id.textview_score).setVisibility(View.GONE);
 		view.findViewById(R.id.imageview_win_icon).setVisibility(View.GONE);
-		((TextView)view.findViewById(R.id.textview_name)).setTextColor(foregroundColor);
-		((TextView)view.findViewById(R.id.textview_name)).setText(gameNames.get(key));
+		((TextView) view.findViewById(R.id.textview_name)).setTextColor(foregroundColor);
+		((TextView) view.findViewById(R.id.textview_name)).setText(gameNames.get(key));
 		if (thumbnails.get(key) != null)
 			((ImageView) view.findViewById(R.id.imageview_avatar)).setImageBitmap(thumbnails.get(key));
 		else

@@ -20,14 +20,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.cjboyett.boardgamestats.utility.view.ImageController;
 import com.cjboyett.boardgamestats.utility.Preferences;
+import com.cjboyett.boardgamestats.utility.view.ImageController;
 import com.cjboyett.boardgamestats.view.AdViewContainer;
 
 import java.io.IOException;
 
-public class PictureTestActivity extends AppCompatActivity
-{
+public class PictureTestActivity extends AppCompatActivity {
 	final static int REQUEST_CAMERA = 1;
 	final static int SELECT_FILE = 2;
 
@@ -41,8 +40,7 @@ public class PictureTestActivity extends AppCompatActivity
 	boolean canWrite, canUseCamera;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState)
-	{
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_picture_test);
 
@@ -51,15 +49,13 @@ public class PictureTestActivity extends AppCompatActivity
 //		targetH = showImg.getHeight();
 
 		imageController = new ImageController(this)
-			.setDirectoryName("images")
-			.setFileType("JPG")
-			.setFileName("test.jpg")
-			.setCompressionLevel(90);
+				.setDirectoryName("images")
+				.setFileType("JPG")
+				.setFileName("test.jpg")
+				.setCompressionLevel(90);
 
-		if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1)
-		{
-			if (!Preferences.hasAskedPermission(this))
-			{
+		if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
+			if (!Preferences.hasAskedPermission(this)) {
 				String[] perms = {"android.permission.WRITE_EXTERNAL_STORAGE", "android.permission.CAMERA"};
 				requestPermissions(perms, 200);
 				Preferences.setHasAskedPermission(this, true);
@@ -69,14 +65,12 @@ public class PictureTestActivity extends AppCompatActivity
 		canWrite = Preferences.canAccessStorage(this);
 		canUseCamera = Preferences.canUseCamera(this);
 
-		final AdViewContainer adViewContainer = (AdViewContainer)findViewById(R.id.ad_container);
+		final AdViewContainer adViewContainer = (AdViewContainer) findViewById(R.id.ad_container);
 
 		FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-		fab.setOnClickListener(new View.OnClickListener()
-		{
+		fab.setOnClickListener(new View.OnClickListener() {
 			@Override
-			public void onClick(View view)
-			{
+			public void onClick(View view) {
 				if (adViewContainer.getVisibility() == View.VISIBLE)
 					adViewContainer.setVisibility(View.GONE);
 				else
@@ -140,22 +134,16 @@ public class PictureTestActivity extends AppCompatActivity
 	}
 
 	@Override
-	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)
-	{
+	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
 		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-		if (requestCode == 200)
-		{
-			if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
-			{
+		if (requestCode == 200) {
+			if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 				Preferences.setCanAccessStoragePreference(this, true);
-			}
-			else Preferences.setCanAccessStoragePreference(this, false);
-			if (grantResults[1] == PackageManager.PERMISSION_GRANTED)
-			{
+			} else Preferences.setCanAccessStoragePreference(this, false);
+			if (grantResults[1] == PackageManager.PERMISSION_GRANTED) {
 				Preferences.setCanUseCameraPreference(this, true);
-			}
-			else Preferences.setCanUseCameraPreference(this, false);
+			} else Preferences.setCanUseCameraPreference(this, false);
 
 			canWrite = Preferences.canAccessStorage(this);
 			canUseCamera = Preferences.canUseCamera(this);
@@ -163,20 +151,17 @@ public class PictureTestActivity extends AppCompatActivity
 	}
 
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data)
-	{
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 
 		Log.d("PHOTO", "It's here");
-		if (resultCode == RESULT_OK)
-		{
+		if (resultCode == RESULT_OK) {
 			Log.d("PHOTO", "Okay");
-			if (requestCode == REQUEST_CAMERA)
-			{
+			if (requestCode == REQUEST_CAMERA) {
 				String imageId = convertImageUriToFile(imageUri, this);
 
 				//  Create and excecute AsyncTask to load capture image
-				new LoadImagesFromSDCard().execute(""+imageId);
+				new LoadImagesFromSDCard().execute("" + imageId);
 
 /*
 				Log.d("PHOTO", "Whatever");
@@ -215,11 +200,9 @@ public class PictureTestActivity extends AppCompatActivity
 					e.printStackTrace();
 				}
 */
-			}
-			else if (requestCode == SELECT_FILE)
-			{
+			} else if (requestCode == SELECT_FILE) {
 				Uri selectedImageUri = data.getData();
-				String[] projection = { MediaStore.MediaColumns.DATA };
+				String[] projection = {MediaStore.MediaColumns.DATA};
 
 				Cursor cursor = this.getContentResolver().query(selectedImageUri, projection, null, null, null);
 				int column_index = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
@@ -233,13 +216,12 @@ public class PictureTestActivity extends AppCompatActivity
 
 				Bitmap scaledBitmap = Bitmap.createScaledBitmap(bm, targetW, targetH, false);
 
-				((ImageView)findViewById(R.id.imageview_picture_test)).setImageBitmap(scaledBitmap);
+				((ImageView) findViewById(R.id.imageview_picture_test)).setImageBitmap(scaledBitmap);
 			}
 		}
 	}
 
-	private Bitmap loadBitmapFromPath(String filePath)
-	{
+	private Bitmap loadBitmapFromPath(String filePath) {
 		Log.d("FILE LOCATION", filePath);
 		Bitmap bm;
 		int targetW = findViewById(R.id.imageview_picture_test).getWidth();
@@ -253,7 +235,7 @@ public class PictureTestActivity extends AppCompatActivity
 		int photoH = bmOptions.outHeight;
 
 		// Determine how much to scale down the image
-		int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+		int scaleFactor = Math.min(photoW / targetW, photoH / targetH);
 
 		// Decode the image file into a Bitmap sized to fill the View
 		bmOptions.inJustDecodeBounds = false;
@@ -262,18 +244,16 @@ public class PictureTestActivity extends AppCompatActivity
 		bm = BitmapFactory.decodeFile(filePath, bmOptions);
 
 		ExifInterface exifInterface = null;
-		try
-		{
+		try {
 			exifInterface = new ExifInterface(filePath);
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		if (exifInterface != null)
-		{
-			bm = rotateBitmap(bm, exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED));
+		if (exifInterface != null) {
+			bm = rotateBitmap(bm,
+							  exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+															ExifInterface.ORIENTATION_UNDEFINED));
 		}
 
 		return bm;
@@ -316,16 +296,17 @@ public class PictureTestActivity extends AppCompatActivity
 			Bitmap bmRotated = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
 			bitmap.recycle();
 			return bmRotated;
-		}
-		catch (OutOfMemoryError e) {
+		} catch (OutOfMemoryError e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
 
-	/************ Convert Image Uri path to physical path **************/
+	/************
+	 * Convert Image Uri path to physical path
+	 **************/
 
-	public static String convertImageUriToFile ( Uri imageUri, Activity activity )  {
+	public static String convertImageUriToFile(Uri imageUri, Activity activity) {
 
 		Cursor cursor = null;
 		int imageID = 0;
@@ -333,7 +314,7 @@ public class PictureTestActivity extends AppCompatActivity
 		try {
 
 			/*********** Which columns values want to get *******/
-			String [] proj={
+			String[] proj = {
 					MediaStore.Images.Media.DATA,
 					MediaStore.Images.Media._ID,
 					MediaStore.Images.Thumbnails._ID,
@@ -367,9 +348,7 @@ public class PictureTestActivity extends AppCompatActivity
 
 
 //				imageDetails.setText("No Image");
-			}
-			else
-			{
+			} else {
 
 				int thumbID = 0;
 				if (cursor.moveToFirst()) {
@@ -377,18 +356,18 @@ public class PictureTestActivity extends AppCompatActivity
 					/**************** Captured image details ************/
 
 					/*****  Used to show image on view in LoadImagesFromSDCard class ******/
-					imageID     = cursor.getInt(columnIndex);
+					imageID = cursor.getInt(columnIndex);
 
-					thumbID     = cursor.getInt(columnIndexThumb);
+					thumbID = cursor.getInt(columnIndexThumb);
 
 					String Path = cursor.getString(file_ColumnIndex);
 
 					//String orientation =  cursor.getString(orientation_ColumnIndex);
 
 					String CapturedImageDetails = " CapturedImageDetails : \n\n"
-							+" ImageID :"+imageID+"\n"
-							+" ThumbID :"+thumbID+"\n"
-							+" Path :"+Path+"\n";
+							+ " ImageID :" + imageID + "\n"
+							+ " ThumbID :" + thumbID + "\n"
+							+ " Path :" + Path + "\n";
 
 					// Show Captured Image detail on activity
 //					imageDetails.setText( CapturedImageDetails );
@@ -403,7 +382,7 @@ public class PictureTestActivity extends AppCompatActivity
 
 		// Return Captured Image ImageID ( By this ImageID Image will load from sdcard )
 
-		return ""+imageID;
+		return "" + imageID;
 	}
 
 
@@ -411,13 +390,11 @@ public class PictureTestActivity extends AppCompatActivity
 	 * Async task for loading the images from the SD card.
 	 *
 	 * @author Android Example
-	 *
 	 */
 
 	// Class with extends AsyncTask class
 
-	public class LoadImagesFromSDCard  extends AsyncTask<String, Void, Void>
-	{
+	public class LoadImagesFromSDCard extends AsyncTask<String, Void, Void> {
 
 		private ProgressDialog Dialog = new ProgressDialog(PictureTestActivity.this);
 
@@ -490,8 +467,7 @@ public class PictureTestActivity extends AppCompatActivity
 			// Close progress dialog
 			Dialog.dismiss();
 
-			if(mBitmap != null)
-			{
+			if (mBitmap != null) {
 				// Set Image to ImageView
 
 				showImg.setImageBitmap(mBitmap);
@@ -501,20 +477,17 @@ public class PictureTestActivity extends AppCompatActivity
 
 	}
 
-	public static class ImageTestActivity extends AppCompatActivity
-	{
+	public static class ImageTestActivity extends AppCompatActivity {
 
 		@Override
-		protected void onCreate(Bundle savedInstanceState)
-		{
+		protected void onCreate(Bundle savedInstanceState) {
 			super.onCreate(savedInstanceState);
 			setContentView(R.layout.activity_image_test);
 
 			View image = findViewById(R.id.imageview_test);
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-			{
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 				Log.d("NAME", image.getTransitionName());
-	//			image.setTransitionName("test");
+				//			image.setTransitionName("test");
 			}
 		}
 

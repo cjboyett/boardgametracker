@@ -38,7 +38,7 @@ public class StringMatcher {
 			}
 		} while (i < value.length() && j < keyword.length());
 
-		return (j == keyword.length())? true : false;
+		return (j == keyword.length()) ? true : false;
 	}
 
 	private static boolean isKorean(char c) {
@@ -55,7 +55,7 @@ public class StringMatcher {
 
 	private static char getInitialSound(char c) {
 
-		if(!isKorean(c)){
+		if (!isKorean(c)) {
 			return c;
 		}
 

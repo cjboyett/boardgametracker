@@ -17,15 +17,13 @@ import com.cjboyett.boardgamestats.utility.view.ViewUtilities;
 /**
  * Created by Casey on 3/10/2016.
  */
-public class AddPlayerView extends RelativeLayout
-{
+public class AddPlayerView extends RelativeLayout {
 	private TextView nameTextView, scoreTextView;
 	private DatedTextView deleteTextView;
 	private AutoCompleteTextView playerTextView;
 	private EditText scoreEditText;
 
-	public AddPlayerView(Context context)
-	{
+	public AddPlayerView(Context context) {
 		super(context);
 		LayoutInflater inflater = LayoutInflater.from(context);
 		inflater.inflate(R.layout.add_player_view, this);
@@ -37,49 +35,40 @@ public class AddPlayerView extends RelativeLayout
 		playerTextView = (AutoCompleteTextView) findViewById(R.id.edittext_other_player);
 		scoreEditText = (EditText) findViewById(R.id.edittext_other_score);
 
-		playerTextView.addTextChangedListener(new TextWatcher()
-		{
+		playerTextView.addTextChangedListener(new TextWatcher() {
 			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count, int after)
-			{
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 			}
 
 			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count)
-			{
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				if (s.length() > 0) nameTextView.setVisibility(VISIBLE);
 				else nameTextView.setVisibility(INVISIBLE);
 			}
 
 			@Override
-			public void afterTextChanged(Editable s)
-			{
+			public void afterTextChanged(Editable s) {
 			}
 		});
 
-		scoreEditText.addTextChangedListener(new TextWatcher()
-		{
+		scoreEditText.addTextChangedListener(new TextWatcher() {
 			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count, int after)
-			{
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 			}
 
 			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count)
-			{
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				if (s.length() > 0) scoreTextView.setVisibility(VISIBLE);
 				else scoreTextView.setVisibility(INVISIBLE);
 			}
 
 			@Override
-			public void afterTextChanged(Editable s)
-			{
+			public void afterTextChanged(Editable s) {
 			}
 		});
 	}
 
-	public void colorComponents(int backgroundColor, int foregroundColor, int hintTextColor)
-	{
+	public void colorComponents(int backgroundColor, int foregroundColor, int hintTextColor) {
 		setBackgroundColor(backgroundColor);
 
 		findViewById(R.id.relativelayout_add_player).setBackgroundColor(backgroundColor);

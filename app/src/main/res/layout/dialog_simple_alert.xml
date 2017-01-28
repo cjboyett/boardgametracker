@@ -35,25 +35,25 @@
         android:visibility="gone">
 
         <ImageView
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:id="@+id/imageview_yancey"
-	        android:src="@mipmap/ic_launcher"
-	        android:layout_gravity="top|left"
-	        android:visibility="gone"
-	        android:paddingRight="5dp"
-	        />
-
-<!--        <TextView
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textview_message"
-            android:padding="5dp"
-            android:textSize="14dp"
-            android:layout_margin="5dp"
-            android:text="Message"
+            android:id="@+id/imageview_yancey"
+            android:src="@mipmap/ic_launcher"
+            android:layout_gravity="top|left"
             android:visibility="gone"
-            android:layout_weight="1"/>-->
+            android:paddingRight="5dp"
+            />
+
+        <!--        <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textview_message"
+                    android:padding="5dp"
+                    android:textSize="14dp"
+                    android:layout_margin="5dp"
+                    android:text="Message"
+                    android:visibility="gone"
+                    android:layout_weight="1"/>-->
 
     </uk.co.deanwild.flowtextview.FlowTextView>
 

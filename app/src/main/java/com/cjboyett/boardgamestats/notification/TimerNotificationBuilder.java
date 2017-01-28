@@ -27,15 +27,14 @@ import java.util.List;
 /**
  * Created by Casey on 10/20/2016.
  */
-public class TimerNotificationBuilder
-{
+public class TimerNotificationBuilder {
 	private static final int NOTIFICATION_ID = 0;
 
 	private RemoteViews timeView;
 	private int smallIcon = R.drawable.meeple_play;
 
-	public NotificationCompat.Builder createTimerNotification(Context context, String game, boolean timerRunning, long timerStart)
-	{
+	public NotificationCompat.Builder createTimerNotification(Context context, String game, boolean timerRunning,
+															  long timerStart) {
 		final NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
 
 		Preferences.setTimerGame(context, game);
@@ -59,49 +58,49 @@ public class TimerNotificationBuilder
 		if (TextUtils.isEmpty(thumbnailUrl)) thumbnailUrl = VideoGameDbUtility.getThumbnailUrl(dbHelper, game);
 		dbHelper.close();
 
-		if (!TextUtils.isEmpty(thumbnailUrl))
-		{
+		if (!TextUtils.isEmpty(thumbnailUrl)) {
 			ImageController imageController = new ImageController(context).setDirectoryName("thumbnails");
-			timeView.setImageViewBitmap(R.id.imageview_thumbnail, imageController.setFileName(thumbnailUrl.substring(thumbnailUrl.lastIndexOf("/") + 1))
-			                                                                     .load());
-		}
-		else
-			timeView.setImageViewBitmap(R.id.imageview_thumbnail, BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher));
+			timeView.setImageViewBitmap(R.id.imageview_thumbnail,
+										imageController.setFileName(thumbnailUrl.substring(
+												thumbnailUrl.lastIndexOf("/") + 1))
+													   .load());
+		} else
+			timeView.setImageViewBitmap(R.id.imageview_thumbnail,
+										BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher));
 
 		builder.setContentTitle("Timer")
-		       .setAutoCancel(true)
-		       .setColor(context.getResources().getColor(R.color.colorAccent))
-		       .setContentText(TextUtils.isEmpty(game) ? "Game in progress" : game)
-		       .setSmallIcon(smallIcon)
-		       .setPriority(Notification.PRIORITY_MAX)
-		       .setOngoing(true)
-               .setContent(timeView);
+			   .setAutoCancel(true)
+			   .setColor(context.getResources().getColor(R.color.colorAccent))
+			   .setContentText(TextUtils.isEmpty(game) ? "Game in progress" : game)
+			   .setSmallIcon(smallIcon)
+			   .setPriority(Notification.PRIORITY_MAX)
+			   .setOngoing(true)
+			   .setContent(timeView);
 
 		PendingIntent pauseIntent = PendingIntent.getService(context,
-		                                                     NOTIFICATION_ID,
-		                                                     new Intent("com.cjboyett.boardgamestats.ACTION_PAUSE_TIMER"),
-		                                                     PendingIntent.FLAG_UPDATE_CURRENT);
+															 NOTIFICATION_ID,
+															 new Intent("com.cjboyett.boardgamestats.ACTION_PAUSE_TIMER"),
+															 PendingIntent.FLAG_UPDATE_CURRENT);
 
 		timeView.setOnClickPendingIntent(R.id.imageview_pause, pauseIntent);
 
 		PendingIntent pendingIntent = PendingIntent.getActivity(context,
-		                                                        NOTIFICATION_ID,
-		                                                        new Intent(context, AddGamePlayTabbedActivity.class),
-		                                                        PendingIntent.FLAG_UPDATE_CURRENT);
+																NOTIFICATION_ID,
+																new Intent(context, AddGamePlayTabbedActivity.class),
+																PendingIntent.FLAG_UPDATE_CURRENT);
 
 		builder.setContentIntent(pendingIntent);
 
 		return builder;
 	}
 
-	public void createTimerNotification(Context context, NotificationCompat.Builder builder)
-	{
-		final NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+	public void createTimerNotification(Context context, NotificationCompat.Builder builder) {
+		final NotificationManager manager =
+				(NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 		manager.notify(NOTIFICATION_ID, builder.build());
 	}
 
-	public void toggleTimerNotification(Context context, NotificationCompat.Builder builder)
-	{
+	public void toggleTimerNotification(Context context, NotificationCompat.Builder builder) {
 		TempDataManager tempDataManager = TempDataManager.getInstance(context);
 
 		List<Long> timer = tempDataManager.getTimer();
@@ -110,20 +109,21 @@ public class TimerNotificationBuilder
 
 		boolean timerRunning = Preferences.isTimerRunning(context);
 
-		if (timerRunning)
-		{
+		if (timerRunning) {
 			lastStopTime = SystemClock.elapsedRealtime();
 			tempDataManager.setTimer(timerBase, lastStartTime, lastStopTime, diff);
-			timeView.setImageViewBitmap(R.id.imageview_pause, BitmapFactory.decodeResource(context.getResources(), android.R.drawable.ic_media_play));
+			timeView.setImageViewBitmap(R.id.imageview_pause,
+										BitmapFactory.decodeResource(context.getResources(),
+																	 android.R.drawable.ic_media_play));
 			smallIcon = R.drawable.meeple_pause;
-		}
-		else
-		{
+		} else {
 			diff += (lastStopTime - lastStartTime);
 			timerBase = SystemClock.elapsedRealtime() - diff;
 			lastStartTime = SystemClock.elapsedRealtime();
 			tempDataManager.setTimer(timerBase, lastStartTime, lastStopTime, diff);
-			timeView.setImageViewBitmap(R.id.imageview_pause, BitmapFactory.decodeResource(context.getResources(), android.R.drawable.ic_media_pause));
+			timeView.setImageViewBitmap(R.id.imageview_pause,
+										BitmapFactory.decodeResource(context.getResources(),
+																	 android.R.drawable.ic_media_pause));
 			smallIcon = R.drawable.meeple_play;
 		}
 
@@ -133,7 +133,8 @@ public class TimerNotificationBuilder
 		Preferences.setTimerRunning(context, timerRunning);
 		tempDataManager.saveTimer();
 
-		final NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+		final NotificationManager manager =
+				(NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 		builder.setSmallIcon(smallIcon);
 		manager.notify(NOTIFICATION_ID, builder.build());
 	}

@@ -4,44 +4,44 @@
                 android:layout_height="wrap_content"
                 android:padding="20dp">
 
-	<TextView
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:textAppearance="?android:attr/textAppearanceSmall"
-		android:text="Name"
-		android:id="@+id/textview_name"
-		android:layout_alignParentTop="true"
-		android:layout_alignParentLeft="true"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Name"
+        android:id="@+id/textview_name"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"/>
 
-	<EditText
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:inputType="textPersonName"
-		android:ems="10"
-		android:id="@+id/edittext_name"
-		android:lines="1"
-		android:hint="Name"
-		android:layout_below="@+id/textview_name"
-		android:layout_alignParentRight="true"
-		android:layout_alignParentLeft="true"/>
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/edittext_name"
+        android:lines="1"
+        android:hint="Name"
+        android:layout_below="@+id/textview_name"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentLeft="true"/>
 
-	<TextView
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:textAppearance="?android:attr/textAppearanceSmall"
-		android:text="Email"
-		android:id="@+id/textview_email"
-		android:layout_below="@+id/edittext_name"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Email"
+        android:id="@+id/textview_email"
+        android:layout_below="@+id/edittext_name"/>
 
-	<EditText
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:inputType="textEmailAddress"
-		android:ems="10"
-		android:id="@+id/edittext_email"
-		android:lines="1"
-		android:hint="Email"
-		android:layout_below="@+id/textview_email"
-		android:layout_alignParentLeft="true"
-		android:layout_alignParentRight="true"/>
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textEmailAddress"
+        android:ems="10"
+        android:id="@+id/edittext_email"
+        android:lines="1"
+        android:hint="Email"
+        android:layout_below="@+id/textview_email"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"/>
 </RelativeLayout>

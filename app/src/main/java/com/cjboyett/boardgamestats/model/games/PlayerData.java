@@ -3,8 +3,7 @@ package com.cjboyett.boardgamestats.model.games;
 /**
  * Created by Casey on 8/10/2016.
  */
-public class PlayerData
-{
+public class PlayerData {
 	private String name;
 	private String facebookid;
 	private String notes;
@@ -21,8 +20,10 @@ public class PlayerData
 	private double losePercentage;
 	private double tiePercentage;
 
-	public PlayerData(String name, String facebookid, String notes, String imageFilePath, int timesPlayedWith, int timePlayedWith, String mostPlayedGameByTimes, String mostPlayedGameByTime, String mostWonGame, String mostLostGame, String mostTiedGame, double winPercentage, double losePercentage, double tiePercentage)
-	{
+	public PlayerData(String name, String facebookid, String notes, String imageFilePath, int timesPlayedWith,
+					  int timePlayedWith, String mostPlayedGameByTimes, String mostPlayedGameByTime, String mostWonGame,
+					  String mostLostGame, String mostTiedGame, double winPercentage, double losePercentage,
+					  double tiePercentage) {
 		this.name = name;
 		this.facebookid = facebookid;
 		this.notes = notes;
@@ -39,131 +40,107 @@ public class PlayerData
 		this.tiePercentage = tiePercentage;
 	}
 
-	public String getName()
-	{
+	public String getName() {
 		return name;
 	}
 
-	public void setName(String name)
-	{
+	public void setName(String name) {
 		this.name = name;
 	}
 
-	public String getFacebookid()
-	{
+	public String getFacebookid() {
 		return facebookid;
 	}
 
-	public void setFacebookid(String facebookid)
-	{
+	public void setFacebookid(String facebookid) {
 		this.facebookid = facebookid;
 	}
 
-	public String getNotes()
-	{
+	public String getNotes() {
 		return notes;
 	}
 
-	public void setNotes(String notes)
-	{
+	public void setNotes(String notes) {
 		this.notes = notes;
 	}
 
-	public String getImageFilePath()
-	{
+	public String getImageFilePath() {
 		return imageFilePath;
 	}
 
-	public void setImageFilePath(String imageFilePath)
-	{
+	public void setImageFilePath(String imageFilePath) {
 		this.imageFilePath = imageFilePath;
 	}
 
-	public int getTimesPlayedWith()
-	{
+	public int getTimesPlayedWith() {
 		return timesPlayedWith;
 	}
 
-	public void setTimesPlayedWith(int timesPlayedWith)
-	{
+	public void setTimesPlayedWith(int timesPlayedWith) {
 		this.timesPlayedWith = timesPlayedWith;
 	}
 
-	public int getTimePlayedWith()
-	{
+	public int getTimePlayedWith() {
 		return timePlayedWith;
 	}
 
-	public void setTimePlayedWith(int timePlayedWith)
-	{
+	public void setTimePlayedWith(int timePlayedWith) {
 		this.timePlayedWith = timePlayedWith;
 	}
 
-	public String getMostPlayedGameByTimes()
-	{
+	public String getMostPlayedGameByTimes() {
 		return mostPlayedGameByTimes;
 	}
 
-	public void setMostPlayedGameByTimes(String mostPlayedGameByTimes)
-	{
+	public void setMostPlayedGameByTimes(String mostPlayedGameByTimes) {
 		this.mostPlayedGameByTimes = mostPlayedGameByTimes;
 	}
 
-	public String getMostPlayedGameByTime()
-	{
+	public String getMostPlayedGameByTime() {
 		return mostPlayedGameByTime;
 	}
 
-	public void setMostPlayedGameByTime(String mostPlayedGameByTime)
-	{
+	public void setMostPlayedGameByTime(String mostPlayedGameByTime) {
 		this.mostPlayedGameByTime = mostPlayedGameByTime;
 	}
 
-	public String getMostWonGame()
-	{
+	public String getMostWonGame() {
 		return mostWonGame;
 	}
 
-	public void setMostWonGame(String mostWonGame)
-	{
+	public void setMostWonGame(String mostWonGame) {
 		this.mostWonGame = mostWonGame;
 	}
 
-	public String getMostLostGame()
-	{
+	public String getMostLostGame() {
 		return mostLostGame;
 	}
 
-	public void setMostLostGame(String mostLostGame)
-	{
+	public void setMostLostGame(String mostLostGame) {
 		this.mostLostGame = mostLostGame;
 	}
 
-	public double getWinPercentage()
-	{
+	public double getWinPercentage() {
 		return winPercentage;
 	}
 
-	public void setWinPercentage(double winPercentage)
-	{
+	public void setWinPercentage(double winPercentage) {
 		this.winPercentage = winPercentage;
 	}
 
-	public double getLosePercentage()
-	{
+	public double getLosePercentage() {
 		return losePercentage;
 	}
 
-	public void setLosePercentage(double losePercentage)
-	{
+	public void setLosePercentage(double losePercentage) {
 		this.losePercentage = losePercentage;
 	}
 
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return name + ":[" + facebookid + ", " + notes + ", " + timesPlayedWith + ", " + timePlayedWith
-		       + ", " + mostPlayedGameByTimes + ", " + mostPlayedGameByTime + ", "
-		       + mostWonGame + ", " + mostLostGame + ", " + mostTiedGame + ", " + winPercentage + ", " + losePercentage + ", " + tiePercentage + "]";
+				+ ", " + mostPlayedGameByTimes + ", " + mostPlayedGameByTime + ", "
+				+ mostWonGame + ", " + mostLostGame + ", " + mostTiedGame + ", " + winPercentage + ", " +
+				losePercentage + ", " + tiePercentage + "]";
 	}
 }

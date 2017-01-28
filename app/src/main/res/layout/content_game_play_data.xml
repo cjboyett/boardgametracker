@@ -161,6 +161,7 @@
         android:id="@+id/textview_players"
         android:layout_below="@+id/relativelayout_game_play_top"
         android:paddingTop="3dp"/>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

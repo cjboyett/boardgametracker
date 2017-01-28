@@ -21,8 +21,8 @@ import android.widget.TextView;
 
 import com.cjboyett.boardgamestats.R;
 import com.cjboyett.boardgamestats.data.DataManager;
-import com.cjboyett.boardgamestats.data.games.board.BoardGameDbUtility;
 import com.cjboyett.boardgamestats.data.games.GamesDbHelper;
+import com.cjboyett.boardgamestats.data.games.board.BoardGameDbUtility;
 import com.cjboyett.boardgamestats.data.games.rpg.RPGDbUtility;
 import com.cjboyett.boardgamestats.data.games.video.VideoGameDbUtility;
 import com.cjboyett.boardgamestats.utility.ActivityUtilities;
@@ -34,8 +34,7 @@ import com.cjboyett.boardgamestats.view.adapter.ImageAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GameStatsListFragment extends Fragment
-{
+public class GameStatsListFragment extends Fragment {
 	private Activity activity;
 	private View view;
 	private LinearLayout dummyView;
@@ -53,8 +52,7 @@ public class GameStatsListFragment extends Fragment
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-	                         Bundle savedInstanceState)
-	{
+							 Bundle savedInstanceState) {
 		view = inflater.inflate(R.layout.activity_game_stats_list, null);
 		activity = this.getActivity();
 
@@ -67,43 +65,37 @@ public class GameStatsListFragment extends Fragment
 	}
 
 	@Override
-	public void onResume()
-	{
+	public void onResume() {
 		super.onResume();
 		dbHelper = new GamesDbHelper(activity);
 
-		if (regenerateLayout)
-		{
+		if (regenerateLayout) {
 			generateLayout();
 			regenerateLayout = false;
 		}
 	}
 
 	@Override
-	public void onPause()
-	{
+	public void onPause() {
 		super.onPause();
 		dbHelper.close();
 	}
 
 	@Override
-	public void onDestroy()
-	{
+	public void onDestroy() {
 		super.onDestroy();
 		if (dbHelper != null) dbHelper.close();
 	}
 
-	public void setRegenerateLayout(boolean regenerateLayout)
-	{
+	public void setRegenerateLayout(boolean regenerateLayout) {
 		this.regenerateLayout = regenerateLayout;
 	}
 
-	private void generateLayout()
-	{
-		dummyView = (LinearLayout)view.findViewById(R.id.dummyview);
-		textView = (TextView)view.findViewById(R.id.textview_game_play);
-		gridView = (GridView)view.findViewById(R.id.listview_game_stats);
-		gamesSearchView = (SearchView)view.findViewById(R.id.searchview_games_stats);
+	private void generateLayout() {
+		dummyView = (LinearLayout) view.findViewById(R.id.dummyview);
+		textView = (TextView) view.findViewById(R.id.textview_game_play);
+		gridView = (GridView) view.findViewById(R.id.listview_game_stats);
+		gamesSearchView = (SearchView) view.findViewById(R.id.searchview_games_stats);
 
 		DataManager dataManager = DataManager.getInstance(activity.getApplication());
 		List<String> gamesList = dataManager.getAllPlayedGamesCombined();
@@ -112,22 +104,19 @@ public class GameStatsListFragment extends Fragment
 
 		populateGrid(finalGamesList);
 
-		gamesSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener()
-		{
+		gamesSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 			@Override
-			public boolean onQueryTextSubmit(String query)
-			{
+			public boolean onQueryTextSubmit(String query) {
 				return false;
 			}
 
 			@Override
-			public boolean onQueryTextChange(String newText)
-			{
-				if (newText != null && !newText.equals(""))
-				{
+			public boolean onQueryTextChange(String newText) {
+				if (newText != null && !newText.equals("")) {
 					List<String> games = new ArrayList<>();
 					for (String game : finalGamesList)
-						if (!game.startsWith("---") && game.toLowerCase().substring(0, game.length() - 2).contains(newText.toLowerCase()))
+						if (!game.startsWith("---") &&
+								game.toLowerCase().substring(0, game.length() - 2).contains(newText.toLowerCase()))
 							games.add(game);
 					StringUtilities.sortList(games);
 					StringUtilities.padGamesList(games);
@@ -143,15 +132,13 @@ public class GameStatsListFragment extends Fragment
 		ActivityUtilities.setDatabaseChanged(activity, false);
 	}
 
-	private void setColors()
-	{
+	private void setColors() {
 		backgroundColor = Preferences.getBackgroundColor(activity);
 		foregroundColor = Preferences.getForegroundColor(activity);
 		hintTextColor = Preferences.getHintTextColor(activity);
 	}
 
-	private void colorComponents()
-	{
+	private void colorComponents() {
 		view.setBackgroundColor(backgroundColor);
 
 		textView.setBackgroundColor(backgroundColor);
@@ -160,8 +147,7 @@ public class GameStatsListFragment extends Fragment
 		gridView.setBackgroundColor(backgroundColor);
 
 		gamesSearchView.setBackgroundColor(backgroundColor);
-		for (TextView textView : ViewUtilities.findChildrenByClass(gamesSearchView, TextView.class))
-		{
+		for (TextView textView : ViewUtilities.findChildrenByClass(gamesSearchView, TextView.class)) {
 //			textView.setBackgroundColor(ColorUtilities.adjustBasedOnHSV(backgroundColor));
 			textView.setTextColor(foregroundColor);
 			textView.setHintTextColor(hintTextColor);
@@ -170,19 +156,15 @@ public class GameStatsListFragment extends Fragment
 			imageView.setColorFilter(foregroundColor, PorterDuff.Mode.SRC_ATOP);
 	}
 
-	private void populateGrid(final List<String> games)
-	{
+	private void populateGrid(final List<String> games) {
 		gridView.setNumColumns(Preferences.numberOfGridColumns(activity));
 		gridView.setAdapter(new ImageAdapter(activity, games));
 
-		gridView.setOnItemClickListener(new AdapterView.OnItemClickListener()
-		{
+		gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-			{
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				dummyView.requestFocus();
-				if (!games.get(position).startsWith("---"))
-				{
+				if (!games.get(position).startsWith("---")) {
 					textView.requestFocus();
 					String game = games.get(position);
 					String gameType = game.substring(game.length() - 1);
@@ -196,20 +178,19 @@ public class GameStatsListFragment extends Fragment
 					else if (gameType.equals("v"))
 						thumbnailUrl = VideoGameDbUtility.getThumbnailUrl(dbHelper, game);
 					ActivityUtilities.generatePaletteAndOpenActivity(activity,
-							new Intent(view.getContext(), GameStatsActivity.class)
-									.putExtra("GAME", game)
-									.putExtra("TYPE", gameType),
-							"http://" + thumbnailUrl,
-							"UP");
+																	 new Intent(view.getContext(),
+																				GameStatsActivity.class)
+																			 .putExtra("GAME", game)
+																			 .putExtra("TYPE", gameType),
+																	 "http://" + thumbnailUrl,
+																	 "UP");
 					ActivityUtilities.exitUp(activity);
 				}
 			}
 		});
-		gridView.setOnTouchListener(new View.OnTouchListener()
-		{
+		gridView.setOnTouchListener(new View.OnTouchListener() {
 			@Override
-			public boolean onTouch(View v, MotionEvent event)
-			{
+			public boolean onTouch(View v, MotionEvent event) {
 				if (Preferences.useSwipes(v.getContext()))
 					return gestureDetector.onTouchEvent(event);
 				return false;
@@ -217,11 +198,9 @@ public class GameStatsListFragment extends Fragment
 		});
 	}
 
-	private class ScrollGestureListener extends GestureDetector.SimpleOnGestureListener
-	{
+	private class ScrollGestureListener extends GestureDetector.SimpleOnGestureListener {
 		@Override
-		public boolean onDown(MotionEvent e)
-		{
+		public boolean onDown(MotionEvent e) {
 			View c = gridView.getChildAt(0);
 			scrollY = -c.getTop() + gridView.getFirstVisiblePosition() * c.getHeight();
 			Log.d("DOWN", scrollY + "");
@@ -229,15 +208,11 @@ public class GameStatsListFragment extends Fragment
 		}
 
 		@Override
-		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY)
-		{
+		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
 			Log.d("FLING", scrollY + "");
-			if (Math.abs(velocityX) < Math.abs(velocityY))
-			{
-				if (Math.abs(e1.getY() - e2.getY()) >= 200)
-				{
-					if (velocityY > 2000 && scrollY == 0)
-					{
+			if (Math.abs(velocityX) < Math.abs(velocityY)) {
+				if (Math.abs(e1.getY() - e2.getY()) >= 200) {
+					if (velocityY > 2000 && scrollY == 0) {
 						getActivity().onBackPressed();
 						return true;
 					}

@@ -22,13 +22,11 @@ import java.util.List;
 /**
  * Created by Casey on 3/28/2016.
  */
-public class CalendarDayView extends FrameLayout
-{
+public class CalendarDayView extends FrameLayout {
 	private CalendarDayView dayView = this;
 	private List<Long> boardGamePlayIds, rpgPlayIds, videoGamePlayIds;
 
-	public CalendarDayView(Context context)
-	{
+	public CalendarDayView(Context context) {
 		super(context);
 		LayoutInflater inflater = LayoutInflater.from(context);
 		inflater.inflate(R.layout.calendar_day_view, this);
@@ -37,59 +35,53 @@ public class CalendarDayView extends FrameLayout
 		rpgPlayIds = new ArrayList<>();
 		videoGamePlayIds = new ArrayList<>();
 
-		((TextView)findViewById(R.id.textview_piechart)).setTextColor(ColorUtilities.mixWithBaseColor(Color.BLACK, 2, Preferences.getForegroundColor(getContext()), 1));
+		((TextView) findViewById(R.id.textview_piechart)).setTextColor(ColorUtilities.mixWithBaseColor(Color.BLACK,
+																									   2,
+																									   Preferences.getForegroundColor(
+																											   getContext()),
+																									   1));
 //		((TextView)findViewById(R.id.textview_piechart)).setShadowLayer(24, 1, 1, ColorUtilities.mixWithBaseColor(Color.WHITE, 2, Preferences.getHintTextColor(getContext()), 1));
 //		((TextView)findViewById(R.id.textview_piechart)).setBackground(new ShapeDrawable(new S));
 	}
 
-	public void setDay(int day)
-	{
-		((TextView)findViewById(R.id.textview_calendar_day)).setText(day + "");
+	public void setDay(int day) {
+		((TextView) findViewById(R.id.textview_calendar_day)).setText(day + "");
 	}
 
-	public void setDifferentMonth(boolean diff)
-	{
-		if (diff) ((TextView)findViewById(R.id.textview_calendar_day)).setTextColor(Color.LTGRAY);
-		else ((TextView)findViewById(R.id.textview_calendar_day)).setTextColor(Color.BLACK);
+	public void setDifferentMonth(boolean diff) {
+		if (diff) ((TextView) findViewById(R.id.textview_calendar_day)).setTextColor(Color.LTGRAY);
+		else ((TextView) findViewById(R.id.textview_calendar_day)).setTextColor(Color.BLACK);
 	}
 
-	public List<Long> getBoardGamePlayIds()
-	{
+	public List<Long> getBoardGamePlayIds() {
 		return boardGamePlayIds;
 	}
 
-	public List<Long> getRPGPlayIds()
-	{
+	public List<Long> getRPGPlayIds() {
 		return rpgPlayIds;
 	}
 
-	public List<Long> getVideoGamePlayIds()
-	{
+	public List<Long> getVideoGamePlayIds() {
 		return videoGamePlayIds;
 	}
 
-	public void addBoardGamePlayId(long id)
-	{
+	public void addBoardGamePlayId(long id) {
 		boardGamePlayIds.add(id);
 //		adjustCalendarButton();
 	}
 
-	public void addRPGPlayId(long id)
-	{
+	public void addRPGPlayId(long id) {
 		rpgPlayIds.add(id);
 //		adjustCalendarButton();
 	}
 
-	public void addVideoGamePlayId(long id)
-	{
+	public void addVideoGamePlayId(long id) {
 		videoGamePlayIds.add(id);
 //		adjustCalendarButton();
 	}
 
-	public void adjustCalendarButton()
-	{
-		if (!boardGamePlayIds.isEmpty() || !rpgPlayIds.isEmpty() || !videoGamePlayIds.isEmpty())
-		{
+	public void adjustCalendarButton() {
+		if (!boardGamePlayIds.isEmpty() || !rpgPlayIds.isEmpty() || !videoGamePlayIds.isEmpty()) {
 			final View playCountView = findViewById(R.id.layout_piechart);
 			final int boardGamePlays = boardGamePlayIds.size();
 			final int rpgPlays = rpgPlayIds.size();
@@ -106,62 +98,60 @@ public class CalendarDayView extends FrameLayout
 
 			final GamesDbHelper dbHelper = new GamesDbHelper(getContext());
 
-			new AsyncTask<String, Void, Void>()
-			{
+			new AsyncTask<String, Void, Void>() {
 				int boardGameTimePlayed, rpgTimePlayed, videoGameTimePlayed;
 
 				@Override
-				protected Void doInBackground(String... params)
-				{
+				protected Void doInBackground(String... params) {
 					// TODO Do a quicker job of getting time played on a given day.
 
-					if (boardGamePlays > 0)
-					{
+					if (boardGamePlays > 0) {
 						for (int i = 0; i < boardGamePlayIds.size(); i++)
-							boardGameTimePlayed += BoardGameStatsDbUtility.timePlayed(dbHelper, boardGamePlayIds.get(i));
+							boardGameTimePlayed +=
+									BoardGameStatsDbUtility.timePlayed(dbHelper, boardGamePlayIds.get(i));
 					}
 
-					if (rpgPlays > 0)
-					{
+					if (rpgPlays > 0) {
 						for (int i = 0; i < rpgPlayIds.size(); i++)
 							rpgTimePlayed += RPGStatsDbUtility.timePlayed(dbHelper, rpgPlayIds.get(i));
 					}
 
-					if (videoGamePlays > 0)
-					{
+					if (videoGamePlays > 0) {
 						for (int i = 0; i < videoGamePlayIds.size(); i++)
-							videoGameTimePlayed += VideoGameStatsDbUtility.timePlayed(dbHelper, videoGamePlayIds.get(i));
+							videoGameTimePlayed +=
+									VideoGameStatsDbUtility.timePlayed(dbHelper, videoGamePlayIds.get(i));
 					}
 
 					return null;
 				}
 
 				@Override
-				protected void onPostExecute(Void aVoid)
-				{
+				protected void onPostExecute(Void aVoid) {
 					if (boardGameTimePlayed != 0)
 						pieChart.addItem("Board",
-						                 1f,
-						                 ColorUtilities.mixWithBaseColor(ColorUtilities.pieSliceColor(0, boardGameTimePlayed),
-						                                                 4,
-						                                                 backgroundColor,
-						                                                 1));
+										 1f,
+										 ColorUtilities.mixWithBaseColor(ColorUtilities.pieSliceColor(0,
+																									  boardGameTimePlayed),
+																		 4,
+																		 backgroundColor,
+																		 1));
 
 					if (rpgTimePlayed != 0)
 						pieChart.addItem("Board",
-						                 1f,
-						                 ColorUtilities.mixWithBaseColor(ColorUtilities.pieSliceColor(1, rpgTimePlayed),
-						                                                 4,
-						                                                 backgroundColor,
-						                                                 1));
+										 1f,
+										 ColorUtilities.mixWithBaseColor(ColorUtilities.pieSliceColor(1, rpgTimePlayed),
+																		 4,
+																		 backgroundColor,
+																		 1));
 
 					if (videoGameTimePlayed != 0)
 						pieChart.addItem("Board",
-						                 1f,
-						                 ColorUtilities.mixWithBaseColor(ColorUtilities.pieSliceColor(2, videoGameTimePlayed),
-						                                                 4,
-						                                                 backgroundColor,
-						                                                 1));
+										 1f,
+										 ColorUtilities.mixWithBaseColor(ColorUtilities.pieSliceColor(2,
+																									  videoGameTimePlayed),
+																		 4,
+																		 backgroundColor,
+																		 1));
 
 					playCountView.setVisibility(VISIBLE);
 
@@ -171,8 +161,7 @@ public class CalendarDayView extends FrameLayout
 		}
 	}
 
-	public void clearIds()
-	{
+	public void clearIds() {
 		boardGamePlayIds.clear();
 		rpgPlayIds.clear();
 		videoGamePlayIds.clear();
@@ -182,30 +171,23 @@ public class CalendarDayView extends FrameLayout
 	}
 
 	@Override
-	public void setOnClickListener(OnClickListener l)
-	{
+	public void setOnClickListener(OnClickListener l) {
 		super.setOnClickListener(l);
-		findViewById(R.id.layout_piechart).setOnClickListener(new OnClickListener()
-		{
+		findViewById(R.id.layout_piechart).setOnClickListener(new OnClickListener() {
 			@Override
-			public void onClick(View v)
-			{
+			public void onClick(View v) {
 				dayView.callOnClick();
 			}
 		});
-		findViewById(R.id.piechart_calendar_day).setOnClickListener(new OnClickListener()
-		{
+		findViewById(R.id.piechart_calendar_day).setOnClickListener(new OnClickListener() {
 			@Override
-			public void onClick(View v)
-			{
+			public void onClick(View v) {
 				dayView.callOnClick();
 			}
 		});
-		findViewById(R.id.textview_piechart).setOnClickListener(new OnClickListener()
-		{
+		findViewById(R.id.textview_piechart).setOnClickListener(new OnClickListener() {
 			@Override
-			public void onClick(View v)
-			{
+			public void onClick(View v) {
 				dayView.callOnClick();
 			}
 		});
@@ -219,11 +201,9 @@ public class CalendarDayView extends FrameLayout
 			}
 		});
 */
-		findViewById(R.id.textview_calendar_day).setOnClickListener(new OnClickListener()
-		{
+		findViewById(R.id.textview_calendar_day).setOnClickListener(new OnClickListener() {
 			@Override
-			public void onClick(View v)
-			{
+			public void onClick(View v) {
 				dayView.callOnClick();
 			}
 		});

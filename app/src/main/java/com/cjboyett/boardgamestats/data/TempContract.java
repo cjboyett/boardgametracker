@@ -5,10 +5,8 @@ import android.provider.BaseColumns;
 /**
  * Created by Casey on 4/20/2016.
  */
-public class TempContract
-{
-	public static final class GamePlayEntry implements BaseColumns
-	{
+public class TempContract {
+	public static final class GamePlayEntry implements BaseColumns {
 		public static final String TABLE_NAME = "tempplays";
 
 		public static final String GAME = "game";
@@ -25,8 +23,7 @@ public class TempContract
 		public static final String TIMER_DIFF = "timerdiff";
 	}
 
-	public static final class PlayerEntry implements BaseColumns
-	{
+	public static final class PlayerEntry implements BaseColumns {
 		public static final String TABLE_NAME = "tempplayers";
 
 		public static final String NAME = "name";

@@ -10,78 +10,78 @@
                                     android:layout_margin="5dp"
                                     android:animateLayoutChanges="true">
 
-	<RelativeLayout
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:gravity="center"
-		android:padding="5dp"
-		android:animateLayoutChanges="true"
-		android:id="@+id/relativelayout_add_game">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="5dp"
+        android:animateLayoutChanges="true"
+        android:id="@+id/relativelayout_add_game">
 
-		<TextView
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:textAppearance="?android:attr/textAppearanceSmall"
-			android:text="Game"
-			android:id="@+id/textview_game"
-			android:layout_alignParentTop="true"
-			android:visibility="invisible"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Game"
+            android:id="@+id/textview_game"
+            android:layout_alignParentTop="true"
+            android:visibility="invisible"/>
 
-		<AutoCompleteTextView
-			android:layout_width="190dp"
-			android:layout_height="wrap_content"
-			android:inputType="textCapWords|textPersonName"
-			android:ems="10"
-			android:id="@+id/edittext_add_game"
-			android:imeOptions="actionNext"
-			android:layout_alignParentLeft="true"
-			android:layout_alignLeft="@+id/textview_game"
-			android:layout_below="@+id/textview_game"
-			android:hint="Game"
-			android:textSize="16dp"/>
+        <AutoCompleteTextView
+            android:layout_width="190dp"
+            android:layout_height="wrap_content"
+            android:inputType="textCapWords|textPersonName"
+            android:ems="10"
+            android:id="@+id/edittext_add_game"
+            android:imeOptions="actionNext"
+            android:layout_alignParentLeft="true"
+            android:layout_alignLeft="@+id/textview_game"
+            android:layout_below="@+id/textview_game"
+            android:hint="Game"
+            android:textSize="16dp"/>
 
-		<TextView
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:textAppearance="?android:attr/textAppearanceSmall"
-			android:text="Weight"
-			android:id="@+id/textview_weight"
-			android:layout_alignLeft="@+id/edittext_weight"
-			android:visibility="invisible"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Weight"
+            android:id="@+id/textview_weight"
+            android:layout_alignLeft="@+id/edittext_weight"
+            android:visibility="invisible"/>
 
-		<EditText
-			android:layout_width="80dp"
-			android:layout_height="wrap_content"
-			android:inputType="numberSigned|numberDecimal"
-			android:ems="10"
-			android:id="@+id/edittext_weight"
-			android:layout_toRightOf="@+id/edittext_add_game"
-			android:layout_below="@+id/textview_weight"
-			android:hint="Weight"
-			android:textSize="16dp"/>
+        <EditText
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:inputType="numberSigned|numberDecimal"
+            android:ems="10"
+            android:id="@+id/edittext_weight"
+            android:layout_toRightOf="@+id/edittext_add_game"
+            android:layout_below="@+id/textview_weight"
+            android:hint="Weight"
+            android:textSize="16dp"/>
 
-<!--
-		<android.support.v7.widget.AppCompatCheckBox
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="Win"
-			android:id="@+id/checkbox_other_win"
-			android:checked="false"
-			android:layout_toRightOf="@+id/edittext_other_score"
-			android:layout_alignTop="@+id/edittext_other_score"
-			android:layout_alignBottom="@+id/edittext_other_score"/>
--->
+        <!--
+                <android.support.v7.widget.AppCompatCheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Win"
+                    android:id="@+id/checkbox_other_win"
+                    android:checked="false"
+                    android:layout_toRightOf="@+id/edittext_other_score"
+                    android:layout_alignTop="@+id/edittext_other_score"
+                    android:layout_alignBottom="@+id/edittext_other_score"/>
+        -->
 
-		<com.cjboyett.boardgamestats.view.DatedTextView
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="x"
-			android:id="@+id/button_remove_game"
-			android:padding="5dp"
-			android:layout_alignRight="@+id/edittext_weight"
-			android:layout_alignParentTop="true"
-			android:textStyle="bold"/>
+        <com.cjboyett.boardgamestats.view.DatedTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="x"
+            android:id="@+id/button_remove_game"
+            android:padding="5dp"
+            android:layout_alignRight="@+id/edittext_weight"
+            android:layout_alignParentTop="true"
+            android:textStyle="bold"/>
 
-	</RelativeLayout>
+    </RelativeLayout>
 
 </android.support.v7.widget.CardView>

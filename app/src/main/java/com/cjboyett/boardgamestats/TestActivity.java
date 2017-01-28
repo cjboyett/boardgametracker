@@ -68,8 +68,7 @@ import java.util.TreeMap;
 import me.nereo.multi_image_selector.MultiImageSelector;
 import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 
-public class TestActivity extends AppCompatActivity
-{
+public class TestActivity extends AppCompatActivity {
 	private View overlay;
 	private ImageView[] imageViews;
 	private List<Bitmap> images;
@@ -89,8 +88,7 @@ public class TestActivity extends AppCompatActivity
 	private List<String> paths;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState)
-	{
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		View view = getLayoutInflater().inflate(R.layout.activity_test, null);
 		setContentView(view);
@@ -99,12 +97,12 @@ public class TestActivity extends AppCompatActivity
 
 		overlay = view.findViewById(R.id.overlay);
 		imageViews = new ImageView[6];
-		imageViews[0] = (ImageView)view.findViewById(R.id.image1);
-		imageViews[1] = (ImageView)view.findViewById(R.id.image2);
-		imageViews[2] = (ImageView)view.findViewById(R.id.image3);
-		imageViews[3] = (ImageView)view.findViewById(R.id.image4);
-		imageViews[4] = (ImageView)view.findViewById(R.id.image5);
-		imageViews[5] = (ImageView)view.findViewById(R.id.image6);
+		imageViews[0] = (ImageView) view.findViewById(R.id.image1);
+		imageViews[1] = (ImageView) view.findViewById(R.id.image2);
+		imageViews[2] = (ImageView) view.findViewById(R.id.image3);
+		imageViews[3] = (ImageView) view.findViewById(R.id.image4);
+		imageViews[4] = (ImageView) view.findViewById(R.id.image5);
+		imageViews[5] = (ImageView) view.findViewById(R.id.image6);
 
 		images = new ArrayList<>();
 
@@ -112,13 +110,11 @@ public class TestActivity extends AppCompatActivity
 
 		IMAGE_TRANSLATION_X = ViewUtilities.dpToPx(this, 280);
 
-		((Button)view.findViewById(R.id.button_show_overlay)).setText("Analyze Games");
+		((Button) view.findViewById(R.id.button_show_overlay)).setText("Analyze Games");
 		view.findViewById(R.id.button_show_overlay).setVisibility(View.VISIBLE);
-		view.findViewById(R.id.button_show_overlay).setOnClickListener(new View.OnClickListener()
-		{
+		view.findViewById(R.id.button_show_overlay).setOnClickListener(new View.OnClickListener() {
 			@Override
-			public void onClick(View v)
-			{
+			public void onClick(View v) {
 				overlay.setVisibility(View.VISIBLE);
 /*
 				new AsyncTask<String, Void, Void>()
@@ -162,87 +158,70 @@ public class TestActivity extends AppCompatActivity
 //				analyzeGames();
 			}
 		});
-		view.findViewById(R.id.button_hide_overlay).setOnClickListener(new View.OnClickListener()
-		{
+		view.findViewById(R.id.button_hide_overlay).setOnClickListener(new View.OnClickListener() {
 			@Override
-			public void onClick(View v)
-			{
+			public void onClick(View v) {
 				overlay.setVisibility(View.GONE);
 			}
 		});
 
-		view.findViewById(R.id.button_pick_images).setOnClickListener(new View.OnClickListener()
-		{
+		view.findViewById(R.id.button_pick_images).setOnClickListener(new View.OnClickListener() {
 			@Override
-			public void onClick(View v)
-			{
+			public void onClick(View v) {
 				selectImages();
 			}
 		});
 
-		view.findViewById(R.id.button_next).setOnClickListener(new View.OnClickListener()
-		{
+		view.findViewById(R.id.button_next).setOnClickListener(new View.OnClickListener() {
 			@Override
-			public void onClick(View v)
-			{
+			public void onClick(View v) {
 				shareImages();
 				//nextImage();
 			}
 		});
 
-		view.findViewById(R.id.button_email_sign_up).setOnClickListener(new View.OnClickListener()
-		{
+		view.findViewById(R.id.button_email_sign_up).setOnClickListener(new View.OnClickListener() {
 			@Override
-			public void onClick(View v)
-			{
+			public void onClick(View v) {
 				firebaseUtility.showEmailSignup();
 			}
 		});
 
-		view.findViewById(R.id.button_email_sign_in).setOnClickListener(new View.OnClickListener()
-		{
+		view.findViewById(R.id.button_email_sign_in).setOnClickListener(new View.OnClickListener() {
 			@Override
-			public void onClick(View v)
-			{
+			public void onClick(View v) {
 //				firebaseUtility.showEmailSignIn();
 			}
 		});
 
-		view.findViewById(R.id.button_backup_database).setOnClickListener(new View.OnClickListener()
-		{
+		view.findViewById(R.id.button_backup_database).setOnClickListener(new View.OnClickListener() {
 			@Override
-			public void onClick(View v)
-			{
+			public void onClick(View v) {
 				firebaseUtility.backupDatabase();
 			}
 		});
 
 		callbackManager = CallbackManager.Factory.create();
-		LoginButton loginButton = (LoginButton)view.findViewById(R.id.login_button);
+		LoginButton loginButton = (LoginButton) view.findViewById(R.id.login_button);
 		loginButton.setReadPermissions(Arrays.asList("public_profile", "user_friends"));
-		loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>()
-		{
+		loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
 			@Override
-			public void onSuccess(LoginResult loginResult)
-			{
+			public void onSuccess(LoginResult loginResult) {
 				firebaseUtility.facebookSignIn(loginResult);
 			}
 
 			@Override
-			public void onCancel()
-			{
+			public void onCancel() {
 				Log.d("CANCEL", "Canceled");
 			}
 
 			@Override
-			public void onError(FacebookException error)
-			{
+			public void onError(FacebookException error) {
 				Log.d("ERROR", error.toString());
 			}
 		});
 
-		if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1)
-		{
+		if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
 			if (true)//!Preferences.hasAskedPermission(this))
 			{
 				String[] perms = {"android.permission.WRITE_EXTERNAL_STORAGE", "android.permission.CAMERA"};
@@ -252,288 +231,244 @@ public class TestActivity extends AppCompatActivity
 		}
 	}
 
-	private void selectImages()
-	{
+	private void selectImages() {
 		MultiImageSelector.create()
-		                  .count(6)
-		                  .start(this, REQUEST_IMAGE);
+						  .count(6)
+						  .start(this, REQUEST_IMAGE);
 	}
 
 	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
-	private void nextImage()
-	{
+	private void nextImage() {
 		imageViews[0].animate()
-		             .translationX(-IMAGE_TRANSLATION_X)
-		             .translationZ(-1f)
-		             .rotationY(-IMAGE_ROTATION)
-		             .scaleX(11f/16f)
-		             .scaleY(13f/16f)
-		             .setDuration(IMAGE_TRANSITION_DURATION)
-		             .setInterpolator(new CustomInterpolator(IMAGE_ROTATION, false))
-		             .setListener(new Animator.AnimatorListener()
-		                        {
-			                        @Override
-			                        public void onAnimationStart(Animator animation)
-			                        {
-			                        }
+					 .translationX(-IMAGE_TRANSLATION_X)
+					 .translationZ(-1f)
+					 .rotationY(-IMAGE_ROTATION)
+					 .scaleX(11f / 16f)
+					 .scaleY(13f / 16f)
+					 .setDuration(IMAGE_TRANSITION_DURATION)
+					 .setInterpolator(new CustomInterpolator(IMAGE_ROTATION, false))
+					 .setListener(new Animator.AnimatorListener() {
+						 @Override
+						 public void onAnimationStart(Animator animation) {
+						 }
 
-			                        @Override
-			                        public void onAnimationEnd(Animator animation)
-			                        {
-				                        finished[0] = true;
-				                        shiftImages();
-			                        }
+						 @Override
+						 public void onAnimationEnd(Animator animation) {
+							 finished[0] = true;
+							 shiftImages();
+						 }
 
-			                        @Override
-			                        public void onAnimationCancel(Animator animation)
-			                        {
-			                        }
+						 @Override
+						 public void onAnimationCancel(Animator animation) {
+						 }
 
-			                        @Override
-			                        public void onAnimationRepeat(Animator animation)
-			                        {
-			                        }
-		                        })
-		             .start();
+						 @Override
+						 public void onAnimationRepeat(Animator animation) {
+						 }
+					 })
+					 .start();
 
 		imageViews[1].animate()
-		             .translationX(-1.1547f * IMAGE_TRANSLATION_X)
-		             .translationZ(-2)
-		             .rotationY(-90)
-		             .scaleX(5f/8f)
-		             .scaleY(5f/8f)
-		             .setDuration(IMAGE_TRANSITION_DURATION / 2)
-		             .setInterpolator(new CustomInterpolator(IMAGE_ROTATION, false))
-		             .setListener(new Animator.AnimatorListener()
-		         {
-			         @Override
-			         public void onAnimationStart(Animator animation)
-			         {
-			         }
+					 .translationX(-1.1547f * IMAGE_TRANSLATION_X)
+					 .translationZ(-2)
+					 .rotationY(-90)
+					 .scaleX(5f / 8f)
+					 .scaleY(5f / 8f)
+					 .setDuration(IMAGE_TRANSITION_DURATION / 2)
+					 .setInterpolator(new CustomInterpolator(IMAGE_ROTATION, false))
+					 .setListener(new Animator.AnimatorListener() {
+						 @Override
+						 public void onAnimationStart(Animator animation) {
+						 }
 
-			         @Override
-			         public void onAnimationEnd(Animator animation)
-			         {
-				         imageViews[1].animate()
-				                      .translationX(-IMAGE_TRANSLATION_X)
-				                      .rotationY(-120)
-				                      .scaleX(7f/16f)
-				                      .scaleY(7f/16f)
-				                      .setDuration(IMAGE_TRANSITION_DURATION / 2)
-				                      .setInterpolator(new CustomInterpolator(IMAGE_ROTATION, false))
-				                      .setListener(new Animator.AnimatorListener()
-				                                 {
-					                                 @Override
-					                                 public void onAnimationStart(Animator animation)
-					                                 {
-					                                 }
+						 @Override
+						 public void onAnimationEnd(Animator animation) {
+							 imageViews[1].animate()
+										  .translationX(-IMAGE_TRANSLATION_X)
+										  .rotationY(-120)
+										  .scaleX(7f / 16f)
+										  .scaleY(7f / 16f)
+										  .setDuration(IMAGE_TRANSITION_DURATION / 2)
+										  .setInterpolator(new CustomInterpolator(IMAGE_ROTATION, false))
+										  .setListener(new Animator.AnimatorListener() {
+											  @Override
+											  public void onAnimationStart(Animator animation) {
+											  }
 
-					                                 @Override
-					                                 public void onAnimationEnd(Animator animation)
-					                                 {
-						                                 finished[1] = true;
-						                                 shiftImages();
-					                                 }
+											  @Override
+											  public void onAnimationEnd(Animator animation) {
+												  finished[1] = true;
+												  shiftImages();
+											  }
 
-					                                 @Override
-					                                 public void onAnimationCancel(Animator animation)
-					                                 {
-					                                 }
+											  @Override
+											  public void onAnimationCancel(Animator animation) {
+											  }
 
-					                                 @Override
-					                                 public void onAnimationRepeat(Animator animation)
-					                                 {
-					                                 }
-				                                 })
-				                      .start();
-			         }
+											  @Override
+											  public void onAnimationRepeat(Animator animation) {
+											  }
+										  })
+										  .start();
+						 }
 
-			         @Override
-			         public void onAnimationCancel(Animator animation)
-			         {
-			         }
+						 @Override
+						 public void onAnimationCancel(Animator animation) {
+						 }
 
-			         @Override
-			         public void onAnimationRepeat(Animator animation)
-			         {
-			         }
-		         })
-		             .start();
+						 @Override
+						 public void onAnimationRepeat(Animator animation) {
+						 }
+					 })
+					 .start();
 
 		imageViews[2].animate()
-		             .translationX(0)
-		             .rotationY(-180)
-		             .scaleX(1f/4f)
-		             .scaleY(1f/4f)
-		             .setDuration(IMAGE_TRANSITION_DURATION)
-		             .setInterpolator(new CustomInterpolator(IMAGE_ROTATION, false))
-		             .setListener(new Animator.AnimatorListener()
-		                        {
-			                        @Override
-			                        public void onAnimationStart(Animator animation)
-			                        {
-			                        }
+					 .translationX(0)
+					 .rotationY(-180)
+					 .scaleX(1f / 4f)
+					 .scaleY(1f / 4f)
+					 .setDuration(IMAGE_TRANSITION_DURATION)
+					 .setInterpolator(new CustomInterpolator(IMAGE_ROTATION, false))
+					 .setListener(new Animator.AnimatorListener() {
+						 @Override
+						 public void onAnimationStart(Animator animation) {
+						 }
 
-			                        @Override
-			                        public void onAnimationEnd(Animator animation)
-			                        {
-				                        finished[2] = true;
-				                        shiftImages();
-			                        }
+						 @Override
+						 public void onAnimationEnd(Animator animation) {
+							 finished[2] = true;
+							 shiftImages();
+						 }
 
-			                        @Override
-			                        public void onAnimationCancel(Animator animation)
-			                        {
-			                        }
+						 @Override
+						 public void onAnimationCancel(Animator animation) {
+						 }
 
-			                        @Override
-			                        public void onAnimationRepeat(Animator animation)
-			                        {
-			                        }
-		                        })
-		             .start();
+						 @Override
+						 public void onAnimationRepeat(Animator animation) {
+						 }
+					 })
+					 .start();
 
 		imageViews[3].animate()
-		             .translationX(IMAGE_TRANSLATION_X)
-		             .rotationY(-240)
-		             .scaleX(7f/16f)
-		             .scaleY(7f/16f)
-		             .setDuration(IMAGE_TRANSITION_DURATION)
-		             .setInterpolator(new CustomInterpolator(IMAGE_ROTATION, false))
-		             .setListener(new Animator.AnimatorListener()
-		                        {
-			                        @Override
-			                        public void onAnimationStart(Animator animation)
-			                        {
-			                        }
+					 .translationX(IMAGE_TRANSLATION_X)
+					 .rotationY(-240)
+					 .scaleX(7f / 16f)
+					 .scaleY(7f / 16f)
+					 .setDuration(IMAGE_TRANSITION_DURATION)
+					 .setInterpolator(new CustomInterpolator(IMAGE_ROTATION, false))
+					 .setListener(new Animator.AnimatorListener() {
+						 @Override
+						 public void onAnimationStart(Animator animation) {
+						 }
 
-			                        @Override
-			                        public void onAnimationEnd(Animator animation)
-			                        {
-				                        finished[3] = true;
-				                        shiftImages();
-			                        }
+						 @Override
+						 public void onAnimationEnd(Animator animation) {
+							 finished[3] = true;
+							 shiftImages();
+						 }
 
-			                        @Override
-			                        public void onAnimationCancel(Animator animation)
-			                        {
-			                        }
+						 @Override
+						 public void onAnimationCancel(Animator animation) {
+						 }
 
-			                        @Override
-			                        public void onAnimationRepeat(Animator animation)
-			                        {
-			                        }
-		                        })
-		             .start();
+						 @Override
+						 public void onAnimationRepeat(Animator animation) {
+						 }
+					 })
+					 .start();
 
 		imageViews[4].animate()
-		             .translationX(1.1547f * IMAGE_TRANSLATION_X)
-		             .rotationY(-270)
-		             .scaleX(5f/8f)
-		             .scaleY(5f/8f)
-		             .setDuration(IMAGE_TRANSITION_DURATION / 2)
-		             .setInterpolator(new CustomInterpolator(IMAGE_ROTATION, false))
-		             .setListener(new Animator.AnimatorListener()
-		                        {
-			                        @Override
-			                        public void onAnimationStart(Animator animation)
-			                        {
-			                        }
+					 .translationX(1.1547f * IMAGE_TRANSLATION_X)
+					 .rotationY(-270)
+					 .scaleX(5f / 8f)
+					 .scaleY(5f / 8f)
+					 .setDuration(IMAGE_TRANSITION_DURATION / 2)
+					 .setInterpolator(new CustomInterpolator(IMAGE_ROTATION, false))
+					 .setListener(new Animator.AnimatorListener() {
+						 @Override
+						 public void onAnimationStart(Animator animation) {
+						 }
 
-			                        @Override
-			                        public void onAnimationEnd(Animator animation)
-			                        {
-				                        currentImage++;
-				                        currentImage %= images.size();
-				                        imageViews[4].setImageBitmap(images.get(currentImage));
-				                        imageViews[4].animate()
-				                                     .translationX(IMAGE_TRANSLATION_X)
-				                                     .rotationY(-300)
-				                                     .scaleX(11f/16f)
-				                                     .scaleY(13f/16f)
-				                                     .setDuration(IMAGE_TRANSITION_DURATION / 2)
-				                                     .setInterpolator(new CustomInterpolator(IMAGE_ROTATION, false))
-				                                     .setListener(new Animator.AnimatorListener()
-				                                                {
-					                                                @Override
-					                                                public void onAnimationStart(Animator animation)
-					                                                {
+						 @Override
+						 public void onAnimationEnd(Animator animation) {
+							 currentImage++;
+							 currentImage %= images.size();
+							 imageViews[4].setImageBitmap(images.get(currentImage));
+							 imageViews[4].animate()
+										  .translationX(IMAGE_TRANSLATION_X)
+										  .rotationY(-300)
+										  .scaleX(11f / 16f)
+										  .scaleY(13f / 16f)
+										  .setDuration(IMAGE_TRANSITION_DURATION / 2)
+										  .setInterpolator(new CustomInterpolator(IMAGE_ROTATION, false))
+										  .setListener(new Animator.AnimatorListener() {
+											  @Override
+											  public void onAnimationStart(Animator animation) {
 
-					                                                }
+											  }
 
-					                                                @Override
-					                                                public void onAnimationEnd(Animator animation)
-					                                                {
-						                                                finished[4] = true;
-						                                                shiftImages();
-					                                                }
+											  @Override
+											  public void onAnimationEnd(Animator animation) {
+												  finished[4] = true;
+												  shiftImages();
+											  }
 
-									                                 @Override
-									                                 public void onAnimationCancel(Animator animation)
-									                                 {
-									                                 }
+											  @Override
+											  public void onAnimationCancel(Animator animation) {
+											  }
 
-									                                 @Override
-									                                 public void onAnimationRepeat(Animator animation)
-									                                 {
-									                                 }
-				                                 })
-				                                     .start();
-			         }
+											  @Override
+											  public void onAnimationRepeat(Animator animation) {
+											  }
+										  })
+										  .start();
+						 }
 
-			         @Override
-			         public void onAnimationCancel(Animator animation)
-			         {
-			         }
+						 @Override
+						 public void onAnimationCancel(Animator animation) {
+						 }
 
-			         @Override
-			         public void onAnimationRepeat(Animator animation)
-			         {
-			         }
-		         })
-		             .start();
+						 @Override
+						 public void onAnimationRepeat(Animator animation) {
+						 }
+					 })
+					 .start();
 
 		imageViews[5].animate()
-		             .translationX(0)
-		             .rotationY(-360)
-		             .scaleX(1)
-		             .scaleY(1)
-		             .setDuration(IMAGE_TRANSITION_DURATION)
-		             .setInterpolator(new CustomInterpolator(IMAGE_ROTATION, false))
-		             .setListener(new Animator.AnimatorListener()
-		         {
-			         @Override
-			         public void onAnimationStart(Animator animation)
-			         {
-			         }
+					 .translationX(0)
+					 .rotationY(-360)
+					 .scaleX(1)
+					 .scaleY(1)
+					 .setDuration(IMAGE_TRANSITION_DURATION)
+					 .setInterpolator(new CustomInterpolator(IMAGE_ROTATION, false))
+					 .setListener(new Animator.AnimatorListener() {
+						 @Override
+						 public void onAnimationStart(Animator animation) {
+						 }
 
-			         @Override
-			         public void onAnimationEnd(Animator animation)
-			         {
-				         finished[5] = true;
-				         shiftImages();
-			         }
+						 @Override
+						 public void onAnimationEnd(Animator animation) {
+							 finished[5] = true;
+							 shiftImages();
+						 }
 
-			         @Override
-			         public void onAnimationCancel(Animator animation)
-			         {
-			         }
+						 @Override
+						 public void onAnimationCancel(Animator animation) {
+						 }
 
-			         @Override
-			         public void onAnimationRepeat(Animator animation)
-			         {
-			         }
-		         })
-		             .start();
+						 @Override
+						 public void onAnimationRepeat(Animator animation) {
+						 }
+					 })
+					 .start();
 	}
 
-	private void shiftImages()
-	{
-		if (finished[0] && finished[1] && finished[2] && finished[3] && finished[4] && finished[5])
-		{
+	private void shiftImages() {
+		if (finished[0] && finished[1] && finished[2] && finished[3] && finished[4] && finished[5]) {
 			imageViews[5].setRotationY(0);
 			ImageView temp = imageViews[5];
-			for (int i=5; i>0; i--) imageViews[i] = imageViews[i - 1];
+			for (int i = 5; i > 0; i--) imageViews[i] = imageViews[i - 1];
 			imageViews[0] = temp;
 			imageViews[5].bringToFront();
 			overlay.invalidate();
@@ -543,18 +478,16 @@ public class TestActivity extends AppCompatActivity
 			if (offset == -1) offset = 5;
 			Log.d("OFFSET", offset + "");
 */
-			for (int i=0; i<6; i++) finished[i] = false;
+			for (int i = 0; i < 6; i++) finished[i] = false;
 		}
 	}
 
-	private void shareImages()
-	{
+	private void shareImages() {
 		long ONE_MEGABYTE = 1024 * 1024;
 		FirebaseStorage storage = FirebaseStorage.getInstance();
 		StorageReference storageReference = storage.getReferenceFromUrl("gs://games-tracker-53f3f.appspot.com")
-		                                           .child(Preferences.getAuthId(this));
-		for (int i=0;i<images.size();i++)
-		{
+												   .child(Preferences.getAuthId(this));
+		for (int i = 0; i < images.size(); i++) {
 			final Bitmap bitmap = images.get(i);
 			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 			bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
@@ -599,38 +532,30 @@ public class TestActivity extends AppCompatActivity
 	}
 
 	@Override
-	protected void onResume()
-	{
+	protected void onResume() {
 		super.onResume();
 		firebaseUtility = new FirebaseUtility(this);
 	}
 
 	@Override
-	protected void onStop()
-	{
+	protected void onStop() {
 		super.onStop();
 		firebaseUtility.close();
 	}
 
 	@Override
-	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)
-	{
+	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
 		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
 		Log.d("PERMISSIONS", requestCode + " " + Arrays.toString(permissions) + " " + Arrays.toString(grantResults));
 
-		if (requestCode == REQUEST_PERMISSIONS)
-		{
-			if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
-			{
+		if (requestCode == REQUEST_PERMISSIONS) {
+			if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 				Preferences.setCanAccessStoragePreference(this, true);
-			}
-			else Preferences.setCanAccessStoragePreference(this, false);
-			if (grantResults[1] == PackageManager.PERMISSION_GRANTED)
-			{
+			} else Preferences.setCanAccessStoragePreference(this, false);
+			if (grantResults[1] == PackageManager.PERMISSION_GRANTED) {
 				Preferences.setCanUseCameraPreference(this, true);
-			}
-			else Preferences.setCanUseCameraPreference(this, false);
+			} else Preferences.setCanUseCameraPreference(this, false);
 
 //			canWrite = Preferences.canAccessStorage(this);
 //			canUseCamera = Preferences.canUseCamera(this);
@@ -638,38 +563,31 @@ public class TestActivity extends AppCompatActivity
 	}
 
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data)
-	{
-		if (resultCode == RESULT_OK && requestCode == REQUEST_IMAGE)
-		{
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (resultCode == RESULT_OK && requestCode == REQUEST_IMAGE) {
 			final List<String> paths = data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
 			this.paths = paths;
 			images.clear();
 
-			for (int i=0; i<paths.size(); i++)
-			{
+			for (int i = 0; i < paths.size(); i++) {
 				final int finalI = i;
-				new AsyncTask<String, Void, Bitmap>()
-				{
+				new AsyncTask<String, Void, Bitmap>() {
 					@Override
-					protected Bitmap doInBackground(String... params)
-					{
+					protected Bitmap doInBackground(String... params) {
 						BitmapFactory.Options options = new BitmapFactory.Options();
 						Bitmap bitmap = BitmapFactory.decodeFile(params[0], options);
 
 						ExifInterface exifInterface = null;
-						try
-						{
+						try {
 							exifInterface = new ExifInterface(params[0]);
-						}
-						catch (Exception e)
-						{
+						} catch (Exception e) {
 							e.printStackTrace();
 						}
 
-						if (exifInterface != null)
-						{
-							bitmap = rotateBitmap(bitmap, exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED));
+						if (exifInterface != null) {
+							bitmap = rotateBitmap(bitmap,
+												  exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+																				ExifInterface.ORIENTATION_UNDEFINED));
 						}
 
 						int maxDimension = 1200;
@@ -699,12 +617,10 @@ public class TestActivity extends AppCompatActivity
 					}
 
 					@Override
-					protected void onPostExecute(Bitmap bitmap)
-					{
+					protected void onPostExecute(Bitmap bitmap) {
 						images.add(bitmap);
-						int i=0;
-						while (finalI + i * paths.size() < 6)
-						{
+						int i = 0;
+						while (finalI + i * paths.size() < 6) {
 							imageViews[finalI + i * paths.size()].setImageBitmap(bitmap);
 /*							if (bitmap.getHeight() < 500 && bitmap.getWidth() < 300)
 							{
@@ -725,12 +641,10 @@ public class TestActivity extends AppCompatActivity
 		callbackManager.onActivityResult(requestCode, resultCode, data);
 	}
 
-	private Bitmap rotateBitmap(Bitmap bitmap, int orientation)
-	{
+	private Bitmap rotateBitmap(Bitmap bitmap, int orientation) {
 
 		Matrix matrix = new Matrix();
-		switch (orientation)
-		{
+		switch (orientation) {
 			case ExifInterface.ORIENTATION_NORMAL:
 				return bitmap;
 			case ExifInterface.ORIENTATION_FLIP_HORIZONTAL:
@@ -760,33 +674,29 @@ public class TestActivity extends AppCompatActivity
 			default:
 				return bitmap;
 		}
-		try
-		{
+		try {
 			Bitmap bmRotated = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
 			bitmap.recycle();
 			return bmRotated;
-		}
-		catch (OutOfMemoryError e)
-		{
+		} catch (OutOfMemoryError e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
 
-	private Bitmap scaleBitmap(Bitmap bitmap, int maxDimension)
-	{
+	private Bitmap scaleBitmap(Bitmap bitmap, int maxDimension) {
 		int width = bitmap.getWidth();
 		int height = bitmap.getHeight();
 		float n = Math.max(width, height) / maxDimension;
-		int newWidth = (int)(width / n);
-		int newHeight = (int)(height / n);
+		int newWidth = (int) (width / n);
+		int newHeight = (int) (height / n);
 		Bitmap scaledBitmap = Bitmap.createBitmap(newWidth, newHeight, bitmap.getConfig());
 		scaledBitmap.setHasAlpha(false);
 
 		int[] pixels = new int[newWidth * newHeight];
 
-		for (int i=0;i<newWidth;i++)
-			for (int j=0;j<newHeight;j++)
+		for (int i = 0; i < newWidth; i++)
+			for (int j = 0; j < newHeight; j++)
 				pixels[j * newWidth + newHeight] = scaleBlock(bitmap, i, j, n);
 //				scaledBitmap.setPixel(i, j, scaleBlock(bitmap, i, j, n));
 
@@ -795,30 +705,26 @@ public class TestActivity extends AppCompatActivity
 		return scaledBitmap;
 	}
 
-	private int scaleBlock(Bitmap bitmap, int i, int j, float n)
-	{
+	private int scaleBlock(Bitmap bitmap, int i, int j, float n) {
 		int red = 0, green = 0, blue = 0;
 
-		int xStart = (int)(Math.floor(n * i));
-		int yStart = (int)(Math.floor(n * j));
-		int xStep = (int)(Math.floor(n * (i+1)) - xStart);
-		int yStep = (int)(Math.floor(n * (j+1)) - yStart);
+		int xStart = (int) (Math.floor(n * i));
+		int yStart = (int) (Math.floor(n * j));
+		int xStep = (int) (Math.floor(n * (i + 1)) - xStart);
+		int yStep = (int) (Math.floor(n * (j + 1)) - yStart);
 
 		int total = 0;
 
-		for (int x = xStart; x < xStart + xStep; x++)
-		{
-			for (int y = yStart; y < yStart + yStep; y++)
-			{
-				try
-				{
+		for (int x = xStart; x < xStart + xStep; x++) {
+			for (int y = yStart; y < yStart + yStep; y++) {
+				try {
 					int color = bitmap.getPixel(x, y);
 					red += Color.red(color);
 					green += Color.green(color);
 					blue += Color.blue(color);
 					total++;
+				} catch (Exception e) {
 				}
-				catch (Exception e) {}
 			}
 		}
 
@@ -829,9 +735,9 @@ public class TestActivity extends AppCompatActivity
 		return Color.rgb(red, green, blue);
 	}
 
-	private void analyzeGamesWithDataAnalyzer(Map<BoardGame, Double> seeds)
-	{
-		List<RecBoardGame> recommendations = dataAnalyzer.recommendationsFromGames(dataAnalyzer.convertToRecBoardGame(seeds));
+	private void analyzeGamesWithDataAnalyzer(Map<BoardGame, Double> seeds) {
+		List<RecBoardGame> recommendations =
+				dataAnalyzer.recommendationsFromGames(dataAnalyzer.convertToRecBoardGame(seeds));
 
 		final GamesDbHelper dbHelper = new GamesDbHelper(activity);
 		final List<String> games = BoardGameDbUtility.getAllPlayedGames(dbHelper);
@@ -847,8 +753,7 @@ public class TestActivity extends AppCompatActivity
 		toShow[0] = recommendations.remove(r.nextInt(recSizeStep));
 		toShow[1] = recommendations.remove(r.nextInt(2 * recSizeStep) + recSizeStep);
 		toShow[2] = recommendations.remove(r.nextInt(3 * recSizeStep) + 3 * recSizeStep);
-		new AsyncTask<Integer, Void, Void>()
-		{
+		new AsyncTask<Integer, Void, Void>() {
 			List<BoardGameXmlParser.Item> gameItems = new ArrayList<>();
 			List<Integer> gameOrder = new ArrayList<>();
 			Map<Integer, String> gameNames = new TreeMap<>();
@@ -856,35 +761,28 @@ public class TestActivity extends AppCompatActivity
 			Map<Integer, Boolean> finished = new TreeMap<>();
 
 			@Override
-			protected Void doInBackground(Integer... ids)
-			{
-				for (Integer id : ids)
-				{
+			protected Void doInBackground(Integer... ids) {
+				for (Integer id : ids) {
 					gameOrder.add(id);
 					finished.put(id, false);
 				}
 				for (Integer id : ids)
-					gameItems.addAll(UrlUtilities.loadBoardGameXmlFromNetwork("https://www.boardgamegeek.com/xmlapi2/thing?id=" + id));
+					gameItems.addAll(UrlUtilities.loadBoardGameXmlFromNetwork(
+							"https://www.boardgamegeek.com/xmlapi2/thing?id=" + id));
 				return null;
 			}
 
 			@Override
-			protected void onPostExecute(Void aVoid)
-			{
-				for (final BoardGameXmlParser.Item item : gameItems)
-				{
+			protected void onPostExecute(Void aVoid) {
+				for (final BoardGameXmlParser.Item item : gameItems) {
 					gameNames.put(item.id, item.name);
-					try
-					{
-						new AsyncTask<String, Void, Bitmap>()
-						{
+					try {
+						new AsyncTask<String, Void, Bitmap>() {
 							@Override
-							protected Bitmap doInBackground(String... url)
-							{
+							protected Bitmap doInBackground(String... url) {
 								Bitmap bitmap = null;
 								InputStream in = null;
-								try
-								{
+								try {
 									if (!url[0].startsWith("http://")) url[0] = "http://" + url[0];
 									URL thumbnailUrl = new URL(url[0]);
 									HttpURLConnection connection = (HttpURLConnection) thumbnailUrl.openConnection();
@@ -894,19 +792,12 @@ public class TestActivity extends AppCompatActivity
 									connection.connect();
 									in = connection.getInputStream();
 									bitmap = BitmapFactory.decodeStream(in);
-								}
-								catch (Exception e)
-								{
+								} catch (Exception e) {
 									e.printStackTrace();
-								}
-								finally
-								{
-									try
-									{
+								} finally {
+									try {
 										in.close();
-									}
-									catch (Exception e)
-									{
+									} catch (Exception e) {
 										e.printStackTrace();
 									}
 								}
@@ -915,23 +806,25 @@ public class TestActivity extends AppCompatActivity
 							}
 
 							@Override
-							protected void onPostExecute(Bitmap bitmap)
-							{
+							protected void onPostExecute(Bitmap bitmap) {
 								thumbnails.put(item.id, bitmap);
 								finished.put(item.id, true);
 								boolean allFinished = true;
 								for (Integer id : finished.keySet()) allFinished = allFinished && finished.get(id);
-								if (allFinished)
-								{
+								if (allFinished) {
 									ListView view = new ListView(activity);
 
-									view.setAdapter(new RecommendedGamesAdapter(activity, gameNames, thumbnails, gameOrder));
-									view.setOnItemClickListener(new AdapterView.OnItemClickListener()
-									{
+									view.setAdapter(new RecommendedGamesAdapter(activity,
+																				gameNames,
+																				thumbnails,
+																				gameOrder));
+									view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 										@Override
-										public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-										{
-											startActivity(new Intent(activity, AddBoardGameActivity.class).putExtra("SEARCH", gameNames.get(gameOrder.get(position))));
+										public void onItemClick(AdapterView<?> parent, View view, int position,
+																long id) {
+											startActivity(new Intent(activity, AddBoardGameActivity.class).putExtra(
+													"SEARCH",
+													gameNames.get(gameOrder.get(position))));
 											ActivityUtilities.exitUp(activity);
 										}
 									});
@@ -946,9 +839,7 @@ public class TestActivity extends AppCompatActivity
 								}
 							}
 						}.execute(item.thumbnailUrl);
-					}
-					catch (Exception e)
-					{
+					} catch (Exception e) {
 						e.printStackTrace();
 					}
 				}
@@ -956,30 +847,25 @@ public class TestActivity extends AppCompatActivity
 		}.execute(toShow[0].getId(), toShow[1].getId(), toShow[2].getId());
 	}
 
-	private void analyzeGames()
-	{
+	private void analyzeGames() {
 		Map<String, Integer> mechanicIntegerMap = new TreeMap<>();
 		Map<String, Integer> categoryIntegerMap = new TreeMap<>();
 		Map<String, Integer> pairIntegerMap = new TreeMap<>();
 
 		final GamesDbHelper dbHelper = new GamesDbHelper(this);
 		List<String> games = BoardGameDbUtility.getAllPlayedGames(dbHelper);
-		for (String game : games)
-		{
+		for (String game : games) {
 			BoardGame boardGame = BoardGameDbUtility.getBoardGame(dbHelper, game);
 			int boardGameScore = BoardGameStatsDbUtility.getGameScore(dbHelper, game);
-			for (GameExtra mechanic : boardGame.getMechanics())
-			{
+			for (GameExtra mechanic : boardGame.getMechanics()) {
 				if (!mechanicIntegerMap.containsKey(mechanic.getName())) mechanicIntegerMap.put(mechanic.getName(), 0);
 				mechanicIntegerMap.put(mechanic.getName(), mechanicIntegerMap.get(mechanic.getName()) + boardGameScore);
 			}
-			for (GameExtra category : boardGame.getCategories())
-			{
+			for (GameExtra category : boardGame.getCategories()) {
 				if (!categoryIntegerMap.containsKey(category.getName())) categoryIntegerMap.put(category.getName(), 0);
 				categoryIntegerMap.put(category.getName(), categoryIntegerMap.get(category.getName()) + boardGameScore);
 
-				for (GameExtra mechanic : boardGame.getMechanics())
-				{
+				for (GameExtra mechanic : boardGame.getMechanics()) {
 					GameExtraPair pair = new GameExtraPair(category, mechanic);
 					if (!pairIntegerMap.containsKey(pair.toString())) pairIntegerMap.put(pair.toString(), 0);
 					pairIntegerMap.put(pair.toString(), pairIntegerMap.get(pair.toString()) + boardGameScore);
@@ -991,28 +877,21 @@ public class TestActivity extends AppCompatActivity
 		String mechanicsWinners = "", categoryWinners = "", pairWinners = "";
 		int max = -1, second = -1, third = -1;
 
-		for (String mechanic : mechanicIntegerMap.keySet())
-		{
+		for (String mechanic : mechanicIntegerMap.keySet()) {
 			int score = mechanicIntegerMap.get(mechanic);
-			if (score > max)
-			{
+			if (score > max) {
 				third = second;
 				second = max;
 				max = score;
-			}
-			else if (score > second)
-			{
+			} else if (score > second) {
 				third = second;
 				second = score;
-			}
-			else if (score > third)
-			{
+			} else if (score > third) {
 				third = score;
 			}
 		}
 		for (String mechanic : mechanicIntegerMap.keySet())
-			if (mechanicIntegerMap.get(mechanic) >= third)
-			{
+			if (mechanicIntegerMap.get(mechanic) >= third) {
 				Log.d("MECHANIC", mechanic + " " + mechanicIntegerMap.get(mechanic));
 				mechanicsWinners += mechanic + " " + mechanicIntegerMap.get(mechanic) + "\n";
 			}
@@ -1021,29 +900,22 @@ public class TestActivity extends AppCompatActivity
 		second = -1;
 		third = -1;
 
-		for (String category : categoryIntegerMap.keySet())
-		{
+		for (String category : categoryIntegerMap.keySet()) {
 			int score = categoryIntegerMap.get(category);
-			if (score > max)
-			{
+			if (score > max) {
 				third = second;
 				second = max;
 				max = score;
-			}
-			else if (score > second)
-			{
+			} else if (score > second) {
 				third = second;
 				second = score;
-			}
-			else if (score > third)
-			{
+			} else if (score > third) {
 				third = score;
 			}
 		}
 
 		for (String category : categoryIntegerMap.keySet())
-			if (categoryIntegerMap.get(category) >= third)
-			{
+			if (categoryIntegerMap.get(category) >= third) {
 				Log.d("CATEGORY", category + " " + categoryIntegerMap.get(category));
 				categoryWinners += category + " " + categoryIntegerMap.get(category) + "\n";
 			}
@@ -1052,28 +924,21 @@ public class TestActivity extends AppCompatActivity
 		second = -1;
 		third = -1;
 
-		for (String pair : pairIntegerMap.keySet())
-		{
+		for (String pair : pairIntegerMap.keySet()) {
 			int score = pairIntegerMap.get(pair);
-			if (score > max)
-			{
+			if (score > max) {
 				third = second;
 				second = max;
 				max = score;
-			}
-			else if (score > second)
-			{
+			} else if (score > second) {
 				third = second;
 				second = score;
-			}
-			else if (score > third)
-			{
+			} else if (score > third) {
 				third = score;
 			}
 		}
 		for (String pair : pairIntegerMap.keySet())
-			if (pairIntegerMap.get(pair) >= third)
-			{
+			if (pairIntegerMap.get(pair) >= third) {
 				Log.d("PAIR", pair + " " + pairIntegerMap.get(pair));
 				pairWinners += pair + " " + pairIntegerMap.get(pair) + "\n";
 			}
@@ -1088,11 +953,9 @@ public class TestActivity extends AppCompatActivity
 		final AlertDialog categoriesDialog = new ViewUtilities.DialogBuilder(this)
 				.setTitle("Categories")
 				.setMessage(StringUtils.chomp(categoryWinners))
-				.setPositiveButton("Okay", new View.OnClickListener()
-				{
+				.setPositiveButton("Okay", new View.OnClickListener() {
 					@Override
-					public void onClick(View v)
-					{
+					public void onClick(View v) {
 						pairsDialog.show();
 					}
 				})
@@ -1101,11 +964,9 @@ public class TestActivity extends AppCompatActivity
 		AlertDialog mechanicsDialog = new ViewUtilities.DialogBuilder(this)
 				.setTitle("Mechanics")
 				.setMessage(StringUtils.chomp(mechanicsWinners))
-				.setPositiveButton("Okay", new View.OnClickListener()
-				{
+				.setPositiveButton("Okay", new View.OnClickListener() {
 					@Override
-					public void onClick(View v)
-					{
+					public void onClick(View v) {
 						categoriesDialog.show();
 					}
 				})
@@ -1115,8 +976,7 @@ public class TestActivity extends AppCompatActivity
 
 	}
 
-	private void downloadTextFiles()
-	{
+	private void downloadTextFiles() {
 		downloadTextFile("game.txt", "games.txt");
 		downloadTextFile("mechanics.txt", "mechanics.txt");
 		downloadTextFile("categories.txt", "categories.txt");
@@ -1125,8 +985,7 @@ public class TestActivity extends AppCompatActivity
 		downloadTextFile("triples.txt", "triples.txt");
 	}
 
-	private void downloadTextFile(String fileUrl, String filePath)
-	{
+	private void downloadTextFile(String fileUrl, String filePath) {
 		long ONE_MEGABYTE = 1024 * 1024;
 		final FileController fileController = new FileController(this);
 		fileController.setFileName(filePath);
@@ -1134,47 +993,40 @@ public class TestActivity extends AppCompatActivity
 		FirebaseStorage storage = FirebaseStorage.getInstance();
 		StorageReference storageReference = storage.getReferenceFromUrl("gs://games-tracker-53f3f.appspot.com");
 		storageReference.child(fileUrl)
-		                .getBytes(2 * ONE_MEGABYTE)
-		                .addOnSuccessListener(new OnSuccessListener<byte[]>()
-		                {
-			                @Override
-			                public void onSuccess(byte[] bytes)
-			                {
-				                fileController.save(bytes);
-			                }
-		                })
-		                .addOnFailureListener(new OnFailureListener()
-		                {
-			                @Override
-			                public void onFailure(@NonNull Exception e)
-			                {
+						.getBytes(2 * ONE_MEGABYTE)
+						.addOnSuccessListener(new OnSuccessListener<byte[]>() {
+							@Override
+							public void onSuccess(byte[] bytes) {
+								fileController.save(bytes);
+							}
+						})
+						.addOnFailureListener(new OnFailureListener() {
+							@Override
+							public void onFailure(@NonNull Exception e) {
 
-			                }
-		                });
+							}
+						});
 
 	}
 
 	@TargetApi(Build.VERSION_CODES.LOLLIPOP_MR1)
-	private class CustomInterpolator extends BaseInterpolator
-	{
+	private class CustomInterpolator extends BaseInterpolator {
 		// In degrees
 		private float angle;
 		private boolean reversed;
 
-		public CustomInterpolator(float angle, boolean reversed)
-		{
-			this.angle = (float)(angle / 360f * 2 * Math.PI);
+		public CustomInterpolator(float angle, boolean reversed) {
+			this.angle = (float) (angle / 360f * 2 * Math.PI);
 			this.reversed = reversed;
 		}
 
 		@Override
-		public float getInterpolation(float input)
-		{
+		public float getInterpolation(float input) {
 			float toReturn;
-			if (!reversed) toReturn = (float)Math.sin(input * angle);
-			else toReturn = (float)Math.sin((1 - input) * angle);
+			if (!reversed) toReturn = (float) Math.sin(input * angle);
+			else toReturn = (float) Math.sin((1 - input) * angle);
 //			Log.d("INTERPOLATING", input + " " + (float)(toReturn / Math.sin(angle)));
-			return (float)(toReturn / Math.sin(angle));
+			return (float) (toReturn / Math.sin(angle));
 		}
 	}
 }

@@ -17,17 +17,16 @@ import static com.cjboyett.boardgamestats.utility.data.StringUtilities.blankIfNu
  * Created by Casey on 12/30/2016.
  */
 
-public class FirebaseGamePlayDataUtility
-{
-	public static BoardGamePlayData makeBoardGamePlayData(FirebaseGamePlayData gamePlayData)
-	{
-		BoardGamePlayData boardGamePlayData = new BoardGamePlayData(new BoardGame(gamePlayData.game, "", gamePlayData.gameId),
-		                                                            -10000,
-		                                                            false,
-		                                                            gamePlayData.timePlayed,
-		                                                            new Date(gamePlayData.date),
-		                                                            blankIfNull(gamePlayData.notes),
-		                                                            gamePlayData.id);
+public class FirebaseGamePlayDataUtility {
+	public static BoardGamePlayData makeBoardGamePlayData(FirebaseGamePlayData gamePlayData) {
+		BoardGamePlayData boardGamePlayData =
+				new BoardGamePlayData(new BoardGame(gamePlayData.game, "", gamePlayData.gameId),
+									  -10000,
+									  false,
+									  gamePlayData.timePlayed,
+									  new Date(gamePlayData.date),
+									  blankIfNull(gamePlayData.notes),
+									  gamePlayData.id);
 		for (String player : gamePlayData.otherPlayers.keySet())
 			boardGamePlayData.addOtherPlayer(player, makePlayerData(gamePlayData.otherPlayers.get(player)));
 
@@ -40,13 +39,12 @@ public class FirebaseGamePlayDataUtility
 		return boardGamePlayData;
 	}
 
-	public static RPGPlayData makeRPGPlayData(FirebaseGamePlayData gamePlayData)
-	{
+	public static RPGPlayData makeRPGPlayData(FirebaseGamePlayData gamePlayData) {
 		RPGPlayData rpgPlayData = new RPGPlayData(new RolePlayingGame(gamePlayData.game, "", gamePlayData.gameId),
-		                                          gamePlayData.timePlayed,
-		                                          new Date(gamePlayData.date),
-		                                          blankIfNull(gamePlayData.notes),
-		                                          gamePlayData.id);
+												  gamePlayData.timePlayed,
+												  new Date(gamePlayData.date),
+												  blankIfNull(gamePlayData.notes),
+												  gamePlayData.id);
 		for (String player : gamePlayData.otherPlayers.keySet())
 			rpgPlayData.addOtherPlayer(player, makePlayerData(gamePlayData.otherPlayers.get(player)));
 
@@ -57,15 +55,15 @@ public class FirebaseGamePlayDataUtility
 		return rpgPlayData;
 	}
 
-	public static VideoGamePlayData makeVideoGamePlayData(FirebaseGamePlayData gamePlayData)
-	{
-		VideoGamePlayData videoGamePlayData = new VideoGamePlayData(new VideoGame(gamePlayData.game, "", gamePlayData.gameId),
-		                                                            -10000,
-		                                                            false,
-		                                                            gamePlayData.timePlayed,
-		                                                            new Date(gamePlayData.date),
-		                                                            blankIfNull(gamePlayData.notes),
-		                                                            gamePlayData.id);
+	public static VideoGamePlayData makeVideoGamePlayData(FirebaseGamePlayData gamePlayData) {
+		VideoGamePlayData videoGamePlayData =
+				new VideoGamePlayData(new VideoGame(gamePlayData.game, "", gamePlayData.gameId),
+									  -10000,
+									  false,
+									  gamePlayData.timePlayed,
+									  new Date(gamePlayData.date),
+									  blankIfNull(gamePlayData.notes),
+									  gamePlayData.id);
 		for (String player : gamePlayData.otherPlayers.keySet())
 			videoGamePlayData.addOtherPlayer(player, makePlayerData(gamePlayData.otherPlayers.get(player)));
 
@@ -78,8 +76,7 @@ public class FirebaseGamePlayDataUtility
 		return videoGamePlayData;
 	}
 
-	public static GamePlayerData makePlayerData(FirebasePlayerData playerData)
-	{
+	public static GamePlayerData makePlayerData(FirebasePlayerData playerData) {
 		String name = playerData.name == null ? "" : playerData.name;
 		double score = playerData.score;
 		boolean win = playerData.win;

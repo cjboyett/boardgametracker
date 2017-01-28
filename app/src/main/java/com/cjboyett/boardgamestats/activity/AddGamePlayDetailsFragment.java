@@ -406,6 +406,7 @@ public class AddGamePlayDetailsFragment extends Fragment {
 
 		private EditText dateEditText;
 		private EditText locationEditText;
+
 		public DatePickerFragment(EditText dateEditText, EditText locationEditText) {
 			super();
 			this.dateEditText = dateEditText;
