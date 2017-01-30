@@ -133,7 +133,6 @@ public class MainActivity extends BaseActivity implements MainView, GestureDetec
 
 	@Override
 	protected void generateLayout() {
-
 	}
 
 	@Override

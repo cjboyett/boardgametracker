@@ -2,12 +2,13 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
 	<item
-		android:drawable="@color/slate"/>
+		android:drawable="@drawable/splash_background_gradient"/>
 
 	<item>
 		<bitmap
 			android:gravity="center"
-			android:src="@mipmap/ic_launcher_6"/>
+			android:src="@drawable/splash_meeple"
+			android:tileMode="disabled"/>
 	</item>
 
 </layer-list>

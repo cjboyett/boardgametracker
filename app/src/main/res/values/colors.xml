@@ -13,4 +13,7 @@
 	<color name="bluegrass">#ff96c9b5</color>
 	<color name="turquoise">#ff86b9b5</color>
 	<color name="slate">#ff76a9b5</color>
+
+	<color name="splash_background_light">#03B6BE</color>
+	<color name="splash_background_dark">#006C71</color>
 </resources>
