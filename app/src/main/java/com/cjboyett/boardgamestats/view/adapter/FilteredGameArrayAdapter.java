@@ -3,6 +3,7 @@ package com.cjboyett.boardgamestats.view.adapter;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
 import android.text.Html;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,10 +40,8 @@ public class FilteredGameArrayAdapter extends ArrayAdapter<String> {
 
 	private float SCALE_FACTOR;
 	private BitmapCache thumbnails;
-	//	private Map<String, Bitmap> thumbnails;
-	private Map<String, String> thumbnailUrls;
 
-	final ImageController imageController;
+//	private final ImageController imageController;
 
 	public FilteredGameArrayAdapter(final Activity activity, int resource, List<String> games, boolean useThumbnails) {
 		super(activity, resource, games);
@@ -57,17 +56,15 @@ public class FilteredGameArrayAdapter extends ArrayAdapter<String> {
 		suggestions = new ArrayList<>();
 		filter = new StringFilter();
 
-		imageController = new ImageController(activity).setDirectoryName("thumbnails");
-
 		if (useThumbnails) {
 			SCALE_FACTOR = Preferences.scaleFactor(activity);
 
 			thumbnails = new BitmapCache();
 //			thumbnails = new HashMap<>();
-			final ImageController imageController = new ImageController(activity).setDirectoryName("thumbnails");
+//			final ImageController imageController = new ImageController(activity).setDirectoryName("thumbnails");
 
 			GamesDbHelper dbHelper = new GamesDbHelper(activity);
-			thumbnailUrls = new HashMap<>();
+			Map<String, String> thumbnailUrls = new HashMap<>();
 			for (String game : items) {
 				if (game.startsWith("---")) thumbnailUrls.put(game, game.substring(3));
 				else {
@@ -135,9 +132,9 @@ public class FilteredGameArrayAdapter extends ArrayAdapter<String> {
 */
 			}
 		}
-
 	}
 
+	@NonNull
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View view = null;
@@ -226,13 +223,16 @@ public class FilteredGameArrayAdapter extends ArrayAdapter<String> {
 			Bitmap thumbnail;
 			String thumbnailUrl = params[0];
 			String game = params[1];
-			if (thumbnailUrl.length() > 1)
+			if (thumbnailUrl.length() > 1) {
+				final ImageController imageController = new ImageController(activity).setDirectoryName("thumbnails");
 				thumbnail = imageController.setFileName(thumbnailUrl.substring(thumbnailUrl.lastIndexOf("/") + 1))
 										   .load();
-			else
+				imageController.close();
+			} else {
 				thumbnail = new StringToBitmapBuilder(activity)
 						.setTextSize(90 * SCALE_FACTOR)
 						.buildBitmap(thumbnailUrl.charAt(0) + "");
+			}
 
 			boolean noThumbnail = (thumbnail == null);
 

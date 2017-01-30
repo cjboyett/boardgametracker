@@ -16,10 +16,10 @@ import android.widget.RelativeLayout;
 
 import com.cjboyett.boardgamestats.MyApp;
 import com.cjboyett.boardgamestats.R;
-import com.cjboyett.boardgamestats.activity.AddBoardGameActivity;
-import com.cjboyett.boardgamestats.activity.AddGamePlayTabbedActivity;
-import com.cjboyett.boardgamestats.activity.GameStatsActivity;
-import com.cjboyett.boardgamestats.activity.PlayerStatsActivity;
+import com.cjboyett.boardgamestats.activity.addgame.AddGameActivity;
+import com.cjboyett.boardgamestats.activity.addgameplay.AddGamePlayTabbedActivity;
+import com.cjboyett.boardgamestats.activity.statsdetail.GameStatsActivity;
+import com.cjboyett.boardgamestats.activity.statsdetail.PlayerStatsActivity;
 import com.cjboyett.boardgamestats.data.DataManager;
 import com.cjboyett.boardgamestats.data.games.GamesDbHelper;
 import com.cjboyett.boardgamestats.data.games.board.BoardGameDbUtility;
@@ -175,7 +175,7 @@ public class Ticker extends RelativeLayout {
 			// If no games in collection then first TickerItem is an AddGameTickerItem
 			if (StatisticsManager.getInstance(getContext()).getNumberOfGames() == 0) {
 				tickerItems[0] = new AddBoardGameTickerItem(getContext());
-				intent = new Intent(getContext(), AddBoardGameActivity.class);
+				intent = new Intent(getContext(), AddGameActivity.class);
 				direction = "UP";
 			}
 			// Otherwise it is an AddGamePlayTickerItem

@@ -18,7 +18,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.cjboyett.boardgamestats.R;
-import com.cjboyett.boardgamestats.activity.GamePlayDetailsTabbedActivity;
+import com.cjboyett.boardgamestats.activity.statsdetail.GamePlayDetailsTabbedActivity;
 import com.cjboyett.boardgamestats.model.games.Game;
 import com.cjboyett.boardgamestats.model.games.GamePlayData;
 import com.cjboyett.boardgamestats.utility.ActivityUtilities;

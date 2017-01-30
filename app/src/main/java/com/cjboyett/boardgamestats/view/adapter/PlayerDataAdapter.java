@@ -13,7 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cjboyett.boardgamestats.R;
-import com.cjboyett.boardgamestats.activity.PlayerStatsActivity;
+import com.cjboyett.boardgamestats.activity.statsdetail.PlayerStatsActivity;
 import com.cjboyett.boardgamestats.model.games.GamePlayerData;
 import com.cjboyett.boardgamestats.utility.ActivityUtilities;
 import com.cjboyett.boardgamestats.utility.Preferences;

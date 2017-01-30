@@ -31,7 +31,7 @@ public class ImageRecyclerAdapter extends RecyclerView.Adapter<ImageRecyclerAdap
 	private List<String> thumbnailUrls;
 	private List<Bitmap> thumbnails;
 	private List<String> games;
-	private ImageController imageController;
+	//	private ImageController imageController;
 	private float ratio = 1f;
 
 	private float SCALE_FACTOR;
@@ -43,7 +43,7 @@ public class ImageRecyclerAdapter extends RecyclerView.Adapter<ImageRecyclerAdap
 		SCALE_FACTOR = Preferences.scaleFactor(activity);
 
 		thumbnails = new ArrayList<>();
-		imageController = new ImageController(activity).setDirectoryName("thumbnails");
+//		imageController = new ImageController(activity).setDirectoryName("thumbnails");
 		DisplayMetrics metrics = new DisplayMetrics();
 		activity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
 		ratio = metrics.density;
@@ -87,13 +87,16 @@ public class ImageRecyclerAdapter extends RecyclerView.Adapter<ImageRecyclerAdap
 		} catch (Exception e) {
 			Log.d("THUMBNAIL", "Making thumbnail for " + position);
 			String thumbnailUrl = thumbnailUrls.get(position);
-			if (thumbnailUrl.length() > 1)
+			if (thumbnailUrl.length() > 1) {
+				ImageController imageController = new ImageController(activity).setDirectoryName("thumbnails");
 				thumbnail =
 						imageController.setFileName(thumbnailUrl.substring(thumbnailUrl.lastIndexOf("/") + 1)).load();
-			else
+				imageController.close();
+			} else {
 				thumbnail = new StringToBitmapBuilder(activity)
 						.setTextSize(90 * SCALE_FACTOR)
 						.buildBitmap(thumbnailUrl.charAt(0) + "");
+			}
 			thumbnails.add(thumbnail);
 		}
 		boolean noThumbnail = (thumbnail == null);

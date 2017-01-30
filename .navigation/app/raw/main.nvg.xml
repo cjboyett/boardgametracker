@@ -6,7 +6,7 @@
     <statePointEntry>
       <state      
         class = "com.android.tools.idea.editors.navigation.model.ActivityState"      
-        className = "com.cjboyett.boardgamestats.activity.BoardGameDataActivity"/>
+        className = "com.cjboyett.boardgamestats.activity.collection.GameDataActivity"/>
       <point      
         x = "500"      
         y = "100"/>
@@ -14,7 +14,7 @@
     <statePointEntry>
       <state      
         class = "com.android.tools.idea.editors.navigation.model.ActivityState"      
-        className = "com.cjboyett.boardgamestats.activity.MainActivity"/>
+        className = "com.cjboyett.boardgamestats.activity.main.MainActivity"/>
       <point      
         x = "548"      
         y = "148"/>
@@ -46,7 +46,7 @@
     <statePointEntry>
       <state      
         class = "com.android.tools.idea.editors.navigation.model.ActivityState"      
-        className = "com.cjboyett.boardgamestats.activity.GamePlayDetailsTabbedActivity"/>
+        className = "com.cjboyett.boardgamestats.activity.statsdetail.GamePlayDetailsTabbedActivity"/>
       <point      
         x = "750"      
         y = "350"/>
@@ -54,7 +54,7 @@
     <statePointEntry>
       <state      
         class = "com.android.tools.idea.editors.navigation.model.ActivityState"      
-        className = "com.cjboyett.boardgamestats.activity.AddGamePlayTabbedActivity"/>
+        className = "com.cjboyett.boardgamestats.activity.addgameplay.AddGamePlayTabbedActivity"/>
       <point      
         x = "800"      
         y = "400"/>
@@ -62,7 +62,7 @@
     <statePointEntry>
       <state      
         class = "com.android.tools.idea.editors.navigation.model.ActivityState"      
-        className = "com.cjboyett.boardgamestats.activity.GameStatsActivity"/>
+        className = "com.cjboyett.boardgamestats.activity.statsdetail.GameStatsActivity"/>
       <point      
         x = "850"      
         y = "450"/>
@@ -70,7 +70,7 @@
     <statePointEntry>
       <state      
         class = "com.android.tools.idea.editors.navigation.model.ActivityState"      
-        className = "com.cjboyett.boardgamestats.activity.PlayerStatsActivity"/>
+        className = "com.cjboyett.boardgamestats.activity.statsdetail.PlayerStatsActivity"/>
       <point      
         x = "900"      
         y = "500"/>
@@ -78,7 +78,7 @@
     <statePointEntry>
       <state      
         class = "com.android.tools.idea.editors.navigation.model.ActivityState"      
-        className = "com.cjboyett.boardgamestats.activity.BoardGameListActivity"/>
+        className = "com.cjboyett.boardgamestats.activity.collection.GameListActivity"/>
       <point      
         x = "950"      
         y = "550"/>
@@ -86,7 +86,7 @@
     <statePointEntry>
       <state      
         class = "com.android.tools.idea.editors.navigation.model.ActivityState"      
-        className = "com.cjboyett.boardgamestats.PictureTestActivity"/>
+        className = "com.cjboyett.boardgamestats.activity.PictureTestActivity"/>
       <point      
         x = "1000"      
         y = "600"/>
@@ -102,7 +102,7 @@
     <statePointEntry>
       <state      
         class = "com.android.tools.idea.editors.navigation.model.ActivityState"      
-        className = "com.cjboyett.boardgamestats.activity.StatsTabbedActivity"/>
+        className = "com.cjboyett.boardgamestats.activity.statsoverview.StatsTabbedActivity"/>
       <point      
         x = "1100"      
         y = "700"/>
@@ -110,7 +110,7 @@
     <statePointEntry>
       <state      
         class = "com.android.tools.idea.editors.navigation.model.ActivityState"      
-        className = "com.cjboyett.boardgamestats.activity.AddBoardGameActivity"/>
+        className = "com.cjboyett.boardgamestats.activity.addgame.AddGameActivity"/>
       <point      
         x = "1150"      
         y = "750"/>

@@ -240,6 +240,7 @@ public class ViewUtilities {
 				imageController.setDirectoryName("avatars")
 							   .setFileName(avatarPath + ".jpg");
 				Bitmap original = imageController.load(); //BitmapFactory.decodeFile(avatarPath);
+				imageController.close();
 
 //				if (original.getByteCount() > 256 * 1024)
 //				{

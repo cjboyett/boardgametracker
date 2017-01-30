@@ -13,7 +13,7 @@ import android.text.TextUtils;
 import android.widget.RemoteViews;
 
 import com.cjboyett.boardgamestats.R;
-import com.cjboyett.boardgamestats.activity.AddGamePlayTabbedActivity;
+import com.cjboyett.boardgamestats.activity.addgameplay.AddGamePlayTabbedActivity;
 import com.cjboyett.boardgamestats.data.TempDataManager;
 import com.cjboyett.boardgamestats.data.games.GamesDbHelper;
 import com.cjboyett.boardgamestats.data.games.board.BoardGameDbUtility;
@@ -64,6 +64,7 @@ public class TimerNotificationBuilder {
 										imageController.setFileName(thumbnailUrl.substring(
 												thumbnailUrl.lastIndexOf("/") + 1))
 													   .load());
+			imageController.close();
 		} else
 			timeView.setImageViewBitmap(R.id.imageview_thumbnail,
 										BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher));

@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.cjboyett.boardgamestats.PictureTestActivity;
+import com.cjboyett.boardgamestats.activity.PictureTestActivity;
 import com.cjboyett.boardgamestats.utility.view.ImageController;
 
 import java.util.ArrayList;
@@ -27,20 +27,20 @@ import java.util.Map;
  */
 public class ImageGalleryRecyclerAdapter extends RecyclerView.Adapter<ImageGalleryRecyclerAdapter.ViewHolder> {
 	private Context context;
-	private ImageController imageController;
+	//	private ImageController imageController;
 	private Map<String, Bitmap> imageList;
 	private List<String> keys;
 
-	public ImageGalleryRecyclerAdapter(Context context, List<String> keys) {
+	public ImageGalleryRecyclerAdapter(final Context context, List<String> keys) {
 		this.context = context;
 		this.keys = keys;
 		imageList = new HashMap<>();
 
-		imageController = new ImageController(context).setDirectoryName("thumbnails");
-
 		for (int i = 0; i < keys.size(); i++) {
 			String imagePath = keys.get(i);
 			new AsyncTask<String, Void, Bitmap>() {
+				final ImageController imageController = new ImageController(context).setDirectoryName("thumbnails");
+
 				@Override
 				protected Bitmap doInBackground(String... params) {
 					Bitmap image;
@@ -53,6 +53,7 @@ public class ImageGalleryRecyclerAdapter extends RecyclerView.Adapter<ImageGalle
 				@Override
 				protected void onPostExecute(Bitmap bitmap) {
 					notifyDataSetChanged();
+					imageController.close();
 				}
 			}.execute(imagePath);
 		}

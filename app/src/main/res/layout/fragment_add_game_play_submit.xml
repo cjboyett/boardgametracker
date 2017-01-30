@@ -1,48 +1,48 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+				android:layout_width="match_parent"
+				android:layout_height="match_parent">
 
-    <!-- TODO: Update blank fragment layout -->
+	<!-- TODO: Update blank fragment layout -->
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="175dp"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true">
+	<LinearLayout
+		android:orientation="vertical"
+		android:layout_width="175dp"
+		android:layout_height="wrap_content"
+		android:layout_centerInParent="true">
 
-        <android.support.v7.widget.AppCompatButton
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:text="Submit"
-            android:id="@+id/button_submit_gameplay"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
-            android:background="@drawable/main_button_background_light"
-            android:padding="10dp"
-            android:layout_margin="5dp"/>
+		<android.support.v7.widget.AppCompatButton
+			android:layout_width="match_parent"
+			android:layout_height="60dp"
+			android:text="Submit"
+			android:id="@+id/button_submit_gameplay"
+			android:layout_centerVertical="true"
+			android:layout_centerHorizontal="true"
+			android:background="@drawable/main_button_background_light"
+			android:padding="10dp"
+			android:layout_margin="5dp"/>
 
-        <android.support.v7.widget.AppCompatButton
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:text="Submit and Share\nto Facebook"
-            android:id="@+id/button_submit_gameplay_and_share"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
-            android:background="@drawable/main_button_background_light"
-            android:padding="10dp"
-            android:layout_margin="5dp"/>
+		<android.support.v7.widget.AppCompatButton
+			android:layout_width="match_parent"
+			android:layout_height="60dp"
+			android:text="Submit and Share\nto Facebook"
+			android:id="@+id/button_submit_gameplay_and_share"
+			android:layout_centerVertical="true"
+			android:layout_centerHorizontal="true"
+			android:background="@drawable/main_button_background_light"
+			android:padding="10dp"
+			android:layout_margin="5dp"/>
 
-        <android.support.v7.widget.AppCompatCheckBox
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Ignore for stats"
-            android:id="@+id/checkbox_ignore"
-            android:checked="false"
-            android:textSize="14dp"
-            android:scaleX="0.75"
-            android:scaleY="0.75"
-            android:layout_margin="5dp"
-            android:gravity="center"/>
-    </LinearLayout>
+		<android.support.v7.widget.AppCompatCheckBox
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:text="Ignore for stats"
+			android:id="@+id/checkbox_ignore"
+			android:checked="false"
+			android:textSize="14dp"
+			android:scaleX="0.75"
+			android:scaleY="0.75"
+			android:layout_margin="5dp"
+			android:gravity="center"/>
+	</LinearLayout>
 
 </RelativeLayout>

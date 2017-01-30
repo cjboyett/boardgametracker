@@ -16,7 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cjboyett.boardgamestats.R;
-import com.cjboyett.boardgamestats.activity.LoginActivity;
+import com.cjboyett.boardgamestats.activity.extras.LoginActivity;
 import com.cjboyett.boardgamestats.data.games.GamesDbHelper;
 import com.cjboyett.boardgamestats.data.games.board.BoardGameContract;
 import com.cjboyett.boardgamestats.data.games.board.BoardGameDbUtility;

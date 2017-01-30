@@ -12,7 +12,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.cjboyett.boardgamestats.R;
-import com.cjboyett.boardgamestats.activity.GamePlayCalendarFragment;
+import com.cjboyett.boardgamestats.activity.statsoverview.GamePlayCalendarFragment;
 import com.cjboyett.boardgamestats.data.games.GamesDbHelper;
 import com.cjboyett.boardgamestats.data.games.board.BoardGameDbUtility;
 import com.cjboyett.boardgamestats.data.games.rpg.RPGDbUtility;

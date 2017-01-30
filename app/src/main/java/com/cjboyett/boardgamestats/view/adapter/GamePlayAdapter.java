@@ -29,7 +29,7 @@ import java.util.List;
 public class GamePlayAdapter extends BaseAdapter {
 	private Activity activity;
 	private List<GamePlayData> gamePlayDataList;
-	private ImageController imageController;
+	//	private ImageController imageController;
 	private float ratio;
 	private String userName;
 
@@ -40,7 +40,7 @@ public class GamePlayAdapter extends BaseAdapter {
 	public GamePlayAdapter(final Activity activity, List<GamePlayData> gamePlayDataList) {
 		this.activity = activity;
 		this.gamePlayDataList = gamePlayDataList;
-		imageController = new ImageController(activity).setDirectoryName("thumbnails");
+		final ImageController imageController = new ImageController(activity).setDirectoryName("thumbnails");
 
 		DisplayMetrics metrics = new DisplayMetrics();
 		activity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
@@ -97,6 +97,7 @@ public class GamePlayAdapter extends BaseAdapter {
 			}
 		}
 		userName = Preferences.getUsername(activity);
+		imageController.close();
 	}
 
 	@Override
@@ -160,7 +161,9 @@ public class GamePlayAdapter extends BaseAdapter {
 		String thumbnailUrl = gamePlayData.getGame().getThumbnailUrl();
 		Bitmap thumbnail;
 		if (thumbnailUrl != null) {
+			final ImageController imageController = new ImageController(activity).setDirectoryName("thumbnails");
 			thumbnail = imageController.setFileName(thumbnailUrl.substring(thumbnailUrl.lastIndexOf("/") + 1)).load();
+			imageController.close();
 			ImageView imageView = (ImageView) view.findViewById(R.id.imageview_avatar);
 			imageView.setMinimumWidth((int) (128 * ratio));
 			imageView.setMinimumHeight((int) (128 * ratio));

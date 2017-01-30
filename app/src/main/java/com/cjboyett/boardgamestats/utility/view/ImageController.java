@@ -106,4 +106,8 @@ public class ImageController {
 			e.printStackTrace();
 		}
 	}
+
+	public void close() {
+		context = null;
+	}
 }

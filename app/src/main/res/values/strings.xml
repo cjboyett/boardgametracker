@@ -1,142 +1,142 @@
 <resources>
-    <string name="app_name">Games Tracker</string>
-    <string name="title_activity_main">Games Tracker</string>
-    <string name="title_activity_add_game_play_tabbed">AddGamePlayTabbedActivity</string>
-    <string name="action_settings">Settings</string>
-    <string name="section_format">Hello World from section: %1$d</string>
-    <string name="title_activity_add_board_game">AddBoardGameActivity</string>
+	<string name="app_name">Games Tracker</string>
+	<string name="title_activity_main">Games Tracker</string>
+	<string name="title_activity_add_game_play_tabbed">AddGamePlayTabbedActivity</string>
+	<string name="action_settings">Settings</string>
+	<string name="section_format">Hello World from section: %1$d</string>
+	<string name="title_activity_add_board_game">AddBoardGameActivity</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_board_game_data">BoardGameDataActivity</string>
-    <string name="title_activity_board_game_list">BoardGameListActivity</string>
-    <string name="title_activity_game_play_data">GamePlayDataActivity</string>
-    <string name="title_activity_game_play_list">GamePlayListActivity</string>
-    <string name="title_activity_game_stats">GameStatsActivity</string>
-    <string name="title_activity_game_stats_list">GameStatsListActivity</string>
-    <string name="title_activity_player_stats">PlayerStatsActivity</string>
-    <string name="title_activity_player_stats_list">PlayerStatsListActivity</string>
-    <string name="title_activity_stats_tabbed">StatsTabbedActivity</string>
-    <string name="title_activity_settings">Settings</string>
+	<!-- TODO: Remove or change this placeholder text -->
+	<string name="hello_blank_fragment">Hello blank fragment</string>
+	<string name="title_activity_board_game_data">BoardGameDataActivity</string>
+	<string name="title_activity_board_game_list">BoardGameListActivity</string>
+	<string name="title_activity_game_play_data">GamePlayDataActivity</string>
+	<string name="title_activity_game_play_list">GamePlayListActivity</string>
+	<string name="title_activity_game_stats">GameStatsActivity</string>
+	<string name="title_activity_game_stats_list">GameStatsListActivity</string>
+	<string name="title_activity_player_stats">PlayerStatsActivity</string>
+	<string name="title_activity_player_stats_list">PlayerStatsListActivity</string>
+	<string name="title_activity_stats_tabbed">StatsTabbedActivity</string>
+	<string name="title_activity_settings">Settings</string>
 
-    <!-- Facebook ads id -->
-    <string name="facebook_app_id">1669817146617505</string>
+	<!-- Facebook ads id -->
+	<string name="facebook_app_id">1669817146617505</string>
 
-    <!-- Strings related to Settings -->
-    <string name="preference_file_key">com.cjboyett.boardgamestats.PREFERENCE_FILE_KEY</string>
+	<!-- Strings related to Settings -->
+	<string name="preference_file_key">com.cjboyett.boardgamestats.PREFERENCE_FILE_KEY</string>
 
-    <string name="preferences_personal_title">Personal</string>
-    <string name="preferences_ui_layout_title">UI Layout</string>
-    <string name="preferences_navigation_title">Navigation and Notifications</string>
+	<string name="preferences_personal_title">Personal</string>
+	<string name="preferences_ui_layout_title">UI Layout</string>
+	<string name="preferences_navigation_title">Navigation and Notifications</string>
 
-    <string name="pref_title_light_ui">Use light theme</string>
-    <string name="pref_description_light_ui">Enable a light theme for the app</string>
-    <string name="light_UI_preference">com.cjboyett.boardgamestats.LIGHT_UI_PREFERENCE</string>
+	<string name="pref_title_light_ui">Use light theme</string>
+	<string name="pref_description_light_ui">Enable a light theme for the app</string>
+	<string name="light_UI_preference">com.cjboyett.boardgamestats.LIGHT_UI_PREFERENCE</string>
 
-    <string name="pref_title_display_name">Display name</string>
-    <string name="pref_default_display_name">Me</string>
-    <string name="display_name_preference">com.cjboyett.boardgamestats.USER_NAME_PREFERENCE</string>
+	<string name="pref_title_display_name">Display name</string>
+	<string name="pref_default_display_name">Me</string>
+	<string name="display_name_preference">com.cjboyett.boardgamestats.USER_NAME_PREFERENCE</string>
 
-    <string name="generate_palette_preference">com.cjboyett.boardgamestats.GENERATE_PALETTE_PREFERENCE</string>
-    <string name="pref_title_generate_palette">Generate game palettes</string>
-    <string name="pref_description_generate_palette">Automatically generate palettes for boardGames based on game\'s thumbnail</string>
+	<string name="generate_palette_preference">com.cjboyett.boardgamestats.GENERATE_PALETTE_PREFERENCE</string>
+	<string name="pref_title_generate_palette">Generate game palettes</string>
+	<string name="pref_description_generate_palette">Automatically generate palettes for boardGames based on game\'s thumbnail</string>
 
-    <string name="thumbnail_size_preference">com.cjboyett.boardgamestats.THUMBNAIL_SIZE_PREFERENCE</string>
-    <string name="pref_title_thumbnail_size">Set thumbnail size</string>
-    <string name="pref_description_thumbnail_size">Set the size of a game\'s thumbnail in lists</string>
+	<string name="thumbnail_size_preference">com.cjboyett.boardgamestats.THUMBNAIL_SIZE_PREFERENCE</string>
+	<string name="pref_title_thumbnail_size">Set thumbnail size</string>
+	<string name="pref_description_thumbnail_size">Set the size of a game\'s thumbnail in lists</string>
 
-    <string name="sort_winners_first_preference">com.cjboyett.boardgamestats.SORT_WINNERS_FIRST_PREFERENCE</string>
-    <string name="pref_title_sort_winners_first">Place winners first</string>
-    <string name="pref_description_sort_winners_first">Sort players to place winners first in order</string>
+	<string name="sort_winners_first_preference">com.cjboyett.boardgamestats.SORT_WINNERS_FIRST_PREFERENCE</string>
+	<string name="pref_title_sort_winners_first">Place winners first</string>
+	<string name="pref_description_sort_winners_first">Sort players to place winners first in order</string>
 
-    <string name="calendar_view_preference">com.cjboyett.boardgamestats.CALENDAR_VIEW_PREFERENCE</string>
-    <string name="pref_description_calendar_view">Show a calendar view instead of a list of dates in statistics</string>
-    <string name="pref_title_calendar_view">Show calendar in statatics</string>
+	<string name="calendar_view_preference">com.cjboyett.boardgamestats.CALENDAR_VIEW_PREFERENCE</string>
+	<string name="pref_description_calendar_view">Show a calendar view instead of a list of dates in statistics</string>
+	<string name="pref_title_calendar_view">Show calendar in statatics</string>
 
-    <string name="activity_transition_preference">com.cjboyett.boardgamestats.ACTIVITY_TRANSITION_PREFERENCE</string>
-    <string name="pref_description_activity_transition">Use custom transitions between app pages</string>
-    <string name="pref_title_activity_transition">Use transitions</string>
+	<string name="activity_transition_preference">com.cjboyett.boardgamestats.ACTIVITY_TRANSITION_PREFERENCE</string>
+	<string name="pref_description_activity_transition">Use custom transitions between app pages</string>
+	<string name="pref_title_activity_transition">Use transitions</string>
 
-    <string name="swipe_preference">com.cjboyett.boardgamestats.SWIPE_PREFERENCE</string>
-    <string name="pref_description_swipe">Allows swipes to move between app pages</string>
-    <string name="pref_title_swipe">Allow swipe transitions</string>
+	<string name="swipe_preference">com.cjboyett.boardgamestats.SWIPE_PREFERENCE</string>
+	<string name="pref_description_swipe">Allows swipes to move between app pages</string>
+	<string name="pref_title_swipe">Allow swipe transitions</string>
 
-    <string name="pref_title_allow_notifications">Allow notifications</string>
-    <string name="pref_description_allow_notifications">Allow the app to send notifications</string>
-    <string name="allow_notifications_preference">com.cjboyett.boardgamestats.ALLOW_NOTIFICATIONS_PREFERENCE</string>
+	<string name="pref_title_allow_notifications">Allow notifications</string>
+	<string name="pref_description_allow_notifications">Allow the app to send notifications</string>
+	<string name="allow_notifications_preference">com.cjboyett.boardgamestats.ALLOW_NOTIFICATIONS_PREFERENCE</string>
 
-    <string name="pref_title_import_game_plays">Import game plays from BGG</string>
-    <string name="pref_description_import_game_plays">Import recorded game plays from a Board Game Geek account</string>
-    <string name="import_game_plays_preference">com.cjboyett.boardgamestats.IMPORT_GAME_PLAYS_PREFERENCE</string>
+	<string name="pref_title_import_game_plays">Import game plays from BGG</string>
+	<string name="pref_description_import_game_plays">Import recorded game plays from a Board Game Geek account</string>
+	<string name="import_game_plays_preference">com.cjboyett.boardgamestats.IMPORT_GAME_PLAYS_PREFERENCE</string>
 
-    <string name="pref_title_import_collection">Import game collection from BGG</string>
-    <string name="pref_description_import_collection">Import game collection from a Board Game Geek account</string>
-    <string name="import_collection_preference">com.cjboyett.boardgamestats.IMPORT_COLLECTION_PREFERENCE</string>
+	<string name="pref_title_import_collection">Import game collection from BGG</string>
+	<string name="pref_description_import_collection">Import game collection from a Board Game Geek account</string>
+	<string name="import_collection_preference">com.cjboyett.boardgamestats.IMPORT_COLLECTION_PREFERENCE</string>
 
-    <string name="pref_title_sync_bgg">Sync data with BGG</string>
-    <string name="pref_description_sync_bgg">Sync local data with a Board Game Geek account</string>
-    <string name="sync_bgg_preference">com.cjboyett.boardgamestats.SYNC_PREFERENCE</string>
+	<string name="pref_title_sync_bgg">Sync data with BGG</string>
+	<string name="pref_description_sync_bgg">Sync local data with a Board Game Geek account</string>
+	<string name="sync_bgg_preference">com.cjboyett.boardgamestats.SYNC_PREFERENCE</string>
 
-    <string name="pref_title_choose_theme">Choose a theme</string>
-    <string name="pref_description_choose_theme">Select a theme to be used throughout the app</string>
-    <string name="choose_theme_preference">com.cjboyett.boardgamestats.CHOOSE_THEME_PREFERENCE</string>
+	<string name="pref_title_choose_theme">Choose a theme</string>
+	<string name="pref_description_choose_theme">Select a theme to be used throughout the app</string>
+	<string name="choose_theme_preference">com.cjboyett.boardgamestats.CHOOSE_THEME_PREFERENCE</string>
 
-    <string name="pref_title_threshold">Game play threshold</string>
-    <string name="pref_description_threshold">Minimum number of plays required before tracking of stats such as most wins and losses</string>
-    <string name="threshold_preference">com.cjboyett.boardgamestats.THRESHOLD_PREFERENCE</string>
-    <string name="pref_default_threshold">3</string>
+	<string name="pref_title_threshold">Game play threshold</string>
+	<string name="pref_description_threshold">Minimum number of plays required before tracking of stats such as most wins and losses</string>
+	<string name="threshold_preference">com.cjboyett.boardgamestats.THRESHOLD_PREFERENCE</string>
+	<string name="pref_default_threshold">3</string>
 
-    <integer name="animation_duration_1">100</integer>
-    <integer name="animation_duration_2">200</integer>
-    <integer name="animation_offset_1">100</integer>
-    <integer name="animation_offset_2">300</integer>
+	<integer name="animation_duration_1">100</integer>
+	<integer name="animation_duration_2">200</integer>
+	<integer name="animation_offset_1">100</integer>
+	<integer name="animation_offset_2">300</integer>
 
-    <string name="title_activity_picture_test">PictureTestActivity</string>
-    <string name="use_camera_preference">com.cjboyett.boardgamestats.USE_CAMERA_PREFERENCE</string>
-    <string name="access_storage_preference">com.cjboyett.boardgamestats.ACCESS_STORAGE_PREFERENCE</string>
-    <string name="asked_permission">com.cjboyett.boardgamestats.ASKED_PERMISSION</string>
-    <string name="first_visit">com.cjboyett.boardgamestats.FIRST_VISIT</string>
-    <string name="first_extras_visit">com.cjboyett.boardgamestats.FIRST_EXTRAS_VISIT</string>
-    <string name="generated_background">com.cjboyett.boardgamestats.GENERATED_BACKGROUND</string>
-    <string name="generated_foreground">com.cjboyett.boardgamestats.GENERATED_FOREGROUND</string>
-    <string name="database_changed">com.cjboyett.boardgamestats.DATABASE_CHANGED</string>
-    <string name="show_ads">com.cjboyett.boardgamestats.SHOW_ADS</string>
-    <string name="super_user">com.cjboyett.boardgamestats.SUPER_USER</string>
-    <string name="title_activity_game_play_details_tabbed">GamePlayDetailsTabbedActivity</string>
-    <string name="is_timer_running">com.cjboyett.boardgamestats.IS_TIMER_RUNNING</string>
-    <string name="timer_running">com.cjboyett.boardgamestats.TIMER_RUNNING</string>
-    <string name="timer_started">com.cjboyett.boardgamestats.TIMER_STARTED</string>
-    <string name="timer_stopped">com.cjboyett.boardgamestats.TIMER_STOPPED</string>
-    <string name="timer_base">com.cjboyett.boardgamestats.TIMER_BASE</string>
-    <string name="last_timer_started">com.cjboyett.boardgamestats.LAST_TIMER_STARTED</string>
-    <string name="last_timer_stopped">com.cjboyett.boardgamestats.LAST_TIMER_STOPPED</string>
-    <string name="timer_diff">com.cjboyett.boardgamestats.TIMER_DIFF</string>
-    <string name="theme_background_preference">com.cjboyett.boardgamestats.THEME_BACKGROUND_PREFERENCE</string>
-    <string name="theme_foreground_preference">com.cjboyett.boardgamestats.THEME_FOREGROUND_PREFERENCE</string>
-    <string name="last_stats_page">com.cjboyett.boardgamestats.LAST_STATS_PAGE</string>
-    <string name="title_activity_stats_detailed">StatsDetailedActivity</string>
-    <string name="title_activity_add_game_manual">AddGameManualActivity</string>
-    <string name="show_popup">com.cjboyett.boardgamestats.SHOW_POPUP</string>
-    <string name="met_yancey">com.cjboyett.boardgamestats.MET_YANCEY</string>
-    <string name="preference_about_title">About</string>
-    <string name="show_notification">com.cjboyett.boardgamestats.SHOW_NOTIFICATIONS</string>
-    <string name="email_preference">com.cjboyett.boardgamestats.EMAIL</string>
-    <string name="last_hotness_download">com.cjboyett.boardgamestats.LAST_HOTNESS_DOWNLOAD</string>
-    <string name="version_key">com.cjboyett.boardgamestats.VERSION_KEY</string>
-    <string name="show_reminder">com.cjboyett.boardgamestatistics.SHOW_REMINDER</string>
-    <string name="need_all_player_table_upgrade">com.cjboyett.boardgamestats.NEED_ALL_PLAYER_TABLE_UPGRADE</string>
-    <string name="edit_avatar_preference">com.cjboyett.boardgamestats.EDIT_AVATAR_PREFERENCE</string>
-    <string name="title_activity_recommendation">RecommendationActivity</string>
-    <string name="title_activity_extras">ExtrasActivity</string>
-    <string name="title_activity_login">LoginActivity</string>
-    <string name="title_activity_image_gallery">ImageGalleryActivity</string>
-    <string name="auth_id">com.cjboyett.boardgamestats.AUTH_ID</string>
-    <string name="auth_provider">com.cjboyett.boardgamestats.AUTH_PROVIDER</string>
-    <string name="title_activity_image_test">ImageTestActivity</string>
-    <string name="title_activity_achievements">AchievementsActivity</string>
-    <string name="pref_recalculate_stats">com.cjboyett.boardgamestats.RECALCULATE_STATS_PREFERENCE</string>
-    <string name="timer_game">com.cjboyett.boardgamestats.TIMER_GAME</string>
-    <string name="use_board_games_for_stats_preference">com.cjboyett.boardgamestats.USE_BOARD_GAMES_FOR_STATS_PREFERENCE</string>
-    <string name="use_rpgs_for_stats_preference">com.cjboyett.boardgamestats.USE_RPGS_FOR_STATS_PREFERENCE</string>
-    <string name="use_video_games_for_stats_preference">com.cjboyett.boardgamestats.USE_VIDEO_GAMES_FOR_STATS_PREFERENCE</string>
+	<string name="title_activity_picture_test">PictureTestActivity</string>
+	<string name="use_camera_preference">com.cjboyett.boardgamestats.USE_CAMERA_PREFERENCE</string>
+	<string name="access_storage_preference">com.cjboyett.boardgamestats.ACCESS_STORAGE_PREFERENCE</string>
+	<string name="asked_permission">com.cjboyett.boardgamestats.ASKED_PERMISSION</string>
+	<string name="first_visit">com.cjboyett.boardgamestats.FIRST_VISIT</string>
+	<string name="first_extras_visit">com.cjboyett.boardgamestats.FIRST_EXTRAS_VISIT</string>
+	<string name="generated_background">com.cjboyett.boardgamestats.GENERATED_BACKGROUND</string>
+	<string name="generated_foreground">com.cjboyett.boardgamestats.GENERATED_FOREGROUND</string>
+	<string name="database_changed">com.cjboyett.boardgamestats.DATABASE_CHANGED</string>
+	<string name="show_ads">com.cjboyett.boardgamestats.SHOW_ADS</string>
+	<string name="super_user">com.cjboyett.boardgamestats.SUPER_USER</string>
+	<string name="title_activity_game_play_details_tabbed">GamePlayDetailsTabbedActivity</string>
+	<string name="is_timer_running">com.cjboyett.boardgamestats.IS_TIMER_RUNNING</string>
+	<string name="timer_running">com.cjboyett.boardgamestats.TIMER_RUNNING</string>
+	<string name="timer_started">com.cjboyett.boardgamestats.TIMER_STARTED</string>
+	<string name="timer_stopped">com.cjboyett.boardgamestats.TIMER_STOPPED</string>
+	<string name="timer_base">com.cjboyett.boardgamestats.TIMER_BASE</string>
+	<string name="last_timer_started">com.cjboyett.boardgamestats.LAST_TIMER_STARTED</string>
+	<string name="last_timer_stopped">com.cjboyett.boardgamestats.LAST_TIMER_STOPPED</string>
+	<string name="timer_diff">com.cjboyett.boardgamestats.TIMER_DIFF</string>
+	<string name="theme_background_preference">com.cjboyett.boardgamestats.THEME_BACKGROUND_PREFERENCE</string>
+	<string name="theme_foreground_preference">com.cjboyett.boardgamestats.THEME_FOREGROUND_PREFERENCE</string>
+	<string name="last_stats_page">com.cjboyett.boardgamestats.LAST_STATS_PAGE</string>
+	<string name="title_activity_stats_detailed">StatsDetailedActivity</string>
+	<string name="title_activity_add_game_manual">AddGameManualActivity</string>
+	<string name="show_popup">com.cjboyett.boardgamestats.SHOW_POPUP</string>
+	<string name="met_yancey">com.cjboyett.boardgamestats.MET_YANCEY</string>
+	<string name="preference_about_title">About</string>
+	<string name="show_notification">com.cjboyett.boardgamestats.SHOW_NOTIFICATIONS</string>
+	<string name="email_preference">com.cjboyett.boardgamestats.EMAIL</string>
+	<string name="last_hotness_download">com.cjboyett.boardgamestats.LAST_HOTNESS_DOWNLOAD</string>
+	<string name="version_key">com.cjboyett.boardgamestats.VERSION_KEY</string>
+	<string name="show_reminder">com.cjboyett.boardgamestatistics.SHOW_REMINDER</string>
+	<string name="need_all_player_table_upgrade">com.cjboyett.boardgamestats.NEED_ALL_PLAYER_TABLE_UPGRADE</string>
+	<string name="edit_avatar_preference">com.cjboyett.boardgamestats.EDIT_AVATAR_PREFERENCE</string>
+	<string name="title_activity_recommendation">RecommendationActivity</string>
+	<string name="title_activity_extras">ExtrasActivity</string>
+	<string name="title_activity_login">LoginActivity</string>
+	<string name="title_activity_image_gallery">ImageGalleryActivity</string>
+	<string name="auth_id">com.cjboyett.boardgamestats.AUTH_ID</string>
+	<string name="auth_provider">com.cjboyett.boardgamestats.AUTH_PROVIDER</string>
+	<string name="title_activity_image_test">ImageTestActivity</string>
+	<string name="title_activity_achievements">AchievementsActivity</string>
+	<string name="pref_recalculate_stats">com.cjboyett.boardgamestats.RECALCULATE_STATS_PREFERENCE</string>
+	<string name="timer_game">com.cjboyett.boardgamestats.TIMER_GAME</string>
+	<string name="use_board_games_for_stats_preference">com.cjboyett.boardgamestats.USE_BOARD_GAMES_FOR_STATS_PREFERENCE</string>
+	<string name="use_rpgs_for_stats_preference">com.cjboyett.boardgamestats.USE_RPGS_FOR_STATS_PREFERENCE</string>
+	<string name="use_video_games_for_stats_preference">com.cjboyett.boardgamestats.USE_VIDEO_GAMES_FOR_STATS_PREFERENCE</string>
 </resources>

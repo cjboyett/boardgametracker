@@ -34,7 +34,7 @@ public class ImageAdapter extends BaseAdapter implements SectionIndexer {
 	private BitmapCache thumbnails;
 	//	private Map<String, Bitmap> thumbnails;
 	private List<String> games;
-	private ImageController imageController;
+	//	private ImageController imageController;
 	private float ratio = 1f;
 
 	private float SCALE_FACTOR;
@@ -47,7 +47,6 @@ public class ImageAdapter extends BaseAdapter implements SectionIndexer {
 
 		thumbnails = new BitmapCache();
 //		thumbnails = new HashMap<>();
-		imageController = new ImageController(activity).setDirectoryName("thumbnails");
 		DisplayMetrics metrics = new DisplayMetrics();
 		activity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
 		ratio = metrics.density;
@@ -225,13 +224,16 @@ public class ImageAdapter extends BaseAdapter implements SectionIndexer {
 		protected Bitmap doInBackground(String... params) {
 			Bitmap thumbnail;
 			String thumbnailUrl = params[0];
-			if (thumbnailUrl.length() > 1)
+			if (thumbnailUrl.length() > 1) {
+				final ImageController imageController = new ImageController(activity).setDirectoryName("thumbnails");
 				thumbnail =
 						imageController.setFileName(thumbnailUrl.substring(thumbnailUrl.lastIndexOf("/") + 1)).load();
-			else
+				imageController.close();
+			} else {
 				thumbnail = new StringToBitmapBuilder(activity)
 						.setTextSize(90 * SCALE_FACTOR)
 						.buildBitmap(thumbnailUrl.charAt(0) + "");
+			}
 
 			boolean noThumbnail = (thumbnail == null);
 

@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:id="@+id/linear_layout_monthly_game_plays"
-              android:padding="3dp">
+			  android:orientation="vertical"
+			  android:layout_width="match_parent"
+			  android:layout_height="wrap_content"
+			  android:id="@+id/linear_layout_monthly_game_plays"
+			  android:padding="3dp">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/textview_month"
-        android:background="#000000"
-        android:textColor="#ffffff"
-        android:textSize="20dp"
-        android:layout_margin="5dp"
-        android:padding="5dp"
-        android:textStyle="bold"/>
+	<TextView
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:id="@+id/textview_month"
+		android:background="#000000"
+		android:textColor="#ffffff"
+		android:textSize="20dp"
+		android:layout_margin="5dp"
+		android:padding="5dp"
+		android:textStyle="bold"/>
 </LinearLayout>

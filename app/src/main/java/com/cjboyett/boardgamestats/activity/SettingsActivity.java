@@ -346,6 +346,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 									   .setFileName("master_user.jpg")
 									   .setFileType("JPG")
 									   .save(bitmap);
+						imageController.close();
 
 						return bitmap;
 					}

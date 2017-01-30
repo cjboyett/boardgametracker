@@ -13,8 +13,8 @@ import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
 import com.cjboyett.boardgamestats.R;
-import com.cjboyett.boardgamestats.activity.AddGamePlayTabbedActivity;
-import com.cjboyett.boardgamestats.activity.ClearStackMainActivity;
+import com.cjboyett.boardgamestats.activity.addgameplay.AddGamePlayTabbedActivity;
+import com.cjboyett.boardgamestats.activity.main.ClearStackMainActivity;
 import com.cjboyett.boardgamestats.model.stats.StatisticsManager;
 import com.cjboyett.boardgamestats.utility.Preferences;
 

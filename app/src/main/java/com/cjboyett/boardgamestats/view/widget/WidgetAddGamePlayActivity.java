@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.cjboyett.boardgamestats.activity.AddGamePlayTabbedActivity;
+import com.cjboyett.boardgamestats.activity.addgameplay.AddGamePlayTabbedActivity;
 import com.cjboyett.boardgamestats.data.TempDataManager;
 
 /**
