@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          xmlns:tools="http://schemas.android.com/tools"
-          package="com.cjboyett.boardgamestats">
+		  xmlns:tools="http://schemas.android.com/tools"
+		  package="com.cjboyett.boardgamestats">
 
 	<uses-permission android:name="android.permission.INTERNET"/>
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
@@ -89,60 +89,61 @@
 		<receiver android:name=".notification.TimerNotificationEventReceiver"/>
 
 		<activity
-			android:name=".activity.MainActivity"
-			android:label="@string/title_activity_main"
-			android:screenOrientation="portrait"
-			android:theme="@style/AppTheme.NoActionBar">
+			android:name=".activity.splash.SplashActivity"
+			android:theme="@style/SplashTheme"
+			android:screenOrientation="portrait">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN"/>
 
 				<category android:name="android.intent.category.LAUNCHER"/>
 			</intent-filter>
 		</activity>
+
 		<activity
-			android:name=".activity.AddGamePlayTabbedActivity"
-			android:label="@string/title_activity_add_game_play_tabbed"
+			android:name=".activity.main.MainActivity"
+			android:label="@string/title_activity_main"
 			android:screenOrientation="portrait"
 			android:theme="@style/AppTheme.NoActionBar">
 		</activity>
 		<activity
-			android:name=".activity.AddBoardGameActivity"
+			android:name=".activity.addgameplay.AddGamePlayTabbedActivity"
+			android:label="@string/title_activity_add_game_play_tabbed"
+			android:screenOrientation="portrait"
+			android:windowSoftInputMode="stateHidden"
+			android:theme="@style/AppTheme.NoActionBar">
+		</activity>
+		<activity
+			android:name=".activity.addgame.AddGameActivity"
 			android:label="@string/title_activity_add_board_game"
 			android:screenOrientation="portrait"
 			android:theme="@style/AppTheme.NoActionBar">
 		</activity>
 		<activity
-			android:name=".activity.BoardGameDataActivity"
+			android:name=".activity.collection.GameDataActivity"
 			android:label="@string/title_activity_board_game_data"
 			android:screenOrientation="portrait"
 			android:theme="@style/AppTheme.NoActionBar">
 		</activity>
 		<activity
-			android:name=".activity.BoardGameListActivity"
+			android:name=".activity.collection.GameListActivity"
 			android:label="@string/title_activity_board_game_list"
 			android:screenOrientation="portrait"
 			android:theme="@style/AppTheme.NoActionBar">
 		</activity>
 		<activity
-			android:name=".activity.GamePlayDataActivity"
-			android:label="@string/title_activity_game_play_data"
-			android:screenOrientation="portrait"
-			android:theme="@style/AppTheme.NoActionBar">
-		</activity>
-		<activity
-			android:name=".activity.GameStatsActivity"
+			android:name=".activity.statsdetail.GameStatsActivity"
 			android:label="@string/title_activity_game_stats"
 			android:screenOrientation="portrait"
 			android:theme="@style/AppTheme.NoActionBar">
 		</activity>
 		<activity
-			android:name=".activity.PlayerStatsActivity"
+			android:name=".activity.statsdetail.PlayerStatsActivity"
 			android:label="@string/title_activity_player_stats"
 			android:screenOrientation="portrait"
 			android:theme="@style/AppTheme.NoActionBar">
 		</activity>
 		<activity
-			android:name=".activity.StatsTabbedActivity"
+			android:name=".activity.statsoverview.StatsTabbedActivity"
 			android:label="@string/title_activity_stats_tabbed"
 			android:screenOrientation="portrait"
 			android:theme="@style/AppTheme.NoActionBar">
@@ -153,7 +154,7 @@
 			android:screenOrientation="portrait">
 		</activity>
 		<activity
-			android:name=".PictureTestActivity"
+			android:name=".activity.PictureTestActivity"
 			android:label="@string/title_activity_picture_test"
 			android:theme="@style/AppTheme.NoActionBar">
 		</activity>
@@ -174,7 +175,7 @@
 			android:value="@string/facebook_app_id"/>
 
 		<activity
-			android:name=".activity.GamePlayDetailsTabbedActivity"
+			android:name=".activity.statsdetail.GamePlayDetailsTabbedActivity"
 			android:label="@string/title_activity_game_play_details_tabbed"
 			android:screenOrientation="portrait"
 			android:theme="@style/AppTheme.NoActionBar">
@@ -185,7 +186,7 @@
 			android:theme="@style/AppTheme.NoActionBar">
 		</activity>
 		<activity
-			android:name=".activity.ClearStackMainActivity"
+			android:name=".activity.main.ClearStackMainActivity"
 			android:screenOrientation="portrait"
 			android:theme="@style/AppTheme.NoActionBar">
 		</activity>
@@ -195,23 +196,23 @@
 			android:name="me.nereo.multi_image_selector.MultiImageSelectorActivity"
 			android:configChanges="orientation|screenSize"/>
 		<activity
-			android:name=".TestActivity"
+			android:name=".activity.TestActivity"
 			android:screenOrientation="portrait">
 		</activity>
 		<activity
-			android:name=".activity.RecommendationActivity"
+			android:name=".activity.extras.RecommendationActivity"
 			android:label="@string/title_activity_recommendation"
 			android:screenOrientation="portrait"
 			android:theme="@style/AppTheme">
 		</activity>
 		<activity
-			android:name=".activity.ExtrasActivity"
+			android:name=".activity.extras.ExtrasActivity"
 			android:label="@string/title_activity_extras"
 			android:screenOrientation="portrait"
 			android:theme="@style/AppTheme">
 		</activity>
 		<activity
-			android:name=".activity.LoginActivity"
+			android:name=".activity.extras.LoginActivity"
 			android:label="@string/title_activity_login"
 			android:screenOrientation="portrait"
 			android:theme="@style/AppTheme">
@@ -222,12 +223,12 @@
 			android:theme="@style/AppTheme">
 		</activity>
 		<activity
-			android:name=".PictureTestActivity$ImageTestActivity"
+			android:name=".activity.PictureTestActivity$ImageTestActivity"
 			android:label="@string/title_activity_image_test"
 			android:theme="@style/AppTheme">
 		</activity>
 		<activity
-			android:name=".activity.AchievementsActivity"
+			android:name=".activity.extras.AchievementsActivity"
 			android:label="@string/title_activity_achievements"
 			android:screenOrientation="portrait"
 			android:theme="@style/AppTheme">

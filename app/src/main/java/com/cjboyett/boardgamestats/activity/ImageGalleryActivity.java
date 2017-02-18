@@ -21,8 +21,7 @@ import com.cjboyett.boardgamestats.view.adapter.ImageGalleryRecyclerAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ImageGalleryActivity extends AppCompatActivity
-{
+public class ImageGalleryActivity extends AppCompatActivity {
 	private Activity activity = this;
 	private View view;
 
@@ -30,8 +29,7 @@ public class ImageGalleryActivity extends AppCompatActivity
 	private GridLayoutManager layoutManager;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState)
-	{
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		view = getLayoutInflater().inflate(R.layout.activity_image_gallery, null);
 		setContentView(view);
@@ -39,40 +37,35 @@ public class ImageGalleryActivity extends AppCompatActivity
 		generateLayout();
 	}
 
-	private void generateLayout()
-	{
-		recyclerView = (RecyclerView)view.findViewById(R.id.recyclerview_image_gallery);
+	private void generateLayout() {
+		recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview_image_gallery);
 		recyclerView.setHasFixedSize(true);
 
 		layoutManager = new GridLayoutManager(this, 4, GridLayoutManager.VERTICAL, false);
-		layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup()
-		{
+		layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
 			@Override
-			public int getSpanSize(int position)
-			{
+			public int getSpanSize(int position) {
 				return position % 3 == 1 ? 2 : 1;
 			}
 		});
 		recyclerView.setLayoutManager(layoutManager);
 
 		final GamesDbHelper dbHelper = new GamesDbHelper(this);
-		DataManager dataManager = DataManager.getInstance(this);
-		final List<String> games = dataManager.getAllGamesCombined();;
+		DataManager dataManager = DataManager.getInstance(getApplication());
+		final List<String> games = dataManager.getAllGamesCombined();
+		;
 		final List<String> keys = new ArrayList<>();
-		new AsyncTask<String, Void, Void>()
-		{
+		new AsyncTask<String, Void, Void>() {
 			@Override
-			protected Void doInBackground(String... params)
-			{
-				for(String game : games)
+			protected Void doInBackground(String... params) {
+				for (String game : games)
 
 				{
 					int l = game.length();
 					String gameType = game.substring(l - 1);
 					game = game.substring(0, l - 2);
 					String key = "";
-					switch (gameType)
-					{
+					switch (gameType) {
 						case "b":
 							key = BoardGameDbUtility.getThumbnailUrl(dbHelper, game);
 							break;
@@ -83,8 +76,7 @@ public class ImageGalleryActivity extends AppCompatActivity
 							key = VideoGameDbUtility.getThumbnailUrl(dbHelper, game);
 							break;
 					}
-					if (!TextUtils.isEmpty(key) && key.lastIndexOf("/") != -1)
-					{
+					if (!TextUtils.isEmpty(key) && key.lastIndexOf("/") != -1) {
 						key = key.substring(key.lastIndexOf("/") + 1);
 						keys.add(key);
 						Log.d("KEY", key);
@@ -94,8 +86,7 @@ public class ImageGalleryActivity extends AppCompatActivity
 			}
 
 			@Override
-			protected void onPostExecute(Void aVoid)
-			{
+			protected void onPostExecute(Void aVoid) {
 				super.onPostExecute(aVoid);
 				ImageGalleryRecyclerAdapter recyclerAdapter = new ImageGalleryRecyclerAdapter(activity, keys);
 				recyclerView.setAdapter(recyclerAdapter);

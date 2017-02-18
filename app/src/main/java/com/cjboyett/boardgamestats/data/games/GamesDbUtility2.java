@@ -12,8 +12,7 @@ import java.util.List;
 /**
  * Created by Casey on 5/30/2016.
  */
-public class GamesDbUtility2
-{
+public class GamesDbUtility2 {
 	/* Returns a list of GamePlayDatas
 	 * who - List of player names
 	 * what - List of games
@@ -24,8 +23,8 @@ public class GamesDbUtility2
 	 *
 	 * In all cases, a null value means search all.
 	 */
-	public static List<GamePlayData> query(GamesDbHelper dbHelper, List<String> who, List<String> what, List<Date> when, boolean range, List<String> where)
-	{
+	public static List<GamePlayData> query(GamesDbHelper dbHelper, List<String> who, List<String> what, List<Date> when,
+										   boolean range, List<String> where) {
 		List<GamePlayData> gamePlayDataList = new ArrayList<>();
 
 		String table;
@@ -42,27 +41,30 @@ public class GamesDbUtility2
 
 		table = BoardGameContract.GamePlayEntry.TABLE_NAME;
 		columns[0] = BoardGameContract.GamePlayEntry._ID;
-		dbHelper.getReadableDatabase().query(table, columns, selections, selectionArgs, groupBy, having, orderBy, limit);
+		dbHelper.getReadableDatabase()
+				.query(table, columns, selections, selectionArgs, groupBy, having, orderBy, limit);
 
 		table = RPGContract.GamePlayEntry.TABLE_NAME;
 //		columns[0] = RPGContract.GamePlayEntry._ID;
-		dbHelper.getReadableDatabase().query(table, columns, selections, selectionArgs, groupBy, having, orderBy, limit);
+		dbHelper.getReadableDatabase()
+				.query(table, columns, selections, selectionArgs, groupBy, having, orderBy, limit);
 
 		table = VideoGameContract.GamePlayEntry.TABLE_NAME;
 //		columns[0] = VideoGameContract.GamePlayEntry._ID;
-		dbHelper.getReadableDatabase().query(table, columns, selections, selectionArgs, groupBy, having, orderBy, limit);
+		dbHelper.getReadableDatabase()
+				.query(table, columns, selections, selectionArgs, groupBy, having, orderBy, limit);
 		return gamePlayDataList;
 	}
 
-	private static String buildSelectionsString(List<String> who, List<String> what, List<Date> when, boolean range, List<String> where)
-	{
+	private static String buildSelectionsString(List<String> who, List<String> what, List<Date> when, boolean range,
+												List<String> where) {
 		String selection = "";
 //		for (String person : who) selection +=
 		return selection;
 	}
 
-	private static String[] buildSelectionArgs(List<String> who, List<String> what, List<Date> when, boolean range, List<String> where)
-	{
+	private static String[] buildSelectionArgs(List<String> who, List<String> what, List<Date> when, boolean range,
+											   List<String> where) {
 		return null;
 	}
 

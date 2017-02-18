@@ -1,5 +1,6 @@
 package com.cjboyett.boardgamestats.view.ticker;
 
+import android.app.Application;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -19,35 +20,29 @@ import java.util.concurrent.ExecutionException;
  * Ticker Item for BGG Hot List items
  * Created by Casey on 5/8/2016.
  */
-public class BGGTickerItem extends TickerItem
-{
+public class BGGTickerItem extends TickerItem {
 	HotnessXmlParser.Item item;
 	Bitmap image;
 
-	public BGGTickerItem(Context context)
-	{
+	public BGGTickerItem(Context context) {
 		super(context);
 
-		List<HotnessXmlParser.Item> items = DataManager.getInstance(context).getAllHotnessItems();
-		if (items != null && !items.isEmpty())
-		{
+		List<HotnessXmlParser.Item> items =
+				DataManager.getInstance((Application) context.getApplicationContext()).getAllHotnessItems();
+		if (items != null && !items.isEmpty()) {
 			// Get a random Hot List Item!!!
 			item = items.get(new Random().nextInt(items.size()));
-			try
-			{
+			try {
 				// AsyncTasks are used to run code in the background
 				// This keeps the screen from locking on the phone
 				// They are bulky, but ultimately are necessary evils
 				// This one simply attempts to download a bitmap image
-				image = new AsyncTask<String, Void, Bitmap>()
-				{
+				image = new AsyncTask<String, Void, Bitmap>() {
 					@Override
-					protected Bitmap doInBackground(String... url)
-					{
+					protected Bitmap doInBackground(String... url) {
 						Bitmap bitmap = null;
 						InputStream in = null;
-						try
-						{
+						try {
 							if (!url[0].startsWith("http://")) url[0] = "http://" + url[0];
 							URL thumbnailUrl = new URL(url[0]);
 							HttpURLConnection connection = (HttpURLConnection) thumbnailUrl.openConnection();
@@ -57,19 +52,12 @@ public class BGGTickerItem extends TickerItem
 							connection.connect();
 							in = connection.getInputStream();
 							bitmap = BitmapFactory.decodeStream(in);
-						}
-						catch (Exception e)
-						{
+						} catch (Exception e) {
 							e.printStackTrace();
-						}
-						finally
-						{
-							try
-							{
+						} finally {
+							try {
 								in.close();
-							}
-							catch (Exception e)
-							{
+							} catch (Exception e) {
 								e.printStackTrace();
 							}
 						}
@@ -78,54 +66,40 @@ public class BGGTickerItem extends TickerItem
 					}
 				}.execute(item.thumbnailUrl)
 				 .get();
-			}
-			catch (InterruptedException e)
-			{
+			} catch (InterruptedException e) {
 				e.printStackTrace();
-			}
-			catch (ExecutionException e)
-			{
+			} catch (ExecutionException e) {
 				e.printStackTrace();
 			}
 		}
 	}
 
-	public int getId()
-	{
+	public int getId() {
 		return item.id;
 	}
 
 	@Override
-	public String getID()
-	{
+	public String getID() {
 		String ID = "";
-		try
-		{
+		try {
 			ID = item.name;
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return ID;
 	}
 
 	@Override
-	public Bitmap getImage()
-	{
+	public Bitmap getImage() {
 		return image;
 	}
 
 	@Override
-	public String getBlurb()
-	{
+	public String getBlurb() {
 		String blurb = "";
-		try
-		{
+		try {
 			blurb = "<b>Currently Hot #" + item.rank + ":</b><br/>" + item.name;
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return blurb;

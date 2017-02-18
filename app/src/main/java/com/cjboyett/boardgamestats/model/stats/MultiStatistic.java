@@ -20,8 +20,7 @@ import java.util.List;
 /**
  * Created by Casey on 9/19/2016.
  */
-public abstract class MultiStatistic extends Statistic
-{
+public abstract class MultiStatistic extends Statistic {
 	private View view;
 	protected StatisticsManager statisticsManager;
 
@@ -31,8 +30,7 @@ public abstract class MultiStatistic extends Statistic
 
 	private int backgroundColor, foregroundColor, hintTextColor;
 
-	public MultiStatistic(Activity activity, StatisticsManager statisticsManager)
-	{
+	public MultiStatistic(Activity activity, StatisticsManager statisticsManager) {
 		super(activity);
 		this.statisticsManager = statisticsManager;
 		stats = new ArrayList<>();
@@ -43,8 +41,7 @@ public abstract class MultiStatistic extends Statistic
 
 	@NonNull
 	@Override
-	public View getView()
-	{
+	public View getView() {
 		view = activity.getLayoutInflater().inflate(R.layout.cardview_game_stats, null, false);
 
 		backgroundColor = Preferences.getBackgroundColor(activity);
@@ -69,8 +66,7 @@ public abstract class MultiStatistic extends Statistic
 
 	@Nullable
 	@Override
-	public void getMoreStats()
-	{
+	public void getMoreStats() {
 		if (gamesCount < initSize) gamesCount = initSize;
 		else gamesCount += stepSize;
 		generateView();
@@ -78,47 +74,37 @@ public abstract class MultiStatistic extends Statistic
 
 	@Nullable
 	@Override
-	public void getFewerStats()
-	{
+	public void getFewerStats() {
 		gamesCount -= stepSize;
 		generateView();
 	}
 
 	@Override
-	public boolean hasMoreStats()
-	{
+	public boolean hasMoreStats() {
 		return gamesCount < stats.size();
 	}
 
 	@Override
-	public boolean hasFewerStats()
-	{
+	public boolean hasFewerStats() {
 		return gamesCount > 0;
 	}
 
 	abstract void generateStats();
 
-	protected void generateView()
-	{
+	protected void generateView() {
 		gamesCount = Math.min(gamesCount, stats.size());
 		gamesCount = Math.max(gamesCount, 0);
 
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
-		{
-			TransitionManager.beginDelayedTransition((ViewGroup)view);
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+			TransitionManager.beginDelayedTransition((ViewGroup) view);
 		}
 
-		LinearLayout linearLayout = (LinearLayout)view.findViewById(R.id.linearlayout_stats);
+		LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.linearlayout_stats);
 
-		if (linearLayout.getChildCount() > gamesCount)
-		{
+		if (linearLayout.getChildCount() > gamesCount) {
 			linearLayout.removeViews(gamesCount, linearLayout.getChildCount() - gamesCount);
-		}
-
-		else
-		{
-			for (int i=linearLayout.getChildCount();i<gamesCount;i++)
-			{
+		} else {
+			for (int i = linearLayout.getChildCount(); i < gamesCount; i++) {
 				StatsView statsView = new StatsView(activity);
 				statsView.setTitle(stats.get(i)[0]);
 				statsView.setDescription(stats.get(i)[1]);

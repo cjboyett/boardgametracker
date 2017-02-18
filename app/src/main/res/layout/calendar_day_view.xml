@@ -1,38 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-             android:background="@drawable/calendar_day_backround">
+			 android:orientation="vertical"
+			 android:layout_width="match_parent"
+			 android:layout_height="match_parent"
+			 android:background="@drawable/calendar_day_backround">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="1"
-        android:id="@+id/textview_calendar_day"
-        android:layout_gravity="left|top"
-        android:maxLines="1"
-        android:textColor="#000000"
-        android:textSize="12dp"
-        android:layout_margin="3dp"
-        android:paddingRight="25dp"
-        android:paddingBottom="25dp"
-        android:background="#ffffff"/>
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="1"
+		android:id="@+id/textview_calendar_day"
+		android:layout_gravity="left|top"
+		android:maxLines="1"
+		android:textColor="#000000"
+		android:textSize="12dp"
+		android:layout_margin="3dp"
+		android:paddingRight="25dp"
+		android:paddingBottom="25dp"
+		android:background="#ffffff"/>
 
-<!--
-    <android.support.v7.widget.AppCompatButton
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:text="100"
-        android:id="@+id/button_calendar_day"
-        android:layout_gravity="center_horizontal|bottom"
-        android:textSize="10dp"
-        android:gravity="center"
-        android:background="@drawable/calendar_day_button_background"
-        android:layout_marginBottom="3dp"
-        android:visibility="invisible"/>
--->
+	<!--
+		<android.support.v7.widget.AppCompatButton
+			style="?android:attr/buttonStyleSmall"
+			android:layout_width="20dp"
+			android:layout_height="20dp"
+			android:text="100"
+			android:id="@+id/button_calendar_day"
+			android:layout_gravity="center_horizontal|bottom"
+			android:textSize="10dp"
+			android:gravity="center"
+			android:background="@drawable/calendar_day_button_background"
+			android:layout_marginBottom="3dp"
+			android:visibility="invisible"/>
+	-->
 	<RelativeLayout
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"

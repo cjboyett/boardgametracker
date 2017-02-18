@@ -14,48 +14,40 @@ import java.util.List;
 /**
  * Created by Casey on 4/22/2016.
  */
-public class ChooseThemeAdapter extends BaseAdapter
-{
+public class ChooseThemeAdapter extends BaseAdapter {
 	private List<Integer[]> palettes;
 
-	public ChooseThemeAdapter(List<Integer[]> palettes)
-	{
+	public ChooseThemeAdapter(List<Integer[]> palettes) {
 		this.palettes = new ArrayList<>(palettes);
 	}
 
 	@Override
-	public int getCount()
-	{
+	public int getCount() {
 		return palettes.size();
 	}
 
 	@Override
-	public Object getItem(int position)
-	{
+	public Object getItem(int position) {
 		return palettes.get(position);
 	}
 
 	@Override
-	public long getItemId(int position)
-	{
+	public long getItemId(int position) {
 		return position;
 	}
 
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent)
-	{
+	public View getView(int position, View convertView, ViewGroup parent) {
 		View view;
-		if (convertView == null)
-		{
+		if (convertView == null) {
 			view = LayoutInflater.from(parent.getContext()).inflate(R.layout.spinner_item_theme, null);
-		}
-		else view = convertView;
+		} else view = convertView;
 
 		Integer[] palette = palettes.get(position);
 		view.findViewById(R.id.textview_sample_background).setBackgroundColor(palette[0]);
 		view.findViewById(R.id.textview_sample_foreground).setBackgroundColor(palette[1]);
 		view.findViewById(R.id.textview_sample_text).setBackgroundColor(palette[0]);
-		((TextView)view.findViewById(R.id.textview_sample_text)).setTextColor(palette[1]);
+		((TextView) view.findViewById(R.id.textview_sample_text)).setTextColor(palette[1]);
 
 		return view;
 	}

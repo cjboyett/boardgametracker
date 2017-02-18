@@ -1,16 +1,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="horizontal"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:padding="5dp">
+			  android:orientation="horizontal"
+			  android:layout_width="match_parent"
+			  android:layout_height="match_parent"
+			  android:padding="5dp">
 
-    <Button
-        android:id="@+id/actionButton"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:text="Add Play"
-        android:background="@drawable/widget_button"
-        android:textColor="@color/colorMainLight"/>
+	<Button
+		android:id="@+id/actionButton"
+		android:layout_width="0dp"
+		android:layout_height="match_parent"
+		android:layout_weight="1"
+		android:text="Add Play"
+		android:background="@drawable/widget_button"
+		android:textColor="@color/colorMainLight"/>
 
 </LinearLayout>

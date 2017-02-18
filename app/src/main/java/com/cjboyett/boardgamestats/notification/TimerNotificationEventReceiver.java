@@ -10,13 +10,11 @@ import com.cjboyett.boardgamestats.utility.Preferences;
 /**
  * Created by Casey on 10/20/2016.
  */
-public class TimerNotificationEventReceiver extends WakefulBroadcastReceiver
-{
+public class TimerNotificationEventReceiver extends WakefulBroadcastReceiver {
 	private static final String ACTION_PAUSE_TIMER = "com.cjboyett.boardgamestats.ACTION_PAUSE_TIMER";
 
 	@Override
-	public void onReceive(Context context, Intent intent)
-	{
+	public void onReceive(Context context, Intent intent) {
 		String action = intent.getAction();
 		Intent serviceIntent = null;
 
@@ -28,8 +26,7 @@ public class TimerNotificationEventReceiver extends WakefulBroadcastReceiver
 			TimerNotificationIntentService.processPauseTimerNotification(context);
 	}
 
-	public static PendingIntent getPauseTimerIntent(Context context)
-	{
+	public static PendingIntent getPauseTimerIntent(Context context) {
 		Intent intent = new Intent(context, TimerNotificationEventReceiver.class);
 		intent.setAction(ACTION_PAUSE_TIMER);
 		return PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);

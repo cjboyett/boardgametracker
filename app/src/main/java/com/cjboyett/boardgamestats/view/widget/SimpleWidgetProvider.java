@@ -12,19 +12,16 @@ import com.cjboyett.boardgamestats.R;
 /**
  * Created by Casey on 4/19/2016.
  */
-public class SimpleWidgetProvider extends AppWidgetProvider
-{
+public class SimpleWidgetProvider extends AppWidgetProvider {
 	@Override
-	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds)
-	{
+	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
 		final int count = appWidgetIds.length;
 
-		for (int i = 0; i < count; i++)
-		{
+		for (int i = 0; i < count; i++) {
 			int widgetId = appWidgetIds[i];
 
 			RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
-					R.layout.widget_simple);
+													  R.layout.widget_simple);
 
 			Intent intent = new Intent(context, WidgetAddGamePlayActivity.class);
 			intent.putExtra("WIDGET", true);

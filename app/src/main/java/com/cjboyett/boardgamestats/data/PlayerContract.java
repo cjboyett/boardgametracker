@@ -5,10 +5,8 @@ import android.provider.BaseColumns;
 /**
  * Created by Casey on 8/10/2016.
  */
-public class PlayerContract
-{
-	public static final class PlayerEntry implements BaseColumns
-	{
+public class PlayerContract {
+	public static final class PlayerEntry implements BaseColumns {
 		public static final String TABLE_NAME = "allplayers";
 
 		public static final String NAME = "name";

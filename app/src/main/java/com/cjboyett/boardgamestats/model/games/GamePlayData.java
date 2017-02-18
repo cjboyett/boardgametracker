@@ -10,8 +10,7 @@ import java.util.TreeMap;
 /**
  * Created by Casey on 4/10/2016.
  */
-public abstract class GamePlayData
-{
+public abstract class GamePlayData {
 	private Game game;
 	private int timePlayed;
 	private String notes;
@@ -23,105 +22,85 @@ public abstract class GamePlayData
 	private long id;
 	private String bggPlayId;
 
-	public Game getGame()
-	{
+	public Game getGame() {
 		return game;
 	}
 
-	public void setGame(Game game)
-	{
+	public void setGame(Game game) {
 		this.game = game;
 	}
 
-	public Date getDate()
-	{
+	public Date getDate() {
 		return date;
 	}
 
-	public void setDate(Date date)
-	{
+	public void setDate(Date date) {
 		this.date = date;
 	}
 
-	public String getNotes()
-	{
+	public String getNotes() {
 		return notes;
 	}
 
-	public void setNotes(String notes)
-	{
+	public void setNotes(String notes) {
 		this.notes = notes;
 	}
 
-	public Map<String, GamePlayerData> getOtherPlayers()
-	{
+	public Map<String, GamePlayerData> getOtherPlayers() {
 		if (otherPlayers == null) otherPlayers = new TreeMap<>();
 		return otherPlayers;
 	}
 
-	public GamePlayerData addOtherPlayer(String player, GamePlayerData data)
-	{
+	public GamePlayerData addOtherPlayer(String player, GamePlayerData data) {
 		return getOtherPlayers().put(player, data);
 	}
 
-	public int getTimePlayed()
-	{
+	public int getTimePlayed() {
 		return timePlayed;
 	}
 
-	public void setTimePlayed(int timePlayed)
-	{
+	public void setTimePlayed(int timePlayed) {
 		this.timePlayed = timePlayed;
 	}
 
-	public long getId()
-	{
+	public long getId() {
 		return id;
 	}
 
-	public void setId(long id)
-	{
+	public void setId(long id) {
 		this.id = id;
 	}
 
-	public String getLocation()
-	{
+	public String getLocation() {
 		return location;
 	}
 
-	public void setLocation(String location)
-	{
+	public void setLocation(String location) {
 		this.location = location;
 	}
 
-	public boolean isCountForStats()
-	{
+	public boolean isCountForStats() {
 		return countForStats;
 	}
 
-	public void setCountForStats(boolean countForStats)
-	{
+	public void setCountForStats(boolean countForStats) {
 		this.countForStats = countForStats;
 	}
 
-	public List<String> getImages()
-	{
+	public List<String> getImages() {
 		if (images == null) images = new ArrayList<>();
 		return images;
 	}
 
-	public void addImage(String... images)
-	{
+	public void addImage(String... images) {
 		for (String image : images) getImages().add(image);
 	}
 
-	public String getBggPlayId()
-	{
+	public String getBggPlayId() {
 		return bggPlayId;
 	}
 
-	public void setBggPlayId(String bggPlayId)
-	{
+	public void setBggPlayId(String bggPlayId) {
 		this.bggPlayId = bggPlayId;
 	}
 }

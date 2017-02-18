@@ -6,7 +6,7 @@
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
 	app:layout_behavior="@string/appbar_scrolling_view_behavior"
-	tools:context=".PictureTestActivity$ImageTestActivity"
+	tools:context=".activity.PictureTestActivity$ImageTestActivity"
 	tools:showIn="@layout/activity_image_test">
 
 	<ImageView

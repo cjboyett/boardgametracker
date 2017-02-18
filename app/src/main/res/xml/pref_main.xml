@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-                  xmlns:app="http://schemas.android.com/apk/res-auto">
+				  xmlns:app="http://schemas.android.com/apk/res-auto">
 
 	<PreferenceScreen
 		android:summary="Personal preferences"
@@ -23,6 +23,7 @@
 			android:key="@string/edit_avatar_preference"/>
 
 		<com.cjboyett.boardgamestats.view.preferences.ImportCollectionDialogPreference
+			android:enabled="false"
 			android:capitalize="words"
 			android:inputType="textCapWords"
 			android:key="@string/import_collection_preference"
@@ -33,6 +34,7 @@
 			android:title="@string/pref_title_import_collection"/>
 
 		<com.cjboyett.boardgamestats.view.preferences.ImportGamePlaysDialogPreference
+			android:enabled="false"
 			android:capitalize="words"
 			android:inputType="textCapWords"
 			android:key="@string/import_game_plays_preference"
@@ -43,6 +45,7 @@
 			android:title="@string/pref_title_import_game_plays"/>
 
 		<com.cjboyett.boardgamestats.view.preferences.SyncBggDataDialogPreference
+			android:enabled="false"
 			android:capitalize="words"
 			android:inputType="textCapWords"
 			android:key="@string/sync_bgg_preference"
@@ -139,7 +142,7 @@
 	</PreferenceScreen>
 
 	<PreferenceScreen
-		android:summary="Advanced navigation settings"
+		android:summary="Advanced navigation and notification settings"
 		android:title="@string/preferences_navigation_title">
 
 		<CheckBoxPreference
@@ -153,6 +156,12 @@
 			android:key="@string/swipe_preference"
 			android:summary="@string/pref_description_swipe"
 			android:title="@string/pref_title_swipe"/>
+
+		<CheckBoxPreference
+			android:defaultValue="true"
+			android:key="@string/allow_notifications_preference"
+			android:summary="@string/pref_description_allow_notifications"
+			android:title="@string/pref_title_allow_notifications"/>
 
 	</PreferenceScreen>
 

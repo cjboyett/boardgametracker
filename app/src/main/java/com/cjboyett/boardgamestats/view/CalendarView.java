@@ -11,8 +11,8 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import com.cjboyett.boardgamestats.activity.GamePlayCalendarFragment;
 import com.cjboyett.boardgamestats.R;
+import com.cjboyett.boardgamestats.activity.statsoverview.GamePlayCalendarFragment;
 import com.cjboyett.boardgamestats.data.games.GamesDbHelper;
 import com.cjboyett.boardgamestats.data.games.board.BoardGameDbUtility;
 import com.cjboyett.boardgamestats.data.games.rpg.RPGDbUtility;
@@ -27,8 +27,7 @@ import java.util.Map;
 /**
  * Created by Casey on 3/28/2016.
  */
-public class CalendarView extends TableLayout
-{
+public class CalendarView extends TableLayout {
 	private GamePlayCalendarFragment parent;
 	private int month, year, firstDayOfMonth;
 	private Date currentDate;
@@ -41,26 +40,25 @@ public class CalendarView extends TableLayout
 
 	private Map<Long, Date> boardGamePlayDates, rpgPlayDates, videoGamePlayDates;
 
-	public CalendarView(Activity activity)
-	{
+	public CalendarView(Activity activity) {
 		super(activity);
 		LayoutInflater inflater = LayoutInflater.from(activity);
 		inflater.inflate(R.layout.calendar_view, this);
 
-		TableLayout calendar = (TableLayout)findViewById(R.id.table_layout_calendar);
+		TableLayout calendar = (TableLayout) findViewById(R.id.table_layout_calendar);
 		dbHelper = new GamesDbHelper(getContext());
 
 		boardGamePlayIds = new ArrayList<>();
 		rpgPlayIds = new ArrayList<>();
 		videoGamePlayIds = new ArrayList<>();
 		dailyGamePlayViews = new ArrayList<>();
-		days = new CalendarDayView[7*6];
+		days = new CalendarDayView[7 * 6];
 
-		TableRow.LayoutParams layoutParams = new TableRow.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+		TableRow.LayoutParams layoutParams =
+				new TableRow.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 		layoutParams.span = 7;
 
-		for (int i=0;i<6;i++)
-		{
+		for (int i = 0; i < 6; i++) {
 			TableRow row = new TableRow(activity);
 			row.setBackgroundColor(Color.WHITE);
 			calendar.addView(row);
@@ -75,11 +73,10 @@ public class CalendarView extends TableLayout
 			dailyGamePlayRow.addView(dailyGamePlayView);
 			calendar.addView(dailyGamePlayRow);
 
-			for (int j=0;j<7;j++)
-			{
+			for (int j = 0; j < 7; j++) {
 				CalendarDayView dayView = new CalendarDayView(activity);
 				row.addView(dayView, j);
-				days[7*i + j] = dayView;
+				days[7 * i + j] = dayView;
 			}
 		}
 
@@ -89,14 +86,11 @@ public class CalendarView extends TableLayout
 
 		populateCalendar();
 
-		findViewById(R.id.imageview_next_month).setOnClickListener(new OnClickListener()
-		{
+		findViewById(R.id.imageview_next_month).setOnClickListener(new OnClickListener() {
 			@Override
-			public void onClick(View v)
-			{
+			public void onClick(View v) {
 				if (month != 11) month++;
-				else
-				{
+				else {
 					month = 0;
 					year++;
 				}
@@ -104,14 +98,11 @@ public class CalendarView extends TableLayout
 			}
 		});
 
-		findViewById(R.id.imageview_previous_month).setOnClickListener(new OnClickListener()
-		{
+		findViewById(R.id.imageview_previous_month).setOnClickListener(new OnClickListener() {
 			@Override
-			public void onClick(View v)
-			{
+			public void onClick(View v) {
 				if (month != 0) month--;
-				else
-				{
+				else {
 					month = 11;
 					year--;
 				}
@@ -120,15 +111,13 @@ public class CalendarView extends TableLayout
 		});
 	}
 
-	public void setParent(GamePlayCalendarFragment parent)
-	{
+	public void setParent(GamePlayCalendarFragment parent) {
 		this.parent = parent;
 	}
 
-	private void setDailyGamePlayView(List<Long> dailyBoardGamePlayIds, List<Long> dailyRPGPlayIds, List<Long> dailyVideoGamePlayIds, int week)
-	{
-		if (!dailyBoardGamePlayIds.isEmpty() || !dailyRPGPlayIds.isEmpty() || !dailyVideoGamePlayIds.isEmpty())
-		{
+	private void setDailyGamePlayView(List<Long> dailyBoardGamePlayIds, List<Long> dailyRPGPlayIds,
+									  List<Long> dailyVideoGamePlayIds, int week) {
+		if (!dailyBoardGamePlayIds.isEmpty() || !dailyRPGPlayIds.isEmpty() || !dailyVideoGamePlayIds.isEmpty()) {
 			Date newDate = null;
 			if (!dailyBoardGamePlayIds.isEmpty())
 				newDate = BoardGameDbUtility.getDateById(dbHelper, dailyBoardGamePlayIds.get(0));
@@ -148,14 +137,12 @@ public class CalendarView extends TableLayout
 			for (long id : dailyVideoGamePlayIds)
 				dailyGamePlayView.addVideoGamePlay(VideoGameDbUtility.getGamePlay(dbHelper, id), id);
 
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
-			{
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
 				TransitionManager.beginDelayedTransition(this);
 			}
 
 			dailyGamePlayView.drawViews();
-			for (int i = 0; i < dailyGamePlayViews.size(); i++)
-			{
+			for (int i = 0; i < dailyGamePlayViews.size(); i++) {
 				if (i != week) dailyGamePlayViews.get(i).setVisibility(GONE);
 			}
 			if (dailyGamePlayView.getVisibility() == GONE) dailyGamePlayView.setVisibility(VISIBLE);
@@ -165,55 +152,51 @@ public class CalendarView extends TableLayout
 		}
 	}
 
-	public void populateCalendar()
-	{
+	public void populateCalendar() {
 		Calendar c = Calendar.getInstance();
 		c.set(year, month, 1);
 		firstDayOfMonth = (c.get(Calendar.DAY_OF_WEEK) - c.getFirstDayOfWeek()) % 7;
 		int daysInMonth = Date.numberOfDaysInMonth[month];
 		if (month == 1 && year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)) daysInMonth++;
-		int daysInLastMonth = Date.numberOfDaysInMonth[(month+11)%12];
-		if (month-1 == 1 && year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)) daysInLastMonth++;
+		int daysInLastMonth = Date.numberOfDaysInMonth[(month + 11) % 12];
+		if (month - 1 == 1 && year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)) daysInLastMonth++;
 
-		for (int i=0;i<daysInMonth;i++)
-		{
-			days[i+firstDayOfMonth].setDay(i+1);
-			days[i+firstDayOfMonth].setDifferentMonth(false);
+		for (int i = 0; i < daysInMonth; i++) {
+			days[i + firstDayOfMonth].setDay(i + 1);
+			days[i + firstDayOfMonth].setDifferentMonth(false);
 
 			final int finalI = i;
-			days[i+firstDayOfMonth].setOnClickListener(new OnClickListener()
-			{
+			days[i + firstDayOfMonth].setOnClickListener(new OnClickListener() {
 				@Override
-				public void onClick(View v)
-				{
-					if (v instanceof CalendarDayView)
-					{
+				public void onClick(View v) {
+					if (v instanceof CalendarDayView) {
 						List<Long> boardGamePlayIds = new ArrayList<>();
 						List<Long> rpgPlayIds = new ArrayList<>();
 						List<Long> videoGamePlayIds = new ArrayList<>();
-						for (long id : ((CalendarDayView)v).getBoardGamePlayIds()) boardGamePlayIds.add(id);
-						for (long id : ((CalendarDayView)v).getRPGPlayIds()) rpgPlayIds.add(id);
-						for (long id : ((CalendarDayView)v).getVideoGamePlayIds()) videoGamePlayIds.add(id);
-						setDailyGamePlayView(boardGamePlayIds, rpgPlayIds, videoGamePlayIds, (finalI +firstDayOfMonth)/7);
+						for (long id : ((CalendarDayView) v).getBoardGamePlayIds()) boardGamePlayIds.add(id);
+						for (long id : ((CalendarDayView) v).getRPGPlayIds()) rpgPlayIds.add(id);
+						for (long id : ((CalendarDayView) v).getVideoGamePlayIds()) videoGamePlayIds.add(id);
+						setDailyGamePlayView(boardGamePlayIds,
+											 rpgPlayIds,
+											 videoGamePlayIds,
+											 (finalI + firstDayOfMonth) / 7);
 					}
 				}
 			});
 
 		}
-		for (int i=0;i<firstDayOfMonth;i++)
-		{
-			days[i].setDay(daysInLastMonth-firstDayOfMonth+i+1);
+		for (int i = 0; i < firstDayOfMonth; i++) {
+			days[i].setDay(daysInLastMonth - firstDayOfMonth + i + 1);
 			days[i].setDifferentMonth(true);
 		}
-		for (int i=daysInMonth+firstDayOfMonth;i<days.length;i++)
-		{
-			days[i].setDay(i-daysInMonth-firstDayOfMonth+1);
+		for (int i = daysInMonth + firstDayOfMonth; i < days.length; i++) {
+			days[i].setDay(i - daysInMonth - firstDayOfMonth + 1);
 			days[i].setDifferentMonth(true);
 		}
 
 		for (CalendarDayView day : days) day.clearIds();
 
-		for (int i = 0; i < dailyGamePlayViews.size(); i++)	dailyGamePlayViews.get(i).setVisibility(GONE);
+		for (int i = 0; i < dailyGamePlayViews.size(); i++) dailyGamePlayViews.get(i).setVisibility(GONE);
 
 		((TextView) findViewById(R.id.textview_month_and_year)).setText(Date.months[month] + " " + year);
 
@@ -235,20 +218,17 @@ public class CalendarView extends TableLayout
 		dbHelper.close();
 	}
 
-	public void addBoardGamePlayId(Date date, long id)
-	{
+	public void addBoardGamePlayId(Date date, long id) {
 		boardGamePlayIds.add(id);
 		days[Integer.parseInt(date.getDayOfMonth()) + firstDayOfMonth - 1].addBoardGamePlayId(id);
 	}
 
-	public void addRPGPlayId(Date date, long id)
-	{
+	public void addRPGPlayId(Date date, long id) {
 		boardGamePlayIds.add(id);
 		days[Integer.parseInt(date.getDayOfMonth()) + firstDayOfMonth - 1].addRPGPlayId(id);
 	}
 
-	public void addVideoGamePlayId(Date date, long id)
-	{
+	public void addVideoGamePlayId(Date date, long id) {
 		boardGamePlayIds.add(id);
 		days[Integer.parseInt(date.getDayOfMonth()) + firstDayOfMonth - 1].addVideoGamePlayId(id);
 	}

@@ -5,17 +5,14 @@ import com.cjboyett.boardgamestats.model.games.GameExtra;
 /**
  * Created by Casey on 3/7/2016.
  */
-public class BoardGameMechanic extends GameExtra
-{
+public class BoardGameMechanic extends GameExtra {
 
-	public BoardGameMechanic(String name, int bggid)
-	{
+	public BoardGameMechanic(String name, int bggid) {
 		super(name, bggid);
 	}
 
 	@Override
-	public String getType()
-	{
+	public String getType() {
 		return "Mechanic";
 	}
 }

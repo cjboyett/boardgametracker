@@ -24,26 +24,22 @@ import java.util.Random;
  * Ticker Item for random stats about games played, such as time played or times won
  * Created by Casey on 5/8/2016.
  */
-public class LocalTickerItem extends TickerItem
-{
+public class LocalTickerItem extends TickerItem {
 	private String blurb, gameName, gameType;
 	private Bitmap image;
 
-	public LocalTickerItem(Context context)
-	{
+	public LocalTickerItem(Context context) {
 		super(context);
 
 		generateImageAndBlurb();
 	}
 
-	private void generateImageAndBlurb()
-	{
+	private void generateImageAndBlurb() {
 		Game game = generateGameAndThumbnail();
 		blurb = generateBlurb(game);
 	}
 
-	private Game generateGameAndThumbnail()
-	{
+	private Game generateGameAndThumbnail() {
 		// StatisticsManager caches various stats in memory that are either lengthy to compute
 		// or are accessed frequently, such as number of games played and times each have been played
 		StatisticsManager statisticsManager = StatisticsManager.getInstance(context);
@@ -63,16 +59,13 @@ public class LocalTickerItem extends TickerItem
 		String thumbnailUrl = "";
 
 		// Checking to make sure the game actually has a thumbnail for the image
-		while (thumbnailUrl.length() <= 11)
-		{
+		while (thumbnailUrl.length() <= 11) {
 			int choice = new Random().nextInt(total);
 
-			for (Integer count : games.keySet())
-			{
+			for (Integer count : games.keySet()) {
 				if (count * games.get(count).size() <= choice)
 					choice -= count * games.get(count).size();
-				else
-				{
+				else {
 					gameName = games.get(count).get(choice / count);
 					break;
 				}
@@ -80,8 +73,7 @@ public class LocalTickerItem extends TickerItem
 
 			gameType = gameName.substring(gameName.length() - 1);
 			gameName = gameName.substring(0, gameName.lastIndexOf(":"));
-			switch (gameType)
-			{
+			switch (gameType) {
 				case "b":
 					thumbnailUrl = "http://" + BoardGameDbUtility.getThumbnailUrl(dbHelper, gameName);
 					break;
@@ -96,12 +88,11 @@ public class LocalTickerItem extends TickerItem
 
 		// Since thumbnail does exist, we load it from memory...
 		image = new ImageController(context).setDirectoryName("thumbnails")
-		                                    .setFileName(thumbnailUrl.substring(thumbnailUrl.lastIndexOf("/") + 1))
-		                                    .load();
+											.setFileName(thumbnailUrl.substring(thumbnailUrl.lastIndexOf("/") + 1))
+											.load();
 		// And then load the game
 		Game game = null;
-		switch (gameType)
-		{
+		switch (gameType) {
 			case "b":
 				game = BoardGameDbUtility.getBoardGame(dbHelper, gameName);
 				break;
@@ -117,8 +108,7 @@ public class LocalTickerItem extends TickerItem
 		return game;
 	}
 
-	private String generateBlurb(Game game)
-	{
+	private String generateBlurb(Game game) {
 		GamesDbHelper dbHelper = new GamesDbHelper(context);
 		String gameBlurb = "";
 		String gameType = "";
@@ -128,8 +118,7 @@ public class LocalTickerItem extends TickerItem
 		else gameType = "v";
 
 		// Magically generate some quick blurb about the game that was loaded above
-		switch (gameType)
-		{
+		switch (gameType) {
 			case "b":
 				gameBlurb = BoardGameStatsDbUtility.getRandomBlurb(dbHelper, game.getName());
 				break;
@@ -145,25 +134,21 @@ public class LocalTickerItem extends TickerItem
 	}
 
 	@Override
-	public String getID()
-	{
+	public String getID() {
 		return gameName;
 	}
 
-	public String getGameType()
-	{
+	public String getGameType() {
 		return gameType;
 	}
 
 	@Override
-	public Bitmap getImage()
-	{
+	public Bitmap getImage() {
 		return image;
 	}
 
 	@Override
-	public String getBlurb()
-	{
+	public String getBlurb() {
 		return blurb;
 	}
 }

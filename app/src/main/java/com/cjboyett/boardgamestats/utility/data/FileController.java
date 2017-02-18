@@ -10,8 +10,7 @@ import java.io.IOException;
 /**
  * Created by Casey on 9/6/2016.
  */
-public class FileController
-{
+public class FileController {
 	private String directoryName = "files";
 	private String fileName = "file.txt";
 	private String fileType = "TXT";
@@ -31,14 +30,12 @@ public class FileController
 		return this;
 	}
 
-	public FileController setFileType(String fileType)
-	{
+	public FileController setFileType(String fileType) {
 		this.fileType = fileType;
 		return this;
 	}
 
-	public boolean exists()
-	{
+	public boolean exists() {
 		return createFile().exists();
 	}
 
@@ -74,14 +71,10 @@ public class FileController
 		return createFile();
 	}
 
-	public void delete()
-	{
-		try
-		{
+	public void delete() {
+		try {
 			createFile().delete();
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

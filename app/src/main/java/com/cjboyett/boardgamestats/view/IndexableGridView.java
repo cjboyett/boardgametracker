@@ -12,8 +12,7 @@ import android.view.MotionEvent;
 import android.widget.GridView;
 import android.widget.ListAdapter;
 
-public class IndexableGridView extends GridView
-{
+public class IndexableGridView extends GridView {
 	private boolean mIsFastScrollEnabled = false;
 	private IndexScroller mScroller = null;
 	private GestureDetector mGestureDetector = null;
@@ -69,7 +68,7 @@ public class IndexableGridView extends GridView
 
 				@Override
 				public boolean onFling(MotionEvent e1, MotionEvent e2,
-				                       float velocityX, float velocityY) {
+									   float velocityX, float velocityY) {
 					// If fling happens, index bar shows
 					if (mScroller != null)
 						mScroller.show();
@@ -85,7 +84,7 @@ public class IndexableGridView extends GridView
 
 	@Override
 	public boolean onInterceptTouchEvent(MotionEvent ev) {
-		if(mScroller.contains(ev.getX(), ev.getY()))
+		if (mScroller.contains(ev.getX(), ev.getY()))
 			return true;
 
 		return super.onInterceptTouchEvent(ev);

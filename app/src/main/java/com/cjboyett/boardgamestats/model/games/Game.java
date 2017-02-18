@@ -3,92 +3,76 @@ package com.cjboyett.boardgamestats.model.games;
 /**
  * Created by Casey on 3/24/2016.
  */
-public abstract class Game
-{
+public abstract class Game {
 	private String name, description, thumbnailUrl;
 	int bggId, yearPublished;
 
-	public Game(String name)
-	{
+	public Game(String name) {
 		this.name = name;
 	}
 
-	public Game(String name, String description, int bggId)
-	{
+	public Game(String name, String description, int bggId) {
 		this.name = name;
 		this.description = description;
 		this.bggId = bggId;
 	}
 
-	public Game(String name, String description, String thumbnailUrl, int bggId)
-	{
+	public Game(String name, String description, String thumbnailUrl, int bggId) {
 		this.name = name;
 		this.description = description;
 		this.thumbnailUrl = thumbnailUrl;
 		this.bggId = bggId;
 	}
 
-	public String getName()
-	{
+	public String getName() {
 		return name;
 	}
 
-	public void setName(String name)
-	{
+	public void setName(String name) {
 		this.name = name;
 	}
 
-	public String getDescription()
-	{
+	public String getDescription() {
 		return description;
 	}
 
-	public void setDescription(String description)
-	{
+	public void setDescription(String description) {
 		this.description = description;
 	}
 
-	public String getThumbnailUrl()
-	{
+	public String getThumbnailUrl() {
 		return thumbnailUrl;
 	}
 
-	public void setThumbnailUrl(String thumbnailUrl)
-	{
+	public void setThumbnailUrl(String thumbnailUrl) {
 		this.thumbnailUrl = thumbnailUrl;
 	}
 
-	public int getBggId()
-	{
+	public int getBggId() {
 		return bggId;
 	}
 
-	public void setBggId(int bggId)
-	{
+	public void setBggId(int bggId) {
 		this.bggId = bggId;
 	}
 
-	public void setYearPublished(int yearPublished)
-	{
+	public void setYearPublished(int yearPublished) {
 		this.yearPublished = yearPublished;
 	}
 
-	public int getYearPublished()
-	{
+	public int getYearPublished() {
 		return yearPublished;
 	}
 
-	public enum GameType
-	{
+	public enum GameType {
 		BOARD("boardgame"), RPG("rpg"), VIDEO("videogame");
 		private String type;
-		GameType(String type)
-		{
+
+		GameType(String type) {
 			this.type = type;
 		}
 
-		public String getType()
-		{
+		public String getType() {
 			return type;
 		}
 	}

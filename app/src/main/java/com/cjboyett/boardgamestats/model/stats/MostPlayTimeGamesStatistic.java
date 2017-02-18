@@ -16,35 +16,30 @@ import java.util.TreeMap;
 /**
  * Created by Casey on 4/21/2016.
  */
-public class MostPlayTimeGamesStatistic extends MultiStatistic
-{
-	public MostPlayTimeGamesStatistic(Activity activity, StatisticsManager statisticsManager)
-	{
+public class MostPlayTimeGamesStatistic extends MultiStatistic {
+	public MostPlayTimeGamesStatistic(Activity activity, StatisticsManager statisticsManager) {
 		super(activity, statisticsManager);
 	}
 
 	@NonNull
 	@Override
-	public String getTitle()
-	{
+	public String getTitle() {
 		return "Most Played Games by Time";
 	}
 
-	void generateStats()
-	{
+	void generateStats() {
 		Map<Integer, List<String>> games = new TreeMap<>();
 
 		List<Integer> counts = new ArrayList<>(statisticsManager.getAllGamesByTimePlayed().keySet());
-		for (Integer count : counts) games.put(count, new ArrayList<>(statisticsManager.getAllGamesByTimePlayed().get(count)));
+		for (Integer count : counts)
+			games.put(count, new ArrayList<>(statisticsManager.getAllGamesByTimePlayed().get(count)));
 
 		Random r = new Random(Preferences.getUsername(activity).hashCode());
 
-		for (int i=counts.size()-1;i>=0;i--)
-		{
+		for (int i = counts.size() - 1; i >= 0; i--) {
 			int count = counts.get(i);
 			Log.d("GAMES", games.get(count).toString());
-			while (!games.get(count).isEmpty())
-			{
+			while (!games.get(count).isEmpty()) {
 				String game = games.get(count).remove(r.nextInt(games.get(count).size()));
 				stats.add(new String[]{game, StringUtilities.convertMinutes(count)});
 			}

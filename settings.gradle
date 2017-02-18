@@ -1,1 +1,1 @@
-include ':app', ':colorpicker', ':holograph', ':floatingactionmenu'
+include ':app', ':colorpicker', ':floatingactionmenu'

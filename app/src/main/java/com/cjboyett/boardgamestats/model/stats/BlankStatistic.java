@@ -10,38 +10,32 @@ import com.cjboyett.boardgamestats.view.BlankView;
 /**
  * Created by Casey on 4/22/2016.
  */
-public class BlankStatistic extends Statistic
-{
-	public BlankStatistic(Activity activity)
-	{
+public class BlankStatistic extends Statistic {
+	public BlankStatistic(Activity activity) {
 		super(activity);
 	}
 
 	@Override
-	public String getTitle()
-	{
+	public String getTitle() {
 		return "";
 	}
 
 	@NonNull
 	@Override
-	public View getView()
-	{
+	public View getView() {
 		View view = new BlankView(activity);
 		return view;
 	}
 
 	@Nullable
 	@Override
-	public void getMoreStats()
-	{
+	public void getMoreStats() {
 
 	}
 
 	@Nullable
 	@Override
-	public void getFewerStats()
-	{
+	public void getFewerStats() {
 
 	}
 }

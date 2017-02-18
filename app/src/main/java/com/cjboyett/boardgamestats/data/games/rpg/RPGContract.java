@@ -5,10 +5,8 @@ import android.provider.BaseColumns;
 /**
  * Created by Casey on 4/10/2016.
  */
-public class RPGContract
-{
-	public static final class RPGEntry implements BaseColumns
-	{
+public class RPGContract {
+	public static final class RPGEntry implements BaseColumns {
 		public static final String TABLE_NAME = "rpgs";
 
 		public static final String NAME = "name";
@@ -20,8 +18,7 @@ public class RPGContract
 		public static final String FAMILIES = "families";
 	}
 
-	public static final class GamePlayEntry implements BaseColumns
-	{
+	public static final class GamePlayEntry implements BaseColumns {
 		public static final String TABLE_NAME = "rpgplays";
 
 		public static final String GAME = "game";
@@ -34,16 +31,14 @@ public class RPGContract
 		public static final String BGG_PLAY_ID = "bggplayid";
 	}
 
-	public static final class PlayerEntry implements BaseColumns
-	{
+	public static final class PlayerEntry implements BaseColumns {
 		public static final String TABLE_NAME = "rpgplayers";
 
 		public static final String NAME = "name";
 		public static final String GAME_PLAY_ID = "gameid";
 	}
 
-	public static final class ImageEntry implements BaseColumns
-	{
+	public static final class ImageEntry implements BaseColumns {
 		public static final String TABLE_NAME = "rpgimages";
 
 		public static final String FILE_LOCATION = "fileLocation";

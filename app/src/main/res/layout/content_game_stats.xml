@@ -1,86 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".activity.GameStatsActivity"
-    tools:showIn="@layout/activity_game_stats">
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:paddingBottom="@dimen/activity_vertical_margin"
+	android:paddingLeft="@dimen/activity_horizontal_margin"
+	android:paddingRight="@dimen/activity_horizontal_margin"
+	android:paddingTop="@dimen/activity_vertical_margin"
+	app:layout_behavior="@string/appbar_scrolling_view_behavior"
+	tools:context=".activity.statsdetail.GameStatsActivity"
+	tools:showIn="@layout/activity_game_stats">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/relativelayout_info">
+	<RelativeLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:id="@+id/relativelayout_game_data_top"
+		android:background="@drawable/content_background_medium_border">
 
-	    <RelativeLayout
-		    android:layout_width="match_parent"
-		    android:layout_height="wrap_content"
-		    android:id="@+id/relativelayout_game_data_top"
-		    android:background="@drawable/content_background_medium_border">
+		<ImageView
+			android:layout_width="96dp"
+			android:layout_height="96dp"
+			android:id="@+id/imageview_thumbnail"
+			android:padding="5dp"/>
 
-	        <ImageView
-	            android:layout_width="96dp"
-	            android:layout_height="96dp"
-	            android:id="@+id/imageview_thumbnail"
-	            android:padding="5dp"/>
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:id="@+id/textview_game_name"
+			android:padding="5dp"
+			android:layout_alignParentTop="true"
+			android:layout_alignParentRight="true"
+			android:textSize="18dp"
+			android:lines="1"
+			android:layout_toRightOf="@+id/imageview_thumbnail"/>
 
-	        <TextView
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:id="@+id/textview_game_name"
-	            android:padding="5dp"
-	            android:layout_alignParentTop="true"
-	            android:layout_alignParentRight="true"
-	            android:textSize="18dp"
-	            android:lines="1"
-	            android:layout_toRightOf="@+id/imageview_thumbnail"/>
+	</RelativeLayout>
 
-	        <RatingBar
-		        android:layout_width="100dp"
-		        android:layout_height="wrap_content"
-		        android:id="@+id/ratingBar"
-		        android:layout_toRightOf="@+id/imageview_thumbnail"
-		        android:layout_alignParentRight="true"
-		        android:layout_alignBottom="@+id/imageview_thumbnail"
-		        android:scaleX="0.5"
-		        android:scaleY="0.5"
-		        android:stepSize="0.5"
-		        android:rating="2.5"/>
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:textAppearance="?android:attr/textAppearanceSmall"
+		android:text="Stats"
+		android:id="@+id/textview_stats"
+		android:layout_below="@+id/relativelayout_game_data_top"/>
 
-	    </RelativeLayout>
+	<ScrollView
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:id="@+id/scrollView"
+		android:layout_below="@+id/textview_stats"
+		android:background="@drawable/content_background_medium_border"
+		android:padding="5dp"
+		android:layout_above="@+id/textview_gameplays">
 
-	    <TextView
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:textAppearance="?android:attr/textAppearanceSmall"
-		    android:text="Stats"
-		    android:id="@+id/textview_stats"
-		    android:layout_below="@+id/relativelayout_game_data_top"/>
+		<LinearLayout
+			android:orientation="vertical"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:id="@+id/linearlayout_stats">
 
-	    <ScrollView
-		    android:layout_width="match_parent"
-		    android:layout_height="200dp"
-		    android:id="@+id/scrollView"
-		    android:layout_below="@+id/textview_stats"
-		    android:background="@drawable/content_background_medium_border"
-		    android:padding="5dp">
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/linearlayout_stats">
-
-            </LinearLayout>
-        </ScrollView>
-
-    </RelativeLayout>
+		</LinearLayout>
+	</ScrollView>
 
 	<TextView
 		android:layout_width="wrap_content"
@@ -88,14 +70,14 @@
 		android:textAppearance="?android:attr/textAppearanceSmall"
 		android:text="Game Plays"
 		android:id="@+id/textview_gameplays"
-		android:layout_below="@+id/relativelayout_info"/>
+		android:layout_above="@+id/listview_gameplay"/>
 
 	<ListView
 		android:layout_width="match_parent"
-		android:layout_height="match_parent"
 		android:id="@+id/listview_gameplay"
-		android:layout_below="@+id/textview_gameplays"
+		android:layout_alignParentBottom="true"
 		android:background="@drawable/content_background_medium_border"
-		android:padding="5dp"/>
+		android:padding="5dp"
+		android:layout_height="175dp"/>
 
 </RelativeLayout>

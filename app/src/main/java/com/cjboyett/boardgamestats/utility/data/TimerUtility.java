@@ -11,15 +11,12 @@ import java.util.List;
 /**
  * Created by Casey on 5/4/2016.
  */
-public class TimerUtility
-{
-	public static String getElapsedTime(Context context)
-	{
+public class TimerUtility {
+	public static String getElapsedTime(Context context) {
 		TempDataManager tempDataManager = TempDataManager.getInstance(context);
 		List<Long> times = tempDataManager.getTimer();
 		if (times.isEmpty() || times.get(0) == 0) return "00:00";
-		else
-		{
+		else {
 			long timerBase = times.get(0);
 			long startTime = times.get(1);
 			long stopTime = times.get(2);
@@ -35,8 +32,7 @@ public class TimerUtility
 		}
 	}
 
-	private static String computeElapsedTimeString(long elapsedTime)
-	{
+	private static String computeElapsedTimeString(long elapsedTime) {
 		Log.d("TIME", elapsedTime + "");
 		long hours = elapsedTime / (60 * 60 * 1000);
 		elapsedTime -= hours * (60 * 60 * 1000);

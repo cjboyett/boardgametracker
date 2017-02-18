@@ -15,42 +15,35 @@ import com.cjboyett.boardgamestats.R;
  * Container view used in ticker.
  * Created by Casey on 5/8/2016.
  */
-public class TickerItemView extends LinearLayout
-{
+public class TickerItemView extends LinearLayout {
 	private TextView blurb;
 	private ImageView image;
 
-	public TickerItemView(Context context, AttributeSet attrs)
-	{
+	public TickerItemView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		LayoutInflater inflater = LayoutInflater.from(context);
 		inflater.inflate(R.layout.ticker_item, this);
-		blurb = (TextView)findViewById(R.id.ticker_blurb);
-		image = (ImageView)findViewById(R.id.ticker_image);
+		blurb = (TextView) findViewById(R.id.ticker_blurb);
+		image = (ImageView) findViewById(R.id.ticker_image);
 	}
 
-	public void setBlurb(String blurbText)
-	{
+	public void setBlurb(String blurbText) {
 		blurb.setText(Html.fromHtml(blurbText));
 	}
 
-	public void setImage(Bitmap tickerImage)
-	{
+	public void setImage(Bitmap tickerImage) {
 		image.setImageBitmap(tickerImage);
 	}
 
-	public void setImageScaleType(ImageView.ScaleType scaleType)
-	{
+	public void setImageScaleType(ImageView.ScaleType scaleType) {
 		image.setScaleType(scaleType);
 	}
 
-	public void colorComponents(int foregroundColor)
-	{
+	public void colorComponents(int foregroundColor) {
 		blurb.setTextColor(foregroundColor);
 	}
 
-	public void setOnImageClickListener(OnClickListener l)
-	{
+	public void setOnImageClickListener(OnClickListener l) {
 		image.setOnClickListener(l);
 	}
 }

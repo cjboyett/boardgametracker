@@ -3,6 +3,7 @@ package com.cjboyett.boardgamestats.view;
 /**
  * Created by Casey on 3/21/2016.
  */
+
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -97,8 +98,12 @@ public class IndexScroller {
 			float paddingTop = (sectionHeight - (indexPaint.descent() - indexPaint.ascent())) / 2;
 			for (int i = 0; i < mSections.length; i++) {
 				float paddingLeft = (mIndexbarWidth - indexPaint.measureText(mSections[i])) / 2;
-				canvas.drawText(mSections[i], mIndexbarRect.left + paddingLeft
-						, mIndexbarRect.top + mIndexbarMargin + sectionHeight * i + paddingTop - indexPaint.ascent(), indexPaint);
+				canvas.drawText(mSections[i],
+								mIndexbarRect.left + paddingLeft
+						,
+								mIndexbarRect.top + mIndexbarMargin + sectionHeight * i + paddingTop -
+										indexPaint.ascent(),
+								indexPaint);
 			}
 		}
 	}
@@ -208,7 +213,8 @@ public class IndexScroller {
 			return 0;
 		if (y >= mIndexbarRect.top + mIndexbarRect.height() - mIndexbarMargin)
 			return mSections.length - 1;
-		return (int) ((y - mIndexbarRect.top - mIndexbarMargin) / ((mIndexbarRect.height() - 2 * mIndexbarMargin) / mSections.length));
+		return (int) ((y - mIndexbarRect.top - mIndexbarMargin) /
+				((mIndexbarRect.height() - 2 * mIndexbarMargin) / mSections.length));
 	}
 
 	private void fade(long delay) {

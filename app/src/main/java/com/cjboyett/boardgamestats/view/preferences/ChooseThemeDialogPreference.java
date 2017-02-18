@@ -18,14 +18,12 @@ import java.util.List;
 /**
  * Created by Casey on 4/22/2016.
  */
-public class ChooseThemeDialogPreference extends DialogPreference
-{
+public class ChooseThemeDialogPreference extends DialogPreference {
 	private List<Integer[]> palettes;
 	private Spinner themeSpinner;
 	private Integer[] currentPalette;
 
-	public ChooseThemeDialogPreference(Context context, AttributeSet attrs)
-	{
+	public ChooseThemeDialogPreference(Context context, AttributeSet attrs) {
 		super(context, attrs);
 
 		int dark = context.getResources().getColor(R.color.colorMainDark);
@@ -54,25 +52,21 @@ public class ChooseThemeDialogPreference extends DialogPreference
 	}
 
 	@Override
-	protected View onCreateDialogView()
-	{
+	protected View onCreateDialogView() {
 		View view = super.onCreateDialogView();
-		themeSpinner = (Spinner)view.findViewById(R.id.spinner_choose_theme);
+		themeSpinner = (Spinner) view.findViewById(R.id.spinner_choose_theme);
 
 		ChooseThemeAdapter adapter = new ChooseThemeAdapter(palettes);
 		themeSpinner.setAdapter(adapter);
 
-		themeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-		{
+		themeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			@Override
-			public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-			{
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 				currentPalette = palettes.get(position);
 			}
 
 			@Override
-			public void onNothingSelected(AdapterView<?> parent)
-			{
+			public void onNothingSelected(AdapterView<?> parent) {
 
 			}
 		});
@@ -80,14 +74,10 @@ public class ChooseThemeDialogPreference extends DialogPreference
 	}
 
 
-
 	@Override
-	protected void onDialogClosed(boolean positiveResult)
-	{
-		if (positiveResult)
-		{
-			if (callChangeListener(currentPalette))
-			{
+	protected void onDialogClosed(boolean positiveResult) {
+		if (positiveResult) {
+			if (callChangeListener(currentPalette)) {
 				Preferences.setThemeBackgroundPreference(getContext(), currentPalette[0]);
 				Preferences.setThemeForegroundPreference(getContext(), currentPalette[1]);
 				notifyChanged();

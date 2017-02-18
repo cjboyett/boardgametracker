@@ -1,94 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:background="@drawable/calendar_day_backround"
-             android:id="@+id/table_layout_calendar"
-             android:animateLayoutChanges="true">
+			 android:layout_width="wrap_content"
+			 android:layout_height="wrap_content"
+			 android:background="@drawable/calendar_day_backround"
+			 android:id="@+id/table_layout_calendar"
+			 android:animateLayoutChanges="true">
 
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#e90202">
+	<TableRow
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:background="#e90202">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/imageview_previous_month"
-            android:src="@drawable/abc_ic_ab_back_material"
-            android:layout_gravity="left|center"
-            android:tint="#000000"
-            android:paddingRight="15dp"
-            android:paddingLeft="3dp"
-            android:paddingTop="3dp"
-            android:paddingBottom="3dp"/>
+		<ImageView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:id="@+id/imageview_previous_month"
+			android:layout_gravity="left|center"
+			android:tint="#000000"
+			android:paddingRight="15dp"
+			android:paddingLeft="3dp"
+			android:paddingTop="3dp"
+			android:paddingBottom="3dp"
+			android:src="@drawable/back"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="March 2016"
-            android:id="@+id/textview_month_and_year"
-            android:layout_gravity="center"
-            android:gravity="center_horizontal"
-            android:padding="5dp"
-            android:layout_span="5"/>
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:textAppearance="?android:attr/textAppearanceLarge"
+			android:text="March 2016"
+			android:id="@+id/textview_month_and_year"
+			android:layout_gravity="center"
+			android:gravity="center_horizontal"
+			android:padding="5dp"
+			android:layout_span="5"/>
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/imageview_next_month"
-            android:src="@drawable/abc_ic_ab_back_material"
-            android:layout_gravity="center|right"
-            android:tint="#000000"
-            android:scaleX="-1"
-            android:paddingRight="15dp"
-            android:paddingLeft="3dp"
-            android:paddingTop="3dp"
-            android:paddingBottom="3dp"/>
+		<ImageView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:id="@+id/imageview_next_month"
+			android:layout_gravity="center|right"
+			android:tint="#000000"
+			android:scaleX="-1"
+			android:paddingRight="15dp"
+			android:paddingLeft="3dp"
+			android:paddingTop="3dp"
+			android:paddingBottom="3dp"
+			android:src="@drawable/back"/>
 
-    </TableRow>
+	</TableRow>
 
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#e1e1e1">
+	<TableRow
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:background="#e1e1e1">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="S"
-            android:gravity="center"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="M"
-            android:gravity="center"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="T"
-            android:gravity="center"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="W"
-            android:gravity="center"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="T"
-            android:gravity="center"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="F"
-            android:gravity="center"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="S"
-            android:gravity="center"/>
-    </TableRow>
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="S"
+			android:gravity="center"/>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="M"
+			android:gravity="center"/>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="T"
+			android:gravity="center"/>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="W"
+			android:gravity="center"/>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="T"
+			android:gravity="center"/>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="F"
+			android:gravity="center"/>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="S"
+			android:gravity="center"/>
+	</TableRow>
 
 </TableLayout>

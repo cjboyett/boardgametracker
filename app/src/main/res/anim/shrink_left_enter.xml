@@ -1,13 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <set xmlns:android="http://schemas.android.com/apk/res/android">
-    <alpha android:fromAlpha="0.8" android:toAlpha="1"
-           android:duration="@integer/animation_duration_1"
-           android:startOffset="@integer/animation_offset_2"/>
-    <scale android:fromXScale="0.8" android:toXScale="1"
-           android:pivotX="50%" android:pivotY="50%"
-           android:fromYScale="0.8" android:toYScale="1"
-           android:duration="150" android:startOffset="@integer/animation_offset_2"/>
-    <translate android:duration="@integer/animation_duration_2"
-               android:startOffset="@integer/animation_offset_1"
-               android:fromXDelta="100%p" android:toXDelta="0"/>
+	<alpha
+		android:fromAlpha="0.8"
+		android:toAlpha="1"
+		android:duration="@integer/animation_duration_1"
+		android:startOffset="@integer/animation_offset_2"/>
+	<scale
+		android:fromXScale="0.8"
+		android:toXScale="1"
+		android:pivotX="50%"
+		android:pivotY="50%"
+		android:fromYScale="0.8"
+		android:toYScale="1"
+		android:duration="150"
+		android:startOffset="@integer/animation_offset_2"/>
+	<translate
+		android:duration="@integer/animation_duration_2"
+		android:startOffset="@integer/animation_offset_1"
+		android:fromXDelta="100%p"
+		android:toXDelta="0"/>
 </set>

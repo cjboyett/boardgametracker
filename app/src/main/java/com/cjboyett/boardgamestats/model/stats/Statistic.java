@@ -8,13 +8,11 @@ import android.view.View;
 /**
  * Created by Casey on 4/21/2016.
  */
-public abstract class Statistic
-{
+public abstract class Statistic {
 	protected Activity activity;
 	private boolean hasMoreStats, hasFewerStats;
 
-	public Statistic(Activity activity)
-	{
+	public Statistic(Activity activity) {
 		this.activity = activity;
 	}
 
@@ -29,23 +27,19 @@ public abstract class Statistic
 	@Nullable
 	public abstract void getFewerStats();
 
-	public boolean hasMoreStats()
-	{
+	public boolean hasMoreStats() {
 		return hasMoreStats;
 	}
 
-	public void setHasMoreStats(boolean hasMoreStats)
-	{
+	public void setHasMoreStats(boolean hasMoreStats) {
 		this.hasMoreStats = hasMoreStats;
 	}
 
-	public boolean hasFewerStats()
-	{
+	public boolean hasFewerStats() {
 		return hasFewerStats;
 	}
 
-	public void setHasFewerStats(boolean hasFewerStats)
-	{
+	public void setHasFewerStats(boolean hasFewerStats) {
 		this.hasFewerStats = hasFewerStats;
 	}
 }

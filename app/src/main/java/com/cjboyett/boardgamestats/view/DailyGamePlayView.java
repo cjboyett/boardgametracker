@@ -17,15 +17,15 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import com.cjboyett.boardgamestats.activity.GamePlayDetailsTabbedActivity;
 import com.cjboyett.boardgamestats.R;
+import com.cjboyett.boardgamestats.activity.statsdetail.GamePlayDetailsTabbedActivity;
 import com.cjboyett.boardgamestats.model.games.Game;
 import com.cjboyett.boardgamestats.model.games.GamePlayData;
 import com.cjboyett.boardgamestats.utility.ActivityUtilities;
-import com.cjboyett.boardgamestats.utility.view.ImageController;
 import com.cjboyett.boardgamestats.utility.Preferences;
-import com.cjboyett.boardgamestats.utility.view.StringToBitmapBuilder;
 import com.cjboyett.boardgamestats.utility.data.StringUtilities;
+import com.cjboyett.boardgamestats.utility.view.ImageController;
+import com.cjboyett.boardgamestats.utility.view.StringToBitmapBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,8 +35,7 @@ import java.util.TreeMap;
 /**
  * Created by Casey on 3/23/2016.
  */
-public class DailyGamePlayView extends LinearLayout
-{
+public class DailyGamePlayView extends LinearLayout {
 	private Activity activity;
 	private float ratio;
 	private int index = 0;
@@ -53,8 +52,7 @@ public class DailyGamePlayView extends LinearLayout
 	private int NUM_COLUMNS;
 	private float SCALE_FACTOR;
 
-	public DailyGamePlayView(Activity activity, String day)
-	{
+	public DailyGamePlayView(Activity activity, String day) {
 		super(activity);
 		LayoutInflater inflater = LayoutInflater.from(activity);
 		inflater.inflate(R.layout.daily_game_play_view, this);
@@ -80,30 +78,24 @@ public class DailyGamePlayView extends LinearLayout
 		colorComponents();
 	}
 
-	public void setDay(String day)
-	{
-		((TextView)findViewById(R.id.textview_day)).setText(day);
+	public void setDay(String day) {
+		((TextView) findViewById(R.id.textview_day)).setText(day);
 	}
 
-	public void addBoardGamePlay(final GamePlayData gamePlayData, final long gamePlayId)
-	{
+	public void addBoardGamePlay(final GamePlayData gamePlayData, final long gamePlayId) {
 		boardGamePlayDatas.put(gamePlayId, gamePlayData);
 	}
 
-	public void addRPGPlay(final GamePlayData gamePlayData, final long gamePlayId)
-	{
+	public void addRPGPlay(final GamePlayData gamePlayData, final long gamePlayId) {
 		rpgPlayDatas.put(gamePlayId, gamePlayData);
 	}
 
-	public void addVideoGamePlay(final GamePlayData gamePlayData, final long gamePlayId)
-	{
+	public void addVideoGamePlay(final GamePlayData gamePlayData, final long gamePlayId) {
 		videoGamePlayDatas.put(gamePlayId, gamePlayData);
 	}
 
-	public void drawViews()
-	{
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
-		{
+	public void drawViews() {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
 			TransitionManager.beginDelayedTransition(this);
 		}
 
@@ -113,24 +105,21 @@ public class DailyGamePlayView extends LinearLayout
 
 		int index = 0;
 
-		for (final long gamePlayId : boardGamePlayDatas.keySet())
-		{
+		for (final long gamePlayId : boardGamePlayDatas.keySet()) {
 			ids[index] = gamePlayId;
 			gameTypes.add("b");
 			gameNames.add(boardGamePlayDatas.get(gamePlayId).getGame().getName());
 			addGamePlayToView(gamePlayId, Game.GameType.BOARD, index);
 			index++;
 		}
-		for (final long gamePlayId : rpgPlayDatas.keySet())
-		{
+		for (final long gamePlayId : rpgPlayDatas.keySet()) {
 			ids[index] = gamePlayId;
 			gameTypes.add("r");
 			gameNames.add(rpgPlayDatas.get(gamePlayId).getGame().getName());
 			addGamePlayToView(gamePlayId, Game.GameType.RPG, index);
 			index++;
 		}
-		for (final long gamePlayId : videoGamePlayDatas.keySet())
-		{
+		for (final long gamePlayId : videoGamePlayDatas.keySet()) {
 			ids[index] = gamePlayId;
 			gameTypes.add("v");
 			gameNames.add(videoGamePlayDatas.get(gamePlayId).getGame().getName());
@@ -139,9 +128,9 @@ public class DailyGamePlayView extends LinearLayout
 		}
 	}
 
-	private void addGamePlayToView(final long gamePlayId, Game.GameType gameType, int index)
-	{
-		TableRow.LayoutParams layoutParams = new TableRow.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+	private void addGamePlayToView(final long gamePlayId, Game.GameType gameType, int index) {
+		TableRow.LayoutParams layoutParams =
+				new TableRow.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 		layoutParams.setMargins(5, 5, 5, 5);
 		layoutParams.gravity = Gravity.CENTER;
 
@@ -167,8 +156,7 @@ public class DailyGamePlayView extends LinearLayout
 		imageView.setPadding(8, 8, 8, 8);
 
 		// TODO Get this to scale and fit properly
-		if (thumbnail == null)
-		{
+		if (thumbnail == null) {
 			imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
 			thumbnail = new StringToBitmapBuilder(activity)
 					.setTextSize(8)
@@ -180,33 +168,32 @@ public class DailyGamePlayView extends LinearLayout
 		imageView.setImageBitmap(thumbnail);
 
 		final int finalIndex = index;
-		imageView.setOnClickListener(new OnClickListener()
-		{
+		imageView.setOnClickListener(new OnClickListener() {
 			@Override
-			public void onClick(View v)
-			{
+			public void onClick(View v) {
 
 				ActivityUtilities.generatePaletteAndOpenActivity(activity,
-						new Intent(activity, GamePlayDetailsTabbedActivity.class)
-								.putExtra("IDS", ids)
-								.putStringArrayListExtra("TYPES", (ArrayList<String>)gameTypes)
-								.putStringArrayListExtra("NAMES", (ArrayList<String>)gameNames)
-								.putExtra("COUNT", ids.length)
-								.putExtra("POSITION", finalIndex),
-						"http://" + gamePlayData.getGame().getThumbnailUrl(),
-						"UP");
+																 new Intent(activity,
+																			GamePlayDetailsTabbedActivity.class)
+																		 .putExtra("IDS", ids)
+																		 .putStringArrayListExtra("TYPES",
+																								  (ArrayList<String>) gameTypes)
+																		 .putStringArrayListExtra("NAMES",
+																								  (ArrayList<String>) gameNames)
+																		 .putExtra("COUNT", ids.length)
+																		 .putExtra("POSITION", finalIndex),
+																 "http://" + gamePlayData.getGame().getThumbnailUrl(),
+																 "UP");
 				ActivityUtilities.exitUp(activity);
 			}
 		});
 
-		if (index == NUM_COLUMNS)
-		{
+		if (index == NUM_COLUMNS) {
 			addTableRow();
 			index = 0;
 		}
 
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
-		{
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
 			TransitionManager.beginDelayedTransition(this);
 		}
 
@@ -217,52 +204,47 @@ public class DailyGamePlayView extends LinearLayout
 
 	}
 
-	public void clearViews()
-	{
-		for (TableRow row : rows) ((TableLayout)findViewById(R.id.table_daily_game_plays)).removeView(row);
+	public void clearViews() {
+		for (TableRow row : rows) ((TableLayout) findViewById(R.id.table_daily_game_plays)).removeView(row);
 		rows = new ArrayList<>();
 		addTableRow();
 		index = 0;
 	}
 
-	private void setColors()
-	{
+	private void setColors() {
 		backgroundColor = Preferences.getBackgroundColor(getContext());
 		foregroundColor = Preferences.getForegroundColor(getContext());
 	}
 
-	private void colorComponents()
-	{
+	private void colorComponents() {
 		setBackgroundColor(backgroundColor);
-		((TextView)findViewById(R.id.textview_day)).setTextColor(foregroundColor);
+		((TextView) findViewById(R.id.textview_day)).setTextColor(foregroundColor);
 		findViewById(R.id.textview_day).setBackgroundColor(backgroundColor);
 		findViewById(R.id.table_daily_game_plays).setBackgroundColor(backgroundColor);
 	}
 
-	private void addTableRow()
-	{
+	private void addTableRow() {
 		TableRow row = new TableRow(activity);
 		row.setPadding(5, 5, 5, 5);
 		row.setBackgroundColor(backgroundColor);
-		TableRow.LayoutParams layoutParams = new TableRow.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+		TableRow.LayoutParams layoutParams =
+				new TableRow.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 		layoutParams.gravity = Gravity.CENTER;
 		row.setLayoutParams(layoutParams);
 		rows.add(row);
-		((TableLayout)findViewById(R.id.table_daily_game_plays)).addView(row);
+		((TableLayout) findViewById(R.id.table_daily_game_plays)).addView(row);
 	}
 
-	public void clearIds()
-	{
+	public void clearIds() {
 		boardGamePlayDatas.clear();
 		rpgPlayDatas.clear();
 		videoGamePlayDatas.clear();
 	}
 
-	public void setChildrenBackrground(int color)
-	{
+	public void setChildrenBackrground(int color) {
 //		setBackgroundColor(color);
 		backgroundColor = color;
-		((TextView)findViewById(R.id.textview_day)).setTextColor(Color.BLACK);
+		((TextView) findViewById(R.id.textview_day)).setTextColor(Color.BLACK);
 		findViewById(R.id.textview_day).setBackgroundColor(color);
 		findViewById(R.id.table_daily_game_plays).setBackgroundColor(color);
 	}

@@ -19,15 +19,13 @@ import java.util.List;
 /**
  * Created by Casey on 9/17/2016.
  */
-public class AchievementRecyclerAdapter extends RecyclerView.Adapter<AchievementRecyclerAdapter.ViewHolder>
-{
+public class AchievementRecyclerAdapter extends RecyclerView.Adapter<AchievementRecyclerAdapter.ViewHolder> {
 	private List<Achievement> achievementList;
 	private Context context;
 
 	private static int backgroundColor, foregroundColor;
 
-	public AchievementRecyclerAdapter(Context context, List<Achievement> achievementList)
-	{
+	public AchievementRecyclerAdapter(Context context, List<Achievement> achievementList) {
 		this.context = context;
 		this.achievementList = achievementList;
 
@@ -36,53 +34,50 @@ public class AchievementRecyclerAdapter extends RecyclerView.Adapter<Achievement
 	}
 
 	@Override
-	public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
-	{
+	public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 		View view = LayoutInflater.from(context).inflate(R.layout.list_item_achievement, null);
 		return new ViewHolder(view);
 	}
 
 	@Override
-	public void onBindViewHolder(ViewHolder holder, int position)
-	{
+	public void onBindViewHolder(ViewHolder holder, int position) {
 		holder.setAchievement(achievementList.get(position));
 	}
 
 	@Override
-	public int getItemCount()
-	{
+	public int getItemCount() {
 		return achievementList.size();
 	}
 
-	public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
-	{
-		private  View view;
+	public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+		private View view;
 
-		public ViewHolder(View itemView)
-		{
+		public ViewHolder(View itemView) {
 			super(itemView);
 			view = itemView;
 		}
 
-		public void setAchievement(Achievement achievement)
-		{
-			((TextView)view.findViewById(R.id.textview_achievement_title)).setText(achievement.getTitle());
-			((TextView)view.findViewById(R.id.textview_achievement_description)).setText(achievement.getDescription());
-			((TextView)view.findViewById(R.id.textview_achievement_experience)).setText(achievement.getExperience() + " Exp");
+		public void setAchievement(Achievement achievement) {
+			((TextView) view.findViewById(R.id.textview_achievement_title)).setText(achievement.getTitle());
+			((TextView) view.findViewById(R.id.textview_achievement_description)).setText(achievement.getDescription());
+			((TextView) view.findViewById(R.id.textview_achievement_experience)).setText(
+					achievement.getExperience() + " Exp");
 
-			((TextView)view.findViewById(R.id.textview_achievement_title)).setTextColor(foregroundColor);
-			((TextView)view.findViewById(R.id.textview_achievement_description)).setTextColor(foregroundColor);
-			((TextView)view.findViewById(R.id.textview_achievement_experience)).setTextColor(foregroundColor);
+			((TextView) view.findViewById(R.id.textview_achievement_title)).setTextColor(foregroundColor);
+			((TextView) view.findViewById(R.id.textview_achievement_description)).setTextColor(foregroundColor);
+			((TextView) view.findViewById(R.id.textview_achievement_experience)).setTextColor(foregroundColor);
 
 			ViewUtilities.tintLayoutBackground(view, foregroundColor);
 
-			if (achievement.isCompleted()) ViewUtilities.tintImageView((AppCompatImageView) view.findViewById(R.id.imageview_achievement_icon), Color.rgb(255, 215, 0));
-			else ViewUtilities.tintImageView((AppCompatImageView) view.findViewById(R.id.imageview_achievement_icon), Color.DKGRAY);
+			if (achievement.isCompleted())
+				ViewUtilities.tintImageView((AppCompatImageView) view.findViewById(R.id.imageview_achievement_icon),
+											Color.rgb(255, 215, 0));
+			else ViewUtilities.tintImageView((AppCompatImageView) view.findViewById(R.id.imageview_achievement_icon),
+											 Color.DKGRAY);
 		}
 
 		@Override
-		public void onClick(View v)
-		{
+		public void onClick(View v) {
 
 		}
 	}

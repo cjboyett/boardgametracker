@@ -11,13 +11,11 @@ import com.cjboyett.boardgamestats.utility.Preferences;
 /**
  * Created by Casey on 10/20/2016.
  */
-public class TimerNotificationIntentService extends IntentService
-{
+public class TimerNotificationIntentService extends IntentService {
 	private static final int NOTIFICATION_ID = 0;
 	private static final String ACTION_PAUSE_TIMER = "com.cjboyett.boardgamestats.ACTION_PAUSE_TIMER";
 
-	public TimerNotificationIntentService()
-	{
+	public TimerNotificationIntentService() {
 		super(TimerNotificationIntentService.class.getSimpleName());
 	}
 
@@ -31,24 +29,19 @@ public class TimerNotificationIntentService extends IntentService
 */
 
 	@Override
-	protected void onHandleIntent(Intent intent)
-	{
+	protected void onHandleIntent(Intent intent) {
 		Log.d(getClass().getSimpleName(), "onHandleIntent, started handling a notification event");
-		try
-		{
+		try {
 			String action = intent.getAction();
 			Log.d("ACTION", action);
 			if (ACTION_PAUSE_TIMER.equals(action))
 				processPauseTimerNotification(getApplicationContext());
-		}
-		finally
-		{
+		} finally {
 			WakefulBroadcastReceiver.completeWakefulIntent(intent);
 		}
 	}
 
-	public static void processPauseTimerNotification(Context context)
-	{
+	public static void processPauseTimerNotification(Context context) {
 		String game = Preferences.getTimerGame(context);
 		long timerStart = Preferences.getTimerStart(context);
 		boolean timerRunning = Preferences.isTimerRunning(context);
@@ -56,6 +49,7 @@ public class TimerNotificationIntentService extends IntentService
 		Log.d("SERVICE", "Pausing " + game + " " + timerStart + " " + timerRunning);
 
 		TimerNotificationBuilder builder = new TimerNotificationBuilder();
-		builder.toggleTimerNotification(context, builder.createTimerNotification(context, game, timerRunning, timerStart));
+		builder.toggleTimerNotification(context,
+										builder.createTimerNotification(context, game, timerRunning, timerStart));
 	}
 }

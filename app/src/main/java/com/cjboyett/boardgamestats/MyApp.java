@@ -1,10 +1,10 @@
 package com.cjboyett.boardgamestats;
 
 import android.app.Application;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.util.Log;
-import android.view.WindowManager;
 
 import com.cjboyett.boardgamestats.data.DataManager;
 import com.cjboyett.boardgamestats.data.TempDataManager;
@@ -14,12 +14,12 @@ import com.cjboyett.boardgamestats.utility.Preferences;
 import com.facebook.FacebookSdk;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
+import com.squareup.leakcanary.LeakCanary;
 
 /**
  * Created by Casey on 4/14/2016.
  */
-public class MyApp extends Application
-{
+public class MyApp extends Application {
 	/**
 	 * The Analytics singleton. The field is set in onCreate method override when the application
 	 * class is initially created.
@@ -53,8 +53,7 @@ public class MyApp extends Application
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		if (!Preferences.isSuperUser(this))
-		{
+		if (!Preferences.isSuperUser(this)) {
 			Log.d("SUPER USER", "You are not.");
 			analytics = GoogleAnalytics.getInstance(this);
 
@@ -72,24 +71,27 @@ public class MyApp extends Application
 			tracker.enableAutoActivityTracking(true);
 		}
 
+		if (LeakCanary.isInAnalyzerProcess(this)) {
+			// This process is dedicated to LeakCanary for heap analysis.
+			// You should not init your app in this process.
+			return;
+		}
+		LeakCanary.install(this);
+
 		// Initialize data managers for quickly navigation
 		final DataManager dataManager = DataManager.getInstance(this);
-		new AsyncTask<String, Void, Void>()
-		{
+		new AsyncTask<String, Void, Void>() {
 			@Override
-			protected Void doInBackground(String... params)
-			{
+			protected Void doInBackground(String... params) {
 				dataManager.initialize();
 				return null;
 			}
 		}.execute("");
 
 		final StatisticsManager statisticsManager = StatisticsManager.getInstance(this);
-		new AsyncTask<String, Void, Void>()
-		{
+		new AsyncTask<String, Void, Void>() {
 			@Override
-			protected Void doInBackground(String... params)
-			{
+			protected Void doInBackground(String... params) {
 				statisticsManager.initialize();
 				return null;
 			}
@@ -105,5 +107,11 @@ public class MyApp extends Application
 
 		// Init Facebook SDK
 		FacebookSdk.sdkInitialize(this);
+	}
+
+	public boolean isConnectedToInternet() {
+		ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+		NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
+		return activeNetwork != null && activeNetwork.isConnected();
 	}
 }

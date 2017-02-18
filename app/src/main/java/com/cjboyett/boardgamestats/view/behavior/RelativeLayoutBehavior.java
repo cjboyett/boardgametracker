@@ -10,22 +10,18 @@ import android.widget.RelativeLayout;
 /**
  * Created by Casey on 4/18/2016.
  */
-public class RelativeLayoutBehavior extends CoordinatorLayout.Behavior<RelativeLayout>
-{
-	public RelativeLayoutBehavior(Context context, AttributeSet attrs)
-	{
+public class RelativeLayoutBehavior extends CoordinatorLayout.Behavior<RelativeLayout> {
+	public RelativeLayoutBehavior(Context context, AttributeSet attrs) {
 		super(context, attrs);
 	}
 
 	@Override
-	public boolean layoutDependsOn(CoordinatorLayout parent, RelativeLayout child, View dependency)
-	{
+	public boolean layoutDependsOn(CoordinatorLayout parent, RelativeLayout child, View dependency) {
 		return super.layoutDependsOn(parent, child, dependency) || dependency instanceof Snackbar.SnackbarLayout;
 	}
 
 	@Override
-	public boolean onDependentViewChanged(CoordinatorLayout parent, RelativeLayout child, View dependency)
-	{
+	public boolean onDependentViewChanged(CoordinatorLayout parent, RelativeLayout child, View dependency) {
 		float translationY = Math.min(0, dependency.getTranslationY() - dependency.getHeight());
 		child.setTranslationY(translationY);
 		return true;

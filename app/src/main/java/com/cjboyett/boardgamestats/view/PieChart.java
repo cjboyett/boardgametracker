@@ -31,8 +31,7 @@ import java.util.List;
 /**
  * Created by Casey on 9/14/2016.
  */
-public class PieChart extends ViewGroup
-{
+public class PieChart extends ViewGroup {
 	private List<Item> mData = new ArrayList<Item>();
 
 	private float mTotal = 0.0f;
@@ -65,7 +64,7 @@ public class PieChart extends ViewGroup
 	private PieView mPieView;
 	private Scroller mScroller;
 	private ValueAnimator mScrollAnimator;
-//	private GestureDetector mDetector;
+	//	private GestureDetector mDetector;
 	private PointerView mPointerView;
 
 	// The angle at which we measure the current item. This is
@@ -428,8 +427,7 @@ public class PieChart extends ViewGroup
 		return mData.size() - 1;
 	}
 
-	public void clearItems()
-	{
+	public void clearItems() {
 		mData.clear();
 		mTotal = 0;
 		onDataChanged();
@@ -579,9 +577,9 @@ public class PieChart extends ViewGroup
 
 		// Lay out the child view that actually draws the pie.
 		mPieView.layout((int) mPieBounds.left,
-		                (int) mPieBounds.top,
-		                (int) mPieBounds.right,
-		                (int) mPieBounds.bottom);
+						(int) mPieBounds.top,
+						(int) mPieBounds.right,
+						(int) mPieBounds.bottom);
 		mPieView.setPivot(mPieBounds.width() / 2, mPieBounds.height() / 2);
 
 		mPointerView.layout(0, 0, w, h);
@@ -863,9 +861,9 @@ public class PieChart extends ViewGroup
 			for (Item it : mData) {
 				mPiePaint.setShader(it.mShader);
 				canvas.drawArc(mBounds,
-				               360 - it.mEndAngle,
-				               it.mEndAngle - it.mStartAngle,
-				               true, mPiePaint);
+							   360 - it.mEndAngle,
+							   it.mEndAngle - it.mStartAngle,
+							   true, mPiePaint);
 			}
 		}
 
