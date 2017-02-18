@@ -419,7 +419,6 @@ public class GamePlayDetailsTabbedActivity extends AppCompatActivity {
 		private String gameName, gameType;
 
 		GamesDbHelper dbHelper;
-		ImageController imageController;
 
 		public static GamePlayDataFragment newInstance(String gameType, long gamePlayId) {
 			GamePlayDataFragment fragment = new GamePlayDataFragment();
@@ -453,7 +452,7 @@ public class GamePlayDetailsTabbedActivity extends AppCompatActivity {
 
 		private void generateLayout(String gameType, long id) {
 			dbHelper = new GamesDbHelper(getContext());
-			imageController = new ImageController(getContext());
+			ImageController imageController = new ImageController(getContext());
 
 			Log.d("GAME", gameType + " " + id);
 			gamePlayData = null;
@@ -532,9 +531,12 @@ public class GamePlayDetailsTabbedActivity extends AppCompatActivity {
 						break;
 				}
 				if (thumbnailUrl != null) {
+					Log.d("BLARG", thumbnailUrl);
+					ImageController imageController = new ImageController(getActivity()).setDirectoryName("thumbnails");
 					Bitmap thumbnail =
 							imageController.setFileName(thumbnailUrl.substring(thumbnailUrl.lastIndexOf("/") + 1))
 										   .load();
+					imageController.close();
 					Palette palette = Palette.generate(thumbnail);
 					List<Palette.Swatch> swatchList = new ArrayList<>();
 					if (palette.getDarkVibrantSwatch() != null)

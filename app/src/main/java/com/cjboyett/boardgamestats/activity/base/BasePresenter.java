@@ -1,15 +1,17 @@
 package com.cjboyett.boardgamestats.activity.base;
 
+import java.lang.ref.WeakReference;
+
 /**
  * Created by Casey on 1/29/2017.
  */
 
 public class BasePresenter<T extends MvpView> implements Presenter<T> {
-	private T view;
+	private WeakReference<T> view;
 
 	@Override
 	public void attachView(T view) {
-		this.view = view;
+		this.view = new WeakReference<T>(view);
 	}
 
 	@Override
@@ -18,11 +20,11 @@ public class BasePresenter<T extends MvpView> implements Presenter<T> {
 	}
 
 	public boolean isViewAttached() {
-		return view != null;
+		return view.get() != null;
 	}
 
 	public T getView() {
-		return view;
+		return view.get();
 	}
 
 	public void checkViewAttached() {

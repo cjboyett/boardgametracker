@@ -22,19 +22,19 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.cjboyett.boardgamestats.R;
-import com.cjboyett.boardgamestats.activity.base.BaseAdActivity;
 import com.cjboyett.boardgamestats.activity.addgame.AddGameActivity;
 import com.cjboyett.boardgamestats.activity.addgameplay.AddGamePlayTabbedActivity;
+import com.cjboyett.boardgamestats.activity.base.BaseAdActivity;
 import com.cjboyett.boardgamestats.data.TempDataManager;
 import com.cjboyett.boardgamestats.data.games.GamesDbHelper;
 import com.cjboyett.boardgamestats.data.games.board.BoardGameDbUtility;
 import com.cjboyett.boardgamestats.data.games.rpg.RPGDbUtility;
 import com.cjboyett.boardgamestats.data.games.video.VideoGameDbUtility;
 import com.cjboyett.boardgamestats.model.games.Game;
-import com.cjboyett.boardgamestats.model.games.GameExtra;
 import com.cjboyett.boardgamestats.model.games.board.BoardGame;
 import com.cjboyett.boardgamestats.model.games.rpg.RolePlayingGame;
 import com.cjboyett.boardgamestats.model.games.video.VideoGame;
@@ -48,21 +48,59 @@ import com.cjboyett.boardgamestats.view.adapter.GameExtrasAdapter;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.OnTouch;
+
 @SuppressWarnings("ResourceType")
-public class GameDataActivity extends BaseAdActivity {
+public class GameDataActivity extends BaseAdActivity implements GameDataView {
 	private Activity activity = this;
 
 	private GamesDbHelper dbHelper;
-	private Bitmap thumbnailBitmap = null;
-	private View view, dummyView;
-	private LinearLayout buttonBar;
-	private TextView doneButton, syncButton, descriptionTextView;
-	private ListView extrasListView;
-	private EditText nameEditText, descriptionEditText;
-	private ImageView thumbnail;
+	private View view;
 
-	private FloatingActionMenu fabMenu;
-	private FloatingActionButton addFab, deleteFab, editFab;
+	@BindView(R.id.dummyview)
+	protected View dummyView;
+
+	@BindView(R.id.scrollview_description)
+	ScrollView scrollView;
+
+	@BindView(R.id.linearlayout_button_bar)
+	protected LinearLayout buttonBar;
+
+	@BindView(R.id.textview_submit)
+	protected TextView doneButton;
+
+	@BindView(R.id.textview_game_description)
+	protected TextView descriptionTextView;
+
+	@BindView(R.id.listview_game_extras)
+	protected ListView extrasListView;
+
+	@BindView(R.id.edittext_game_name)
+	protected EditText nameEditText;
+
+	@BindView(R.id.edittext_game_description)
+	protected EditText descriptionEditText;
+
+	@BindView(R.id.imageview_thumbnail)
+	protected ImageView thumbnail;
+
+	@BindView(R.id.floating_menu)
+	protected FloatingActionMenu fabMenu;
+
+	@BindView(R.id.fab_add)
+	protected FloatingActionButton addFab;
+
+	@BindView(R.id.fab_delete)
+	protected FloatingActionButton deleteFab;
+
+	@BindView(R.id.fab_edit)
+	protected FloatingActionButton editFab;
+
+	@BindView(R.id.fab_bgg)
+	protected FloatingActionButton syncFab;
 
 	private String gameName, gameType;
 	private Game game;
@@ -78,11 +116,15 @@ public class GameDataActivity extends BaseAdActivity {
 		super("ca-app-pub-1437859753538305/9571180678");
 	}
 
+
+	// Lifecycle methods
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		view = getLayoutInflater().inflate(R.layout.activity_game_data, null);
 		setContentView(view);
+		ButterKnife.bind(this);
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
 			getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
@@ -95,148 +137,7 @@ public class GameDataActivity extends BaseAdActivity {
 		else if (StringUtilities.isVideoGame(gameType)) game = VideoGameDbUtility.getVideoGame(dbHelper, gameName);
 		else game = new BoardGame("Farts");
 
-		extrasListView = (ListView) view.findViewById(R.id.listview_game_extras);
 		extrasListView.setAdapter(new GameExtrasAdapter(this, game));
-
-		dummyView = findViewById(R.id.dummyview);
-		buttonBar = (LinearLayout) findViewById(R.id.linearlayout_button_bar);
-		doneButton = (TextView) findViewById(R.id.textview_submit);
-		syncButton = (TextView) findViewById(R.id.textview_sync);
-
-		fabMenu = (FloatingActionMenu) findViewById(R.id.floating_menu);
-
-		addFab = (FloatingActionButton) findViewById(R.id.fab_add);
-		addFab.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				fabMenu.close(true);
-				TempDataManager tempDataManager = TempDataManager.getInstance(getApplication());
-				tempDataManager.initialize();
-				startActivity(new Intent(view.getContext(), AddGamePlayTabbedActivity.class)
-									  .putExtra("GAME", gameName)
-									  .putExtra("TYPE", gameType)
-									  .putExtra("ID", -1l)
-									  .putExtra("EXIT", "UP"));
-				ActivityUtilities.exitDown(activity);
-			}
-		});
-
-		deleteFab = (FloatingActionButton) findViewById(R.id.fab_delete);
-		deleteFab.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				fabMenu.close(true);
-				final View finalView = view;
-				AlertDialog dialog = new ViewUtilities.DialogBuilder(view.getContext())
-						.setTitle("Delete Game")
-						.setMessage(
-								"Are you sure you want to delete this game?  This will remove all data associated with it.  This action cannot be undone.")
-						.setPositiveButton("Delete", new View.OnClickListener() {
-							@Override
-							public void onClick(View v) {
-								String thumbnailUrl = "http://" + game.getThumbnailUrl();
-								new ImageController(finalView.getContext())
-										.setDirectoryName("thumbnails")
-										.setFileName(thumbnailUrl.substring(thumbnailUrl.lastIndexOf("/") + 1))
-										.delete();
-								if (gameType.equals("b"))
-									BoardGameDbUtility.deleteBoardGame(dbHelper,
-																	   new BoardGame(getIntent().getStringExtra("GAME")));
-								else if (gameType.equals("r"))
-									RPGDbUtility.deleteRPG(dbHelper,
-														   new RolePlayingGame(getIntent().getStringExtra("GAME")));
-								else if (gameType.equals("v"))
-									VideoGameDbUtility.deleteVideoGame(dbHelper,
-																	   new VideoGame(getIntent().getStringExtra("GAME")));
-								ActivityUtilities.setDatabaseChanged(activity, true);
-								startActivity(new Intent(finalView.getContext(), GameListActivity.class)
-													  .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-								ActivityUtilities.exitRight(activity);
-							}
-						})
-						.setNegativeButton("Cancel", null)
-						.create();
-				dialog.show();
-			}
-		});
-
-		editFab = (FloatingActionButton) findViewById(R.id.fab_edit);
-		editFab.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				fabMenu.close(true);
-				if (!editing) {
-					editing = true;
-					flipView(view.findViewById(R.id.scrollview_description), descriptionEditText);
-
-					nameEditText.setText(game.getName());
-					nameEditText.setEnabled(true);
-					descriptionEditText.setEnabled(true);
-
-					nameEditText.setHint("Name");
-					descriptionEditText.setHint("Description");
-				}
-			}
-		});
-
-		findViewById(R.id.fab_bgg).setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				syncWithBgg();
-			}
-		});
-
-		doneButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if (editing) {
-					editing = false;
-					flipView(descriptionEditText, view.findViewById(R.id.scrollview_description));
-
-					nameEditText.setEnabled(false);
-					descriptionEditText.setEnabled(false);
-
-					nameEditText.setHint("");
-					descriptionEditText.setHint("");
-
-					String oldGameName = game.getName();
-
-					game.setName(nameEditText.getText()
-											 .toString());
-					game.setDescription(descriptionEditText.getText()
-														   .toString());
-
-					try {
-						boolean success = false;
-						if (gameType.equals("b"))
-							success = BoardGameDbUtility.updateBoardGame(dbHelper, oldGameName, (BoardGame) game);
-						else if (gameType.equals("r"))
-							success = RPGDbUtility.updateRPG(dbHelper, oldGameName, (RolePlayingGame) game);
-						else if (gameType.equals("v"))
-							success = VideoGameDbUtility.updateVideoGame(dbHelper, oldGameName, (VideoGame) game);
-						if (success) {
-							ActivityUtilities.setDatabaseChanged(activity, true);
-
-							String gameString = game.getName();
-							if (game.getYearPublished() > 0)
-								gameString += " (" + game.getYearPublished() + ")";
-
-							nameEditText.setText(gameString);
-							descriptionTextView.setText(game.getDescription() + "\n\n\n");
-						} else showError("Could not update game.");
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-
-					dummyView.requestFocus();
-				}
-			}
-		});
-
-		nameEditText = (EditText) findViewById(R.id.edittext_boardgame_name);
-		descriptionEditText = (EditText) findViewById(R.id.edittext_boardgame_description);
-		descriptionTextView = (TextView) findViewById(R.id.textview_boardgame_description);
-		thumbnail = (ImageView) findViewById(R.id.imageview_avatar);
 
 		gestureDetector = new GestureDetectorCompat(this, new ScrollGestureListener());
 
@@ -245,24 +146,12 @@ public class GameDataActivity extends BaseAdActivity {
 					(AnimatorSet) AnimatorInflater.loadAnimator(getApplicationContext(), R.anim.card_flip_right_out);
 			setLeftIn = (AnimatorSet) AnimatorInflater.loadAnimator(getApplicationContext(), R.anim.card_flip_left_in);
 		} catch (Exception e) {
-
+			// Why do we catch here?
 		}
-
-		findViewById(R.id.scrollview_description).setOnTouchListener(new View.OnTouchListener() {
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				if (Preferences.useSwipes(activity)) return gestureDetector.onTouchEvent(event);
-				return false;
-			}
-		});
 
 		generateLayout();
 		setColors();
 		colorComponents();
-
-		if (game instanceof BoardGame) {
-			for (GameExtra mechanic : ((BoardGame) game).getMechanics()) Log.d("MECHANIC", mechanic.toString());
-		}
 
 		dummyView.requestFocus();
 	}
@@ -291,6 +180,9 @@ public class GameDataActivity extends BaseAdActivity {
 		ActivityUtilities.exitRight(this);
 	}
 
+
+	// BaseActivity methods
+
 	@Override
 	protected void setColors() {
 		if (Preferences.generatePalette(this)) {
@@ -306,11 +198,9 @@ public class GameDataActivity extends BaseAdActivity {
 
 	protected void colorComponents() {
 		nameEditText.setTextColor(foregroundColor);
-//		nameEditText.setBackgroundColor(backgroundColor);
 		nameEditText.setHintTextColor(hintTextColor);
 
 		descriptionEditText.setTextColor(foregroundColor);
-//		descriptionEditText.setBackgroundColor(backgroundColor);
 		descriptionEditText.setHintTextColor(hintTextColor);
 
 		descriptionTextView.setTextColor(foregroundColor);
@@ -320,10 +210,13 @@ public class GameDataActivity extends BaseAdActivity {
 
 		doneButton.setBackgroundColor(backgroundColor);
 		doneButton.setTextColor(foregroundColor);
-		syncButton.setBackgroundColor(backgroundColor);
-		syncButton.setTextColor(foregroundColor);
 
-		findViewById(R.id.imageview_spacer).setBackgroundColor(hintTextColor);
+		((TextView) view.findViewById(R.id.textview_description_label)).setTextColor(foregroundColor);
+		((TextView) view.findViewById(R.id.textview_extras_label)).setTextColor(foregroundColor);
+
+		ViewUtilities.tintLayoutBackground(view.findViewById(R.id.relativelayout_header), foregroundColor);
+		ViewUtilities.tintLayoutBackground(view.findViewById(R.id.listview_game_extras), foregroundColor);
+		ViewUtilities.tintLayoutBackground(view.findViewById(R.id.relativelayout_description), foregroundColor);
 	}
 
 	protected void generateLayout() {
@@ -335,7 +228,7 @@ public class GameDataActivity extends BaseAdActivity {
 		descriptionTextView.setText(game.getDescription() + "\n\n\n");
 
 		try {
-			thumbnailBitmap = getIntent().getParcelableExtra("BITMAP");
+			Bitmap thumbnailBitmap = getIntent().getParcelableExtra("BITMAP");
 			if (thumbnailBitmap != null) {
 				thumbnail.setImageBitmap(thumbnailBitmap);
 			} else {
@@ -348,6 +241,164 @@ public class GameDataActivity extends BaseAdActivity {
 //		final TranslateAnimation translateAnimation = new TranslateAnimation(0, 0, buttonBar.getTop(), buttonBar.getBottom());
 //		buttonBar.startAnimation(translateAnimation);
 	}
+
+
+	// Interface methods
+
+
+	// Binding methods
+
+	@OnClick(R.id.fab_add)
+	protected void addGamePlay() {
+		fabMenu.close(true);
+		TempDataManager tempDataManager = TempDataManager.getInstance(getApplication());
+		tempDataManager.initialize();
+		startActivity(new Intent(view.getContext(), AddGamePlayTabbedActivity.class)
+							  .putExtra("GAME", gameName)
+							  .putExtra("TYPE", gameType)
+							  .putExtra("ID", -1L)
+							  .putExtra("EXIT", "UP"));
+		ActivityUtilities.exitDown(activity);
+	}
+
+	@OnClick(R.id.fab_delete)
+	protected void deleteGame() {
+		fabMenu.close(true);
+		final View finalView = view;
+		AlertDialog dialog = new ViewUtilities.DialogBuilder(view.getContext())
+				.setTitle("Delete Game")
+				.setMessage(
+						"Are you sure you want to delete this game?  This will remove all data associated with it.  This action cannot be undone.")
+				.setPositiveButton("Delete", new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						String thumbnailUrl = "http://" + game.getThumbnailUrl();
+						new ImageController(finalView.getContext())
+								.setDirectoryName("thumbnails")
+								.setFileName(thumbnailUrl.substring(thumbnailUrl.lastIndexOf("/") + 1))
+								.delete();
+						switch (gameType) {
+							case "b":
+								BoardGameDbUtility.deleteBoardGame(dbHelper,
+																   new BoardGame(getIntent().getStringExtra(
+																		   "GAME")));
+								break;
+							case "r":
+								RPGDbUtility.deleteRPG(dbHelper,
+													   new RolePlayingGame(getIntent().getStringExtra("GAME")));
+								break;
+							case "v":
+								VideoGameDbUtility.deleteVideoGame(dbHelper,
+																   new VideoGame(getIntent().getStringExtra(
+																		   "GAME")));
+								break;
+						}
+						ActivityUtilities.setDatabaseChanged(activity, true);
+						startActivity(new Intent(finalView.getContext(), GameListActivity.class)
+											  .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+						ActivityUtilities.exitRight(activity);
+					}
+				})
+				.setNegativeButton("Cancel", null)
+				.create();
+		dialog.show();
+	}
+
+	@OnClick(R.id.fab_edit)
+	protected void editGame() {
+		fabMenu.close(true);
+		if (!editing) {
+			editing = true;
+			flipView(scrollView, descriptionEditText);
+
+			nameEditText.setText(game.getName());
+			nameEditText.setEnabled(true);
+			descriptionEditText.setEnabled(true);
+
+			nameEditText.setHint("Name");
+			descriptionEditText.setHint("Description");
+		}
+	}
+
+	@OnClick(R.id.fab_bgg)
+	protected void syncWithBgg() {
+		long id = 0;
+		switch (gameType) {
+			case "b":
+				id = BoardGameDbUtility.getGameId(dbHelper, gameName);
+				break;
+			case "r":
+				id = RPGDbUtility.getGameId(dbHelper, gameName);
+				break;
+			case "v":
+				id = VideoGameDbUtility.getGameId(dbHelper, gameName);
+				break;
+		}
+
+		if (id > 0) {
+			syncWithBggWithId(id, gameType);
+		} else {
+			searchBgg(gameName, gameType);
+		}
+	}
+
+	@OnClick(R.id.textview_submit)
+	protected void updateGame() {
+		if (editing) {
+			editing = false;
+			flipView(descriptionEditText, scrollView);
+
+			nameEditText.setEnabled(false);
+			descriptionEditText.setEnabled(false);
+
+			nameEditText.setHint("");
+			descriptionEditText.setHint("");
+
+			String oldGameName = game.getName();
+
+			game.setName(nameEditText.getText()
+									 .toString());
+			game.setDescription(descriptionEditText.getText()
+												   .toString());
+
+			try {
+				boolean success = false;
+				switch (gameType) {
+					case "b":
+						success = BoardGameDbUtility.updateBoardGame(dbHelper, oldGameName, (BoardGame) game);
+						break;
+					case "r":
+						success = RPGDbUtility.updateRPG(dbHelper, oldGameName, (RolePlayingGame) game);
+						break;
+					case "v":
+						success = VideoGameDbUtility.updateVideoGame(dbHelper, oldGameName, (VideoGame) game);
+						break;
+				}
+				if (success) {
+					ActivityUtilities.setDatabaseChanged(activity, true);
+
+					String gameString = game.getName();
+					if (game.getYearPublished() > 0)
+						gameString += " (" + game.getYearPublished() + ")";
+
+					nameEditText.setText(gameString);
+					descriptionTextView.setText(game.getDescription() + "\n\n\n");
+				} else showError("Could not update game.");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			dummyView.requestFocus();
+		}
+	}
+
+	@OnTouch(R.id.scrollview_description)
+	protected boolean touchScrollView(MotionEvent event) {
+		return Preferences.useSwipes(activity) && gestureDetector.onTouchEvent(event);
+	}
+
+
+	// Private methods
 
 	private void flipView(final View fromView, final View toView) {
 		try {
@@ -450,27 +501,6 @@ public class GameDataActivity extends BaseAdActivity {
 		}
 	}
 
-	private void syncWithBgg() {
-		long id = 0;
-		switch (gameType) {
-			case "b":
-				id = BoardGameDbUtility.getGameId(dbHelper, gameName);
-				break;
-			case "r":
-				id = RPGDbUtility.getGameId(dbHelper, gameName);
-				break;
-			case "v":
-				id = VideoGameDbUtility.getGameId(dbHelper, gameName);
-				break;
-		}
-
-		if (id > 0) {
-			syncWithBggWithId(id, gameType);
-		} else {
-			searchBgg(gameName, gameType);
-		}
-	}
-
 	private void syncWithBggWithId(final long id, final String gameType) {
 		fabMenu.close(true);
 
@@ -537,7 +567,7 @@ public class GameDataActivity extends BaseAdActivity {
 
 		if (editing) {
 			editing = false;
-			flipView(descriptionEditText, view.findViewById(R.id.scrollview_description));
+			flipView(descriptionEditText, scrollView);
 
 			nameEditText.setEnabled(false);
 			descriptionEditText.setEnabled(false);
@@ -597,6 +627,11 @@ public class GameDataActivity extends BaseAdActivity {
 				.setPositiveButton("Close", null)
 				.create();
 		errorDialog.show();
+	}
+
+	@Override
+	public Activity getActivity() {
+		return activity;
 	}
 
 	private class ScrollGestureListener extends GestureDetector.SimpleOnGestureListener {
