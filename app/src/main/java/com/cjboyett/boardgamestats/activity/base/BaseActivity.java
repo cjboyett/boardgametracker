@@ -4,9 +4,6 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.cjboyett.boardgamestats.utility.Preferences;
 
-/**
- * Created by Casey on 10/15/2016.
- */
 public abstract class BaseActivity extends AppCompatActivity {
 	protected int backgroundColor, foregroundColor, hintTextColor;
 

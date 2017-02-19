@@ -6,7 +6,7 @@
     <statePointEntry>
       <state      
         class = "com.android.tools.idea.editors.navigation.model.ActivityState"      
-        className = "com.cjboyett.boardgamestats.activity.collection.GameDataActivity"/>
+        className = "com.cjboyett.boardgamestats.activity.collection.gamedata.GameDataActivity"/>
       <point      
         x = "500"      
         y = "100"/>
@@ -78,7 +78,7 @@
     <statePointEntry>
       <state      
         class = "com.android.tools.idea.editors.navigation.model.ActivityState"      
-        className = "com.cjboyett.boardgamestats.activity.collection.GameListActivity"/>
+        className = "com.cjboyett.boardgamestats.activity.collection.gamelist.GameListActivity"/>
       <point      
         x = "950"      
         y = "550"/>

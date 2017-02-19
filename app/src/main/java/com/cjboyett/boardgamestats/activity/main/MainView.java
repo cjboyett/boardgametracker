@@ -1,12 +1,8 @@
 package com.cjboyett.boardgamestats.activity.main;
 
-import com.cjboyett.boardgamestats.activity.base.MvpView;
+import com.cjboyett.boardgamestats.activity.base.MvpScoopView;
 
-/**
- * Created by Casey on 1/29/2017.
- */
-
-public interface MainView extends MvpView {
+public interface MainView extends MvpScoopView {
 	void setWelcomeMessage(String welcomeMessage);
 
 	void processFirstVisit();

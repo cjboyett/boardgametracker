@@ -1,6 +1,7 @@
 package com.cjboyett.boardgamestats.view.ticker;
 
 import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
@@ -101,46 +102,29 @@ public class Ticker extends RelativeLayout {
 
 	// Animation for moving TickerItemViews
 	public void changeTickerItem() {
-		tickerItemViews[currentTickerItem].animate()
-										  .translationX(-TICKER_ITEM_TRANSLATION_X)
-										  .setStartDelay(0)
-										  .setDuration(1500)
-										  .setInterpolator(new AnticipateOvershootInterpolator())
-										  .setListener(new Animator.AnimatorListener() {
-											  @Override
-											  public void onAnimationStart(Animator animation) {
-											  }
-
-											  @Override
-											  public void onAnimationEnd(Animator animation) {
-												  tickerItemViews[currentTickerItem].setTranslationX(
-														  TICKER_ITEM_TRANSLATION_X);
-												  getNewTickerItem(currentTickerItem);
-												  tickerItemViews[currentTickerItem = 1 - currentTickerItem].animate()
-																											.translationX(
-																													0)
-																											.setStartDelay(
-																													0)
-																											.setDuration(
-																													1000)
-																											.setInterpolator(
-																													new OvershootInterpolator())
-																											.setListener(
-																													null)
-																											.start();
-											  }
-
-											  @Override
-											  public void onAnimationCancel(Animator animation) {
-
-											  }
-
-											  @Override
-											  public void onAnimationRepeat(Animator animation) {
-
-											  }
-										  })
-										  .start();
+		final TickerItemView currentView = tickerItemViews[currentTickerItem];
+		currentView.animate()
+				   .translationX(-TICKER_ITEM_TRANSLATION_X)
+				   .setStartDelay(0)
+				   .setDuration(1500)
+				   .setInterpolator(new AnticipateOvershootInterpolator())
+				   .setListener(new AnimatorListenerAdapter() {
+					   @Override
+					   public void onAnimationEnd(Animator animation) {
+						   tickerItemViews[currentTickerItem].setTranslationX(
+								   TICKER_ITEM_TRANSLATION_X);
+						   getNewTickerItem(currentTickerItem);
+						   TickerItemView nextView = tickerItemViews[currentTickerItem = 1 - currentTickerItem];
+						   nextView.animate()
+								   .translationX(0)
+								   .setStartDelay(0)
+								   .setDuration(1000)
+								   .setInterpolator(new OvershootInterpolator())
+								   .setListener(null)
+								   .start();
+					   }
+				   })
+				   .start();
 	}
 
 	// Starts...

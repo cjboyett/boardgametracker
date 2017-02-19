@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+				android:id="@+id/root_view"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+	>
+
+	<com.cjboyett.boardgamestats.view.scoop.MainUiContainer
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		android:id="@+id/screen_container"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:layout_above="@+id/ad_container"
+		android:background="@android:color/transparent"/>
+
+	<com.cjboyett.boardgamestats.view.scoop.DialogUiContainer
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		android:id="@+id/dialog_container"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:background="@android:color/transparent"
+		/>
+
+	<com.cjboyett.boardgamestats.view.AdViewContainer
+		android:id="@+id/ad_container"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_alignParentBottom="true"
+		android:animateLayoutChanges="true"/>
+</RelativeLayout>

@@ -1,4 +1,4 @@
-package com.cjboyett.boardgamestats.activity.collection;
+package com.cjboyett.boardgamestats.activity.collection.gamedata;
 
 import com.cjboyett.boardgamestats.activity.base.BasePresenter;
 

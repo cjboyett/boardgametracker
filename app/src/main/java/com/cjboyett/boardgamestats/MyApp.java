@@ -16,6 +16,8 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 import com.squareup.leakcanary.LeakCanary;
 
+import timber.log.Timber;
+
 /**
  * Created by Casey on 4/14/2016.
  */
@@ -107,6 +109,10 @@ public class MyApp extends Application {
 
 		// Init Facebook SDK
 		FacebookSdk.sdkInitialize(this);
+
+		if (BuildConfig.DEBUG) {
+			Timber.plant(new Timber.DebugTree());
+		}
 	}
 
 	public boolean isConnectedToInternet() {

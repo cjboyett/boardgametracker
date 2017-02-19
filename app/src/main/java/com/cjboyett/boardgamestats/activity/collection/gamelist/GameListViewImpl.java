@@ -1,10 +1,8 @@
-package com.cjboyett.boardgamestats.activity.collection;
+package com.cjboyett.boardgamestats.activity.collection.gamelist;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Build;
-import android.os.Bundle;
 import android.support.v4.view.GestureDetectorCompat;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -15,10 +13,13 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cjboyett.boardgamestats.R;
-import com.cjboyett.boardgamestats.activity.base.BaseAdActivity;
-import com.cjboyett.boardgamestats.activity.addgame.AddGameActivity;
+import com.cjboyett.boardgamestats.activity.addgame.AddGameScreen;
+import com.cjboyett.boardgamestats.activity.base.BaseViewController;
+import com.cjboyett.boardgamestats.activity.base.ScoopActivity;
+import com.cjboyett.boardgamestats.activity.collection.gamedata.GameDataScreen;
 import com.cjboyett.boardgamestats.data.DataManager;
 import com.cjboyett.boardgamestats.data.games.GamesDbHelper;
 import com.cjboyett.boardgamestats.data.games.board.BoardGameDbUtility;
@@ -33,8 +34,9 @@ import com.cjboyett.boardgamestats.view.adapter.ImageAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GameListActivity extends BaseAdActivity {
-	private Activity activity = this;
+import butterknife.OnClick;
+
+public class GameListViewImpl extends BaseViewController implements GameListView {
 	private GridView gamesGridView;
 	private SearchView gamesSearchView;
 	private View view, dummyView;
@@ -46,30 +48,23 @@ public class GameListActivity extends BaseAdActivity {
 	private GamesDbHelper dbHelper;
 	private GestureDetectorCompat gestureDetector;
 
+/*
 	public GameListActivity() {
 		super("ca-app-pub-1437859753538305/9571180678");
 	}
+*/
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		view = getLayoutInflater().inflate(R.layout.activity_game_list, null);
-		setContentView(view);
+	public void onAttach() {
+		super.onAttach();
+		view = getView();
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
-			getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+			getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
 
-		findViewById(R.id.fab)
-				.setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View view) {
-						startActivity(new Intent(view.getContext(), AddGameActivity.class));
-						ActivityUtilities.exitUp(activity);
-					}
-				});
-
-		dbHelper = new GamesDbHelper(this);
-		gestureDetector = new GestureDetectorCompat(this, new ScrollGestureListener());
+		dbHelper = new GamesDbHelper(getActivity());
+		gestureDetector = new GestureDetectorCompat(getActivity(), new GameListViewImpl.ScrollGestureListener());
+		getActivity().setGestureDetector(gestureDetector);
 
 		generateLayout();
 		setColors();
@@ -77,39 +72,28 @@ public class GameListActivity extends BaseAdActivity {
 	}
 
 	@Override
-	protected void onPause() {
-		super.onPause();
-		dbHelper.close();
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-		dbHelper = new GamesDbHelper(this);
-		if (ActivityUtilities.databaseChanged(this)) generateLayout();
-	}
-
-	@Override
-	protected void onDestroy() {
+	public void onDetach() {
 		if (dbHelper != null) dbHelper.close();
-		super.onDestroy();
+		super.onDetach();
 	}
 
+/*
 	@Override
 	public void onBackPressed() {
 		super.onBackPressed();
 		ActivityUtilities.exitRight(this);
 	}
+*/
 
 	protected void generateLayout() {
-		dummyView = findViewById(R.id.dummyview);
-		gamesSearchView = (SearchView) findViewById(R.id.searchview_games_list);
-		gamesGridView = (GridView) findViewById(R.id.listview_games);
+		dummyView = view.findViewById(R.id.dummyview);
+		gamesSearchView = (SearchView) view.findViewById(R.id.searchview_games_list);
+		gamesGridView = (GridView) view.findViewById(R.id.listview_games);
 		gamesGridView.setFastScrollEnabled(true);
 		gamesList = new ArrayList<>();
 
 		// TODO Move to a background thread
-		DataManager dataManager = DataManager.getInstance(getApplication());
+		DataManager dataManager = DataManager.getInstance(getActivity().getApplication());
 		gamesList = dataManager.getAllGamesCombined();
 
 		populateGrid(gamesList);
@@ -139,8 +123,7 @@ public class GameListActivity extends BaseAdActivity {
 		setColors();
 		colorComponents();
 
-		ActivityUtilities.setDatabaseChanged(this, false);
-
+		ActivityUtilities.setDatabaseChanged(getActivity(), false);
 	}
 
 	protected void colorComponents() {
@@ -165,8 +148,8 @@ public class GameListActivity extends BaseAdActivity {
 */
 
 
-		gamesGridView.setNumColumns(Preferences.numberOfGridColumns(this));
-		gamesGridView.setAdapter(new ImageAdapter(this, games));
+		gamesGridView.setNumColumns(Preferences.numberOfGridColumns(getActivity()));
+		gamesGridView.setAdapter(new ImageAdapter(getActivity(), games));
 
 		gamesGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
@@ -185,21 +168,29 @@ public class GameListActivity extends BaseAdActivity {
 					else if (gameType.equals("v"))
 						thumbnailUrl = VideoGameDbUtility.getThumbnailUrl(dbHelper, game);
 
-					if (thumbnailUrl != null && !thumbnailUrl.equals("")) {
-						ActivityUtilities.generatePaletteAndOpenActivity(activity,
+//					if (thumbnailUrl != null && !thumbnailUrl.equals("")) {
+/*
+						ActivityUtilities.generatePaletteAndOpenActivity(getActivity(),
 																		 new Intent(view.getContext(),
 																					GameDataActivity.class)
 																				 .putExtra("GAME", game)
 																				 .putExtra("TYPE", gameType),
 																		 "http://" + thumbnailUrl,
 																		 "LEFT");
-						ActivityUtilities.exitLeft(activity);
+						ActivityUtilities.exitLeft(getActivity());
+*/
 
-					} else
+//					} else {
+//					}
+/*
 						startActivity(new Intent(view.getContext(), GameDataActivity.class)
 											  .putExtra("GAME", game)
 											  .putExtra("TYPE", gameType));
 					ActivityUtilities.exitLeft(activity);
+*/
+					appRouter.goTo(new GameDataScreen(new Intent().putExtra("GAME", game)
+																  .putExtra("TYPE", gameType)
+					));
 				}
 			}
 		});
@@ -216,6 +207,24 @@ public class GameListActivity extends BaseAdActivity {
 
 	}
 
+	@OnClick(R.id.fab)
+	protected void onFabClick(View view) {
+		//					startActivity(new Intent(view.getContext(), AddGameActivity.class));
+		//					ActivityUtilities.exitUp(activity);
+		appRouter.goTo(new AddGameScreen(new Intent().putExtra("GAME", "King of New York").putExtra("TYPE", "b")));
+		Toast.makeText(getActivity(), "AHHHHH", Toast.LENGTH_SHORT).show();
+	}
+
+	@Override
+	protected int layoutId() {
+		return R.layout.activity_game_list;
+	}
+
+	@Override
+	public ScoopActivity getActivity() {
+		return getScoop().findService(ScoopActivity.ACTIVITY_SERVICE);
+	}
+
 	private class ScrollGestureListener extends GestureDetector.SimpleOnGestureListener {
 		@Override
 		public boolean onDown(MotionEvent e) {
@@ -227,7 +236,8 @@ public class GameListActivity extends BaseAdActivity {
 			if (Math.abs(velocityX) > Math.abs(velocityY)) {
 				if (Math.abs(e1.getX() - e2.getX()) >= 200) {
 					if (velocityX > 2000) {
-						onBackPressed();
+//						onBackPressed();
+						appRouter.goBack();
 						return true;
 					}
 				}

@@ -1,10 +1,6 @@
-package com.cjboyett.boardgamestats.activity.collection;
+package com.cjboyett.boardgamestats.activity.collection.gamedata;
 
 import com.cjboyett.boardgamestats.activity.base.MvpView;
-
-/**
- * Created by Casey on 2/5/2017.
- */
 
 public interface GameDataView extends MvpView {
 }

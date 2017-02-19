@@ -66,6 +66,10 @@ dependencies {
 
     compile 'com.jakewharton:butterknife:8.5.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
+
+    compile 'com.lyft:scoop:0.4.2'
+
+    compile 'com.jakewharton.timber:timber:4.5.1'
 }
 
 apply plugin: 'com.google.gms.google-services'

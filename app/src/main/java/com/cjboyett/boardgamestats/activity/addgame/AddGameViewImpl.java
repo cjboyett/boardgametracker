@@ -1,14 +1,11 @@
 package com.cjboyett.boardgamestats.activity.addgame;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.PorterDuff;
 import android.os.AsyncTask;
-import android.os.Build;
-import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatCheckBox;
@@ -17,7 +14,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -32,8 +28,8 @@ import android.widget.TextView;
 
 import com.cjboyett.boardgamestats.MyApp;
 import com.cjboyett.boardgamestats.R;
-import com.cjboyett.boardgamestats.activity.base.BaseActivity;
-import com.cjboyett.boardgamestats.activity.collection.gamedata.GameDataActivity;
+import com.cjboyett.boardgamestats.activity.base.BaseViewController;
+import com.cjboyett.boardgamestats.activity.base.ScoopActivity;
 import com.cjboyett.boardgamestats.data.games.GamesDbHelper;
 import com.cjboyett.boardgamestats.data.games.board.BoardGameDbUtility;
 import com.cjboyett.boardgamestats.data.games.board.BoardGameXmlParser;
@@ -50,6 +46,7 @@ import com.cjboyett.boardgamestats.utility.data.GameDownloadUtilities;
 import com.cjboyett.boardgamestats.utility.data.StringUtilities;
 import com.cjboyett.boardgamestats.utility.data.UrlUtilities;
 import com.cjboyett.boardgamestats.utility.view.ViewUtilities;
+import com.lyft.scoop.Screen;
 
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -62,8 +59,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
-public class AddGameActivity extends BaseActivity {
-	private Activity activity = this;
+public class AddGameViewImpl extends BaseViewController {
 	private View view, dummyView;
 	private Spinner gameTypeSpinner;
 	private SearchView gameSearchView;
@@ -84,16 +80,14 @@ public class AddGameActivity extends BaseActivity {
 
 	private GamesDbHelper dbHelper;
 
+	private Intent intent;
+
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		view = getLayoutInflater().inflate(R.layout.activity_add_game, null);
-		setContentView(view);
+	public void onAttach() {
+		super.onAttach();
+		view = getView();
 
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
-			getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-
-		dbHelper = new GamesDbHelper(this);
+		dbHelper = new GamesDbHelper(getActivity());
 		games = new ArrayList<>();
 		sync = getIntent().getBooleanExtra("SYNC", false);
 		if (sync) oldGameName = getIntent().getStringExtra("GAME");
@@ -101,18 +95,8 @@ public class AddGameActivity extends BaseActivity {
 		generateLayout();
 		setColors();
 		colorComponents();
-	}
 
-	@Override
-	protected void onPause() {
-		super.onPause();
-		dbHelper.close();
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-		dbHelper = new GamesDbHelper(this);
+		dbHelper = new GamesDbHelper(getActivity());
 		if (getIntent().hasExtra("TYPE")) {
 			String type = getIntent().getStringExtra("TYPE");
 			if (StringUtilities.isBoardGame(type)) {
@@ -135,9 +119,9 @@ public class AddGameActivity extends BaseActivity {
 	}
 
 	@Override
-	protected void onDestroy() {
-		super.onDestroy();
+	public void onDetach() {
 		if (dbHelper != null) dbHelper.close();
+		super.onDetach();
 	}
 
 	private void setRPGListAdapter(Map<Integer, String> rpgs) {
@@ -165,11 +149,13 @@ public class AddGameActivity extends BaseActivity {
 			}
 		}
 
-		listView.setAdapter(new CustomArrayAdapter(this, android.R.layout.simple_list_item_1, games));
+		listView.setAdapter(new AddGameViewImpl.CustomArrayAdapter(getActivity(),
+																   android.R.layout.simple_list_item_1,
+																   games));
 		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				new DownloadXmlGameTask().execute(
+				new AddGameViewImpl.DownloadXmlGameTask().execute(
 						"https://www.boardgamegeek.com/xmlapi2/family?id=" + ids.get(position));
 			}
 		});
@@ -184,11 +170,13 @@ public class AddGameActivity extends BaseActivity {
 		if (boardGamesList.isEmpty()) {
 			showSearchError();
 		} else {
-			listView.setAdapter(new CustomArrayAdapter(this, android.R.layout.simple_list_item_1, makeList()));
+			listView.setAdapter(new AddGameViewImpl.CustomArrayAdapter(getActivity(),
+																	   android.R.layout.simple_list_item_1,
+																	   makeList()));
 			listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 				@Override
 				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-					new DownloadXmlGameTask().execute(
+					new AddGameViewImpl.DownloadXmlGameTask().execute(
 							"https://www.boardgamegeek.com/xmlapi2/thing?id=" +
 									boardGamesList.get(position).id);
 				}
@@ -205,11 +193,13 @@ public class AddGameActivity extends BaseActivity {
 		if (videoGamesList.isEmpty()) {
 			showSearchError();
 		} else {
-			listView.setAdapter(new CustomArrayAdapter(this, android.R.layout.simple_list_item_1, makeList()));
+			listView.setAdapter(new AddGameViewImpl.CustomArrayAdapter(getActivity(),
+																	   android.R.layout.simple_list_item_1,
+																	   makeList()));
 			listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 				@Override
 				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-					new DownloadXmlGameTask().execute(
+					new AddGameViewImpl.DownloadXmlGameTask().execute(
 							"https://www.boardgamegeek.com/xmlapi2/thing?id=" +
 									videoGamesList.get(position).id);
 				}
@@ -249,7 +239,7 @@ public class AddGameActivity extends BaseActivity {
 
 	private void showSearchError() {
 		if (sync) {
-			AlertDialog errorDialog = new ViewUtilities.DialogBuilder(activity)
+			AlertDialog errorDialog = new ViewUtilities.DialogBuilder(getActivity())
 					.setTitle("Error")
 					.setMessage("I apologize, but I cannot find your game.")
 					.withYancey(true)
@@ -257,7 +247,7 @@ public class AddGameActivity extends BaseActivity {
 					.create();
 			errorDialog.show();
 		} else {
-			AlertDialog errorDialog = new ViewUtilities.DialogBuilder(activity)
+			AlertDialog errorDialog = new ViewUtilities.DialogBuilder(getActivity())
 					.setTitle("Error")
 					.setMessage(
 							"Something went wrong while searching.  Either Board Game Geek is not responding, or their database does not contain your game." +
@@ -278,13 +268,13 @@ public class AddGameActivity extends BaseActivity {
 
 	private void showAddManualDialog() {
 		final Game.GameType[] type = {gameType};
-		final View view = activity.getLayoutInflater()
-								  .inflate(R.layout.dialog_add_game_manual, null);
+		final View view = getActivity().getLayoutInflater()
+									   .inflate(R.layout.dialog_add_game_manual, null);
 		final EditText gameNameEditText = (EditText) view.findViewById(R.id.edittext_game_name);
 		final EditText gameDescriptionEditText =
 				(EditText) view.findViewById(R.id.edittext_game_details);
 
-		gameDialog = new ViewUtilities.DialogBuilder(activity)
+		gameDialog = new ViewUtilities.DialogBuilder(getActivity())
 				.setView(view)
 				.setPositiveButton("Add Game to Collection", new View.OnClickListener() {
 					@Override
@@ -306,7 +296,7 @@ public class AddGameActivity extends BaseActivity {
 									RPGDbUtility.addRPG(dbHelper, new RolePlayingGame(name, description, -10000));
 								else if (type[0] == Game.GameType.VIDEO)
 									VideoGameDbUtility.addVideoGame(dbHelper, new VideoGame(name, description, -10000));
-								ActivityUtilities.setDatabaseChanged(activity, true);
+								ActivityUtilities.setDatabaseChanged(getActivity(), true);
 								showSnack("Added " + name);
 							} catch (Exception e) {
 								Log.e("GAME", e.getMessage());
@@ -334,9 +324,9 @@ public class AddGameActivity extends BaseActivity {
 		gameTypeList.add("Board Game");
 		gameTypeList.add("RPG");
 		gameTypeList.add("Video Game");
-		gameTypeSpinner.setAdapter(new CustomArrayAdapter(this,
-														  android.R.layout.simple_spinner_dropdown_item,
-														  gameTypeList));
+		gameTypeSpinner.setAdapter(new AddGameViewImpl.CustomArrayAdapter(getActivity(),
+																		  android.R.layout.simple_spinner_dropdown_item,
+																		  gameTypeList));
 		gameTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -389,7 +379,7 @@ public class AddGameActivity extends BaseActivity {
 								RPGDbUtility.addRPG(dbHelper, new RolePlayingGame(name, description, -10000));
 							else if (type[0] == Game.GameType.VIDEO)
 								VideoGameDbUtility.addVideoGame(dbHelper, new VideoGame(name, description, -10000));
-							ActivityUtilities.setDatabaseChanged(activity, true);
+							ActivityUtilities.setDatabaseChanged(getActivity(), true);
 							showSnack("Added " + name);
 						} catch (Exception e) {
 							Log.e("GAME", e.getMessage());
@@ -419,24 +409,23 @@ public class AddGameActivity extends BaseActivity {
 	}
 
 
-	@Override
 	protected void generateLayout() {
-		dummyView = findViewById(R.id.dummyview);
-		gameTypeSpinner = (Spinner) findViewById(R.id.spinner_game_type);
-		gameSearchView = (SearchView) findViewById(R.id.searchview_boardgame);
-		exactMatch = (AppCompatCheckBox) findViewById(R.id.checkbox_exact_match);
-		listView = (ListView) findViewById(R.id.listview_boardgames);
-		progressBarLayout = (LinearLayout) findViewById(R.id.linearlayout_progress_bar);
-		progressBar = (ProgressBar) findViewById(R.id.progressbar_add_game);
+		dummyView = view.findViewById(R.id.dummyview);
+		gameTypeSpinner = (Spinner) view.findViewById(R.id.spinner_game_type);
+		gameSearchView = (SearchView) view.findViewById(R.id.searchview_boardgame);
+		exactMatch = (AppCompatCheckBox) view.findViewById(R.id.checkbox_exact_match);
+		listView = (ListView) view.findViewById(R.id.listview_boardgames);
+		progressBarLayout = (LinearLayout) view.findViewById(R.id.linearlayout_progress_bar);
+		progressBar = (ProgressBar) view.findViewById(R.id.progressbar_add_game);
 
 		gameSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 			@Override
 			public boolean onQueryTextSubmit(String query) {
-				if (((MyApp) getApplication()).isConnectedToInternet()) {
+				if (((MyApp) getActivity().getApplication()).isConnectedToInternet()) {
 					try {
 						dummyView.requestFocus();
 						InputMethodManager inputManager = (InputMethodManager)
-								getSystemService(Context.INPUT_METHOD_SERVICE);
+								getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 
 						inputManager.hideSoftInputFromWindow(gameSearchView.getWindowToken(),
 															 InputMethodManager.HIDE_NOT_ALWAYS);
@@ -444,7 +433,7 @@ public class AddGameActivity extends BaseActivity {
 						e.printStackTrace();
 					}
 
-					listView.setAdapter(new ArrayAdapter<String>(activity, android.R.layout.simple_list_item_1));
+					listView.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1));
 
 					if (gameType != Game.GameType.RPG) {
 						try {
@@ -454,16 +443,16 @@ public class AddGameActivity extends BaseActivity {
 							if (exact) url += "&exact=1";
 
 							if (gameType == Game.GameType.BOARD)
-								new DownloadBoardGameXmlItemsTask().execute(url);
+								new AddGameViewImpl.DownloadBoardGameXmlItemsTask().execute(url);
 							else if (gameType == Game.GameType.VIDEO)
-								new DownloadVideoGameXmlItemsTask().execute(url);
+								new AddGameViewImpl.DownloadVideoGameXmlItemsTask().execute(url);
 						} catch (Exception e) {
 						}
 					} else {
-						new DownloadRPGsTask().execute(query);
+						new AddGameViewImpl.DownloadRPGsTask().execute(query);
 					}
 				} else
-					ViewUtilities.errorDialog(activity).show();
+					ViewUtilities.errorDialog(getActivity()).show();
 
 				return false;
 			}
@@ -480,9 +469,9 @@ public class AddGameActivity extends BaseActivity {
 		gameTypeList.add("Board Game");
 		gameTypeList.add("RPG");
 		gameTypeList.add("Video Game");
-		gameTypeSpinner.setAdapter(new CustomArrayAdapter(this,
-														  android.R.layout.simple_spinner_dropdown_item,
-														  gameTypeList));
+		gameTypeSpinner.setAdapter(new AddGameViewImpl.CustomArrayAdapter(getActivity(),
+																		  android.R.layout.simple_spinner_dropdown_item,
+																		  gameTypeList));
 		gameTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -510,7 +499,7 @@ public class AddGameActivity extends BaseActivity {
 		videoGamesList = new ArrayList<>();
 
 		ArrayAdapter<String> adapter =
-				new CustomArrayAdapter(this, android.R.layout.simple_list_item_1, makeList());
+				new AddGameViewImpl.CustomArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, makeList());
 
 		listView.setAdapter(adapter);
 	}
@@ -537,11 +526,12 @@ public class AddGameActivity extends BaseActivity {
 		ViewUtilities.tintLayoutBackground(view.findViewById(R.id.layout_game_search), foregroundColor);
 		ViewUtilities.tintLayoutBackground(view.findViewById(R.id.layout_game_search_results), foregroundColor);
 
-		findViewById(R.id.imageview_spacer).setBackgroundColor(hintTextColor);
+		view.findViewById(R.id.imageview_spacer).setBackgroundColor(hintTextColor);
 
 		ViewUtilities.tintProgressBar(progressBar, foregroundColor);
 	}
 
+/*
 	@Override
 	public void onBackPressed() {
 		if (getIntent().hasExtra("GAME")) {
@@ -552,9 +542,9 @@ public class AddGameActivity extends BaseActivity {
 							.putExtra("GAME", currentGame.getName())
 							.putExtra("TYPE", gameType.getType())
 							.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-					setResult(RESULT_OK, returnIntent);
+					setResult(Activity.RESULT_OK, returnIntent);
 					if (thumbnailUrl != null && !thumbnailUrl.equals("")) {
-						ActivityUtilities.generatePaletteAndOpenActivity(activity,
+						ActivityUtilities.generatePaletteAndOpenActivity(getActivity(),
 																		 returnIntent,
 																		 "http://" + thumbnailUrl,
 																		 "DOWN");
@@ -584,6 +574,23 @@ public class AddGameActivity extends BaseActivity {
 			finish();
 			ActivityUtilities.exitDown(this);
 		}
+	}
+*/
+
+	@Override
+	protected int layoutId() {
+		return R.layout.activity_add_game;
+	}
+
+	ScoopActivity getActivity() {
+		return getScoop().findService(ScoopActivity.ACTIVITY_SERVICE);
+	}
+
+	private Intent getIntent() {
+		if (intent == null) {
+			intent = ((AddGameScreen) Screen.fromController(this)).getIntent();
+		}
+		return intent;
 	}
 
 	private class DownloadRPGsTask extends AsyncTask<String, Void, Map<Integer, String>> {
@@ -704,9 +711,9 @@ public class AddGameActivity extends BaseActivity {
 				Bitmap thumbnail = null;
 				if (game.getThumbnailUrl() != null) {
 					try {
-						thumbnail = new DownloadThumbnailTask().execute(
+						thumbnail = new AddGameViewImpl.DownloadThumbnailTask().execute(
 								"http://" + game.getThumbnailUrl())
-															   .get();
+																			   .get();
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					} catch (ExecutionException e) {
@@ -717,9 +724,9 @@ public class AddGameActivity extends BaseActivity {
 
 				currentGame = game;
 
-				final View view = activity.getLayoutInflater()
-										  .inflate(R.layout.dialog_fragment_add_board_game, null);
-				gameDialog = new ViewUtilities.DialogBuilder(activity)
+				final View view = getActivity().getLayoutInflater()
+											   .inflate(R.layout.dialog_fragment_add_board_game, null);
+				gameDialog = new ViewUtilities.DialogBuilder(getActivity())
 						.setView(view)
 						.setPositiveButton(
 								sync ? "Sync" : "Add Game to Collection", new View.OnClickListener() {
@@ -755,12 +762,11 @@ public class AddGameActivity extends BaseActivity {
 												}
 												String thumbnailUrl = currentGame.getThumbnailUrl();
 												GameDownloadUtilities.downloadThumbnail(
-														"http://" + thumbnailUrl, activity);
-												ActivityUtilities.setDatabaseChanged(activity, true);
-												if (activity.getIntent()
-															.hasExtra("GAME"))
-													onBackPressed();
-												else
+														"http://" + thumbnailUrl, getActivity());
+												ActivityUtilities.setDatabaseChanged(getActivity(), true);
+												if (getIntent()
+														.hasExtra("GAME")) {//onBackPressed();
+												} else
 													showSnack("Added " + currentGame.getName());
 											} catch (Exception e) {
 												Log.e("GAME", e.getMessage());
@@ -795,7 +801,7 @@ public class AddGameActivity extends BaseActivity {
 				gameDialog.show();
 			} else {
 				progressBarLayout.setVisibility(View.GONE);
-				AlertDialog errorDialog = new ViewUtilities.DialogBuilder(activity)
+				AlertDialog errorDialog = new ViewUtilities.DialogBuilder(getActivity())
 						.setTitle("Error")
 						.setMessage("Something went wrong in finding your game.  Please try again later.")
 						.setPositiveButton("Okay", null)
@@ -856,4 +862,5 @@ public class AddGameActivity extends BaseActivity {
 
 
 	}
+
 }

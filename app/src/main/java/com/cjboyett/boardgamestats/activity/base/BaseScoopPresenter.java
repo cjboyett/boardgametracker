@@ -2,7 +2,7 @@ package com.cjboyett.boardgamestats.activity.base;
 
 import java.lang.ref.WeakReference;
 
-public class BasePresenter<T extends MvpView> implements Presenter<T> {
+public class BaseScoopPresenter<T extends MvpScoopView> implements ScoopPresenter<T> {
 	private WeakReference<T> view;
 
 	@Override

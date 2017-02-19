@@ -1,6 +1,6 @@
 package com.cjboyett.boardgamestats.activity.main;
 
-import com.cjboyett.boardgamestats.activity.base.BasePresenter;
+import com.cjboyett.boardgamestats.activity.base.BaseScoopPresenter;
 import com.cjboyett.boardgamestats.data.TempDataManager;
 import com.cjboyett.boardgamestats.utility.Preferences;
 import com.google.firebase.auth.FirebaseAuth;
@@ -9,7 +9,7 @@ import com.google.firebase.auth.FirebaseAuth;
  * Created by Casey on 1/29/2017.
  */
 
-public class MainPresenter extends BasePresenter<MainView> {
+public class MainPresenter extends BaseScoopPresenter<MainView> {
 	public void initializeView() {
 		if (Preferences.isFirstVisit(getView().getActivity())) {
 			getView().processFirstVisit();

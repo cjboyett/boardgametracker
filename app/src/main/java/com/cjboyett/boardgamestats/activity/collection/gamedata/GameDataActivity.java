@@ -1,4 +1,4 @@
-package com.cjboyett.boardgamestats.activity.collection;
+package com.cjboyett.boardgamestats.activity.collection.gamedata;
 
 import android.animation.Animator;
 import android.animation.AnimatorInflater;
@@ -29,6 +29,7 @@ import com.cjboyett.boardgamestats.R;
 import com.cjboyett.boardgamestats.activity.addgame.AddGameActivity;
 import com.cjboyett.boardgamestats.activity.addgameplay.AddGamePlayTabbedActivity;
 import com.cjboyett.boardgamestats.activity.base.BaseAdActivity;
+import com.cjboyett.boardgamestats.activity.collection.gamelist.GameListActivity;
 import com.cjboyett.boardgamestats.data.TempDataManager;
 import com.cjboyett.boardgamestats.data.games.GamesDbHelper;
 import com.cjboyett.boardgamestats.data.games.board.BoardGameDbUtility;

@@ -5,7 +5,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.os.Bundle;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatImageView;
@@ -16,15 +15,13 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cjboyett.boardgamestats.R;
 import com.cjboyett.boardgamestats.activity.SettingsActivity;
-import com.cjboyett.boardgamestats.activity.addgame.AddGameActivity;
-import com.cjboyett.boardgamestats.activity.addgameplay.AddGamePlayTabbedActivity;
-import com.cjboyett.boardgamestats.activity.base.BaseActivity;
+import com.cjboyett.boardgamestats.activity.base.BaseViewController;
 import com.cjboyett.boardgamestats.activity.base.ScoopActivity;
-import com.cjboyett.boardgamestats.activity.collection.gamelist.GameListActivity;
-import com.cjboyett.boardgamestats.activity.extras.AchievementsActivity;
+import com.cjboyett.boardgamestats.activity.collection.gamelist.GameListScreen;
 import com.cjboyett.boardgamestats.activity.extras.ExtrasActivity;
 import com.cjboyett.boardgamestats.activity.extras.LoginActivity;
 import com.cjboyett.boardgamestats.activity.statsoverview.StatsTabbedActivity;
@@ -37,10 +34,10 @@ import com.cjboyett.boardgamestats.utility.view.ViewUtilities;
 import com.cjboyett.boardgamestats.view.ticker.Ticker;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
+import timber.log.Timber;
 
-public class MainActivity extends BaseActivity implements MainView, GestureDetector.OnGestureListener {
+public class MainViewImpl extends BaseViewController implements MainView, GestureDetector.OnGestureListener {
 	private View view;
 
 	@BindView(R.id.ticker)
@@ -76,28 +73,25 @@ public class MainActivity extends BaseActivity implements MainView, GestureDetec
 	private MainPresenter presenter;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+	protected int layoutId() {
+		return R.layout.content_main;
+	}
 
-		view = getLayoutInflater().inflate(R.layout.activity_main, null);
-		setContentView(view);
-		ButterKnife.bind(this);
+	@Override
+	public void onAttach() {
+		super.onAttach();
+		view = getView();
 
 		presenter = new MainPresenter();
 		presenter.attachView(this);
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-			getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+			getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
 		}
 
-		generateLayout();
+		gestureDetector = new GestureDetectorCompat(getActivity(), this);
+		getActivity().setGestureDetector(gestureDetector);
 
-		gestureDetector = new GestureDetectorCompat(this, this);
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
 		setColors();
 		colorComponents();
 
@@ -108,37 +102,24 @@ public class MainActivity extends BaseActivity implements MainView, GestureDetec
 
 //			animateAchievementButton();
 		}
+
+		Timber.d("onAttach");
 	}
 
 	@Override
-	protected void onPause() {
-		super.onPause();
+	public void onDetach() {
 		pauseTicker();
-	}
-
-	@Override
-	protected void onDestroy() {
 		presenter.detachView();
-		super.onDestroy();
-	}
-
-	@Override
-	public boolean onTouchEvent(MotionEvent event) {
-		if (Preferences.useSwipes(this)) gestureDetector.onTouchEvent(event);
-		return super.onTouchEvent(event);
+		super.onDetach();
 	}
 
 
 	// BaseActivity methods
 
 	@Override
-	protected void generateLayout() {
-	}
-
-	@Override
 	protected void colorComponents() {
 		view.setBackgroundColor(backgroundColor);
-		if (Preferences.lightUI(this)) {
+		if (Preferences.lightUI(getActivity())) {
 			collectionsButton.setBackgroundResource(R.drawable.main_button_background_dark);
 			statsButton.setBackgroundResource(R.drawable.main_button_background_dark);
 			extrasButton.setBackgroundResource(R.drawable.main_button_background_dark);
@@ -173,18 +154,14 @@ public class MainActivity extends BaseActivity implements MainView, GestureDetec
 
 	// Interface methods
 
-	public ScoopActivity getActivity() {
-		return null;
-	}
-
 	public void setWelcomeMessage(String welcomeMessage) {
 		welcomeBackTextView.setText(welcomeMessage);
 	}
 
 	public void processFirstVisit() {
-		Preferences.setShowPopup(this, false);
-		Preferences.setMetYancey(this, true);
-		ViewUtilities.DialogBuilder syncDialogBuilder = new ViewUtilities.DialogBuilder(this);
+		Preferences.setShowPopup(getActivity(), false);
+		Preferences.setMetYancey(getActivity(), true);
+		ViewUtilities.DialogBuilder syncDialogBuilder = new ViewUtilities.DialogBuilder(getActivity());
 		final EditText usernameEditText = syncDialogBuilder.getInput();
 		final AlertDialog syncDialog = syncDialogBuilder.setTitle("Sync With BGG")
 														.setMessage(
@@ -206,7 +183,7 @@ public class MainActivity extends BaseActivity implements MainView, GestureDetec
 														.setNegativeButton("Cancel", null)
 														.create();
 
-		final AlertDialog addToCollectionDialog = new ViewUtilities.DialogBuilder(this)
+		final AlertDialog addToCollectionDialog = new ViewUtilities.DialogBuilder(getActivity())
 				.setTitle("Add a New Game?")
 				.setMessage("If you have a Board Game Geek account I can download your game information.\n\n" +
 									"Or you can manually add a new game.")
@@ -220,14 +197,14 @@ public class MainActivity extends BaseActivity implements MainView, GestureDetec
 				.setNeutralButton("Add a Game", new View.OnClickListener() {
 					@Override
 					public void onClick(View v) {
-						startActivity(new Intent(v.getContext(), AddGameActivity.class));
+//						startActivity(new Intent(v.getContext(), AddGameActivity.class));
 						ActivityUtilities.exitDown(getActivity());
 					}
 				})
 				.setNegativeButton("Later", null)
 				.create();
 
-		final ViewUtilities.DialogBuilder firstVisitDialog = new ViewUtilities.DialogBuilder(this);
+		final ViewUtilities.DialogBuilder firstVisitDialog = new ViewUtilities.DialogBuilder(getActivity());
 		final EditText firstVisitInput = firstVisitDialog.getInput();
 		firstVisitDialog.setTitle("Welcome!")
 						.setMessage(
@@ -293,40 +270,47 @@ public class MainActivity extends BaseActivity implements MainView, GestureDetec
 	}
 
 	public void openAddGamePlay() {
-		startActivity(new Intent(this, AddGamePlayTabbedActivity.class).putExtra("EXIT", "UP"));
-		ActivityUtilities.exitDown(this);
+		//startActivity(new Intent(this, AddGamePlayTabbedActivity.class).putExtra("EXIT", "UP"));
+		//ActivityUtilities.exitDown(this);
+		showToast("Add Game");
 	}
 
 	public void openCollections() {
-		startActivity(new Intent(this, GameListActivity.class));
-		ActivityUtilities.exitLeft(this);
+		//startActivity(new Intent(this, GameListActivity.class));
+		//ActivityUtilities.exitLeft(this);
+		appRouter.goTo(new GameListScreen());
+		showToast("Collection");
 	}
 
 	public void openStatsOverview() {
-		startActivity(new Intent(this, StatsTabbedActivity.class));
-		ActivityUtilities.exitUp(this);
+		getActivity().startActivity(new Intent(getActivity(), StatsTabbedActivity.class));
+		ActivityUtilities.exitUp(getActivity());
+		showToast("Stats");
 	}
 
 	public void openLogin() {
-		startActivity(new Intent(this, LoginActivity.class));
-		ActivityUtilities.exitRight(this);
+		getActivity().startActivity(new Intent(getActivity(), LoginActivity.class));
+		ActivityUtilities.exitRight(getActivity());
+		showToast("Login");
 	}
 
 	public void openExtras() {
-		startActivity(new Intent(this, ExtrasActivity.class));
-		ActivityUtilities.exitRight(this);
+		getActivity().startActivity(new Intent(getActivity(), ExtrasActivity.class));
+		ActivityUtilities.exitRight(getActivity());
+		showToast("Extras");
 	}
 
 	public void openSettings() {
-		startActivity(new Intent(this, SettingsActivity.class));
+		getActivity().startActivity(new Intent(getActivity(), SettingsActivity.class));
+		showToast("Settings");
 	}
 
 	public void openAchievements() {
-		startActivity(new Intent(this, AchievementsActivity.class));
+		//startActivity(new Intent(this, AchievementsActivity.class));
 	}
 
 	public void openHelp() {
-		AlertDialog alertDialog = new ViewUtilities.DialogBuilder(this)
+		AlertDialog alertDialog = new ViewUtilities.DialogBuilder(getActivity())
 				.setTitle("Help")
 				.setMessage("This is where help will be placed in the future.")
 				.setPositiveButton("Okay", null)
@@ -428,6 +412,13 @@ public class MainActivity extends BaseActivity implements MainView, GestureDetec
 	}
 
 
+	// Private methods
+
+	private void showToast(String message) {
+		Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+	}
+
+
 	// Gesture methods
 
 	@Override
@@ -482,5 +473,10 @@ public class MainActivity extends BaseActivity implements MainView, GestureDetec
 		}
 
 		return false;
+	}
+
+	@Override
+	public ScoopActivity getActivity() {
+		return getScoop().findService(ScoopActivity.ACTIVITY_SERVICE);
 	}
 }
