@@ -531,6 +531,8 @@ public class AddGameViewImpl extends BaseViewController {
 		ViewUtilities.tintProgressBar(progressBar, foregroundColor);
 	}
 
+
+
 /*
 	@Override
 	public void onBackPressed() {

@@ -234,7 +234,8 @@
 		</activity>
 		<activity
 			android:name=".activity.base.ScoopActivity"
-			android:screenOrientation="portrait">
+			android:screenOrientation="portrait"
+			android:theme="@style/AppTheme">
 		</activity>
 	</application>
 

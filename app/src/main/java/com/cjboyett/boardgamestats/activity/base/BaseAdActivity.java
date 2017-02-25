@@ -13,9 +13,6 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 
-/**
- * Created by Casey on 10/15/2016.
- */
 public abstract class BaseAdActivity extends BaseActivity {
 	private String googleAdUnitId;
 	private AdView googleAdView;
