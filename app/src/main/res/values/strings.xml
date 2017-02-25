@@ -139,4 +139,5 @@
 	<string name="use_board_games_for_stats_preference">com.cjboyett.boardgamestats.USE_BOARD_GAMES_FOR_STATS_PREFERENCE</string>
 	<string name="use_rpgs_for_stats_preference">com.cjboyett.boardgamestats.USE_RPGS_FOR_STATS_PREFERENCE</string>
 	<string name="use_video_games_for_stats_preference">com.cjboyett.boardgamestats.USE_VIDEO_GAMES_FOR_STATS_PREFERENCE</string>
+	<string name="title_conductor">Conductor</string>
 </resources>

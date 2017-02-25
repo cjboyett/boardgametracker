@@ -1,4 +1,4 @@
-package com.cjboyett.boardgamestats.activity.main;
+package com.cjboyett.boardgamestats.conductor.main;
 
 import com.cjboyett.boardgamestats.activity.base.BasePresenter;
 import com.cjboyett.boardgamestats.data.TempDataManager;

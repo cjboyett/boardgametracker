@@ -31,41 +31,52 @@ repositories {
     maven { url "https://jitpack.io" }
 }
 
+ext {
+    butterKnifeVersion = "8.5.1"
+    conductorVersion = "2.1.0"
+    facebookVersion = "4.19.0"
+    leakCanaryVersion = "1.5"
+    playServicesVersion = "10.0.1"
+    supportLibraryVersion = "25.1.1"
+}
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
     compile project(':colorpicker')
     compile project(':floatingactionmenu')
 
-    compile 'com.android.support:appcompat-v7:25.1.1'
-    compile 'com.android.support:design:25.1.1'
-    compile 'com.android.support:cardview-v7:25.1.1'
-    compile 'com.android.support:recyclerview-v7:25.1.1'
-    compile 'com.android.support:palette-v7:25.1.1'
-    compile 'com.google.android.gms:play-services-ads:10.0.1'
-    compile 'com.google.android.gms:play-services-analytics:10.0.1'
+    compile "com.android.support:appcompat-v7:$supportLibraryVersion"
+    compile "com.android.support:design:$supportLibraryVersion"
+    compile "com.android.support:cardview-v7:$supportLibraryVersion"
+    compile "com.android.support:recyclerview-v7:$supportLibraryVersion"
+    compile "com.android.support:palette-v7:$supportLibraryVersion"
+    compile "com.android.support:support-v4:$supportLibraryVersion"
 
-    compile 'com.google.firebase:firebase-core:10.0.1'
-    compile 'com.google.firebase:firebase-database:10.0.1'
-    compile 'com.google.firebase:firebase-ads:10.0.1'
-    compile 'com.google.firebase:firebase-auth:10.0.1'
-    compile 'com.google.firebase:firebase-storage:10.0.1'
+    compile "com.google.android.gms:play-services-ads:$playServicesVersion"
+    compile "com.google.android.gms:play-services-analytics:$playServicesVersion"
+    compile "com.google.firebase:firebase-core:$playServicesVersion"
+    compile "com.google.firebase:firebase-database:$playServicesVersion"
+    compile "com.google.firebase:firebase-ads:$playServicesVersion"
+    compile "com.google.firebase:firebase-auth:$playServicesVersion"
+    compile "com.google.firebase:firebase-storage:$playServicesVersion"
 
-    compile 'com.facebook.android:facebook-android-sdk:4.+'
+    compile "com.facebook.android:facebook-android-sdk:$facebookVersion"
 
     compile 'org.apache.commons:commons-lang3:3.4'
     compile 'commons-io:commons-io:2.4'
-    compile 'com.android.support:support-v4:25.1.1'
 
     compile 'com.github.deano2390:FlowTextView:2.0.4'
     compile 'com.github.lovetuzitong:MultiImageSelector:1.2'
 
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
-    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
-    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+    debugCompile "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion"
+    releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
+    testCompile "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
 
-    compile 'com.jakewharton:butterknife:8.5.1'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
+    compile "com.jakewharton:butterknife:$butterKnifeVersion"
+    annotationProcessor "com.jakewharton:butterknife-compiler:$butterKnifeVersion"
+
+    compile "com.bluelinelabs:conductor:$conductorVersion"
 }
 
 apply plugin: 'com.google.gms.google-services'

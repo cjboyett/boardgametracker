@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 
-import com.cjboyett.boardgamestats.activity.main.MainActivity;
+import com.cjboyett.boardgamestats.conductor.ConductorActivity;
 
 public class SplashActivity extends AppCompatActivity {
 	@Override
@@ -13,9 +13,8 @@ public class SplashActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 
 		SystemClock.sleep(1000);
-		Intent intent = new Intent(this, MainActivity.class);
+		Intent intent = new Intent(this, ConductorActivity.class);
 		startActivity(intent);
 		finish();
-//		overridePendingTransition(R.anim.main_enter, R.anim.splash_exit);
 	}
 }

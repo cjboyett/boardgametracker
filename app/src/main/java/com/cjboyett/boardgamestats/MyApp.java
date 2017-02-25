@@ -71,12 +71,14 @@ public class MyApp extends Application {
 			tracker.enableAutoActivityTracking(true);
 		}
 
+/*
 		if (LeakCanary.isInAnalyzerProcess(this)) {
 			// This process is dedicated to LeakCanary for heap analysis.
 			// You should not init your app in this process.
 			return;
 		}
 		LeakCanary.install(this);
+*/
 
 		// Initialize data managers for quickly navigation
 		final DataManager dataManager = DataManager.getInstance(this);
