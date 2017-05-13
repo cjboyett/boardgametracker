@@ -4,25 +4,33 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
+import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatImageView;
 import android.text.TextUtils;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.bluelinelabs.conductor.RouterTransaction;
+import com.bluelinelabs.conductor.changehandler.FadeChangeHandler;
 import com.cjboyett.boardgamestats.R;
 import com.cjboyett.boardgamestats.activity.SettingsActivity;
 import com.cjboyett.boardgamestats.activity.addgame.AddGameActivity;
-import com.cjboyett.boardgamestats.activity.addgameplay.AddGamePlayTabbedActivity;
-import com.cjboyett.boardgamestats.activity.collection.GameListActivity;
-import com.cjboyett.boardgamestats.activity.extras.AchievementsActivity;
-import com.cjboyett.boardgamestats.activity.extras.ExtrasActivity;
-import com.cjboyett.boardgamestats.activity.extras.LoginActivity;
+import com.cjboyett.boardgamestats.activity.extras.AchievementsController;
 import com.cjboyett.boardgamestats.activity.statsoverview.StatsTabbedActivity;
+import com.cjboyett.boardgamestats.conductor.ConductorActivity;
+import com.cjboyett.boardgamestats.conductor.addgameplay.AddGamePlayTabbedController;
 import com.cjboyett.boardgamestats.conductor.base.BaseController;
+import com.cjboyett.boardgamestats.conductor.changehandlers.DirectionalChangeHandler;
+import com.cjboyett.boardgamestats.conductor.collection.GameListController;
+import com.cjboyett.boardgamestats.conductor.extras.ExtrasController;
+import com.cjboyett.boardgamestats.conductor.extras.LoginController;
 import com.cjboyett.boardgamestats.data.PlayersDbUtility;
 import com.cjboyett.boardgamestats.data.games.GamesDbHelper;
 import com.cjboyett.boardgamestats.utility.ActivityUtilities;
@@ -39,33 +47,35 @@ public class MainController extends BaseController implements MainView {
 	private View view;
 
 	@BindView(R.id.ticker)
-	protected Ticker ticker;
+	Ticker ticker;
 
 	@BindView(R.id.textview_welcome_back)
-	protected TextView welcomeBackTextView;
+	TextView welcomeBackTextView;
 
 	@BindView(R.id.textview_add_game_play)
-	protected TextView addGamePlayButton;
+	AppCompatButton addGamePlayButton;
 
 	@BindView(R.id.textview_add_game)
-	protected TextView collectionsButton;
+	AppCompatButton collectionsButton;
 
 	@BindView(R.id.textview_stats)
-	protected TextView statsButton;
+	AppCompatButton statsButton;
 
 	@BindView(R.id.textview_extras)
-	protected TextView extrasButton;
+	AppCompatButton extrasButton;
 
 	@BindView(R.id.imageview_settings)
-	protected AppCompatImageView settingsButton;
+	AppCompatImageView settingsButton;
 
 	@BindView(R.id.imageview_help)
-	protected AppCompatImageView helpButton;
+	AppCompatImageView helpButton;
 
 	@BindView(R.id.imageview_achievements)
-	protected AppCompatImageView achievementButton;
+	AppCompatImageView achievementButton;
 
 	private MainPresenter presenter;
+
+	private GestureDetectorCompat gestureDetector;
 
 	@NonNull
 	@Override
@@ -83,34 +93,24 @@ public class MainController extends BaseController implements MainView {
 		setColors();
 		colorComponents();
 		presenter.initializeView();
+		gestureDetector = new GestureDetectorCompat(getActivity(), new ScrollGestureListener());
+		((ConductorActivity) getActivity()).setGestureDetector(gestureDetector);
 	}
 
 	@Override
 	protected void onDetach(@NonNull View view) {
 		pauseTicker();
+		((ConductorActivity) getActivity()).removeGestureDetector();
 		presenter.detachView();
 		super.onDetach(view);
 	}
 
 	protected void colorComponents() {
 		view.setBackgroundColor(backgroundColor);
-		if (Preferences.lightUI(getActivity())) {
-			collectionsButton.setBackgroundResource(R.drawable.main_button_background_dark);
-			statsButton.setBackgroundResource(R.drawable.main_button_background_dark);
-			extrasButton.setBackgroundResource(R.drawable.main_button_background_dark);
-			addGamePlayButton.setBackgroundResource(R.drawable.main_button_background_dark);
-			settingsButton.setBackgroundResource(R.drawable.main_button_background_dark);
-			achievementButton.setBackgroundResource(R.drawable.main_button_background_dark);
-			helpButton.setBackgroundResource(R.drawable.main_button_background_dark);
-		} else {
-			collectionsButton.setBackgroundResource(R.drawable.main_button_background_light);
-			statsButton.setBackgroundResource(R.drawable.main_button_background_light);
-			extrasButton.setBackgroundResource(R.drawable.main_button_background_light);
-			addGamePlayButton.setBackgroundResource(R.drawable.main_button_background_light);
-			settingsButton.setBackgroundResource(R.drawable.main_button_background_light);
-			achievementButton.setBackgroundResource(R.drawable.main_button_background_light);
-			helpButton.setBackgroundResource(R.drawable.main_button_background_light);
-		}
+		ViewUtilities.tintButtonBackground(collectionsButton, buttonColor);
+		ViewUtilities.tintButtonBackground(statsButton, buttonColor);
+		ViewUtilities.tintButtonBackground(extrasButton, buttonColor);
+		ViewUtilities.tintButtonBackground(addGamePlayButton, buttonColor);
 
 		collectionsButton.setTextColor(foregroundColor);
 		statsButton.setTextColor(foregroundColor);
@@ -242,13 +242,23 @@ public class MainController extends BaseController implements MainView {
 	}
 
 	public void openAddGamePlay() {
-		startActivity(new Intent(getActivity(), AddGamePlayTabbedActivity.class).putExtra("EXIT", "UP"));
-		ActivityUtilities.exitDown(getActivity());
+
+		getRouter().pushController(RouterTransaction.with(new AddGamePlayTabbedController())
+													.pushChangeHandler(DirectionalChangeHandler.from(
+															DirectionalChangeHandler.TOP))
+													.popChangeHandler(DirectionalChangeHandler.from(
+															DirectionalChangeHandler.TOP)));
+
+//		startActivity(new Intent(getActivity(), AddGamePlayTabbedActivity.class).putExtra("EXIT", "UP"));
+//		ActivityUtilities.exitDown(getActivity());
 	}
 
 	public void openCollections() {
-		startActivity(new Intent(getActivity(), GameListActivity.class));
-		ActivityUtilities.exitLeft(getActivity());
+		getRouter().pushController(RouterTransaction.with(new GameListController())
+													.pushChangeHandler(DirectionalChangeHandler.from(
+															DirectionalChangeHandler.RIGHT))
+													.popChangeHandler(DirectionalChangeHandler.from(
+															DirectionalChangeHandler.RIGHT)));
 	}
 
 	public void openStatsOverview() {
@@ -257,13 +267,19 @@ public class MainController extends BaseController implements MainView {
 	}
 
 	public void openLogin() {
-		startActivity(new Intent(getActivity(), LoginActivity.class));
-		ActivityUtilities.exitRight(getActivity());
+		getRouter().pushController(RouterTransaction.with(new LoginController())
+													.pushChangeHandler(DirectionalChangeHandler.from(
+															DirectionalChangeHandler.LEFT))
+													.popChangeHandler(DirectionalChangeHandler.from(
+															DirectionalChangeHandler.LEFT)));
 	}
 
 	public void openExtras() {
-		startActivity(new Intent(getActivity(), ExtrasActivity.class));
-		ActivityUtilities.exitRight(getActivity());
+		getRouter().pushController(RouterTransaction.with(new ExtrasController())
+													.pushChangeHandler(DirectionalChangeHandler.from(
+															DirectionalChangeHandler.LEFT))
+													.popChangeHandler(DirectionalChangeHandler.from(
+															DirectionalChangeHandler.LEFT)));
 	}
 
 	public void openSettings() {
@@ -271,7 +287,9 @@ public class MainController extends BaseController implements MainView {
 	}
 
 	public void openAchievements() {
-		startActivity(new Intent(getActivity(), AchievementsActivity.class));
+		getRouter().pushController(RouterTransaction.with(new AchievementsController())
+													.pushChangeHandler(new FadeChangeHandler(500))
+													.popChangeHandler(new FadeChangeHandler(500)));
 	}
 
 	public void openHelp() {
@@ -283,40 +301,70 @@ public class MainController extends BaseController implements MainView {
 		alertDialog.show();
 	}
 
+
 	// OnClick methods
 
 	@OnClick(R.id.textview_add_game_play)
-	protected void processAddGamePlay() {
+	void processAddGamePlay() {
 		presenter.processAddGamePlay();
 	}
 
 	@OnClick(R.id.textview_add_game)
-	protected void processCollections() {
+	void processCollections() {
 		presenter.processCollections();
 	}
 
 	@OnClick(R.id.textview_stats)
-	protected void processStatsOverview() {
+	void processStatsOverview() {
 		presenter.processStatsOverview();
 	}
 
 	@OnClick(R.id.textview_extras)
-	protected void processExtras() {
+	void processExtras() {
 		presenter.processExtras();
 	}
 
 	@OnClick(R.id.imageview_settings)
-	protected void processSettings() {
+	void processSettings() {
 		presenter.processSettings();
 	}
 
 	@OnClick(R.id.imageview_achievements)
-	protected void processAchievements() {
+	void processAchievements() {
 		presenter.processAchievements();
 	}
 
 	@OnClick(R.id.imageview_help)
-	protected void processHelp() {
+	void processHelp() {
 		presenter.processHelp();
+	}
+
+	private class ScrollGestureListener extends GestureDetector.SimpleOnGestureListener {
+		@Override
+		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+			if (Math.abs(velocityX) > Math.abs(velocityY)) {
+				if (Math.abs(e1.getX() - e2.getX()) >= 200) {
+					if (velocityX < -2000) {
+						processCollections();
+						return true;
+					} else if (velocityX > 2000) {
+						processExtras();
+						return true;
+					}
+				}
+			} else {
+				if (Math.abs(e1.getY() - e2.getY()) >= 200) {
+					if (velocityY < -2000) {
+						processStatsOverview();
+						return true;
+					} else if (velocityY > 2000) {
+						processAddGamePlay();
+						return true;
+					}
+				}
+			}
+
+			return false;
+		}
 	}
 }

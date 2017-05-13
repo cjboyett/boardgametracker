@@ -6,7 +6,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GestureDetectorCompat;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -31,6 +30,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+
+import timber.log.Timber;
 
 public class GamePlayCalendarFragment extends Fragment {
 	private Activity activity;
@@ -202,13 +203,13 @@ public class GamePlayCalendarFragment extends Fragment {
 		@Override
 		public boolean onDown(MotionEvent e) {
 			scrollY = scrollView.getScrollY(); //scrollView.getScrollY();
-			Log.d("DOWN", scrollY + "");
+			Timber.d(scrollY + "");
 			return super.onDown(e);
 		}
 
 		@Override
 		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-			Log.d("FLING", scrollY + "");
+			Timber.d(scrollY + "");
 			if (Math.abs(velocityX) < Math.abs(velocityY)) {
 				try {
 					if (Math.abs(e1.getY() - e2.getY()) >= 200) {
@@ -218,7 +219,7 @@ public class GamePlayCalendarFragment extends Fragment {
 						}
 					}
 				} catch (Exception e) {
-					e.printStackTrace();
+					Timber.e(e);
 				}
 			}
 			return false;

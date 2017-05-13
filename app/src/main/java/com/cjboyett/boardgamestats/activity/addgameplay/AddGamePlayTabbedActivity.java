@@ -15,14 +15,12 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.cjboyett.boardgamestats.R;
 import com.cjboyett.boardgamestats.activity.addgame.AddGameActivity;
-import com.cjboyett.boardgamestats.activity.main.ClearStackMainActivity;
 import com.cjboyett.boardgamestats.data.PlayersDbUtility;
 import com.cjboyett.boardgamestats.data.TempDataManager;
 import com.cjboyett.boardgamestats.data.games.GamesDbHelper;
@@ -61,6 +59,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import me.nereo.multi_image_selector.MultiImageSelectorActivity;
+import timber.log.Timber;
 
 public class AddGamePlayTabbedActivity extends AppCompatActivity {
 	private Activity activity = this;
@@ -123,7 +122,7 @@ public class AddGamePlayTabbedActivity extends AppCompatActivity {
 
 		gamePlayId = getIntent().getLongExtra("ID", -1l);
 
-		Log.d("GAME", gameName + " " + gameType + " " + gamePlayId);
+		Timber.d(gameName + " " + gameType + " " + gamePlayId);
 		if (gameType != null && !gameType.equals("") && gamePlayId != -1l) {
 			if (StringUtilities.isBoardGame(gameType))
 				boardGamePlayData = BoardGameDbUtility.getGamePlay(dbHelper, gamePlayId);
@@ -219,8 +218,8 @@ public class AddGamePlayTabbedActivity extends AppCompatActivity {
 		if (tempDataManager.getTempGamePlayData().size() >= 6) {
 			gameName = tempDataManager.getTempGamePlayData().get(0);
 			gameType = tempDataManager.getTempGamePlayData().get(1);
-			if (tempDataManager.getTimer().get(0) != 0 &&
-					tempDataManager.getTimer().get(1) > tempDataManager.getTimer().get(2))
+			if (tempDataManager.getTimer().getTimerBase() != 0 &&
+					tempDataManager.getTimer().isTimerRunning())
 				timePlayed = getMinutesFromTimeString(TimerUtility.getElapsedTime(this));
 			else
 				timePlayed = getMinutesFromTimeString(tempDataManager.getTempGamePlayData().get(2));
@@ -228,7 +227,7 @@ public class AddGamePlayTabbedActivity extends AppCompatActivity {
 			location = tempDataManager.getTempGamePlayData().get(4);
 			notes = tempDataManager.getTempGamePlayData().get(5);
 		}
-		Log.d("GAME", gameName + " " + gameType + " " + timePlayed + " " + date + " " + location + " " + notes);
+		Timber.d(gameName + " " + gameType + " " + timePlayed + " " + date + " " + location + " " + notes);
 
 		if (gameName != null && gameType != null) {
 			if (StringUtilities.isBoardGame(gameType))
@@ -251,7 +250,7 @@ public class AddGamePlayTabbedActivity extends AppCompatActivity {
 				try {
 					players = tempDataManager.getTempPlayers();
 				} catch (Exception e) {
-					e.printStackTrace();
+					Timber.e(e);
 					players = addGamePlayPlayersFragment.getPlayerData();
 				}
 
@@ -339,7 +338,7 @@ public class AddGamePlayTabbedActivity extends AppCompatActivity {
 				alertDialog.show();
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			Timber.e(e);
 			if (Preferences.isSuperUser(activity)) {
 				AlertDialog alertDialog = new ViewUtilities.DialogBuilder(this)
 						.setTitle("Error")
@@ -400,7 +399,7 @@ public class AddGamePlayTabbedActivity extends AppCompatActivity {
 		super.onPause();
 		dbHelper.close();
 
-		List<Long> times = TempDataManager.getInstance(getApplication()).getTimer();
+		List<Long> times = TempDataManager.getInstance(getApplication()).getTimer().toList();
 		if (!submitted && !times.isEmpty() && times.get(0) > 0 && times.get(1) > times.get(2)) {
 			String game = TempDataManager.getInstance(getApplication()).getTempGamePlayData().get(0);
 			TimerNotificationBuilder timerNotificationBuilder = new TimerNotificationBuilder();
@@ -455,6 +454,7 @@ public class AddGamePlayTabbedActivity extends AppCompatActivity {
 	}
 
 	private void goBack() {
+/*
 		if (getIntent().getBooleanExtra("WIDGET", false) || getIntent().getStringExtra("EXIT") == null) {
 			startActivity(new Intent(this, ClearStackMainActivity.class));
 			ActivityUtilities.exitUp(this);
@@ -463,6 +463,9 @@ public class AddGamePlayTabbedActivity extends AppCompatActivity {
 			String exitActivity = getIntent().getStringExtra("EXIT");
 			ActivityUtilities.exit(this, exitActivity);
 		}
+*/
+		super.onBackPressed();
+		ActivityUtilities.exitUp(this);
 	}
 
 	@Override
@@ -476,7 +479,7 @@ public class AddGamePlayTabbedActivity extends AppCompatActivity {
 			addGamePlayDetailsFragment.setGame(gameName, gameType);
 		} else if (requestCode == 201 && requestCode == RESULT_OK) {
 			List<String> paths = data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
-			for (String path : paths) Log.d("PATH", path);
+			for (String path : paths) Timber.d(path);
 		} else callbackManager.onActivityResult(requestCode, resultCode, data);
 	}
 
@@ -490,15 +493,15 @@ public class AddGamePlayTabbedActivity extends AppCompatActivity {
 		this.location = location;
 		this.notes = notes;
 
-		Log.d("TYPE", gameType);
+		Timber.d(gameType);
 	}
 
 	private int getMinutesFromTimeString(String time) {
-		Log.d("TIME", "Getting time from " + time);
+		Timber.d("Getting time from " + time);
 		if (NumberUtils.isParsable(time)) return Integer.parseInt(time);
 		else if (time.contains(":")) {
 			String[] parts = time.split(":");
-			Log.d("TIME", Arrays.toString(parts));
+			Timber.d(Arrays.toString(parts));
 			if (parts.length == 1 && NumberUtils.isParsable(parts[0])) return 1;
 			else if (parts.length == 2 && NumberUtils.isParsable(parts[0]) && NumberUtils.isParsable(parts[1]))
 				return Integer.parseInt(parts[0]) + Integer.parseInt(parts[1]) / 30;

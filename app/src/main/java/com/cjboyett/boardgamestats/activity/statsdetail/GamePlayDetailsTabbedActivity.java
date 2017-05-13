@@ -12,7 +12,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,6 +50,8 @@ import com.google.android.gms.ads.AdView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import timber.log.Timber;
 
 public class GamePlayDetailsTabbedActivity extends AppCompatActivity {
 	private Activity activity = this;
@@ -262,7 +263,7 @@ public class GamePlayDetailsTabbedActivity extends AppCompatActivity {
 						break;
 				}
 				if (thumbnailUrl != null) {
-					Log.d("THUMBNAIL", thumbnailUrl);
+					Timber.d(thumbnailUrl);
 					Bitmap thumbnail =
 							imageController.setFileName(thumbnailUrl.substring(thumbnailUrl.lastIndexOf("/") + 1))
 										   .load();
@@ -454,7 +455,7 @@ public class GamePlayDetailsTabbedActivity extends AppCompatActivity {
 			dbHelper = new GamesDbHelper(getContext());
 			ImageController imageController = new ImageController(getContext());
 
-			Log.d("GAME", gameType + " " + id);
+			Timber.d(gameType + " " + id);
 			gamePlayData = null;
 			this.gameType = gameType;
 			switch (gameType) {
@@ -531,7 +532,7 @@ public class GamePlayDetailsTabbedActivity extends AppCompatActivity {
 						break;
 				}
 				if (thumbnailUrl != null) {
-					Log.d("BLARG", thumbnailUrl);
+					Timber.d(thumbnailUrl);
 					ImageController imageController = new ImageController(getActivity()).setDirectoryName("thumbnails");
 					Bitmap thumbnail =
 							imageController.setFileName(thumbnailUrl.substring(thumbnailUrl.lastIndexOf("/") + 1))

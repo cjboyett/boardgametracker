@@ -6,7 +6,6 @@ import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GestureDetectorCompat;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -34,6 +33,8 @@ import com.cjboyett.boardgamestats.view.adapter.ImageAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import timber.log.Timber;
 
 public class GameStatsListFragment extends Fragment {
 	private Activity activity;
@@ -204,13 +205,13 @@ public class GameStatsListFragment extends Fragment {
 		public boolean onDown(MotionEvent e) {
 			View c = gridView.getChildAt(0);
 			scrollY = -c.getTop() + gridView.getFirstVisiblePosition() * c.getHeight();
-			Log.d("DOWN", scrollY + "");
+			Timber.d(scrollY + "");
 			return super.onDown(e);
 		}
 
 		@Override
 		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-			Log.d("FLING", scrollY + "");
+			Timber.d(scrollY + "");
 			if (Math.abs(velocityX) < Math.abs(velocityY)) {
 				if (Math.abs(e1.getY() - e2.getY()) >= 200) {
 					if (velocityY > 2000 && scrollY == 0) {

@@ -74,17 +74,19 @@ public class Ticker extends RelativeLayout {
 		// Sets second View off screen
 		tickerItemViews[1].setTranslationX(TICKER_ITEM_TRANSLATION_X);
 
-		initializeTickerItems();
+		if (!isInEditMode()) {
+			initializeTickerItems();
 
-		// Keeps ticker running in the background
-		tickerHandler = new Handler();
-		tickerRunnable = new Runnable() {
-			@Override
-			public void run() {
-				changeTickerItem();
-				if (!paused && !failedToLoad) tickerHandler.postDelayed(tickerRunnable, DURATION);
-			}
-		};
+			// Keeps ticker running in the background
+			tickerHandler = new Handler();
+			tickerRunnable = new Runnable() {
+				@Override
+				public void run() {
+					changeTickerItem();
+					if (!paused && !failedToLoad) tickerHandler.postDelayed(tickerRunnable, DURATION);
+				}
+			};
+		}
 	}
 
 	public void setColors(int foregroundColor) {

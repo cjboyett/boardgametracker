@@ -1,4 +1,4 @@
-package com.cjboyett.boardgamestats.activity.extras;
+package com.cjboyett.boardgamestats.conductor.extras;
 
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;

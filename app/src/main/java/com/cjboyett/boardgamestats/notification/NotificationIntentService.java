@@ -10,7 +10,6 @@ import android.media.RingtoneManager;
 import android.os.SystemClock;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.support.v7.app.NotificationCompat;
-import android.util.Log;
 
 import com.cjboyett.boardgamestats.R;
 import com.cjboyett.boardgamestats.activity.addgameplay.AddGamePlayTabbedActivity;
@@ -21,6 +20,8 @@ import com.cjboyett.boardgamestats.utility.Preferences;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+
+import timber.log.Timber;
 
 /**
  * Created by Casey on 5/3/2016.
@@ -62,10 +63,10 @@ public class NotificationIntentService extends IntentService {
 
 	@Override
 	protected void onHandleIntent(Intent intent) {
-		Log.d(getClass().getSimpleName(), "onHandleIntent, started handling a notification event");
+		Timber.d("started handling a notification event");
 		try {
 			String action = intent.getAction();
-			Log.d("ACTION", action);
+			Timber.d(action);
 			if (ACTION_START_TIMER.equals(action))
 				processStartTimerNotification();
 			else if (ACTION_DELETE_TIMER.equals(action))

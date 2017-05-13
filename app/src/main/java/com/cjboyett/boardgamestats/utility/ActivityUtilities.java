@@ -16,9 +16,6 @@ import com.cjboyett.boardgamestats.utility.view.ImageController;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Casey on 3/16/2016.
- */
 public class ActivityUtilities {
 	public static void openActivity(Activity activity, Intent intent, String exit) {
 		activity.startActivity(intent);

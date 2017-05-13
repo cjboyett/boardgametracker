@@ -72,11 +72,4 @@
 		</com.github.clans.fab.FloatingActionMenu>
 	</android.support.design.widget.CoordinatorLayout>
 
-	<com.cjboyett.boardgamestats.view.AdViewContainer
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:id="@+id/ad_container"
-		android:animateLayoutChanges="true"
-		android:layout_alignParentBottom="true"/>
-
 </LinearLayout>

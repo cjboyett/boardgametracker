@@ -29,9 +29,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by Casey on 4/7/2016.
- */
+import timber.log.Timber;
+
 public class FilteredGameArrayAdapter extends ArrayAdapter<String> {
 	private Activity activity;
 	private List<String> items, suggestions;
@@ -111,7 +110,7 @@ public class FilteredGameArrayAdapter extends ArrayAdapter<String> {
 
 						boolean noThumbnail = (thumbnail == null);
 
-//						if (!noThumbnail) Log.d("THUMBNAIL SIZE", thumbnail.getByteCount() / 1024 + " KB");
+//						if (!noThumbnail) Timber.d(thumbnail.getByteCount() / 1024 + " KB");
 
 						if (noThumbnail)
 							thumbnail = new StringToBitmapBuilder(activity)
@@ -161,7 +160,7 @@ public class FilteredGameArrayAdapter extends ArrayAdapter<String> {
 				((TextView) view).setText(Html.fromHtml(suggestion));
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			Timber.e(e);
 		}
 
 		return view;

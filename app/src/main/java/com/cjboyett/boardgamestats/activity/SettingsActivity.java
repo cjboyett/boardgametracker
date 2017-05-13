@@ -219,7 +219,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 				@Override
 				public boolean onPreferenceChange(Preference preference, Object newValue) {
 					Integer[] colors = (Integer[]) newValue;
-					setColorPreferences(colors[0], colors[1]);
+					setColorPreferences(colors[0], colors[1], colors[2]);
 					return false;
 				}
 			});
@@ -257,8 +257,10 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
 			bindPreferenceSummaryToValue(findPreference(getString(R.string.theme_background_preference)));
 			bindPreferenceSummaryToValue(findPreference(getString(R.string.theme_foreground_preference)));
+			bindPreferenceSummaryToValue(findPreference(getString(R.string.theme_button_preference)));
 			setColorPreferences(Preferences.getBackgroundColor(getActivity()),
-								Preferences.getForegroundColor(getActivity()));
+								Preferences.getForegroundColor(getActivity()),
+								Preferences.getButtonColor(getActivity()));
 		}
 
 		@Override
@@ -277,6 +279,11 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 						findPreference(getString(R.string.theme_foreground_preference))
 								.setSummary(colorString);
 						break;
+					case "com.cjboyett.boardgamestats.THEME_BUTTON_PREFERENCE":
+						Preferences.setThemeButtonPreference(preference.getContext(), (int) newValue);
+						findPreference(getString(R.string.theme_button_preference))
+								.setSummary(colorString);
+						break;
 					default:
 						break;
 				}
@@ -288,9 +295,10 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 			preference.setOnPreferenceChangeListener(this);
 		}
 
-		private void setColorPreferences(int backgroundColor, int foregroundColor) {
+		private void setColorPreferences(int backgroundColor, int foregroundColor, int buttonColor) {
 			String backgroundColorString = "#" + Integer.toHexString(backgroundColor).substring(2).toUpperCase();
 			String foregroundColorString = "#" + Integer.toHexString(foregroundColor).substring(2).toUpperCase();
+			String buttonColorString = "#" + Integer.toHexString(buttonColor).substring(2).toUpperCase();
 
 			((ColorPickerPreference) findPreference(getString(R.string.theme_background_preference)))
 					.setValue(backgroundColor);
@@ -300,6 +308,10 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 					.setValue(foregroundColor);
 			findPreference(getString(R.string.theme_foreground_preference))
 					.setSummary(foregroundColorString);
+			((ColorPickerPreference) findPreference(getString(R.string.theme_button_preference)))
+					.setValue(buttonColor);
+			findPreference(getString(R.string.theme_button_preference))
+					.setSummary(buttonColorString);
 		}
 
 		private void openEmail() {
@@ -307,7 +319,9 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 			intent.setData(Uri.parse("mailto:")); // only email apps should handle this
 			intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"casey@cjboyett.com"});
 			intent.putExtra(Intent.EXTRA_SUBJECT, "Games Tracker");
-			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
+			}
 			startActivity(intent);
 		}
 	}

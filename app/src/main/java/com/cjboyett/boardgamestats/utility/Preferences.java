@@ -69,6 +69,13 @@ public class Preferences {
 						 .apply();
 	}
 
+	public static void setThemeButtonPreference(Context context, int preference) {
+		SharedPreferences sharedPreferences = getSharedPreferences(context);
+		sharedPreferences.edit()
+						 .putInt(context.getString(R.string.theme_button_preference), preference)
+						 .apply();
+	}
+
 	public static int getBackgroundColor(Context context) {
 		int defaultBackground;
 		if (lightUI(context)) defaultBackground = context.getResources().getColor(R.color.colorMainLight);
@@ -87,6 +94,17 @@ public class Preferences {
 		SharedPreferences sharedPreferences = getSharedPreferences(context);
 		return sharedPreferences
 				.getInt(context.getString(R.string.theme_foreground_preference), defaultForeground);
+	}
+
+	public static int getButtonColor(Context context) {
+		int defaultButton;
+		if (lightUI(context)) defaultButton = context.getResources().getColor(R.color.colorMainDark);
+		else defaultButton = context.getResources().getColor(R.color.colorMainLight);
+		defaultButton = ColorUtilities.darken(defaultButton);
+
+		SharedPreferences sharedPreferences = getSharedPreferences(context);
+		return sharedPreferences
+				.getInt(context.getString(R.string.theme_button_preference), defaultButton);
 	}
 
 	public static int getHintTextColor(Context context) {

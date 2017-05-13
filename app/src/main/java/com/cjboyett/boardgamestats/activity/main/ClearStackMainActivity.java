@@ -4,9 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
-/**
- * Created by Casey on 5/4/2016.
- */
 public class ClearStackMainActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

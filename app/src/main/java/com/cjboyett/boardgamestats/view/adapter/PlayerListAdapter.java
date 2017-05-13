@@ -99,7 +99,7 @@ public class PlayerListAdapter extends BaseAdapter {
 							new GraphRequest.Callback() {
 								public void onCompleted(GraphResponse response)
 								{
-									Log.d("RESPONSE", response.toString());
+									Timber.d(response.toString());
 									JSONObject data = response.getJSONObject();
 
 									if (data.has("friends"))
@@ -138,7 +138,7 @@ public class PlayerListAdapter extends BaseAdapter {
 																			}
 																			catch (Exception e)
 																			{
-																				e.printStackTrace();
+																				Timber.e(e);
 																			}
 
 																			return profilePicture[0];
@@ -148,14 +148,14 @@ public class PlayerListAdapter extends BaseAdapter {
 																		protected void onPostExecute(Bitmap bitmap)
 																		{
 																			if (bitmap != null) avatars.put(player, bitmap);
-																			else Log.d("PICTURE", "NULL");
+																			else Timber.d("NULL");
 																			notifyDataSetChanged();
 																		}
 																	}.execute(profilePictureURL);
 																}
 																catch (Exception e)
 																{
-																	e.printStackTrace();
+																	Timber.e(e);
 																}
 															}
 														}
@@ -164,7 +164,7 @@ public class PlayerListAdapter extends BaseAdapter {
 										}
 										catch (Exception e)
 										{
-											e.printStackTrace();
+											Timber.e(e);
 										}
 									}
 								}

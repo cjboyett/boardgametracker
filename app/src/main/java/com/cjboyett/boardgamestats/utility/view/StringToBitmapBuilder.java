@@ -5,12 +5,13 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.DisplayMetrics;
-import android.util.Log;
 
 import com.cjboyett.boardgamestats.utility.Preferences;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import timber.log.Timber;
 
 /**
  * Created by Casey on 4/2/2016.
@@ -79,7 +80,7 @@ public class StringToBitmapBuilder {
 			paintWidth = (int) (paint.measureText(string));
 			return string;
 		} else {
-			Log.d("BREAKING TEXT", string);
+			Timber.d(string);
 			// TODO Lazy breaking.  Fix later?
 			String[] bits = string.split(" ");
 			String tempLine = "";
@@ -103,12 +104,12 @@ public class StringToBitmapBuilder {
 			paintWidth = 0;
 
 			for (String line : lines) {
-				Log.d("WIDTH", paintWidth + "");
+				Timber.d(paintWidth + "");
 				paintWidth = Math.max(paintWidth, (int) paint.measureText(line));
 				toReturn += line + "\n";
 			}
-			Log.d("WIDTH", paintWidth + "");
-			Log.d("STRING", toReturn);
+			Timber.d(paintWidth + "");
+			Timber.d(toReturn);
 
 			toReturn = toReturn.substring(0, toReturn.length() - 1);
 

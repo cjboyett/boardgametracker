@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
 
+import timber.log.Timber;
+
 /**
  * Ticker Item for BGG Hot List items
  * Created by Casey on 5/8/2016.
@@ -53,12 +55,12 @@ public class BGGTickerItem extends TickerItem {
 							in = connection.getInputStream();
 							bitmap = BitmapFactory.decodeStream(in);
 						} catch (Exception e) {
-							e.printStackTrace();
+							Timber.e(e);
 						} finally {
 							try {
 								in.close();
 							} catch (Exception e) {
-								e.printStackTrace();
+								Timber.e(e);
 							}
 						}
 
@@ -67,9 +69,9 @@ public class BGGTickerItem extends TickerItem {
 				}.execute(item.thumbnailUrl)
 				 .get();
 			} catch (InterruptedException e) {
-				e.printStackTrace();
+				Timber.e(e);
 			} catch (ExecutionException e) {
-				e.printStackTrace();
+				Timber.e(e);
 			}
 		}
 	}
@@ -84,7 +86,7 @@ public class BGGTickerItem extends TickerItem {
 		try {
 			ID = item.name;
 		} catch (Exception e) {
-			e.printStackTrace();
+			Timber.e(e);
 		}
 		return ID;
 	}
@@ -100,7 +102,7 @@ public class BGGTickerItem extends TickerItem {
 		try {
 			blurb = "<b>Currently Hot #" + item.rank + ":</b><br/>" + item.name;
 		} catch (Exception e) {
-			e.printStackTrace();
+			Timber.e(e);
 		}
 		return blurb;
 	}

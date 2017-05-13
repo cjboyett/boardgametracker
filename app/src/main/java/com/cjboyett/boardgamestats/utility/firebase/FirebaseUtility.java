@@ -9,7 +9,6 @@ import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -17,6 +16,7 @@ import android.widget.Toast;
 
 import com.cjboyett.boardgamestats.R;
 import com.cjboyett.boardgamestats.activity.extras.LoginActivity;
+import com.cjboyett.boardgamestats.conductor.extras.LoginController;
 import com.cjboyett.boardgamestats.data.games.GamesDbHelper;
 import com.cjboyett.boardgamestats.data.games.board.BoardGameContract;
 import com.cjboyett.boardgamestats.data.games.board.BoardGameDbUtility;
@@ -66,9 +66,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-/**
- * Created by Casey on 8/29/2016.
- */
+import timber.log.Timber;
+
 public class FirebaseUtility {
 	private FirebaseAuth auth;
 	private FirebaseAuth.AuthStateListener authStateListener;
@@ -82,8 +81,8 @@ public class FirebaseUtility {
 			@Override
 			public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
 				FirebaseUser user = auth.getCurrentUser();
-				if (user != null) Log.d("USER", user.getEmail() + " " + user.getDisplayName());
-				else Log.d("USER", "Does not exist");
+				if (user != null) Timber.d(user.getEmail() + " " + user.getDisplayName());
+				else Timber.d("Does not exist");
 			}
 		};
 		auth.addAuthStateListener(authStateListener);
@@ -264,6 +263,80 @@ public class FirebaseUtility {
 		}
 	}
 
+	public void showEmailSignIn(final LoginController loginActivity) {
+		if (!signedIn()) {
+			View signInView = activity.getLayoutInflater()
+									  .inflate(R.layout.dialog_sign_in_form, null);
+			final EditText emailEditText, passwordEditText;
+
+			emailEditText = (EditText) signInView.findViewById(R.id.edittext_email);
+			passwordEditText = (EditText) signInView.findViewById(R.id.edittext_password);
+
+			int foregroundColor = Preferences.getForegroundColor(activity);
+			int hintTextColor = Preferences.getHintTextColor(activity);
+
+			((TextView) signInView.findViewById(R.id.textview_password)).setTextColor(foregroundColor);
+			passwordEditText.setTextColor(foregroundColor);
+			passwordEditText.setHintTextColor(hintTextColor);
+
+			((TextView) signInView.findViewById(R.id.textview_email)).setTextColor(foregroundColor);
+			emailEditText.setTextColor(foregroundColor);
+			emailEditText.setHintTextColor(hintTextColor);
+			AlertDialog signUpDialog = new ViewUtilities.DialogBuilder(activity)
+					.setTitle("Sign in")
+					.setView(signInView)
+					.setPositiveButton("Okay", new View.OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							final String email = emailEditText.getText()
+															  .toString();
+							final String password = passwordEditText.getText()
+																	.toString();
+							if (!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password))
+								auth.signInWithEmailAndPassword(email, password)
+									.addOnCompleteListener(activity, new OnCompleteListener<AuthResult>() {
+										@Override
+										public void onComplete(@NonNull Task<AuthResult> task) {
+											if (task.isSuccessful()) {
+												if (TextUtils.isEmpty(Preferences.getAuthId(activity)))
+													Preferences.setAuthId(activity, auth.getCurrentUser().getUid());
+												else
+													auth.getCurrentUser()
+														.linkWithCredential(EmailAuthProvider.getCredential(email,
+																											password));
+
+												Preferences.setCurrentAuthProvider(activity, "Email");
+
+												Toast.makeText(activity, "Log-in successful", Toast.LENGTH_SHORT)
+													 .show();
+												loginActivity.loginSuccessful();
+											} else
+												Toast.makeText(activity, "Log-in failed", Toast.LENGTH_SHORT)
+													 .show();
+										}
+									});
+						}
+					})
+					.setNegativeButton("Cancel", null)
+					.create();
+			signUpDialog.show();
+		} else {
+			AlertDialog alertDialog = new ViewUtilities.DialogBuilder(activity)
+					.setTitle("Already signed in")
+					.setMessage("You are already signed in.  Would you like to sign out and sign back in?")
+					.setPositiveButton("Sign out", new View.OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							signOut();
+							showEmailSignIn(loginActivity);
+						}
+					})
+					.setNegativeButton("Cancel", null)
+					.create();
+			alertDialog.show();
+		}
+	}
+
 	public void facebookSignIn(LoginResult loginResult) {
 		handleFacebookAccessToken(loginResult.getAccessToken());
 	}
@@ -275,8 +348,7 @@ public class FirebaseUtility {
 			.addOnCompleteListener(activity, new OnCompleteListener<AuthResult>() {
 				@Override
 				public void onComplete(@NonNull Task<AuthResult> task) {
-					Log.d(FirebaseUtility.class.getSimpleName(),
-						  "signInWithCredential:onComplete:" + task.isSuccessful());
+					Timber.d("signInWithCredential:onComplete:" + task.isSuccessful());
 
 					if (task.isSuccessful()) {
 						Preferences.setCurrentAuthProvider(activity, "Facebook");
@@ -291,7 +363,7 @@ public class FirebaseUtility {
 					}
 
 					if (!task.isSuccessful()) {
-						Log.w(FirebaseUtility.class.getSimpleName(), "signInWithCredential", task.getException());
+						Timber.w("signInWithCredential", task.getException());
 						Toast.makeText(activity, "Authentication failed",
 									   Toast.LENGTH_SHORT)
 							 .show();
@@ -335,7 +407,7 @@ public class FirebaseUtility {
 														null);
 					while (boardCursor.moveToNext()) {
 						long id = boardCursor.getLong(0);
-//						Log.d("ID", id + "");
+//						Timber.d(id + "");
 						reference.child("board")
 								 .child(id + "")
 								 .setValue(FirebaseGamePlayData.makeFirebaseData(BoardGameDbUtility.getGamePlay(dbHelper,
@@ -353,7 +425,7 @@ public class FirebaseUtility {
 													  null);
 					while (rpgCursor.moveToNext()) {
 						long id = rpgCursor.getLong(0);
-//						Log.d("ID", id + "");
+//						Timber.d(id + "");
 						reference.child("rpg")
 								 .child(id + "")
 								 .setValue(FirebaseGamePlayData.makeFirebaseData(RPGDbUtility.getGamePlay(dbHelper,
@@ -371,7 +443,7 @@ public class FirebaseUtility {
 														null);
 					while (videoCursor.moveToNext()) {
 						long id = videoCursor.getLong(0);
-//						Log.d("ID", id + "");
+//						Timber.d(id + "");
 						reference.child("video")
 								 .child(id + "")
 								 .setValue(FirebaseGamePlayData.makeFirebaseData(VideoGameDbUtility.getGamePlay(dbHelper,
@@ -587,7 +659,7 @@ public class FirebaseUtility {
 							UrlUtilities.loadBoardGameXmlFromNetwork(urls[0]);
 					return BoardGame.createGame(items.get(0));
 				} catch (Exception e) {
-					Log.e("PARSER", e.getMessage());
+					Timber.e(e);
 				}
 			} else if (gameType == Game.GameType.RPG) {
 				InputStream inputStream = null;
@@ -596,12 +668,12 @@ public class FirebaseUtility {
 					List<RPGXmlParser.Item> items = new RPGXmlParser().parse(inputStream);
 					return RolePlayingGame.createGame(items.get(0));
 				} catch (Exception e) {
-					e.printStackTrace();
+					Timber.e(e);
 				} finally {
 					try {
 						inputStream.close();
 					} catch (Exception e) {
-						e.printStackTrace();
+						Timber.e(e);
 					}
 				}
 			} else if (gameType == Game.GameType.VIDEO) {
@@ -610,7 +682,7 @@ public class FirebaseUtility {
 							UrlUtilities.loadVideoGameXmlFromNetwork(urls[0]);
 					return VideoGame.createGame(items.get(0));
 				} catch (Exception e) {
-					Log.e("PARSER", e.getMessage());
+					Timber.e(e);
 				}
 			}
 
@@ -653,7 +725,7 @@ public class FirebaseUtility {
 				in = connection.getInputStream();
 				bitmap = BitmapFactory.decodeStream(in);
 			} catch (Exception e) {
-				e.printStackTrace();
+				Timber.e(e);
 			} finally {
 				try {
 					in.close();

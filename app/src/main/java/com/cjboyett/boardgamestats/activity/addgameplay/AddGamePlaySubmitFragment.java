@@ -2,6 +2,7 @@ package com.cjboyett.boardgamestats.activity.addgameplay;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,11 +12,12 @@ import android.widget.CheckBox;
 
 import com.cjboyett.boardgamestats.R;
 import com.cjboyett.boardgamestats.utility.Preferences;
+import com.cjboyett.boardgamestats.utility.view.ColorUtilities;
 import com.cjboyett.boardgamestats.utility.view.ViewUtilities;
 
 public class AddGamePlaySubmitFragment extends Fragment {
 	private View view;
-	private int backgroundColor, foregroundColor;
+	private int backgroundColor, foregroundColor, buttonColor;
 	private boolean ignore;
 
 	public AddGamePlaySubmitFragment() {
@@ -47,11 +49,13 @@ public class AddGamePlaySubmitFragment extends Fragment {
 	private void setColors() {
 		backgroundColor = Preferences.getBackgroundColor(getActivity());
 		foregroundColor = Preferences.getForegroundColor(getActivity());
+		buttonColor = Preferences.getButtonColor(getActivity());
 	}
 
 	private void colorComponents() {
 		view.setBackgroundColor(backgroundColor);
 
+/*
 		if (Preferences.lightUI(getActivity())) {
 			view.findViewById(R.id.button_submit_gameplay)
 				.setBackgroundResource(R.drawable.main_button_background_dark);
@@ -63,6 +67,10 @@ public class AddGamePlaySubmitFragment extends Fragment {
 			view.findViewById(R.id.button_submit_gameplay_and_share)
 				.setBackgroundResource(R.drawable.main_button_background_light);
 		}
+*/
+		ViewUtilities.tintButtonBackground((AppCompatButton) view.findViewById(R.id.button_submit_gameplay), buttonColor);
+		ViewUtilities.tintButtonBackground((AppCompatButton) view.findViewById(R.id.button_submit_gameplay_and_share), buttonColor);
+
 
 //		view.findViewById(R.id.button_submit_gameplay).setBackgroundColor(backgroundColor);
 		((Button) view.findViewById(R.id.button_submit_gameplay)).setTextColor(foregroundColor);

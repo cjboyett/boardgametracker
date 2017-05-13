@@ -2,7 +2,6 @@ package com.cjboyett.boardgamestats.data.games;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.util.Log;
 
 import com.cjboyett.boardgamestats.data.TempContract;
 import com.cjboyett.boardgamestats.data.games.board.BoardGameDbUtility;
@@ -16,6 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+
+import timber.log.Timber;
 
 /**
  * Created by Casey on 4/13/2016.
@@ -92,19 +93,19 @@ public class GamesDbUtility {
 	}
 
 	public static void clearTempGamePlayTable(GamesDbHelper dbHelper) {
-		Log.d("DELETE", "Play");
+		Timber.d("Play");
 		dbHelper.getWritableDatabase().execSQL("DELETE FROM " + TempContract.GamePlayEntry.TABLE_NAME + ";");
 	}
 
 	public static void clearTempPlayersTable(GamesDbHelper dbHelper) {
-		Log.d("DELETE", "Players");
+		Timber.d("Players");
 		dbHelper.getWritableDatabase().execSQL("DELETE FROM " + TempContract.PlayerEntry.TABLE_NAME + ";");
 	}
 
 	public static void addTempGamePlay(GamesDbHelper dbHelper, String gameName, String gameType, String timePlayed,
 									   String date,
 									   String location, String notes) {
-		Log.d("SETTING", "Play");
+		Timber.d("Play");
 		ContentValues values = new ContentValues();
 		values.put(TempContract.GamePlayEntry.GAME, gameName != null ? gameName : "");
 		values.put(TempContract.GamePlayEntry.GAME_TYPE, gameType != null ? gameType : "");
@@ -165,8 +166,11 @@ public class GamesDbUtility {
 																 null);
 
 		if (gameCursor.moveToFirst()) {
-			for (int i = 0; i < gameCursor.getColumnCount(); i++)
+			Timber.d(gameCursor.getColumnCount() + "");
+			for (int i = 0; i < gameCursor.getColumnCount(); i++) {
 				gamePlayData.add(gameCursor.getLong(i));
+				Timber.d(i + " " + gameCursor.getLong(i));
+			}
 		}
 		gameCursor.close();
 
@@ -178,7 +182,7 @@ public class GamesDbUtility {
 	}
 
 	public static void addTempPlayer(GamesDbHelper dbHelper, String name, double score, boolean win) {
-		Log.d("SETTING", "Player");
+		Timber.d("Player");
 		ContentValues values = new ContentValues();
 		if (name != null) values.put(TempContract.PlayerEntry.NAME, name);
 		else values.put(TempContract.PlayerEntry.NAME, "");

@@ -24,7 +24,7 @@ import com.cjboyett.boardgamestats.activity.addgame.AddGameActivity;
 import com.cjboyett.boardgamestats.activity.addgameplay.AddGamePlayTabbedActivity;
 import com.cjboyett.boardgamestats.activity.base.BaseActivity;
 import com.cjboyett.boardgamestats.activity.collection.GameListActivity;
-import com.cjboyett.boardgamestats.activity.extras.AchievementsActivity;
+import com.cjboyett.boardgamestats.activity.extras.AchievementsController;
 import com.cjboyett.boardgamestats.activity.extras.ExtrasActivity;
 import com.cjboyett.boardgamestats.activity.extras.LoginActivity;
 import com.cjboyett.boardgamestats.activity.statsoverview.StatsTabbedActivity;
@@ -322,7 +322,7 @@ public class MainActivity extends BaseActivity implements MainView, GestureDetec
 	}
 
 	public void openAchievements() {
-		startActivity(new Intent(this, AchievementsActivity.class));
+		startActivity(new Intent(this, AchievementsController.class));
 	}
 
 	public void openHelp() {

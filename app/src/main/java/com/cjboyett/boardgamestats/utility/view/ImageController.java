@@ -10,6 +10,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import timber.log.Timber;
+
 /**
  * Created by Ilya Gazman on 3/6/2016.
  */
@@ -62,14 +64,14 @@ public class ImageController {
 					break;
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			Timber.e(e);
 		} finally {
 			try {
 				if (fileOutputStream != null) {
 					fileOutputStream.close();
 				}
 			} catch (IOException e) {
-				e.printStackTrace();
+				Timber.e(e);
 			}
 		}
 	}
@@ -86,14 +88,14 @@ public class ImageController {
 			inputStream = new FileInputStream(createFile());
 			return BitmapFactory.decodeStream(inputStream);
 		} catch (Exception e) {
-			e.printStackTrace();
+			Timber.e(e);
 		} finally {
 			try {
 				if (inputStream != null) {
 					inputStream.close();
 				}
 			} catch (IOException e) {
-				e.printStackTrace();
+				Timber.e(e);
 			}
 		}
 		return null;
@@ -103,7 +105,7 @@ public class ImageController {
 		try {
 			createFile().delete();
 		} catch (Exception e) {
-			e.printStackTrace();
+			Timber.e(e);
 		}
 	}
 

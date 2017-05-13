@@ -8,7 +8,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -21,6 +20,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import timber.log.Timber;
 
 /**
  * Created by Casey on 9/10/2016.
@@ -91,7 +92,7 @@ public class ImageGalleryRecyclerAdapter extends RecyclerView.Adapter<ImageGalle
 			@Override
 			public void onClick(View v) {
 				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-					Log.d("NAME", v.getTransitionName());
+					Timber.d(v.getTransitionName());
 				}
 				ActivityOptionsCompat transitionActivityOptions =
 						ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) context, v, "test");

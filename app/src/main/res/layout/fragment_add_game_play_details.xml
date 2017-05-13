@@ -2,26 +2,26 @@
 				xmlns:tools="http://schemas.android.com/tools"
 				android:layout_width="match_parent"
 				android:layout_height="match_parent"
-				tools:context="com.cjboyett.test.boardgames.AddGamePlayDetailsFragment"
-				android:padding="5dp"
+				android:animateLayoutChanges="true"
 				android:gravity="center_vertical|center_horizontal"
-				android:animateLayoutChanges="true">
+				android:padding="5dp"
+				tools:context="com.cjboyett.test.boardgames.AddGamePlayDetailsFragment">
 
 	<ScrollView
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
-		android:scrollIndicators="none"
-		android:nestedScrollingEnabled="true">
+		android:nestedScrollingEnabled="true"
+		android:scrollIndicators="none">
 
 		<RelativeLayout
 			android:layout_width="match_parent"
 			android:layout_height="match_parent">
 
 			<LinearLayout
+				android:id="@+id/linearlayout_main_details"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:orientation="horizontal"
-				android:id="@+id/linearlayout_main_details">
+				android:orientation="horizontal">
 
 				<RelativeLayout
 					android:layout_width="match_parent"
@@ -29,114 +29,116 @@
 					android:layout_weight="1">
 
 					<LinearLayout
-						android:orientation="vertical"
+						android:id="@+id/linear_layout_game"
 						android:layout_width="match_parent"
 						android:layout_height="wrap_content"
-						android:id="@+id/linear_layout_game"
+						android:layout_alignParentLeft="true"
 						android:layout_alignParentStart="true"
 						android:layout_alignParentTop="true"
-						android:layout_alignParentLeft="true"
 						android:layout_alignRight="@+id/linear_layout_time"
-						android:animateLayoutChanges="true">
+						android:animateLayoutChanges="true"
+						android:orientation="vertical">
 
 						<TextView
+							android:id="@+id/textview_game"
 							android:layout_width="wrap_content"
 							android:layout_height="wrap_content"
 							android:text="Game"
-							android:id="@+id/textview_game"
-							android:visibility="visible"
-							android:textSize="12dp"/>
+							android:textSize="12dp"
+							android:visibility="visible"/>
 
 						<AutoCompleteTextView
+							android:id="@+id/edittext_game"
 							android:layout_width="match_parent"
 							android:layout_height="wrap_content"
-							android:id="@+id/edittext_game"
 							android:hint="Game"
-							android:inputType="textCapWords|textAutoComplete"
 							android:imeOptions="actionNext"
+							android:inputType="textCapWords|textAutoComplete"
 							android:textSize="16dp"/>
 					</LinearLayout>
 
 					<LinearLayout
-						android:orientation="vertical"
+						android:id="@+id/linear_layout_time"
 						android:layout_width="match_parent"
 						android:layout_height="wrap_content"
-						android:id="@+id/linear_layout_time"
 						android:layout_below="@+id/linear_layout_game"
-						android:animateLayoutChanges="true">
+						android:animateLayoutChanges="true"
+						android:orientation="vertical">
 
 						<LinearLayout
-							android:orientation="horizontal"
 							android:layout_width="match_parent"
-							android:layout_height="match_parent">
+							android:layout_height="match_parent"
+							android:orientation="horizontal">
 
 							<TextView
-								android:layout_width="wrap_content"
-								android:layout_height="wrap_content"
-								android:text="Duration"
 								android:id="@+id/textview_time_played"
-								android:visibility="visible"
-								android:textSize="12dp"
-								android:layout_weight="1"/>
-
-							<TextView
 								android:layout_width="wrap_content"
 								android:layout_height="wrap_content"
-								android:text="Start"
-								android:id="@+id/textview_start_timer"
+								android:layout_weight="1"
+								android:text="Duration"
 								android:textSize="12dp"
+								android:visibility="visible"/>
+
+							<TextView
+								android:id="@+id/textview_start_timer"
+								android:layout_width="wrap_content"
+								android:layout_height="wrap_content"
 								android:layout_weight="1"
 								android:gravity="right"
-								android:paddingRight="5dp"/>
+								android:paddingRight="5dp"
+								android:text="Start"
+								android:textSize="12dp"/>
 						</LinearLayout>
 
 						<LinearLayout
-							android:orientation="horizontal"
 							android:layout_width="match_parent"
 							android:layout_height="match_parent"
-							android:animateLayoutChanges="true">
+							android:animateLayoutChanges="true"
+							android:orientation="horizontal">
 
 							<EditText
+								android:id="@+id/edittext_time_played"
 								android:layout_width="0dp"
 								android:layout_height="wrap_content"
+								android:layout_weight="1"
 								android:ems="10"
-								android:id="@+id/edittext_time_played"
-								android:inputType="number"
 								android:hint="Duration"
-								android:textSize="16dp"
-								android:layout_weight="1"/>
+								android:imeOptions="actionNext"
+								android:inputType="number"
+								android:textSize="16dp"/>
 
 							<Chronometer
+								android:id="@+id/timer"
 								android:layout_width="50dp"
 								android:layout_height="match_parent"
-								android:id="@+id/timer"
-								android:visibility="visible"
-								android:padding="5dp"
 								android:gravity="center_vertical|right"
-								android:textSize="12dp"/>
+								android:padding="5dp"
+								android:textSize="12dp"
+								android:visibility="visible"/>
 						</LinearLayout>
 
 					</LinearLayout>
 
 					<LinearLayout
-						android:orientation="vertical"
+						android:id="@+id/linearl_layout_date"
 						android:layout_width="match_parent"
 						android:layout_height="wrap_content"
-						android:id="@+id/linearl_layout_date"
+						android:layout_below="@+id/linear_layout_time"
 						android:animateLayoutChanges="true"
-						android:layout_below="@+id/linear_layout_time">
+						android:orientation="vertical">
 
 						<TextView
+							android:id="@+id/textview_date"
 							android:layout_width="wrap_content"
 							android:layout_height="wrap_content"
 							android:text="Date"
-							android:id="@+id/textview_date"
 							android:textSize="12dp"/>
 
 						<EditText
+							android:id="@+id/edittext_date"
 							android:layout_width="match_parent"
 							android:layout_height="wrap_content"
-							android:id="@+id/edittext_date"
+							android:focusable="false"
 							android:hint="Date"
 							android:inputType="none"
 							android:textSize="16dp"/>
@@ -150,75 +152,76 @@
 					android:layout_weight="2">
 
 					<ImageButton
+						android:id="@+id/imagebutton_add_pictures"
 						android:layout_width="75dp"
 						android:layout_height="75dp"
 						android:layout_gravity="center"
-						android:id="@+id/imagebutton_add_pictures"
-						android:src="@android:drawable/ic_menu_gallery"
+						android:layout_margin="5dp"
 						android:scaleType="fitCenter"
-						android:layout_margin="5dp"/>
+						android:src="@android:drawable/ic_menu_gallery"
+						android:visibility="gone"/>
 
 				</LinearLayout>
 
 			</LinearLayout>
 
 			<LinearLayout
-				android:orientation="vertical"
+				android:id="@+id/linear_layout_location"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:id="@+id/linear_layout_location"
 				android:layout_below="@+id/linearlayout_main_details"
-				android:animateLayoutChanges="true">
+				android:animateLayoutChanges="true"
+				android:orientation="vertical">
 
 				<TextView
+					android:id="@+id/textview_location"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:text="Location"
-					android:id="@+id/textview_location"
-					android:visibility="visible"
-					android:textSize="12dp"/>
+					android:textSize="12dp"
+					android:visibility="visible"/>
 
 				<AutoCompleteTextView
+					android:id="@+id/edittext_location"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
-					android:id="@+id/edittext_location"
 					android:hint="Location"
-					android:inputType="textCapWords|textAutoComplete"
 					android:imeOptions="actionNext"
+					android:inputType="textCapWords|textAutoComplete"
 					android:textSize="16dp"/>
 
 			</LinearLayout>
 
 			<LinearLayout
-				android:orientation="vertical"
+				android:id="@+id/linear_layout_notes"
 				android:layout_width="match_parent"
 				android:layout_height="match_parent"
-				android:id="@+id/linear_layout_notes"
+				android:layout_alignParentBottom="true"
 				android:layout_below="@+id/linear_layout_location"
 				android:animateLayoutChanges="true"
-				android:layout_alignParentBottom="true">
+				android:orientation="vertical">
 
 				<TextView
+					android:id="@+id/textview_notes"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:text="Notes"
-					android:id="@+id/textview_notes"
-					android:visibility="visible"
-					android:textSize="12dp"/>
+					android:textSize="12dp"
+					android:visibility="visible"/>
 
 				<EditText
+					android:id="@+id/edittext_gameplay_notes"
 					android:layout_width="match_parent"
 					android:layout_height="match_parent"
-					android:inputType="textCapSentences|textMultiLine|textImeMultiLine"
-					android:ems="10"
-					android:id="@+id/edittext_gameplay_notes"
-					android:hint="Notes"
-					android:gravity="top"
-					android:capitalize="sentences"
 					android:breakStrategy="simple"
+					android:capitalize="sentences"
+					android:ems="10"
+					android:gravity="top"
+					android:hint="Notes"
+					android:inputType="textCapSentences|textMultiLine|textImeMultiLine"
+					android:isScrollContainer="true"
 					android:lines="10"
 					android:scrollbars="vertical"
-					android:isScrollContainer="true"
 					android:textSize="16dp"/>
 			</LinearLayout>
 

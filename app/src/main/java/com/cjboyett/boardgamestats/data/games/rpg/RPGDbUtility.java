@@ -25,6 +25,8 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import timber.log.Timber;
+
 import static com.cjboyett.boardgamestats.data.games.rpg.RPGContract.GamePlayEntry;
 import static com.cjboyett.boardgamestats.data.games.rpg.RPGContract.ImageEntry;
 import static com.cjboyett.boardgamestats.data.games.rpg.RPGContract.PlayerEntry;
@@ -113,7 +115,7 @@ public class RPGDbUtility {
 						  RPGEntry.NAME + " = ?",
 						  new String[]{oldGameName});
 			} catch (Exception e) {
-				e.printStackTrace();
+				Timber.e(e);
 				return false;
 			}
 			db.close();
@@ -276,7 +278,7 @@ public class RPGDbUtility {
 		try {
 			db.insertOrThrow(GamePlayEntry.TABLE_NAME, null, values);
 		} catch (Exception e) {
-			e.printStackTrace();
+			Timber.e(e);
 		}
 		db.close();
 
@@ -363,7 +365,7 @@ public class RPGDbUtility {
 					  GamePlayEntry._ID + " = ?",
 					  new String[]{gamePlayId + ""});
 		} catch (Exception e) {
-			e.printStackTrace();
+			Timber.e(e);
 		}
 		db.close();
 

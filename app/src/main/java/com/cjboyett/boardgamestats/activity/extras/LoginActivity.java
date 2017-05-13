@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.GestureDetectorCompat;
-import android.util.Log;
+import android.support.v7.widget.AppCompatButton;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -25,6 +25,8 @@ import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
 import java.util.Arrays;
+
+import timber.log.Timber;
 
 public class LoginActivity extends BaseAdActivity {
 	private Activity activity = this;
@@ -67,12 +69,12 @@ public class LoginActivity extends BaseAdActivity {
 
 			@Override
 			public void onCancel() {
-				Log.d("CANCEL", "Canceled");
+				Timber.d("Canceled");
 			}
 
 			@Override
 			public void onError(FacebookException error) {
-				Log.d("ERROR", error.toString());
+				Timber.d(error.toString());
 			}
 		});
 
@@ -81,7 +83,7 @@ public class LoginActivity extends BaseAdActivity {
 			protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
 				if (currentAccessToken != null) {
 //					firebaseUtility.signOut();
-					Log.d("ACCESS TOKEN", currentAccessToken.getExpires().toString());
+					Timber.d(currentAccessToken.getExpires().toString());
 					loginSuccessful();
 				}
 			}
@@ -106,10 +108,15 @@ public class LoginActivity extends BaseAdActivity {
 	protected void colorComponents() {
 		view.setBackgroundColor(backgroundColor);
 
-		ViewUtilities.tintLayoutBackground(view.findViewById(R.id.textview_sign_in_email), foregroundColor);
+		ViewUtilities.tintButtonBackground((AppCompatButton) view.findViewById(R.id.textview_sign_in_email),
+										   buttonColor);
+		ViewUtilities.tintButtonBackground((AppCompatButton) view.findViewById(R.id.textview_sign_up_email),
+										   buttonColor);
+
+//		ViewUtilities.tintLayoutBackground(view.findViewById(R.id.textview_sign_in_email), foregroundColor);
 		((TextView) view.findViewById(R.id.textview_sign_in_email)).setTextColor(foregroundColor);
 
-		ViewUtilities.tintLayoutBackground(view.findViewById(R.id.textview_sign_up_email), foregroundColor);
+//		ViewUtilities.tintLayoutBackground(view.findViewById(R.id.textview_sign_up_email), foregroundColor);
 		((TextView) view.findViewById(R.id.textview_sign_up_email)).setTextColor(foregroundColor);
 	}
 

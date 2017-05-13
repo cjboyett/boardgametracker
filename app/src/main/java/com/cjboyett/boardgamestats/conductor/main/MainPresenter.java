@@ -5,8 +5,8 @@ import com.cjboyett.boardgamestats.data.TempDataManager;
 import com.cjboyett.boardgamestats.utility.Preferences;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class MainPresenter extends BasePresenter<MainView> {
-	public void initializeView() {
+class MainPresenter extends BasePresenter<MainView> {
+	void initializeView() {
 		if (Preferences.isFirstVisit(getView().getActivity())) {
 			getView().processFirstVisit();
 		} else {
@@ -19,7 +19,7 @@ public class MainPresenter extends BasePresenter<MainView> {
 		processWelcomeBackText();
 	}
 
-	public void processWelcomeBackText() {
+	private void processWelcomeBackText() {
 		String welcomeBack = "Welcome Back";
 		String username = Preferences.getUsername(getView().getActivity());
 		if (username != null && !username.equals("") && !username.equalsIgnoreCase("User"))
@@ -29,7 +29,7 @@ public class MainPresenter extends BasePresenter<MainView> {
 		getView().setWelcomeMessage(welcomeBack);
 	}
 
-	public void processAddGamePlay() {
+	void processAddGamePlay() {
 		if (!Preferences.isTimerRunning(getView().getActivity())) {
 			TempDataManager tempDataManager = TempDataManager.getInstance(getView().getActivity().getApplication());
 			tempDataManager.initialize();
@@ -37,15 +37,15 @@ public class MainPresenter extends BasePresenter<MainView> {
 		getView().openAddGamePlay();
 	}
 
-	public void processCollections() {
+	void processCollections() {
 		getView().openCollections();
 	}
 
-	public void processStatsOverview() {
+	void processStatsOverview() {
 		getView().openStatsOverview();
 	}
 
-	public void processExtras() {
+	void processExtras() {
 		if (FirebaseAuth.getInstance().getCurrentUser() != null) {
 			getView().openExtras();
 		} else {
@@ -53,15 +53,15 @@ public class MainPresenter extends BasePresenter<MainView> {
 		}
 	}
 
-	public void processSettings() {
+	void processSettings() {
 		getView().openSettings();
 	}
 
-	public void processAchievements() {
+	void processAchievements() {
 		getView().openAchievements();
 	}
 
-	public void processHelp() {
+	void processHelp() {
 		getView().openHelp();
 	}
 

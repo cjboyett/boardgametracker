@@ -19,6 +19,7 @@ import com.cjboyett.boardgamestats.data.games.GamesDbHelper;
 import com.cjboyett.boardgamestats.data.games.board.BoardGameDbUtility;
 import com.cjboyett.boardgamestats.data.games.rpg.RPGDbUtility;
 import com.cjboyett.boardgamestats.data.games.video.VideoGameDbUtility;
+import com.cjboyett.boardgamestats.model.Timer;
 import com.cjboyett.boardgamestats.utility.Preferences;
 import com.cjboyett.boardgamestats.utility.view.ImageController;
 
@@ -104,7 +105,7 @@ public class TimerNotificationBuilder {
 	public void toggleTimerNotification(Context context, NotificationCompat.Builder builder) {
 		TempDataManager tempDataManager = TempDataManager.getInstance(context);
 
-		List<Long> timer = tempDataManager.getTimer();
+		List<Long> timer = tempDataManager.getTimer().toList();
 
 		long timerBase = timer.get(0), lastStartTime = timer.get(1), lastStopTime = timer.get(2), diff = timer.get(3);
 
@@ -112,7 +113,7 @@ public class TimerNotificationBuilder {
 
 		if (timerRunning) {
 			lastStopTime = SystemClock.elapsedRealtime();
-			tempDataManager.setTimer(timerBase, lastStartTime, lastStopTime, diff);
+			tempDataManager.setTimer(new Timer(timerBase, lastStartTime, lastStopTime, diff));
 			timeView.setImageViewBitmap(R.id.imageview_pause,
 										BitmapFactory.decodeResource(context.getResources(),
 																	 android.R.drawable.ic_media_play));
@@ -121,7 +122,7 @@ public class TimerNotificationBuilder {
 			diff += (lastStopTime - lastStartTime);
 			timerBase = SystemClock.elapsedRealtime() - diff;
 			lastStartTime = SystemClock.elapsedRealtime();
-			tempDataManager.setTimer(timerBase, lastStartTime, lastStopTime, diff);
+			tempDataManager.setTimer(new Timer(timerBase, lastStartTime, lastStopTime, diff));
 			timeView.setImageViewBitmap(R.id.imageview_pause,
 										BitmapFactory.decodeResource(context.getResources(),
 																	 android.R.drawable.ic_media_pause));

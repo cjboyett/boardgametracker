@@ -2,9 +2,6 @@ package com.cjboyett.boardgamestats.utility.view;
 
 import android.graphics.Color;
 
-/**
- * Created by Casey on 3/26/2016.
- */
 public class ColorUtilities {
 	private static final float MAX_TIME = 180f;
 
@@ -29,6 +26,15 @@ public class ColorUtilities {
 		int green = Color.green(color);
 		int blue = Color.blue(color);
 		return Color.rgb(255 - red, 255 - green, 255 - blue);
+	}
+
+	public static int hintTextColor(int backgroundColor, int foregroundColor) {
+		float[] hsv = new float[3];
+		Color.colorToHSV(backgroundColor, hsv);
+//		return hsv[2] > 0.5f;
+
+		if (hsv[2] > 0.5f) return ColorUtilities.lighten(foregroundColor);
+		else return ColorUtilities.darken(foregroundColor);
 	}
 
 	//TODO Maybe fix this

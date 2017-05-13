@@ -111,6 +111,14 @@
 				app:initialColor="0xffff0000"
 				app:lightnessSlider="true"/>
 
+			<com.flask.colorpicker.ColorPickerPreference
+				android:key="@string/theme_button_preference"
+				android:title="Theme Button"
+				app:alphaSlider="false"
+				app:density="12"
+				app:initialColor="0xffff0000"
+				app:lightnessSlider="true"/>
+
 			<CheckBoxPreference
 				android:defaultValue="true"
 				android:key="@string/generate_palette_preference"

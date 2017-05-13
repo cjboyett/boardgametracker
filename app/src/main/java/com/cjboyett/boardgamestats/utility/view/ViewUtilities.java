@@ -22,7 +22,6 @@ import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.AppCompatImageView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,11 +60,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import timber.log.Timber;
 import uk.co.deanwild.flowtextview.FlowTextView;
 
-/**
- * Created by Casey on 4/8/2016.
- */
 public class ViewUtilities {
 	public static <V extends View> Collection<V> findChildrenByClass(ViewGroup viewGroup, Class<V> vClass) {
 		return gatherChildrenByClass(viewGroup, vClass, new ArrayList<V>());
@@ -81,14 +78,6 @@ public class ViewUtilities {
 				gatherChildrenByClass((ViewGroup) child, vClass, childrenFound);
 		}
 		return childrenFound;
-	}
-
-	public static void setBackground(View view, Drawable background) {
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-			view.setBackground(background);
-		} else {
-			view.setBackgroundDrawable(background);
-		}
 	}
 
 	public static void tintCheckBox(AppCompatCheckBox checkBox, int color) {
@@ -168,9 +157,10 @@ public class ViewUtilities {
 				Drawable background = DrawableCompat.wrap(layout.getBackground());
 				DrawableCompat.setTintList(background, colorStateList);
 				DrawableCompat.setTintMode(background, PorterDuff.Mode.SRC_ATOP);
-				setBackground(layout, background);
+				layout.setBackground(background);
 			}
 		} catch (Exception e) {
+			// Empty catch?
 		}
 	}
 
@@ -197,31 +187,14 @@ public class ViewUtilities {
 		int[] progressColors = new int[]{progressColor, progressColor};
 		ColorStateList progressColorStateList = new ColorStateList(progressStates, progressColors);
 
-/*
-		int[][] progressBackgroundStates = new int[][]{new int[]{android.R.attr.state_enabled},
-		                                     new int[]{-android.R.attr.state_enabled}};
-		int[] progressBackgroundColors = new int[]{progressBackgroundColor, progressBackgroundColor};
-		ColorStateList progressBackgroundColorStateList = new ColorStateList(progressBackgroundStates, progressBackgroundColors);
-*/
-
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 			ratingBar.setProgressTintList(progressColorStateList);
 			ratingBar.setProgressTintMode(PorterDuff.Mode.SRC_ATOP);
-
-//			ratingBar.setProgressBackgroundTintList(progressBackgroundColorStateList);
-//			ratingBar.setProgressBackgroundTintMode(PorterDuff.Mode.SRC_ATOP);
 		} else {
 			Drawable progress = DrawableCompat.wrap(ratingBar.getProgressDrawable());
 			DrawableCompat.setTintList(progress, progressColorStateList);
 			DrawableCompat.setTintMode(progress, PorterDuff.Mode.SRC_ATOP);
 			ratingBar.setProgressDrawable(progress);
-
-/*
-			Drawable progressBackground = DrawableCompat.wrap(ratingBar.getIndeterminateDrawable());
-			DrawableCompat.setTintList(progressBackground, progressBackgroundColorStateList);
-			DrawableCompat.setTintMode(progressBackground, PorterDuff.Mode.SRC_ATOP);
-			ratingBar.setIndeterminateDrawable(progressBackground);
-*/
 		}
 	}
 
@@ -233,22 +206,16 @@ public class ViewUtilities {
 		dbHelper.close();
 
 		if (!StringUtils.isEmpty(avatarPath)) {
-			Log.d("PATH", avatarPath);
+			Timber.d(avatarPath);
 			BitmapFactory.Options options = new BitmapFactory.Options();
 			try {
 				ImageController imageController = new ImageController(context);
 				imageController.setDirectoryName("avatars")
 							   .setFileName(avatarPath + ".jpg");
-				Bitmap original = imageController.load(); //BitmapFactory.decodeFile(avatarPath);
+				Bitmap original = imageController.load();
 				imageController.close();
 
-//				if (original.getByteCount() > 256 * 1024)
-//				{
-//					options.inSampleSize = (int)Math.ceil(Math.sqrt((original.getByteCount() / 1024) / 256));
-//					original = BitmapFactory.decodeFile(avatarPath, options);
-//				}
-
-				Log.d("SIZE", original.getByteCount() / 1024 + "");
+				Timber.d(original.getByteCount() / 1024 + "");
 
 				avatar = Bitmap.createBitmap(original.getWidth(), original.getHeight(), original.getConfig());
 				Canvas canvas = new Canvas(avatar);
@@ -274,18 +241,10 @@ public class ViewUtilities {
 													roundedRectPaint);
 					canvas.drawBitmap(roundedRect, 0, 0, maskPaint);
 				}
-
-//				ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
-//				if (avatar.compress(Bitmap.CompressFormat.JPEG, 40, byteOutputStream))
-//				{
-//					byte[] byteArray = byteOutputStream.toByteArray();
-//					avatar = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
-//					Log.d("SIZE", avatar.getByteCount() / 1024 + "");
-//				}
 			} catch (Exception e) {
-
+				// Empty catch?
 			}
-		} else if (avatar == null) {
+		} else {
 			int[] avatarHeads = {R.drawable.avatar_head_large_128,
 								 R.drawable.avatar_head_medium_128,
 								 R.drawable.avatar_head_small_128,
@@ -318,11 +277,6 @@ public class ViewUtilities {
 			colors.add(r.nextInt(128));
 			colors.add(64 + r.nextInt(128));
 			colors.add(128 + r.nextInt(128));
-/*
-		colors.add(16 + 80 * r.nextInt(2));
-		colors.add(16 + 64 + 80 * r.nextInt(2));
-		colors.add(16 + 128 + 80 * r.nextInt(2));
-*/
 
 			int color = Color.rgb(colors.remove(r.nextInt(3)), colors.remove(r.nextInt(2)), colors.remove(0));
 			color = ColorUtilities.mixWithBaseColor(color, 1, Preferences.getForegroundColor(context), 1);
@@ -347,7 +301,6 @@ public class ViewUtilities {
 																 PorterDuff.Mode.SRC_ATOP));
 			canvas.drawBitmap(avatarBody, 0, 0, avatarPaint);
 			canvas.drawBitmap(avatarHead, 0, 0, avatarPaint);
-//			Log.d("SIZE", avatar.getByteCount()/1024 + "");
 		}
 
 		return avatar;
@@ -369,7 +322,7 @@ public class ViewUtilities {
 						HttpMethod.GET,
 						new GraphRequest.Callback() {
 							public void onCompleted(GraphResponse response) {
-								Log.d("RESPONSE", response.toString());
+								Timber.d(response.toString());
 								try {
 									JSONObject data = response.getJSONObject();
 									if (data.has("picture")) {
@@ -384,7 +337,7 @@ public class ViewUtilities {
 															BitmapFactory.decodeStream(new URL(params[0]).openConnection()
 																										 .getInputStream());
 												} catch (IOException e) {
-													e.printStackTrace();
+													Timber.e(e);
 												}
 												return profilePicture[0];
 											}
@@ -397,7 +350,7 @@ public class ViewUtilities {
 										}.execute(profilePictureURL);
 									}
 								} catch (Exception e) {
-									e.printStackTrace();
+									Timber.e(e);
 								}
 							}
 						}
@@ -494,7 +447,8 @@ public class ViewUtilities {
 		return feedContent;
 	}
 
-	public static ShareContent createShareMediaContent(List<Bitmap> pictures) {
+	public static ShareContent<SharePhotoContent, SharePhotoContent.Builder> createShareMediaContent(
+			List<Bitmap> pictures) {
 		List<SharePhoto> sharePhotos = new ArrayList<>();
 		for (Bitmap picture : pictures) {
 			SharePhoto sharePhoto = new SharePhoto.Builder()
@@ -503,20 +457,17 @@ public class ViewUtilities {
 			sharePhotos.add(sharePhoto);
 		}
 
-		ShareContent feedContent = new SharePhotoContent.Builder()
+		return new SharePhotoContent.Builder()
 				.addPhotos(sharePhotos)
 				.build();
-
-		return feedContent;
 	}
 
 	public static AlertDialog errorDialog(Context context) {
-		AlertDialog errorDialog = new DialogBuilder(context)
+		return new DialogBuilder(context)
 				.setTitle("Error")
 				.setMessage("It looks like you are not connected to the Internet.  Please connect and try again.")
 				.setPositiveButton("Okay", null)
 				.create();
-		return errorDialog;
 	}
 
 	public static int dpToPx(Context context, int dp) {
@@ -574,7 +525,6 @@ public class ViewUtilities {
 			negativeButton.setBackgroundColor(backgroundColor);
 			negativeButton.setTextColor(foregroundColor);
 
-//			input.setBackgroundColor(backgroundColor);
 			input.setTextColor(foregroundColor);
 			input.setHintTextColor(hintTextColor);
 		}
@@ -658,7 +608,6 @@ public class ViewUtilities {
 		}
 
 		public AlertDialog create() {
-//			withYancey(false);
 			alertDialog = builder.create();
 			return alertDialog;
 		}

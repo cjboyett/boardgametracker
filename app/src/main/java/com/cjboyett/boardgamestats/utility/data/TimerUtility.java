@@ -2,19 +2,17 @@ package com.cjboyett.boardgamestats.utility.data;
 
 import android.content.Context;
 import android.os.SystemClock;
-import android.util.Log;
 
 import com.cjboyett.boardgamestats.data.TempDataManager;
 
 import java.util.List;
 
-/**
- * Created by Casey on 5/4/2016.
- */
+import timber.log.Timber;
+
 public class TimerUtility {
 	public static String getElapsedTime(Context context) {
 		TempDataManager tempDataManager = TempDataManager.getInstance(context);
-		List<Long> times = tempDataManager.getTimer();
+		List<Long> times = tempDataManager.getTimer().toList();
 		if (times.isEmpty() || times.get(0) == 0) return "00:00";
 		else {
 			long timerBase = times.get(0);
@@ -33,7 +31,7 @@ public class TimerUtility {
 	}
 
 	private static String computeElapsedTimeString(long elapsedTime) {
-		Log.d("TIME", elapsedTime + "");
+		Timber.d(elapsedTime + "");
 		long hours = elapsedTime / (60 * 60 * 1000);
 		elapsedTime -= hours * (60 * 60 * 1000);
 		long minutes = elapsedTime / (60 * 1000);

@@ -145,7 +145,7 @@ public class BarGraph extends View {
                             values.add((BarStackSegment) value.clone());
                         }
                     } catch (CloneNotSupportedException e) {
-                        e.printStackTrace();
+                        Timber.e(e);
                         continue;
                     }
 

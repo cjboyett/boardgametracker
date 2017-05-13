@@ -10,7 +10,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -28,7 +27,7 @@ import android.widget.TextView;
 import com.cjboyett.boardgamestats.R;
 import com.cjboyett.boardgamestats.activity.addgame.AddGameActivity;
 import com.cjboyett.boardgamestats.activity.addgameplay.AddGamePlayTabbedActivity;
-import com.cjboyett.boardgamestats.activity.base.BaseAdActivity;
+import com.cjboyett.boardgamestats.activity.base.BaseActivity;
 import com.cjboyett.boardgamestats.data.TempDataManager;
 import com.cjboyett.boardgamestats.data.games.GamesDbHelper;
 import com.cjboyett.boardgamestats.data.games.board.BoardGameDbUtility;
@@ -52,9 +51,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTouch;
+import timber.log.Timber;
 
 @SuppressWarnings("ResourceType")
-public class GameDataActivity extends BaseAdActivity implements GameDataView {
+public class GameDataActivity extends BaseActivity implements GameDataView {
 	private Activity activity = this;
 
 	private GamesDbHelper dbHelper;
@@ -112,9 +112,11 @@ public class GameDataActivity extends BaseAdActivity implements GameDataView {
 
 	private GestureDetectorCompat gestureDetector;
 
+/*
 	public GameDataActivity() {
 		super("ca-app-pub-1437859753538305/9571180678");
 	}
+*/
 
 
 	// Lifecycle methods
@@ -385,7 +387,7 @@ public class GameDataActivity extends BaseAdActivity implements GameDataView {
 					descriptionTextView.setText(game.getDescription() + "\n\n\n");
 				} else showError("Could not update game.");
 			} catch (Exception e) {
-				e.printStackTrace();
+				Timber.e(e);
 			}
 
 			dummyView.requestFocus();
@@ -521,7 +523,7 @@ public class GameDataActivity extends BaseAdActivity implements GameDataView {
 						}
 					}
 				} catch (Exception e) {
-					e.printStackTrace();
+					Timber.e(e);
 					showError("Could not sync with Board Game Geek");
 				}
 				break;
@@ -540,7 +542,7 @@ public class GameDataActivity extends BaseAdActivity implements GameDataView {
 						}
 					}
 				} catch (Exception e) {
-					e.printStackTrace();
+					Timber.e(e);
 					showError("Could not sync with Board Game Geek");
 				}
 				break;
@@ -559,7 +561,7 @@ public class GameDataActivity extends BaseAdActivity implements GameDataView {
 						}
 					}
 				} catch (Exception e) {
-					e.printStackTrace();
+					Timber.e(e);
 					showError("Could not sync with Board Game Geek");
 				}
 				break;
@@ -643,7 +645,7 @@ public class GameDataActivity extends BaseAdActivity implements GameDataView {
 
 		@Override
 		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-			Log.d("FLING", "fling");
+			Timber.d("fling");
 			if (Math.abs(velocityX) > Math.abs(velocityY)) {
 				if (Math.abs(e1.getX() - e2.getX()) >= 200) {
 					if (velocityX > 2000) {

@@ -7,6 +7,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import timber.log.Timber;
+
 /**
  * Created by Casey on 3/17/2016.
  */
@@ -109,7 +111,7 @@ public class StringUtilities {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			Timber.e(e);
 		}
 	}
 

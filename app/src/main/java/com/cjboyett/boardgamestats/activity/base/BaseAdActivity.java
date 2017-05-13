@@ -13,6 +13,8 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 
+import timber.log.Timber;
+
 /**
  * Created by Casey on 10/15/2016.
  */
@@ -62,7 +64,7 @@ public abstract class BaseAdActivity extends BaseActivity {
 				});
 				googleAdView.loadAd(adRequest);
 			} catch (Exception e) {
-				e.printStackTrace();
+				Timber.e(e);
 			}
 		}
 

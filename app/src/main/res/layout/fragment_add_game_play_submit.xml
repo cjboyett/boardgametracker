@@ -8,7 +8,8 @@
 		android:orientation="vertical"
 		android:layout_width="175dp"
 		android:layout_height="wrap_content"
-		android:layout_centerInParent="true">
+		android:layout_centerVertical="true"
+		android:layout_centerHorizontal="true">
 
 		<android.support.v7.widget.AppCompatButton
 			android:layout_width="match_parent"
@@ -17,7 +18,6 @@
 			android:id="@+id/button_submit_gameplay"
 			android:layout_centerVertical="true"
 			android:layout_centerHorizontal="true"
-			android:background="@drawable/main_button_background_light"
 			android:padding="10dp"
 			android:layout_margin="5dp"/>
 
@@ -28,7 +28,6 @@
 			android:id="@+id/button_submit_gameplay_and_share"
 			android:layout_centerVertical="true"
 			android:layout_centerHorizontal="true"
-			android:background="@drawable/main_button_background_light"
 			android:padding="10dp"
 			android:layout_margin="5dp"/>
 

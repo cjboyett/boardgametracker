@@ -8,6 +8,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import timber.log.Timber;
+
 /**
  * Created by Casey on 5/9/2016.
  */
@@ -22,7 +24,7 @@ public class HotnessXmlParser {
 			parser.nextTag();
 			return readFeed(parser);
 		} catch (Exception e) {
-			e.printStackTrace();
+			Timber.e(e);
 		} finally {
 			try {
 				in.close();
@@ -44,7 +46,7 @@ public class HotnessXmlParser {
 				else skip(parser);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			Timber.e(e);
 		}
 		return entries;
 	}
@@ -74,7 +76,7 @@ public class HotnessXmlParser {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			Timber.e(e);
 		}
 		return new Item(name, id, rank, thumbnailUrl);
 	}
@@ -88,7 +90,7 @@ public class HotnessXmlParser {
 			parser.nextTag();
 			parser.require(XmlPullParser.END_TAG, namespace, "name");
 		} catch (Exception e) {
-			e.printStackTrace();
+			Timber.e(e);
 		}
 
 		return name;
@@ -104,7 +106,7 @@ public class HotnessXmlParser {
 			parser.nextTag();
 			parser.require(XmlPullParser.END_TAG, namespace, "thumbnail");
 		} catch (Exception e) {
-			e.printStackTrace();
+			Timber.e(e);
 		}
 
 		return "http://" + thumbnailUrl;
@@ -127,7 +129,7 @@ public class HotnessXmlParser {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			Timber.e(e);
 		}
 	}
 

@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import timber.log.Timber;
+
 //import java.nio.file.Files;
 
 /**
@@ -68,12 +70,12 @@ public class DataAnalyzer {
 			                                   });
 */
 		} catch (Exception e) {
-			e.printStackTrace();
+			Timber.e(e);
 		} finally {
 			try {
 				reader.close();
 			} catch (Exception e) {
-				e.printStackTrace();
+				Timber.e(e);
 			}
 		}
 		return map;
@@ -100,12 +102,12 @@ public class DataAnalyzer {
 			                                              });
 */
 		} catch (Exception e) {
-			e.printStackTrace();
+			Timber.e(e);
 		} finally {
 			try {
 				reader.close();
 			} catch (Exception e) {
-				e.printStackTrace();
+				Timber.e(e);
 			}
 		}
 		return gamesMap;

@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.support.v7.widget.AppCompatImageView;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -27,9 +26,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by Casey on 4/16/2016.
- */
+import timber.log.Timber;
+
 public class PlayerDataAdapter extends BaseAdapter {
 	private Activity activity;
 	private List<GamePlayerData> gamePlayerDataList;
@@ -77,13 +75,13 @@ public class PlayerDataAdapter extends BaseAdapter {
 		playerAvatars = new HashMap<>();
 
 		for (GamePlayerData data : gamePlayerData) {
-//			Log.d("PLAYER", data.toString());
+//			Timber.d(data.toString());
 			new AsyncTask<String, Void, Bitmap>() {
 				@Override
 				protected Bitmap doInBackground(String... params) {
 					String name = params[0];
 					if (name.equals(Preferences.getUsername(activity))) name = "master_user";
-					Log.d("PLAYER", name);
+					Timber.d(name);
 					playerAvatars.put(params[0], ViewUtilities.createAvatar(activity, name, true));
 					return null;
 				}
@@ -146,7 +144,7 @@ public class PlayerDataAdapter extends BaseAdapter {
 		view.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-//				Log.d("CLICK", gamePlayerData.getPlayerName());
+//				Timber.d(gamePlayerData.getPlayerName());
 				if (!gamePlayerData.getPlayerName().equals(Preferences.getUsername(activity)))
 					activity.startActivity(new Intent(activity, PlayerStatsActivity.class).putExtra("NAME",
 																									gamePlayerData.getPlayerName()));

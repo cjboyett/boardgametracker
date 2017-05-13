@@ -8,7 +8,6 @@ import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -37,6 +36,8 @@ import com.cjboyett.boardgamestats.view.adapter.StatsRecyclerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import timber.log.Timber;
 
 
 public class StatsOverviewFragment extends Fragment {
@@ -243,13 +244,13 @@ public class StatsOverviewFragment extends Fragment {
 			// Works here because we set the first stat as blank in adapter.
 			scrollY =
 					l.getChildCount(); //recyclerView.getScrollY(); //-c.getTop() + recyclerView.getFirstVisiblePosition() * c.getHeight();
-			Log.d("DOWN", scrollY + "");
+			Timber.d(scrollY + "");
 			return super.onDown(e);
 		}
 
 		@Override
 		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-			Log.d("FLING", scrollY + "");
+			Timber.d(scrollY + "");
 			try {
 				if (Math.abs(velocityX) < Math.abs(velocityY)) {
 					if (Math.abs(e1.getY() - e2.getY()) >= 200) {
@@ -260,7 +261,7 @@ public class StatsOverviewFragment extends Fragment {
 					}
 				}
 			} catch (Exception e) {
-				e.printStackTrace();
+				Timber.e(e);
 			}
 			return false;
 		}

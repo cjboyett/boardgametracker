@@ -25,8 +25,8 @@ import android.widget.TextView;
 
 import com.cjboyett.boardgamestats.MyApp;
 import com.cjboyett.boardgamestats.R;
-import com.cjboyett.boardgamestats.activity.base.BaseAdActivity;
 import com.cjboyett.boardgamestats.activity.addgame.AddGameActivity;
+import com.cjboyett.boardgamestats.activity.base.BaseAdActivity;
 import com.cjboyett.boardgamestats.data.DataManager;
 import com.cjboyett.boardgamestats.data.games.GamesDbHelper;
 import com.cjboyett.boardgamestats.data.games.board.BoardGameDbUtility;
@@ -59,6 +59,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.TreeMap;
+
+import timber.log.Timber;
 
 public class RecommendationActivity extends BaseAdActivity {
 	private Activity activity = this;
@@ -262,12 +264,12 @@ public class RecommendationActivity extends BaseAdActivity {
 									in = connection.getInputStream();
 									bitmap = BitmapFactory.decodeStream(in);
 								} catch (Exception e) {
-									e.printStackTrace();
+									Timber.e(e);
 								} finally {
 									try {
 										in.close();
 									} catch (Exception e) {
-										e.printStackTrace();
+										Timber.e(e);
 									}
 								}
 
@@ -308,7 +310,7 @@ public class RecommendationActivity extends BaseAdActivity {
 							}
 						}.execute(item.thumbnailUrl);
 					} catch (Exception e) {
-						e.printStackTrace();
+						Timber.e(e);
 					}
 				}
 			}

@@ -5,7 +5,6 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.cjboyett.boardgamestats.data.games.GamesDbHelper;
 import com.cjboyett.boardgamestats.data.games.HotnessXmlParser;
@@ -29,6 +28,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
+
+import timber.log.Timber;
 
 import static com.cjboyett.boardgamestats.data.games.board.BoardGameContract.BoardGameEntry;
 import static com.cjboyett.boardgamestats.data.games.board.BoardGameContract.GamePlayEntry;
@@ -178,7 +179,7 @@ public class BoardGameDbUtility {
 						  BoardGameEntry.NAME + " = ?",
 						  new String[]{oldGameName});
 			} catch (Exception e) {
-				e.printStackTrace();
+				Timber.e(e);
 				return false;
 			}
 			db.close();
@@ -341,7 +342,7 @@ public class BoardGameDbUtility {
 		try {
 			db.insertOrThrow(GamePlayEntry.TABLE_NAME, null, values);
 		} catch (Exception e) {
-			e.printStackTrace();
+			Timber.e(e);
 		}
 		db.close();
 
@@ -431,7 +432,7 @@ public class BoardGameDbUtility {
 		if (location != null) values.put(GamePlayEntry.LOCATION, location);
 		values.put(GamePlayEntry.COUNT_FOR_STATS, countForStats ? "y" : "n");
 
-		Log.d("IGNORE?", !countForStats + " ");
+		Timber.d(!countForStats + " ");
 
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
 		try {
@@ -440,7 +441,7 @@ public class BoardGameDbUtility {
 					  GamePlayEntry._ID + " = ?",
 					  new String[]{gamePlayId + ""});
 		} catch (Exception e) {
-			e.printStackTrace();
+			Timber.e(e);
 		}
 		db.close();
 

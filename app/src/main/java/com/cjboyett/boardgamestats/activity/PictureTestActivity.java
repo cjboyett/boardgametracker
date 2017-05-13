@@ -16,7 +16,6 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -26,6 +25,8 @@ import com.cjboyett.boardgamestats.utility.view.ImageController;
 import com.cjboyett.boardgamestats.view.AdViewContainer;
 
 import java.io.IOException;
+
+import timber.log.Timber;
 
 public class PictureTestActivity extends AppCompatActivity {
 	final static int REQUEST_CAMERA = 1;
@@ -97,7 +98,7 @@ public class PictureTestActivity extends AppCompatActivity {
 								}
 								catch (Exception e)
 								{
-									e.printStackTrace();
+									Timber.e(e);
 								}
 								if (photoFile != null)
 								{
@@ -155,9 +156,9 @@ public class PictureTestActivity extends AppCompatActivity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 
-		Log.d("PHOTO", "It's here");
+		Timber.d("It's here");
 		if (resultCode == RESULT_OK) {
-			Log.d("PHOTO", "Okay");
+			Timber.d("Okay");
 			if (requestCode == REQUEST_CAMERA) {
 				String imageId = convertImageUriToFile(imageUri, this);
 
@@ -165,7 +166,7 @@ public class PictureTestActivity extends AppCompatActivity {
 				new LoadImagesFromSDCard().execute("" + imageId);
 
 /*
-				Log.d("PHOTO", "Whatever");
+				Timber.d("Whatever");
 
 				File destination = imageController.createFile();
 				Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
@@ -177,7 +178,7 @@ public class PictureTestActivity extends AppCompatActivity {
 				int targetW = ((ImageView)findViewById(R.id.imageview_picture_test)).getWidth();
 				int targetH = ((ImageView)findViewById(R.id.imageview_picture_test)).getHeight();
 				Bitmap bm = imageController.load();//loadBitmapFromPath(destination.getAbsolutePath());
-				Log.d("BITMAP", (bm == null) + "");
+				Timber.d((bm == null) + "");
 
 				Bitmap scaledBitmap = Bitmap.createScaledBitmap(bm, targetW, targetH, false);
 
@@ -185,20 +186,20 @@ public class PictureTestActivity extends AppCompatActivity {
 
 				try
 				{
-					Log.d("BITMAP BEFORE DELETE", (imageController.load() == null) + "");
+					Timber.d((imageController.load() == null) + "");
 				}
 				catch (Exception e)
 				{
-					e.printStackTrace();
+					Timber.e(e);
 				}
 				imageController.delete();
 				try
 				{
-					Log.d("BITMAP AFTER DELETE", (imageController.load() == null) + "");
+					Timber.d((imageController.load() == null) + "");
 				}
 				catch (Exception e)
 				{
-					e.printStackTrace();
+					Timber.e(e);
 				}
 */
 			} else if (requestCode == SELECT_FILE) {
@@ -229,7 +230,7 @@ public class PictureTestActivity extends AppCompatActivity {
 	}
 
 	private Bitmap loadBitmapFromPath(String filePath) {
-		Log.d("FILE LOCATION", filePath);
+		Timber.d(filePath);
 		Bitmap bm;
 		int targetW = findViewById(R.id.imageview_picture_test).getWidth();
 		int targetH = findViewById(R.id.imageview_picture_test).getHeight();
@@ -254,7 +255,7 @@ public class PictureTestActivity extends AppCompatActivity {
 		try {
 			exifInterface = new ExifInterface(filePath);
 		} catch (Exception e) {
-			e.printStackTrace();
+			Timber.e(e);
 		}
 
 		if (exifInterface != null) {
@@ -304,7 +305,7 @@ public class PictureTestActivity extends AppCompatActivity {
 			bitmap.recycle();
 			return bmRotated;
 		} catch (OutOfMemoryError e) {
-			e.printStackTrace();
+			Timber.e(e);
 			return null;
 		}
 	}
@@ -493,7 +494,7 @@ public class PictureTestActivity extends AppCompatActivity {
 
 			View image = findViewById(R.id.imageview_test);
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-				Log.d("NAME", image.getTransitionName());
+				Timber.d(image.getTransitionName());
 				//			image.setTransitionName("test");
 			}
 		}

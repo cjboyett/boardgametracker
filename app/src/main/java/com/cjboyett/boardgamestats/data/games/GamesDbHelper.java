@@ -5,7 +5,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import com.cjboyett.boardgamestats.data.PlayerContract;
 import com.cjboyett.boardgamestats.data.TempContract;
@@ -308,7 +307,6 @@ public class GamesDbHelper extends SQLiteOpenHelper {
 
 		// Added "count for stats" column in each table
 		if (oldVersion < 8) {
-			Log.d("BLAH", "BLAH");
 			db.execSQL("ALTER TABLE " + BoardGameContract.GamePlayEntry.TABLE_NAME +
 							   " ADD " + BoardGameContract.GamePlayEntry.COUNT_FOR_STATS + " CHAR(1) DEFAULT 'Y';");
 			db.execSQL("ALTER TABLE " + RPGContract.GamePlayEntry.TABLE_NAME +

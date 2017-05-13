@@ -14,11 +14,9 @@ import com.cjboyett.boardgamestats.utility.Preferences;
 import com.facebook.FacebookSdk;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
-import com.squareup.leakcanary.LeakCanary;
 
-/**
- * Created by Casey on 4/14/2016.
- */
+import timber.log.Timber;
+
 public class MyApp extends Application {
 	/**
 	 * The Analytics singleton. The field is set in onCreate method override when the application
@@ -54,7 +52,7 @@ public class MyApp extends Application {
 	public void onCreate() {
 		super.onCreate();
 		if (!Preferences.isSuperUser(this)) {
-			Log.d("SUPER USER", "You are not.");
+			Timber.d("You are not.");
 			analytics = GoogleAnalytics.getInstance(this);
 
 			// Replaced the tracker-id with my app from https://www.google.com/analytics/web/
@@ -70,15 +68,6 @@ public class MyApp extends Application {
 			// Enable automatic activity tracking for your app
 			tracker.enableAutoActivityTracking(true);
 		}
-
-/*
-		if (LeakCanary.isInAnalyzerProcess(this)) {
-			// This process is dedicated to LeakCanary for heap analysis.
-			// You should not init your app in this process.
-			return;
-		}
-		LeakCanary.install(this);
-*/
 
 		// Initialize data managers for quickly navigation
 		final DataManager dataManager = DataManager.getInstance(this);
@@ -109,6 +98,10 @@ public class MyApp extends Application {
 
 		// Init Facebook SDK
 		FacebookSdk.sdkInitialize(this);
+
+		if (BuildConfig.DEBUG) {
+			Timber.plant(new CustomTree());
+		}
 	}
 
 	public boolean isConnectedToInternet() {

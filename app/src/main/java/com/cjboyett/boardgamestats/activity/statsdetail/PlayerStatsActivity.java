@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -54,6 +53,7 @@ import java.util.List;
 
 import me.nereo.multi_image_selector.MultiImageSelector;
 import me.nereo.multi_image_selector.MultiImageSelectorActivity;
+import timber.log.Timber;
 
 public class PlayerStatsActivity extends BaseAdActivity {
 	private Activity activity = this;
@@ -128,7 +128,7 @@ public class PlayerStatsActivity extends BaseAdActivity {
 			if (resultCode == RESULT_OK) {
 				// Get the result list of select image paths
 				List<String> paths = data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
-//				for (String path : paths) Log.d("PICTURE", path);
+//				for (String path : paths) Timber.d(path);
 
 				new AsyncTask<String, Void, Bitmap>() {
 					@Override
@@ -482,13 +482,13 @@ public class PlayerStatsActivity extends BaseAdActivity {
 		public boolean onDown(MotionEvent e) {
 			View c = listView.getChildAt(0);
 			scrollY = -c.getTop() + listView.getFirstVisiblePosition() * c.getHeight();
-			Log.d("DOWN", scrollY + "");
+			Timber.d(scrollY + "");
 			return super.onDown(e);
 		}
 
 		@Override
 		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-			Log.d("FLING", scrollY + "");
+			Timber.d(scrollY + "");
 			if (Math.abs(velocityX) < Math.abs(velocityY)) {
 				if (Math.abs(e1.getY() - e2.getY()) >= 200) {
 					if (velocityY > 2000 && scrollY == 0) {

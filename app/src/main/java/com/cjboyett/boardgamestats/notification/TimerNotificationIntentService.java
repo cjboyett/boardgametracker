@@ -4,9 +4,10 @@ import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.WakefulBroadcastReceiver;
-import android.util.Log;
 
 import com.cjboyett.boardgamestats.utility.Preferences;
+
+import timber.log.Timber;
 
 /**
  * Created by Casey on 10/20/2016.
@@ -30,10 +31,10 @@ public class TimerNotificationIntentService extends IntentService {
 
 	@Override
 	protected void onHandleIntent(Intent intent) {
-		Log.d(getClass().getSimpleName(), "onHandleIntent, started handling a notification event");
+		Timber.d("started handling a notification event");
 		try {
 			String action = intent.getAction();
-			Log.d("ACTION", action);
+			Timber.d(action);
 			if (ACTION_PAUSE_TIMER.equals(action))
 				processPauseTimerNotification(getApplicationContext());
 		} finally {
@@ -46,7 +47,7 @@ public class TimerNotificationIntentService extends IntentService {
 		long timerStart = Preferences.getTimerStart(context);
 		boolean timerRunning = Preferences.isTimerRunning(context);
 
-		Log.d("SERVICE", "Pausing " + game + " " + timerStart + " " + timerRunning);
+		Timber.d("Pausing " + game + " " + timerStart + " " + timerRunning);
 
 		TimerNotificationBuilder builder = new TimerNotificationBuilder();
 		builder.toggleTimerNotification(context,

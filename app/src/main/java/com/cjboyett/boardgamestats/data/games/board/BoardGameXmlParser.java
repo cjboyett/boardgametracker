@@ -9,9 +9,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Casey on 3/5/2016.
- */
+import timber.log.Timber;
+
 public class BoardGameXmlParser {
 	private static final String namespace = null;
 
@@ -23,7 +22,7 @@ public class BoardGameXmlParser {
 			parser.nextTag();
 			return readFeed(parser);
 		} catch (Exception e) {
-			e.printStackTrace();
+			Timber.e(e);
 		} finally {
 			try {
 				in.close();
@@ -45,7 +44,7 @@ public class BoardGameXmlParser {
 				else skip(parser);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			Timber.e(e);
 		}
 		return entries;
 	}
@@ -85,7 +84,7 @@ public class BoardGameXmlParser {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			Timber.e(e);
 		}
 		return new Item(id, name, thumbnailUrl, description, yearPublished, links);
 	}
@@ -99,7 +98,7 @@ public class BoardGameXmlParser {
 			parser.nextTag();
 			parser.require(XmlPullParser.END_TAG, namespace, "name");
 		} catch (Exception e) {
-			e.printStackTrace();
+			Timber.e(e);
 		}
 
 		return name;
@@ -116,7 +115,7 @@ public class BoardGameXmlParser {
 			parser.nextTag();
 			parser.require(XmlPullParser.END_TAG, namespace, "thumbnail");
 		} catch (Exception e) {
-			e.printStackTrace();
+			Timber.e(e);
 		}
 
 		return thumbnailUrl;
@@ -132,7 +131,7 @@ public class BoardGameXmlParser {
 			parser.nextTag();
 			parser.require(XmlPullParser.END_TAG, namespace, "description");
 		} catch (Exception e) {
-			e.printStackTrace();
+			Timber.e(e);
 		}
 
 		return description;
@@ -147,7 +146,7 @@ public class BoardGameXmlParser {
 			parser.nextTag();
 			parser.require(XmlPullParser.END_TAG, namespace, "yearpublished");
 		} catch (Exception e) {
-			e.printStackTrace();
+			Timber.e(e);
 		}
 
 		return yearPublished;
@@ -164,7 +163,7 @@ public class BoardGameXmlParser {
 			parser.nextTag();
 			parser.require(XmlPullParser.END_TAG, namespace, "link");
 		} catch (Exception e) {
-			e.printStackTrace();
+			Timber.e(e);
 		}
 
 		return link;
@@ -187,7 +186,7 @@ public class BoardGameXmlParser {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			Timber.e(e);
 		}
 	}
 

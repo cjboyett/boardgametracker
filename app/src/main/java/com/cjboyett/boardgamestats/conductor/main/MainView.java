@@ -2,7 +2,7 @@ package com.cjboyett.boardgamestats.conductor.main;
 
 import com.cjboyett.boardgamestats.activity.base.MvpView;
 
-public interface MainView extends MvpView {
+interface MainView extends MvpView {
 	void setWelcomeMessage(String welcomeMessage);
 
 	void processFirstVisit();

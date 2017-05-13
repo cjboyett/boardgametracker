@@ -16,7 +16,7 @@
 	<application
 		android:name=".MyApp"
 		android:allowBackup="true"
-		android:icon="@mipmap/ic_launcher_6"
+		android:icon="@drawable/ic_launcher_11"
 		android:label="@string/app_name"
 		android:supportsRtl="true"
 		android:theme="@style/AppTheme">
@@ -104,6 +104,9 @@
 			android:label="@string/title_activity_main"
 			android:screenOrientation="portrait"
 			android:theme="@style/AppTheme.NoActionBar">
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+			</intent-filter>
 		</activity>
 		<activity
 			android:name=".activity.addgameplay.AddGamePlayTabbedActivity"
@@ -228,7 +231,7 @@
 			android:theme="@style/AppTheme">
 		</activity>
 		<activity
-			android:name=".activity.extras.AchievementsActivity"
+			android:name=".activity.extras.AchievementsController"
 			android:label="@string/title_activity_achievements"
 			android:screenOrientation="portrait"
 			android:theme="@style/AppTheme">

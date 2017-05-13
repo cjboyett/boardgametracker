@@ -1,47 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-			  android:orientation="vertical"
 			  android:layout_width="match_parent"
 			  android:layout_height="match_parent"
+			  android:orientation="vertical"
 			  android:padding="20dp">
 
 	<TextView
+		android:id="@+id/textview_title"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:textAppearance="?android:attr/textAppearanceLarge"
-		android:text="Large Text"
-		android:id="@+id/textview_title"
-		android:padding="5dp"
-		android:visibility="gone"
 		android:layout_marginBottom="5dp"
-		android:textStyle="bold"/>
+		android:padding="5dp"
+		android:text="Large Text"
+		android:textAppearance="?android:attr/textAppearanceLarge"
+		android:textStyle="bold"
+		android:visibility="gone"/>
 
 	<LinearLayout
-		android:orientation="vertical"
+		android:id="@+id/linearlayout_custom_view"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:id="@+id/linearlayout_custom_view"
+		android:orientation="vertical"
 		android:visibility="visible">
 	</LinearLayout>
 
 	<uk.co.deanwild.flowtextview.FlowTextView
 
+		android:id="@+id/textview_message"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:id="@+id/textview_message"
+		android:layout_margin="5dp"
 		android:padding="5dp"
 		android:textSize="14dp"
-		android:layout_margin="5dp"
 		android:visibility="gone">
 
 		<ImageView
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
 			android:id="@+id/imageview_yancey"
-			android:src="@mipmap/ic_launcher"
+			android:layout_width="48dp"
+			android:layout_height="48dp"
 			android:layout_gravity="top|left"
-			android:visibility="gone"
 			android:paddingRight="5dp"
+			android:src="@drawable/splash_meeple2"
+			android:visibility="gone"
 			/>
 
 		<!--        <TextView
@@ -58,55 +58,55 @@
 	</uk.co.deanwild.flowtextview.FlowTextView>
 
 	<EditText
+		android:id="@+id/edittext_input"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:id="@+id/edittext_input"
 		android:padding="5dp"
 		android:visibility="gone"/>
 
 	<LinearLayout
-		android:orientation="horizontal"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_marginTop="5dp">
+		android:layout_marginTop="5dp"
+		android:orientation="horizontal">
 
 		<TextView
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:textAppearance="?android:attr/textAppearanceLarge"
-			android:text="Large Text"
 			android:id="@+id/button_negative"
-			android:layout_weight="1"
-			android:padding="5dp"
-			android:textSize="16dp"
-			android:visibility="gone"
-			android:textStyle="bold"/>
-
-		<TextView
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:textAppearance="?android:attr/textAppearanceLarge"
+			android:layout_weight="1"
+			android:padding="5dp"
 			android:text="Large Text"
+			android:textAppearance="?android:attr/textAppearanceLarge"
+			android:textSize="16dp"
+			android:textStyle="bold"
+			android:visibility="gone"/>
+
+		<TextView
 			android:id="@+id/button_neutral"
-			android:layout_weight="1"
-			android:padding="5dp"
-			android:gravity="center_horizontal"
-			android:textSize="16dp"
-			android:visibility="gone"
-			android:textStyle="bold"/>
-
-		<TextView
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:textAppearance="?android:attr/textAppearanceLarge"
-			android:text="Large Text"
-			android:id="@+id/button_positive"
 			android:layout_weight="1"
+			android:gravity="center_horizontal"
 			android:padding="5dp"
-			android:gravity="right"
+			android:text="Large Text"
+			android:textAppearance="?android:attr/textAppearanceLarge"
 			android:textSize="16dp"
-			android:visibility="gone"
-			android:textStyle="bold"/>
+			android:textStyle="bold"
+			android:visibility="gone"/>
+
+		<TextView
+			android:id="@+id/button_positive"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:gravity="right"
+			android:padding="5dp"
+			android:text="Large Text"
+			android:textAppearance="?android:attr/textAppearanceLarge"
+			android:textSize="16dp"
+			android:textStyle="bold"
+			android:visibility="gone"/>
 	</LinearLayout>
 
 </LinearLayout>

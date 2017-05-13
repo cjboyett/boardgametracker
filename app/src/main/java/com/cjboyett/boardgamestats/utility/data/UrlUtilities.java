@@ -3,7 +3,6 @@ package com.cjboyett.boardgamestats.utility.data;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.util.Log;
 
 import com.cjboyett.boardgamestats.data.games.HotnessXmlParser;
 import com.cjboyett.boardgamestats.data.games.board.BoardGameXmlParser;
@@ -19,6 +18,8 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import timber.log.Timber;
 
 /**
  * Created by Casey on 4/10/2016.
@@ -42,12 +43,12 @@ public class UrlUtilities {
 				}
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			Timber.e(e);
 		} finally {
 			try {
 				inputStream.close();
 			} catch (IOException e) {
-				e.printStackTrace();
+				Timber.e(e);
 			}
 		}
 
@@ -63,7 +64,7 @@ public class UrlUtilities {
 			in = UrlUtilities.downloadUrl(urlString);
 			items = parser.parse(in);
 		} catch (Exception e) {
-			Log.e("PARSER", e.getMessage());
+			Timber.e(e);
 		} finally {
 			try {
 				in.close();
@@ -82,7 +83,7 @@ public class UrlUtilities {
 			in = UrlUtilities.downloadUrl(urlString);
 			items = parser.parse(in);
 		} catch (Exception e) {
-			Log.e("PARSER", e.getMessage());
+			Timber.e(e);
 		} finally {
 			try {
 				in.close();
@@ -103,7 +104,7 @@ public class UrlUtilities {
 			connection.connect();
 			return connection.getInputStream();
 		} catch (Exception e) {
-			e.printStackTrace();
+			Timber.e(e);
 		}
 
 		return null;
@@ -118,7 +119,7 @@ public class UrlUtilities {
 			in = UrlUtilities.downloadUrl(urlString);
 			items = parser.parse(in);
 		} catch (Exception e) {
-			Log.e("PARSER", e.getMessage());
+			Timber.e(e);
 		} finally {
 			try {
 				in.close();

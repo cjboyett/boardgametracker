@@ -23,9 +23,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-/**
- * Created by Casey on 11/26/2016.
- */
+import timber.log.Timber;
+
 public class FilteredPlayerArrayAdapter extends ArrayAdapter<String> {
 	private Activity activity;
 	private Set<String> items;
@@ -64,7 +63,7 @@ public class FilteredPlayerArrayAdapter extends ArrayAdapter<String> {
 					{
 						String name = params[0];
 						if (name.equals(Preferences.getUsername(activity))) name = "master_user";
-						Log.d("PLAYER", name);
+						Timber.d(name);
 						thumbnails.put(params[0], ViewUtilities.createAvatar(activity, name, true));
 						return null;
 					}
@@ -121,7 +120,7 @@ public class FilteredPlayerArrayAdapter extends ArrayAdapter<String> {
 				((TextView) view).setText(Html.fromHtml(suggestion));
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			Timber.e(e);
 		}
 
 		return view;

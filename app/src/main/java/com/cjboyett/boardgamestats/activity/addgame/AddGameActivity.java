@@ -14,7 +14,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.text.Html;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -61,6 +60,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
+
+import timber.log.Timber;
 
 public class AddGameActivity extends BaseActivity {
 	private Activity activity = this;
@@ -297,7 +298,7 @@ public class AddGameActivity extends BaseActivity {
 							String description = gameDescriptionEditText.getText()
 																		.toString();
 
-							Log.d("MANUAL", name + " " + type);
+							Timber.d(name + " " + type);
 
 							try {
 								if (type[0] == Game.GameType.BOARD)
@@ -309,7 +310,7 @@ public class AddGameActivity extends BaseActivity {
 								ActivityUtilities.setDatabaseChanged(activity, true);
 								showSnack("Added " + name);
 							} catch (Exception e) {
-								Log.e("GAME", e.getMessage());
+								Timber.e(e);
 							}
 						}
 					}
@@ -380,7 +381,7 @@ public class AddGameActivity extends BaseActivity {
 						String description = gameDescriptionEditText.getText()
 																	.toString();
 
-						Log.d("MANUAL", name + " " + type);
+						Timber.d(name + " " + type);
 
 						try {
 							if (type[0] == Game.GameType.BOARD)
@@ -392,7 +393,7 @@ public class AddGameActivity extends BaseActivity {
 							ActivityUtilities.setDatabaseChanged(activity, true);
 							showSnack("Added " + name);
 						} catch (Exception e) {
-							Log.e("GAME", e.getMessage());
+							Timber.e(e);
 						}
 					}
 				}
@@ -441,7 +442,7 @@ public class AddGameActivity extends BaseActivity {
 						inputManager.hideSoftInputFromWindow(gameSearchView.getWindowToken(),
 															 InputMethodManager.HIDE_NOT_ALWAYS);
 					} catch (Exception e) {
-						e.printStackTrace();
+						Timber.e(e);
 					}
 
 					listView.setAdapter(new ArrayAdapter<String>(activity, android.R.layout.simple_list_item_1));
@@ -616,7 +617,7 @@ public class AddGameActivity extends BaseActivity {
 			try {
 				return UrlUtilities.loadBoardGameXmlFromNetwork(url);
 			} catch (Exception e) {
-				Log.e("PARSER", e.getMessage());
+				Timber.e(e);
 			}
 			return null;
 		}
@@ -640,7 +641,7 @@ public class AddGameActivity extends BaseActivity {
 			try {
 				return UrlUtilities.loadVideoGameXmlFromNetwork(url);
 			} catch (Exception e) {
-				Log.e("PARSER", e.getMessage());
+				Timber.e(e);
 			}
 			return null;
 		}
@@ -668,7 +669,7 @@ public class AddGameActivity extends BaseActivity {
 							UrlUtilities.loadBoardGameXmlFromNetwork(urls[0]);
 					return BoardGame.createGame(items.get(0));
 				} catch (Exception e) {
-					Log.e("PARSER", e.getMessage());
+					Timber.e(e);
 				}
 			} else if (gameType == Game.GameType.RPG) {
 				InputStream inputStream = null;
@@ -677,12 +678,12 @@ public class AddGameActivity extends BaseActivity {
 					List<RPGXmlParser.Item> items = new RPGXmlParser().parse(inputStream);
 					return RolePlayingGame.createGame(items.get(0));
 				} catch (Exception e) {
-					e.printStackTrace();
+					Timber.e(e);
 				} finally {
 					try {
 						inputStream.close();
 					} catch (Exception e) {
-						e.printStackTrace();
+						Timber.e(e);
 					}
 				}
 			} else if (gameType == Game.GameType.VIDEO) {
@@ -691,7 +692,7 @@ public class AddGameActivity extends BaseActivity {
 							UrlUtilities.loadVideoGameXmlFromNetwork(urls[0]);
 					return VideoGame.createGame(items.get(0));
 				} catch (Exception e) {
-					Log.e("PARSER", e.getMessage());
+					Timber.e(e);
 				}
 			}
 
@@ -708,9 +709,9 @@ public class AddGameActivity extends BaseActivity {
 								"http://" + game.getThumbnailUrl())
 															   .get();
 					} catch (InterruptedException e) {
-						e.printStackTrace();
+						Timber.e(e);
 					} catch (ExecutionException e) {
-						e.printStackTrace();
+						Timber.e(e);
 					}
 				}
 				progressBarLayout.setVisibility(View.GONE);
@@ -763,7 +764,7 @@ public class AddGameActivity extends BaseActivity {
 												else
 													showSnack("Added " + currentGame.getName());
 											} catch (Exception e) {
-												Log.e("GAME", e.getMessage());
+												Timber.e(e);
 											}
 										}
 									}
@@ -822,7 +823,7 @@ public class AddGameActivity extends BaseActivity {
 				in = connection.getInputStream();
 				bitmap = BitmapFactory.decodeStream(in);
 			} catch (Exception e) {
-				e.printStackTrace();
+				Timber.e(e);
 			} finally {
 				try {
 					in.close();

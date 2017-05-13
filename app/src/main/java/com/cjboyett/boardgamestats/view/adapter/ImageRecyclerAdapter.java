@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +21,8 @@ import com.cjboyett.boardgamestats.utility.view.StringToBitmapBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import timber.log.Timber;
 
 /**
  * Created by Casey on 4/23/2016.
@@ -85,7 +86,7 @@ public class ImageRecyclerAdapter extends RecyclerView.Adapter<ImageRecyclerAdap
 		try {
 			thumbnail = thumbnails.get(position);
 		} catch (Exception e) {
-			Log.d("THUMBNAIL", "Making thumbnail for " + position);
+			Timber.d("Making thumbnail for " + position);
 			String thumbnailUrl = thumbnailUrls.get(position);
 			if (thumbnailUrl.length() > 1) {
 				ImageController imageController = new ImageController(activity).setDirectoryName("thumbnails");

@@ -5,11 +5,12 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.WakefulBroadcastReceiver;
-import android.util.Log;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
+
+import timber.log.Timber;
 
 /**
  * Created by Casey on 5/3/2016.
@@ -56,7 +57,7 @@ public class NotificationEventReceiver extends WakefulBroadcastReceiver {
 		Intent serviceIntent = null;
 
 		if (action.equals(ACTION_START_TIMER)) {
-			Log.d("INTENT", "Start timer");
+			Timber.d("Start timer");
 			serviceIntent = NotificationIntentService.createIntentStartTimerNotificationService(context);
 		} else if (action.equals(ACTION_DELETE_TIMER))
 			serviceIntent = NotificationIntentService.createIntentDeleteTimerNotification(context);

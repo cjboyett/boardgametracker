@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
+import android.support.v7.widget.AppCompatButton;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -26,6 +26,8 @@ import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
 import java.util.Arrays;
+
+import timber.log.Timber;
 
 public class ExtrasActivity extends BaseAdActivity {
 	private Activity activity = this;
@@ -90,7 +92,7 @@ public class ExtrasActivity extends BaseAdActivity {
 			view.findViewById(R.id.textview_email_logout)
 				.setVisibility(View.GONE);
 			// TODO Check authentication/reauthenticate
-//			Log.d("LOGGED IN FROM", firebaseUtility.signedInFrom());
+//			Timber.d(firebaseUtility.signedInFrom());
 
 			callbackManager = CallbackManager.Factory.create();
 			LoginButton loginButton = (LoginButton) view.findViewById(R.id.login_button);
@@ -99,18 +101,18 @@ public class ExtrasActivity extends BaseAdActivity {
 				@Override
 				public void onSuccess(LoginResult loginResult) {
 					firebaseUtility.facebookSignIn(loginResult);
-					Log.d("RESULT", loginResult.toString());
-					if (loginResult.getAccessToken() == null) Log.d("RESULT", "Token null");
+					Timber.d(loginResult.toString());
+					if (loginResult.getAccessToken() == null) Timber.d("Token null");
 				}
 
 				@Override
 				public void onCancel() {
-					Log.d("CANCEL", "Canceled");
+					Timber.d("Canceled");
 				}
 
 				@Override
 				public void onError(FacebookException error) {
-					Log.d("ERROR", error.toString());
+					Timber.d(error.toString());
 				}
 			});
 
@@ -205,6 +207,7 @@ public class ExtrasActivity extends BaseAdActivity {
 	protected void colorComponents() {
 		view.setBackgroundColor(backgroundColor);
 
+/*
 		if (Preferences.lightUI(this)) {
 			view.findViewById(R.id.textview_backup_database)
 				.setBackgroundResource(R.drawable.main_button_background_dark);
@@ -224,6 +227,16 @@ public class ExtrasActivity extends BaseAdActivity {
 			view.findViewById(R.id.textview_email_logout)
 				.setBackgroundResource(R.drawable.main_button_background_light);
 		}
+*/
+		ViewUtilities.tintButtonBackground((AppCompatButton) view.findViewById(R.id.textview_backup_database),
+										   buttonColor);
+		ViewUtilities.tintButtonBackground((AppCompatButton) view.findViewById(R.id.textview_restore_database),
+										   buttonColor);
+		ViewUtilities.tintButtonBackground((AppCompatButton) view.findViewById(R.id.textview_board_game_recommendation),
+										   buttonColor);
+		ViewUtilities.tintButtonBackground((AppCompatButton) view.findViewById(R.id.textview_email_logout),
+										   buttonColor);
+
 
 		((TextView) view.findViewById(R.id.textview_backup_database)).setTextColor(foregroundColor);
 		((TextView) view.findViewById(R.id.textview_restore_database)).setTextColor(foregroundColor);

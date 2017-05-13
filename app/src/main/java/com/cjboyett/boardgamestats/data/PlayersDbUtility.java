@@ -441,7 +441,7 @@ public class PlayersDbUtility {
 		db.close();
 
 		allPlayers = new ArrayList<>(players);
-//		for (String player : allPlayers) Log.d("PLAYER", player);
+//		for (String player : allPlayers) Timber.d(player);
 		for (String player : allPlayers) PlayersDbUtility.generateNewPlayer(dbHelper, player);
 	}
 

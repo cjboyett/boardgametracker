@@ -14,7 +14,6 @@ import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +28,7 @@ import android.widget.TextView;
 import com.cjboyett.boardgamestats.R;
 import com.cjboyett.boardgamestats.data.DataManager;
 import com.cjboyett.boardgamestats.data.TempDataManager;
+import com.cjboyett.boardgamestats.model.Timer;
 import com.cjboyett.boardgamestats.model.games.Game;
 import com.cjboyett.boardgamestats.model.games.board.BoardGame;
 import com.cjboyett.boardgamestats.model.games.rpg.RolePlayingGame;
@@ -42,6 +42,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import me.nereo.multi_image_selector.MultiImageSelector;
+import timber.log.Timber;
 
 public class AddGamePlayDetailsFragment extends Fragment {
 	private TextView gameTextView, timePlayedTextView, dateTextView, locationTextView, notesTextView;
@@ -234,13 +235,18 @@ public class AddGamePlayDetailsFragment extends Fragment {
 		super.onResume();
 		TempDataManager tempDataManager = TempDataManager.getInstance();
 		List<String> gameData = tempDataManager.getTempGamePlayData();
-		List<Long> timerData = tempDataManager.getTimer();
+		Timer timerObj = tempDataManager.getTimer();
+		List<Long> timerData = new ArrayList<>();
+		timerData.add(timerObj.getTimerBase());
+		timerData.add(timerObj.getLastStartTime());
+		timerData.add(timerObj.getLastStopTime());
+		timerData.add(timerObj.getDiff());
 
 		try {
-			Log.d("GAME", gameData.toString());
-			Log.d("TIMER", timerData.toString());
+			Timber.d(gameData.toString());
+			Timber.d(timerData.toString());
 		} catch (Exception e) {
-			e.printStackTrace();
+			Timber.e(e);
 		}
 
 		if (gameData != null && gameData.size() >= 6) {
@@ -323,7 +329,7 @@ public class AddGamePlayDetailsFragment extends Fragment {
 												notesEditText.getText().toString());
 			tempDataManager.saveTempGamePlayData();
 
-			tempDataManager.setTimer(timerBase, lastStartTime, lastStopTime, diff);
+			tempDataManager.setTimer(new Timer(timerBase, lastStartTime, lastStopTime, diff));
 			tempDataManager.saveTimer();
 		} catch (Exception e) {
 

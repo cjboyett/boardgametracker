@@ -113,6 +113,7 @@
 	<string name="timer_diff">com.cjboyett.boardgamestats.TIMER_DIFF</string>
 	<string name="theme_background_preference">com.cjboyett.boardgamestats.THEME_BACKGROUND_PREFERENCE</string>
 	<string name="theme_foreground_preference">com.cjboyett.boardgamestats.THEME_FOREGROUND_PREFERENCE</string>
+	<string name="theme_button_preference">com.cjboyett.boardgamestats.THEME_BUTTON_PREFERENCE</string>
 	<string name="last_stats_page">com.cjboyett.boardgamestats.LAST_STATS_PAGE</string>
 	<string name="title_activity_stats_detailed">StatsDetailedActivity</string>
 	<string name="title_activity_add_game_manual">AddGameManualActivity</string>

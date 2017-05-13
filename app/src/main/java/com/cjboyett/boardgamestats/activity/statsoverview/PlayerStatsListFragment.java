@@ -7,7 +7,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GestureDetectorCompat;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -33,6 +32,8 @@ import com.cjboyett.boardgamestats.view.adapter.PlayerListAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import timber.log.Timber;
 
 public class PlayerStatsListFragment extends Fragment {
 	private View view;
@@ -69,7 +70,7 @@ public class PlayerStatsListFragment extends Fragment {
 		colorComponents();
 		;
 
-//		Log.d("MAX MEMORY" ,(int)(Runtime.getRuntime().maxMemory() / 1024) + "");
+//		Timber.d((int)(Runtime.getRuntime().maxMemory() / 1024) + "");
 		return view;
 	}
 
@@ -182,13 +183,13 @@ public class PlayerStatsListFragment extends Fragment {
 		public boolean onDown(MotionEvent e) {
 			View c = listView.getChildAt(0);
 			scrollY = -c.getTop() + listView.getFirstVisiblePosition() * c.getHeight();
-			Log.d("DOWN", scrollY + "");
+			Timber.d(scrollY + "");
 			return super.onDown(e);
 		}
 
 		@Override
 		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-			Log.d("FLING", scrollY + "");
+			Timber.d(scrollY + "");
 			if (Math.abs(velocityX) < Math.abs(velocityY)) {
 				if (Math.abs(e1.getY() - e2.getY()) >= 200) {
 					if (velocityY > 2000 && scrollY <= 0) {

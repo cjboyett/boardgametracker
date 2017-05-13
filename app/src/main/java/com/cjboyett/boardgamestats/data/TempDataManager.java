@@ -1,24 +1,24 @@
 package com.cjboyett.boardgamestats.data;
 
 import android.content.Context;
-import android.os.SystemClock;
-import android.util.Log;
 
+import com.cjboyett.boardgamestats.conductor.addgameplay.GamePlayDetails;
 import com.cjboyett.boardgamestats.data.games.GamesDbHelper;
 import com.cjboyett.boardgamestats.data.games.GamesDbUtility;
+import com.cjboyett.boardgamestats.model.Timer;
 import com.cjboyett.boardgamestats.model.games.GamePlayerData;
 
 import java.util.List;
 
-/**
- * Created by Casey on 5/2/2016.
- */
+import timber.log.Timber;
+
 public class TempDataManager {
 	private static TempDataManager instance = null;
 	private Context context;
 
 	private List<String> tempGamePlayData;
-	private List<Long> timer;
+	//	private List<Long> timer;
+	private Timer timer;
 	private List<GamePlayerData> tempPlayers;
 
 	private TempDataManager(Context context) {
@@ -35,7 +35,6 @@ public class TempDataManager {
 	}
 
 	public void initialize() {
-		Log.d("TEMPDATA", "Initializing");
 		clearTempGamePlayData();
 		clearTempPlayers();
 		tempGamePlayData = null;
@@ -48,6 +47,15 @@ public class TempDataManager {
 		return tempGamePlayData;
 	}
 
+	public void setTempGamePlayData(GamePlayDetails gamePlayDetails) {
+		setTempGamePlayData(gamePlayDetails.getGameName(),
+							gamePlayDetails.getGameType(),
+							gamePlayDetails.getTimePlayed(),
+							gamePlayDetails.getDate(),
+							gamePlayDetails.getLocation(),
+							gamePlayDetails.getNotes());
+	}
+
 	public void setTempGamePlayData(String gameName, String gameType, String timePlayed, String date, String location,
 									String notes) {
 		getTempGamePlayData().clear();
@@ -57,18 +65,18 @@ public class TempDataManager {
 		getTempGamePlayData().add(date);
 		getTempGamePlayData().add(location);
 		getTempGamePlayData().add(notes);
-		Log.d("TEMPDATA", "Setting " + getTempGamePlayData().toString());
+		Timber.d("Setting " + getTempGamePlayData().toString());
 	}
 
 	public void loadTempGamePlayData() {
 		GamesDbHelper dbHelper = new GamesDbHelper(context);
 		tempGamePlayData = GamesDbUtility.getTempGamePlay(dbHelper);
 		dbHelper.close();
-		Log.d("TEMPDATA", "Loading temp game: " + tempGamePlayData.toString());
+		Timber.d("Loading temp game: " + tempGamePlayData.toString());
 	}
 
 	public void saveTempGamePlayData() {
-		Log.d("TEMPDATA", "Saving temp game: " + getTempGamePlayData().toString());
+		Timber.d("Saving temp game: " + getTempGamePlayData().toString());
 		GamesDbHelper dbHelper = new GamesDbHelper(context);
 		if (getTempGamePlayData().size() >= 6)
 			GamesDbUtility.addTempGamePlay(dbHelper,
@@ -82,46 +90,50 @@ public class TempDataManager {
 	}
 
 	public void clearTempGamePlayData() {
-		Log.d("TEMPDATA", "Clearing temp game");
+		Timber.d("Clearing temp game");
 		GamesDbHelper dbHelper = new GamesDbHelper(context);
 		GamesDbUtility.clearTempGamePlayTable(dbHelper);
 		dbHelper.close();
 	}
 
-	public void setTimer(long timerBase, long lastStartTime, long lastStopTime, long diff) {
+	public void setTimer(Timer timer) {
+		this.timer = timer;
+	}
+
+/*	public void setTimer(long timerBase, long lastStartTime, long lastStopTime, long diff) {
 		getTimer().clear();
 		getTimer().add(timerBase);
 		getTimer().add(lastStartTime);
 		getTimer().add(lastStopTime);
 		getTimer().add(diff);
-		Log.d("TEMPDATA", "Setting timer: " + SystemClock.elapsedRealtime() + " " + getTimer().toString());
-	}
+		Timber.d("Setting timer: " + SystemClock.elapsedRealtime() + " " + getTimer().toString());
+	}*/
 
-	public List<Long> getTimer() {
+	public Timer getTimer() {
 		if (timer == null) loadTimer();
 		return timer;
 	}
 
 	public void loadTimer() {
 		GamesDbHelper dbHelper = new GamesDbHelper(context);
-		timer = GamesDbUtility.getTempTimer(dbHelper);
+		timer = new Timer(GamesDbUtility.getTempTimer(dbHelper));
 		dbHelper.close();
-		Log.d("TEMPDATA", "Loading timer: " + timer.toString());
+		Timber.d("Loading timer: " + timer.toString());
 	}
 
 	public void saveTimer() {
-		Log.d("TEMPDATA", "Saving timer: " + getTimer().toString());
+		Timber.d("Saving timer: " + getTimer().toString());
 		GamesDbHelper dbHelper = new GamesDbHelper(context);
 		GamesDbUtility.setTempTimer(dbHelper,
-									getTimer().get(0),
-									getTimer().get(1),
-									getTimer().get(2),
-									getTimer().get(3));
+									getTimer().getTimerBase(),
+									getTimer().getLastStartTime(),
+									getTimer().getLastStopTime(),
+									getTimer().getDiff());
 		dbHelper.close();
 	}
 
 	public void addTempPlayer(GamePlayerData gamePlayerData) {
-		Log.d("TEMPDATA", "Adding " + gamePlayerData.toString());
+		Timber.d("Adding " + gamePlayerData.toString());
 		getTempPlayers().add(gamePlayerData);
 	}
 
@@ -134,18 +146,18 @@ public class TempDataManager {
 		GamesDbHelper dbHelper = new GamesDbHelper(context);
 		tempPlayers = GamesDbUtility.getTempPlayers(dbHelper);
 		dbHelper.close();
-		Log.d("TEMPDATA", "Loading players: " + tempPlayers.toString());
+		Timber.d("Loading players: " + tempPlayers.toString());
 	}
 
 	public void saveTempPlayers() {
-		Log.d("TEMPDATA", "Saving players: " + getTempPlayers().toString());
+		Timber.d("Saving players: " + getTempPlayers().toString());
 		GamesDbHelper dbHelper = new GamesDbHelper(context);
 		for (GamePlayerData gamePlayerData : getTempPlayers()) GamesDbUtility.addTempPlayer(dbHelper, gamePlayerData);
 		dbHelper.close();
 	}
 
 	public void clearTempPlayers() {
-		Log.d("TEMPDATA", "Clearing players");
+		Timber.d("Clearing players");
 		GamesDbHelper dbHelper = new GamesDbHelper(context);
 		GamesDbUtility.clearTempPlayersTable(dbHelper);
 		dbHelper.close();

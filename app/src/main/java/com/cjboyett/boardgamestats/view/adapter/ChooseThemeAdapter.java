@@ -11,9 +11,6 @@ import com.cjboyett.boardgamestats.R;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Casey on 4/22/2016.
- */
 public class ChooseThemeAdapter extends BaseAdapter {
 	private List<Integer[]> palettes;
 
@@ -46,8 +43,11 @@ public class ChooseThemeAdapter extends BaseAdapter {
 		Integer[] palette = palettes.get(position);
 		view.findViewById(R.id.textview_sample_background).setBackgroundColor(palette[0]);
 		view.findViewById(R.id.textview_sample_foreground).setBackgroundColor(palette[1]);
+		view.findViewById(R.id.textview_sample_button).setBackgroundColor(palette[2]);
+/*
 		view.findViewById(R.id.textview_sample_text).setBackgroundColor(palette[0]);
 		((TextView) view.findViewById(R.id.textview_sample_text)).setTextColor(palette[1]);
+*/
 
 		return view;
 	}

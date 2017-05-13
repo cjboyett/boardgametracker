@@ -11,7 +11,7 @@
 		android:layout_height="0dp"
 		android:layout_weight="1"
 		android:fitsSystemWindows="true"
-		tools:context=".activity.extras.AchievementsActivity">
+		tools:context=".activity.extras.AchievementsController">
 
 		<include layout="@layout/content_achievements"/>
 

@@ -1,6 +1,5 @@
 package com.cjboyett.boardgamestats.data;
 
-import android.util.Log;
 import android.util.Xml;
 
 import com.cjboyett.boardgamestats.model.Date;
@@ -21,9 +20,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Casey on 3/17/2016.
- */
+import timber.log.Timber;
+
 public class PlaysXmlParser {
 	private static final String namespace = null;
 	private String bggUserName = null, userName = "";
@@ -172,7 +170,7 @@ public class PlaysXmlParser {
 			parser.nextTag();
 			parser.require(XmlPullParser.END_TAG, namespace, "comments");
 		} catch (Exception e) {
-			Log.e("PARSER", e.getMessage());
+			Timber.e(e);
 		}
 
 		return notes;
@@ -189,7 +187,7 @@ public class PlaysXmlParser {
 			}
 			parser.require(XmlPullParser.END_TAG, namespace, "players");
 		} catch (Exception e) {
-			e.printStackTrace();
+			Timber.e(e);
 		}
 
 		return players;
@@ -210,7 +208,7 @@ public class PlaysXmlParser {
 			parser.nextTag();
 			parser.require(XmlPullParser.END_TAG, namespace, "player");
 		} catch (Exception e) {
-			e.printStackTrace();
+			Timber.e(e);
 		}
 
 		return gamePlayerData;

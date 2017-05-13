@@ -7,6 +7,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import timber.log.Timber;
+
 /**
  * Created by Casey on 9/6/2016.
  */
@@ -49,14 +51,14 @@ public class FileController {
 			fileOutputStream = new FileOutputStream(createFile());
 			fileOutputStream.write(bytes);
 		} catch (Exception e) {
-			e.printStackTrace();
+			Timber.e(e);
 		} finally {
 			try {
 				if (fileOutputStream != null) {
 					fileOutputStream.close();
 				}
 			} catch (IOException e) {
-				e.printStackTrace();
+				Timber.e(e);
 			}
 		}
 	}
@@ -75,7 +77,7 @@ public class FileController {
 		try {
 			createFile().delete();
 		} catch (Exception e) {
-			e.printStackTrace();
+			Timber.e(e);
 		}
 	}
 }

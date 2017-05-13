@@ -1,7 +1,5 @@
 package com.cjboyett.boardgamestats.data.games;
 
-import android.util.Log;
-
 import com.cjboyett.boardgamestats.data.games.board.BoardGameStatsDbUtility;
 import com.cjboyett.boardgamestats.data.games.rpg.RPGStatsDbUtility;
 import com.cjboyett.boardgamestats.data.games.video.VideoGameStatsDbUtility;
@@ -16,6 +14,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+
+import timber.log.Timber;
 
 /**
  * Created by Casey on 4/13/2016.
@@ -104,8 +104,8 @@ public class GameStatsDbUtility {
 																	  boolean useBoardGamesForStats,
 																	  boolean useRPGsForStats,
 																	  boolean useVideoGamesForStats) {
-		Log.d("Getting games",
-			  "BG " + useBoardGamesForStats + ", RPG " + useRPGsForStats + ", VG " + useVideoGamesForStats);
+		Timber.d("Getting games" + "BG " + useBoardGamesForStats + ", RPG " + useRPGsForStats + ", VG " +
+						 useVideoGamesForStats);
 		Map<Integer, List<String>> allGames = new TreeMap<>();
 
 		if (useBoardGamesForStats) {

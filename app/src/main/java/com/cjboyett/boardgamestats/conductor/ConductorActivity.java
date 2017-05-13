@@ -2,6 +2,8 @@ package com.cjboyett.boardgamestats.conductor;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.view.GestureDetectorCompat;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
@@ -20,6 +22,7 @@ import com.google.android.gms.ads.AdView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import timber.log.Timber;
 
 public class ConductorActivity extends BaseActivity {
 	@BindView(R.id.main_container)
@@ -34,6 +37,8 @@ public class ConductorActivity extends BaseActivity {
 	private Router router;
 	private String googleAdUnitId;
 	private AdView googleAdView;
+
+	private GestureDetectorCompat gestureDetector;
 
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -79,11 +84,12 @@ public class ConductorActivity extends BaseActivity {
 				});
 				googleAdView.loadAd(adRequest);
 			} catch (Exception e) {
-				e.printStackTrace();
+				Timber.e(e);
 			}
 		}
 	}
 
+	@Override
 	protected void onResume() {
 		super.onResume();
 		if (googleAdView != null) googleAdView.resume();
@@ -108,11 +114,27 @@ public class ConductorActivity extends BaseActivity {
 
 	@Override
 	protected void generateLayout() {
-
 	}
 
 	@Override
 	protected void colorComponents() {
+	}
 
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		if (Preferences.useSwipes(this) && gestureDetector != null) {
+			return gestureDetector.onTouchEvent(event);
+		}
+		return super.onTouchEvent(event);
+	}
+
+	public void setGestureDetector(GestureDetectorCompat gestureDetector) {
+		if (gestureDetector != null) {
+			this.gestureDetector = gestureDetector;
+		}
+	}
+
+	public void removeGestureDetector() {
+//		this.gestureDetector = null;
 	}
 }

@@ -1,6 +1,5 @@
 package com.cjboyett.boardgamestats.data.games.rpg;
 
-import android.util.Log;
 import android.util.Xml;
 
 import org.apache.commons.lang3.StringEscapeUtils;
@@ -10,9 +9,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Casey on 4/10/2016.
- */
+import timber.log.Timber;
+
 public class RPGXmlParser {
 	private static final String namespace = null;
 
@@ -24,7 +22,7 @@ public class RPGXmlParser {
 			parser.nextTag();
 			return readFeed(parser);
 		} catch (Exception e) {
-			Log.e("PARSER", e.getMessage());
+			Timber.e(e);
 		} finally {
 			try {
 				in.close();
@@ -46,7 +44,7 @@ public class RPGXmlParser {
 				else skip(parser);
 			}
 		} catch (Exception e) {
-			Log.e("PARSER", e.getMessage());
+			Timber.e(e);
 		}
 		return entries;
 	}
@@ -83,7 +81,7 @@ public class RPGXmlParser {
 				}
 			}
 		} catch (Exception e) {
-			Log.e("PARSER", e.getMessage());
+			Timber.e(e);
 		}
 		return new Item(id, name, thumbnailUrl, description, links);
 	}
@@ -97,7 +95,7 @@ public class RPGXmlParser {
 			parser.nextTag();
 			parser.require(XmlPullParser.END_TAG, namespace, "name");
 		} catch (Exception e) {
-			Log.e("PARSER", e.getMessage());
+			Timber.e(e);
 		}
 
 		return name;
@@ -114,7 +112,7 @@ public class RPGXmlParser {
 			parser.nextTag();
 			parser.require(XmlPullParser.END_TAG, namespace, "thumbnail");
 		} catch (Exception e) {
-			Log.e("PARSER", e.getMessage());
+			Timber.e(e);
 		}
 
 		return thumbnailUrl;
@@ -130,7 +128,7 @@ public class RPGXmlParser {
 			parser.nextTag();
 			parser.require(XmlPullParser.END_TAG, namespace, "description");
 		} catch (Exception e) {
-			Log.e("PARSER", e.getMessage());
+			Timber.e(e);
 		}
 
 		return description;
@@ -147,7 +145,7 @@ public class RPGXmlParser {
 			parser.nextTag();
 			parser.require(XmlPullParser.END_TAG, namespace, "link");
 		} catch (Exception e) {
-			Log.e("PARSER", e.getMessage());
+			Timber.e(e);
 		}
 
 		return link;
@@ -170,7 +168,7 @@ public class RPGXmlParser {
 				}
 			}
 		} catch (Exception e) {
-			Log.e("PARSER", e.getMessage());
+			Timber.e(e);
 		}
 	}
 

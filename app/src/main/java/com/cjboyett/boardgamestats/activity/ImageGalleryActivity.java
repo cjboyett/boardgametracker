@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 
 import com.cjboyett.boardgamestats.R;
@@ -20,6 +19,8 @@ import com.cjboyett.boardgamestats.view.adapter.ImageGalleryRecyclerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import timber.log.Timber;
 
 public class ImageGalleryActivity extends AppCompatActivity {
 	private Activity activity = this;
@@ -79,7 +80,7 @@ public class ImageGalleryActivity extends AppCompatActivity {
 					if (!TextUtils.isEmpty(key) && key.lastIndexOf("/") != -1) {
 						key = key.substring(key.lastIndexOf("/") + 1);
 						keys.add(key);
-						Log.d("KEY", key);
+						Timber.d(key);
 					}
 				}
 				return null;

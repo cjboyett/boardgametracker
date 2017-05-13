@@ -16,7 +16,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.BaseInterpolator;
 import android.widget.AdapterView;
@@ -68,6 +67,7 @@ import java.util.TreeMap;
 
 import me.nereo.multi_image_selector.MultiImageSelector;
 import me.nereo.multi_image_selector.MultiImageSelectorActivity;
+import timber.log.Timber;
 
 public class TestActivity extends AppCompatActivity {
 	private View overlay;
@@ -213,12 +213,12 @@ public class TestActivity extends AppCompatActivity {
 
 			@Override
 			public void onCancel() {
-				Log.d("CANCEL", "Canceled");
+				Timber.d("Canceled");
 			}
 
 			@Override
 			public void onError(FacebookException error) {
-				Log.d("ERROR", error.toString());
+				Timber.d(error.toString());
 			}
 		});
 
@@ -477,7 +477,7 @@ public class TestActivity extends AppCompatActivity {
 /*
 			offset--;
 			if (offset == -1) offset = 5;
-			Log.d("OFFSET", offset + "");
+			Timber.d(offset + "");
 */
 			for (int i = 0; i < 6; i++) finished[i] = false;
 		}
@@ -493,12 +493,12 @@ public class TestActivity extends AppCompatActivity {
 			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 			bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
 
-			Log.d("SIZE", bitmap.getByteCount() + "");
+			Timber.d(bitmap.getByteCount() + "");
 /*
 			if (bitmap.getByteCount() > ONE_MEGABYTE)
 			{
 				double scale = Math.sqrt(1024. * 1024. / bitmap.getByteCount());
-				Log.d("SCALE", scale + " " + (int)(bitmap.getWidth() * scale) + " " + (int)(bitmap.getHeight() * scale));
+				Timber.d(scale + " " + (int)(bitmap.getWidth() * scale) + " " + (int)(bitmap.getHeight() * scale));
 				bitmap = Bitmap.createScaledBitmap(bitmap, (int)(bitmap.getWidth() * scale), (int)(bitmap.getHeight() * scale), false);
 			}
 			bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
@@ -512,14 +512,14 @@ public class TestActivity extends AppCompatActivity {
 				@Override
 				public void onSuccess(UploadTask.TaskSnapshot taskSnapshot)
 				{
-					Log.d("SUCCESS", "It was successful");
+					Timber.d("It was successful");
 				}
 			}).addOnFailureListener(this, new OnFailureListener()
 			{
 				@Override
 				public void onFailure(@NonNull Exception e)
 				{
-					Log.d("FAILURE", "It was not successful");
+					Timber.d("It was not successful");
 				}
 			});
 		}
@@ -548,7 +548,7 @@ public class TestActivity extends AppCompatActivity {
 	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
 		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-		Log.d("PERMISSIONS", requestCode + " " + Arrays.toString(permissions) + " " + Arrays.toString(grantResults));
+		Timber.d(requestCode + " " + Arrays.toString(permissions) + " " + Arrays.toString(grantResults));
 
 		if (requestCode == REQUEST_PERMISSIONS) {
 			if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -582,7 +582,7 @@ public class TestActivity extends AppCompatActivity {
 						try {
 							exifInterface = new ExifInterface(params[0]);
 						} catch (Exception e) {
-							e.printStackTrace();
+							Timber.e(e);
 						}
 
 						if (exifInterface != null) {
@@ -600,7 +600,7 @@ public class TestActivity extends AppCompatActivity {
 							int width = bitmap.getWidth();
 							int height = bitmap.getHeight();
 							float scale = 1200f / Math.max(width, height);
-//							Log.d("STUFF", width + " " + height + " " + scale);
+//							Timber.d(width + " " + height + " " + scale);
 //							float scaleWidth = scale * width;
 //							float scaleHeight = scale * height;
 
@@ -612,7 +612,7 @@ public class TestActivity extends AppCompatActivity {
 						}
 */
 
-						Log.d("DIMENSIONS", bitmap.getWidth() + " " + bitmap.getHeight());
+						Timber.d(bitmap.getWidth() + " " + bitmap.getHeight());
 
 						return bitmap;
 					}
@@ -680,7 +680,7 @@ public class TestActivity extends AppCompatActivity {
 			bitmap.recycle();
 			return bmRotated;
 		} catch (OutOfMemoryError e) {
-			e.printStackTrace();
+			Timber.e(e);
 			return null;
 		}
 	}
@@ -747,7 +747,7 @@ public class TestActivity extends AppCompatActivity {
 		Iterator<RecBoardGame> iter = recommendations.iterator();
 		while (iter.hasNext())
 			if (games.contains(iter.next().getName())) iter.remove();
-//		for (RecBoardGame game : recommendations) Log.d("GAME", game.getRank() + " " + game.getName() + " " + game.getRecommendationLevel());
+//		for (RecBoardGame game : recommendations) Timber.d(game.getRank() + " " + game.getName() + " " + game.getRecommendationLevel());
 		final RecBoardGame[] toShow = new RecBoardGame[3];
 		Random r = new Random();
 		int recSizeStep = Math.min(recommendations.size() / 10, 50);
@@ -794,12 +794,12 @@ public class TestActivity extends AppCompatActivity {
 									in = connection.getInputStream();
 									bitmap = BitmapFactory.decodeStream(in);
 								} catch (Exception e) {
-									e.printStackTrace();
+									Timber.e(e);
 								} finally {
 									try {
 										in.close();
 									} catch (Exception e) {
-										e.printStackTrace();
+										Timber.e(e);
 									}
 								}
 
@@ -841,7 +841,7 @@ public class TestActivity extends AppCompatActivity {
 							}
 						}.execute(item.thumbnailUrl);
 					} catch (Exception e) {
-						e.printStackTrace();
+						Timber.e(e);
 					}
 				}
 			}
@@ -893,7 +893,7 @@ public class TestActivity extends AppCompatActivity {
 		}
 		for (String mechanic : mechanicIntegerMap.keySet())
 			if (mechanicIntegerMap.get(mechanic) >= third) {
-				Log.d("MECHANIC", mechanic + " " + mechanicIntegerMap.get(mechanic));
+				Timber.d(mechanic + " " + mechanicIntegerMap.get(mechanic));
 				mechanicsWinners += mechanic + " " + mechanicIntegerMap.get(mechanic) + "\n";
 			}
 
@@ -917,7 +917,7 @@ public class TestActivity extends AppCompatActivity {
 
 		for (String category : categoryIntegerMap.keySet())
 			if (categoryIntegerMap.get(category) >= third) {
-				Log.d("CATEGORY", category + " " + categoryIntegerMap.get(category));
+				Timber.d(category + " " + categoryIntegerMap.get(category));
 				categoryWinners += category + " " + categoryIntegerMap.get(category) + "\n";
 			}
 
@@ -940,7 +940,7 @@ public class TestActivity extends AppCompatActivity {
 		}
 		for (String pair : pairIntegerMap.keySet())
 			if (pairIntegerMap.get(pair) >= third) {
-				Log.d("PAIR", pair + " " + pairIntegerMap.get(pair));
+				Timber.d(pair + " " + pairIntegerMap.get(pair));
 				pairWinners += pair + " " + pairIntegerMap.get(pair) + "\n";
 			}
 
@@ -1026,7 +1026,7 @@ public class TestActivity extends AppCompatActivity {
 			float toReturn;
 			if (!reversed) toReturn = (float) Math.sin(input * angle);
 			else toReturn = (float) Math.sin((1 - input) * angle);
-//			Log.d("INTERPOLATING", input + " " + (float)(toReturn / Math.sin(angle)));
+//			Timber.d(input + " " + (float)(toReturn / Math.sin(angle)));
 			return (float) (toReturn / Math.sin(angle));
 		}
 	}

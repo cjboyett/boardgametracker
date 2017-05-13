@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Looper;
-import android.util.Log;
 
 import com.cjboyett.boardgamestats.data.PlaysXmlParser;
 import com.cjboyett.boardgamestats.data.games.GamesDbHelper;
@@ -38,6 +37,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import timber.log.Timber;
+
 /**
  * Created by Casey on 4/18/2016.
  */
@@ -59,12 +60,12 @@ public class GameDownloadUtilities {
 					in = connection.getInputStream();
 					bitmap = BitmapFactory.decodeStream(in);
 				} catch (Exception e) {
-					e.printStackTrace();
+					Timber.e(e);
 				} finally {
 					try {
 						in.close();
 					} catch (Exception e) {
-						e.printStackTrace();
+						Timber.e(e);
 					}
 				}
 
@@ -115,7 +116,7 @@ public class GameDownloadUtilities {
 				try {
 					return loadGamePlayDataXmlFromNetwork(context, urls[0] + "&page=" + page, gameType);
 				} catch (Exception e) {
-					Log.e("PARSER", e.getMessage());
+					Timber.e(e);
 				}
 				return null;
 			}
@@ -172,9 +173,9 @@ public class GameDownloadUtilities {
 								}
 							}
 						} catch (InterruptedException e) {
-							e.printStackTrace();
+							Timber.e(e);
 						} catch (ExecutionException e) {
-							e.printStackTrace();
+							Timber.e(e);
 						}
 
 						new DownloadXmlPlaysTask(gameType, page + 1).execute(url);
@@ -225,7 +226,7 @@ public class GameDownloadUtilities {
 					List<BoardGameXmlParser.Item> items = UrlUtilities.loadBoardGameXmlFromNetwork(urls[0]);
 					return BoardGame.createGame(items.get(0));
 				} catch (Exception e) {
-					e.printStackTrace();
+					Timber.e(e);
 				}
 			} else if (gameType == Game.GameType.RPG) {
 				InputStream inputStream = null;
@@ -234,12 +235,12 @@ public class GameDownloadUtilities {
 					List<RPGXmlParser.Item> items = new RPGXmlParser().parse(inputStream);
 					return RolePlayingGame.createGame(items.get(0));
 				} catch (Exception e) {
-					e.printStackTrace();
+					Timber.e(e);
 				} finally {
 					try {
 						inputStream.close();
 					} catch (Exception e) {
-						e.printStackTrace();
+						Timber.e(e);
 					}
 				}
 			} else if (gameType == Game.GameType.VIDEO) {
@@ -247,7 +248,7 @@ public class GameDownloadUtilities {
 					List<VideoGameXmlParser.Item> items = UrlUtilities.loadVideoGameXmlFromNetwork(urls[0]);
 					return VideoGame.createGame(items.get(0));
 				} catch (Exception e) {
-					e.printStackTrace();
+					Timber.e(e);
 				}
 			}
 
@@ -303,7 +304,7 @@ public class GameDownloadUtilities {
 					UrlUtilities.downloadUrl(urls[0]);
 					return loadCollectionFromNetwork(urls[0]);
 				} catch (Exception e) {
-					e.printStackTrace();
+					Timber.e(e);
 				}
 				return null;
 			}
@@ -345,9 +346,9 @@ public class GameDownloadUtilities {
 								}
 							}
 						} catch (InterruptedException e) {
-							e.printStackTrace();
+							Timber.e(e);
 						} catch (ExecutionException e) {
-							e.printStackTrace();
+							Timber.e(e);
 						}
 					}
 				}
@@ -395,12 +396,12 @@ public class GameDownloadUtilities {
 				gameIds.add(Long.parseLong(id));
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			Timber.e(e);
 		} finally {
 			try {
 				in.close();
 			} catch (IOException e) {
-				e.printStackTrace();
+				Timber.e(e);
 			}
 		}
 		return gameIds;
