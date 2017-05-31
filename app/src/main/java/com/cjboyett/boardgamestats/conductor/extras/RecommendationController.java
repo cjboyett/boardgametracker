@@ -2,20 +2,16 @@ package com.cjboyett.boardgamestats.conductor.extras;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.annotation.NonNull;
-import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.transition.Fade;
 import android.transition.TransitionManager;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -23,11 +19,12 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.bluelinelabs.conductor.RouterTransaction;
 import com.cjboyett.boardgamestats.MyApp;
 import com.cjboyett.boardgamestats.R;
-import com.cjboyett.boardgamestats.activity.addgame.AddGameActivity;
-import com.cjboyett.boardgamestats.conductor.ConductorActivity;
+import com.cjboyett.boardgamestats.conductor.addgame.AddGameController;
 import com.cjboyett.boardgamestats.conductor.base.BaseController;
+import com.cjboyett.boardgamestats.conductor.changehandlers.DirectionalChangeHandler;
 import com.cjboyett.boardgamestats.data.DataManager;
 import com.cjboyett.boardgamestats.data.games.GamesDbHelper;
 import com.cjboyett.boardgamestats.data.games.board.BoardGameDbUtility;
@@ -36,8 +33,6 @@ import com.cjboyett.boardgamestats.data.games.board.BoardGameXmlParser;
 import com.cjboyett.boardgamestats.model.games.board.BoardGame;
 import com.cjboyett.boardgamestats.recommendations.DataAnalyzer;
 import com.cjboyett.boardgamestats.recommendations.RecBoardGame;
-import com.cjboyett.boardgamestats.utility.ActivityUtilities;
-import com.cjboyett.boardgamestats.utility.Preferences;
 import com.cjboyett.boardgamestats.utility.data.FileController;
 import com.cjboyett.boardgamestats.utility.data.UrlUtilities;
 import com.cjboyett.boardgamestats.utility.view.ViewUtilities;
@@ -76,8 +71,6 @@ public class RecommendationController extends BaseController {
 	private int progress, totalProgress;
 	private boolean downloading;
 
-	private GestureDetectorCompat gestureDetector;
-
 	@NonNull
 	@Override
 	protected View onCreateView(@NonNull LayoutInflater inflater, @NonNull ViewGroup container) {
@@ -89,8 +82,8 @@ public class RecommendationController extends BaseController {
 	protected void onAttach(@NonNull View view) {
 		super.onAttach(view);
 		activity = getActivity();
-		gestureDetector = new GestureDetectorCompat(activity, new ScrollGestureListener());
-		((ConductorActivity) getActivity()).setGestureDetector(gestureDetector);
+
+		getToolbar().setTitle("Recommendations");
 
 		addGameForRecommendationViews = new HashMap<>();
 
@@ -131,7 +124,6 @@ public class RecommendationController extends BaseController {
 
 	@Override
 	protected void onDetach(@NonNull View view) {
-		((ConductorActivity) getActivity()).removeGestureDetector();
 		super.onDetach(view);
 	}
 
@@ -196,15 +188,6 @@ public class RecommendationController extends BaseController {
 					ViewUtilities.errorDialog(activity).show();
 			}
 		});
-
-		view.findViewById(R.id.scrollview_board_game_data).setOnTouchListener(new View.OnTouchListener() {
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				if (Preferences.useSwipes(v.getContext()))
-					return gestureDetector.onTouchEvent(event);
-				return false;
-			}
-		});
 	}
 
 	protected void colorComponents() {
@@ -266,7 +249,8 @@ public class RecommendationController extends BaseController {
 								Bitmap bitmap = null;
 								InputStream in = null;
 								try {
-									if (!url[0].startsWith("http://")) url[0] = "http://" + url[0];
+									if (!url[0].startsWith("http://") && !url[0].startsWith("https://"))
+										url[0] = "https://" + url[0];
 									URL thumbnailUrl = new URL(url[0]);
 									HttpURLConnection connection = (HttpURLConnection) thumbnailUrl.openConnection();
 									connection.setReadTimeout(10000);
@@ -296,27 +280,41 @@ public class RecommendationController extends BaseController {
 								for (Integer id : finished.keySet()) allFinished = allFinished && finished.get(id);
 								if (allFinished) {
 									ListView view = new ListView(activity);
-
 									view.setAdapter(new RecommendedGamesAdapter(activity,
 																				gameNames,
 																				thumbnails,
 																				gameOrder));
-									view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-										@Override
-										public void onItemClick(AdapterView<?> parent, View view, int position,
-																long id) {
-											startActivity(new Intent(activity, AddGameActivity.class).putExtra(
-													"SEARCH",
-													gameNames.get(gameOrder.get(position))));
-											ActivityUtilities.exitUp(activity);
-										}
-									});
-									AlertDialog alertDialog = new ViewUtilities.DialogBuilder(activity)
+									final AlertDialog alertDialog = new ViewUtilities.DialogBuilder(activity)
 											.setTitle("Recommendation")
 											.setView(view)
 											.setPositiveButton("Okay", null)
 											.withYancey(false)
 											.create();
+
+
+									view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+										@Override
+										public void onItemClick(AdapterView<?> parent, View view, int position,
+																long id) {
+/*
+											startActivity(new Intent(activity, AddGameActivity.class).putExtra(
+													"SEARCH",
+													gameNames.get(gameOrder.get(position))));
+											ActivityUtilities.exitUp(activity);
+*/
+											getRouter().pushController(RouterTransaction.with(new AddGameController(
+													gameNames.get(gameOrder.get(position)),
+													"b"))
+																						.pushChangeHandler(
+																								DirectionalChangeHandler
+																										.from(DirectionalChangeHandler.RIGHT))
+																						.popChangeHandler(
+																								DirectionalChangeHandler
+																										.from(DirectionalChangeHandler.RIGHT)));
+											alertDialog.cancel();
+										}
+									});
+
 									alertDialog.show();
 								}
 							}
@@ -450,26 +448,6 @@ public class RecommendationController extends BaseController {
 															  .requestFocus();
 			addGameForRecommendationViews.put((DatedTextView) newAddGameForRecommendationView.findViewById(R.id.button_remove_game),
 											  newAddGameForRecommendationView);
-		}
-	}
-
-	private class ScrollGestureListener extends GestureDetector.SimpleOnGestureListener {
-		@Override
-		public boolean onDown(MotionEvent e) {
-			return super.onDown(e);
-		}
-
-		@Override
-		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-			if (Math.abs(velocityX) > Math.abs(velocityY)) {
-				if (Math.abs(e1.getX() - e2.getX()) >= 200) {
-					if (velocityX < -2000) {
-						getRouter().popCurrentController();
-						return true;
-					}
-				}
-			}
-			return false;
 		}
 	}
 }

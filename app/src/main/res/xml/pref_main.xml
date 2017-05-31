@@ -18,42 +18,14 @@
 			android:singleLine="true"
 			android:title="@string/pref_title_display_name"/>
 
+		<CheckBoxPreference
+			android:defaultValue="true"
+			android:key="@string/allow_notifications_preference"
+			android:summary="@string/pref_description_allow_notifications"
+			android:title="@string/pref_title_allow_notifications"/>
 		<Preference
 			android:title="Edit avatar"
 			android:key="@string/edit_avatar_preference"/>
-
-		<com.cjboyett.boardgamestats.view.preferences.ImportCollectionDialogPreference
-			android:enabled="false"
-			android:capitalize="words"
-			android:inputType="textCapWords"
-			android:key="@string/import_collection_preference"
-			android:maxLines="1"
-			android:selectAllOnFocus="true"
-			android:singleLine="true"
-			android:summary="@string/pref_description_import_collection"
-			android:title="@string/pref_title_import_collection"/>
-
-		<com.cjboyett.boardgamestats.view.preferences.ImportGamePlaysDialogPreference
-			android:enabled="false"
-			android:capitalize="words"
-			android:inputType="textCapWords"
-			android:key="@string/import_game_plays_preference"
-			android:maxLines="1"
-			android:selectAllOnFocus="true"
-			android:singleLine="true"
-			android:summary="@string/pref_description_import_game_plays"
-			android:title="@string/pref_title_import_game_plays"/>
-
-		<com.cjboyett.boardgamestats.view.preferences.SyncBggDataDialogPreference
-			android:enabled="false"
-			android:capitalize="words"
-			android:inputType="textCapWords"
-			android:key="@string/sync_bgg_preference"
-			android:maxLines="1"
-			android:selectAllOnFocus="true"
-			android:singleLine="true"
-			android:summary="@string/pref_description_sync_bgg"
-			android:title="@string/pref_title_sync_bgg"/>
 
 	</PreferenceScreen>
 
@@ -146,30 +118,6 @@
 		<Preference
 			android:title="Recalculate all stats"
 			android:key="@string/pref_recalculate_stats"/>
-
-	</PreferenceScreen>
-
-	<PreferenceScreen
-		android:summary="Advanced navigation and notification settings"
-		android:title="@string/preferences_navigation_title">
-
-		<CheckBoxPreference
-			android:defaultValue="true"
-			android:key="@string/activity_transition_preference"
-			android:summary="@string/pref_description_activity_transition"
-			android:title="@string/pref_title_activity_transition"/>
-
-		<CheckBoxPreference
-			android:defaultValue="true"
-			android:key="@string/swipe_preference"
-			android:summary="@string/pref_description_swipe"
-			android:title="@string/pref_title_swipe"/>
-
-		<CheckBoxPreference
-			android:defaultValue="true"
-			android:key="@string/allow_notifications_preference"
-			android:summary="@string/pref_description_allow_notifications"
-			android:title="@string/pref_title_allow_notifications"/>
 
 	</PreferenceScreen>
 

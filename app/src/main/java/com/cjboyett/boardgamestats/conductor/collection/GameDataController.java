@@ -6,12 +6,9 @@ import android.animation.AnimatorSet;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
-import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -27,8 +24,6 @@ import android.widget.TextView;
 import com.cjboyett.boardgamestats.R;
 import com.cjboyett.boardgamestats.activity.addgame.AddGameActivity;
 import com.cjboyett.boardgamestats.activity.addgameplay.AddGamePlayTabbedActivity;
-import com.cjboyett.boardgamestats.activity.collection.GameListActivity;
-import com.cjboyett.boardgamestats.conductor.ConductorActivity;
 import com.cjboyett.boardgamestats.conductor.base.BaseController;
 import com.cjboyett.boardgamestats.data.TempDataManager;
 import com.cjboyett.boardgamestats.data.games.GamesDbHelper;
@@ -37,12 +32,14 @@ import com.cjboyett.boardgamestats.data.games.rpg.RPGDbUtility;
 import com.cjboyett.boardgamestats.data.games.video.VideoGameDbUtility;
 import com.cjboyett.boardgamestats.model.games.Game;
 import com.cjboyett.boardgamestats.model.games.board.BoardGame;
+import com.cjboyett.boardgamestats.model.games.board.SimpleGame;
 import com.cjboyett.boardgamestats.model.games.rpg.RolePlayingGame;
 import com.cjboyett.boardgamestats.model.games.video.VideoGame;
 import com.cjboyett.boardgamestats.utility.ActivityUtilities;
 import com.cjboyett.boardgamestats.utility.Preferences;
 import com.cjboyett.boardgamestats.utility.data.GameDownloadUtilities;
 import com.cjboyett.boardgamestats.utility.data.StringUtilities;
+import com.cjboyett.boardgamestats.utility.view.ColorUtilities;
 import com.cjboyett.boardgamestats.utility.view.ImageController;
 import com.cjboyett.boardgamestats.utility.view.ViewUtilities;
 import com.cjboyett.boardgamestats.view.adapter.GameExtrasAdapter;
@@ -52,7 +49,6 @@ import com.github.clans.fab.FloatingActionMenu;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.OnTouch;
 import timber.log.Timber;
 
 @SuppressWarnings("ResourceType")
@@ -111,8 +107,6 @@ public class GameDataController extends BaseController implements GameDataView {
 	private AnimatorSet setRightOut, setLeftIn;
 	private boolean editing;
 
-	private GestureDetectorCompat gestureDetector;
-
 /*
 	public GameDataActivity() {
 		super("ca-app-pub-1437859753538305/9571180678");
@@ -150,9 +144,6 @@ public class GameDataController extends BaseController implements GameDataView {
 
 		extrasListView.setAdapter(new GameExtrasAdapter(getActivity(), game));
 
-		gestureDetector = new GestureDetectorCompat(getActivity(), new ScrollGestureListener());
-		((ConductorActivity) getActivity()).setGestureDetector(null);
-
 		try {
 			setRightOut =
 					(AnimatorSet) AnimatorInflater.loadAnimator(getApplicationContext(), R.anim.card_flip_right_out);
@@ -165,13 +156,17 @@ public class GameDataController extends BaseController implements GameDataView {
 		setColors();
 		colorComponents();
 
+		getToolbar().setTitleTextColor(foregroundColor);
+		getToolbar().setBackgroundColor(Preferences.generatePalette(getActivity()) ? ColorUtilities.darken(
+				backgroundColor) : buttonColor);
+
 		dummyView.requestFocus();
 	}
 
 	@Override
 	protected void onDetach(@NonNull View view) {
-		((ConductorActivity) getActivity()).removeGestureDetector();
 		if (dbHelper != null) dbHelper.close();
+		getToolbarImage().setImageBitmap(null);
 		super.onDetach(view);
 	}
 
@@ -189,6 +184,7 @@ public class GameDataController extends BaseController implements GameDataView {
 			backgroundColor = Preferences.getBackgroundColor(getActivity());
 			hintTextColor = Preferences.getHintTextColor(getActivity());
 		}
+		buttonColor = Preferences.getButtonColor(getActivity());
 	}
 
 	protected void colorComponents() {
@@ -216,11 +212,13 @@ public class GameDataController extends BaseController implements GameDataView {
 
 	protected void generateLayout() {
 		String gameString = game.getName();
+		getToolbar().setTitle(game.getName());
+
 		if (game.getYearPublished() > 0) gameString += " (" + game.getYearPublished() + ")";
 
 		nameEditText.setText(gameString);
 		descriptionEditText.setText(game.getDescription());
-		descriptionTextView.setText(game.getDescription() + "\n\n\n");
+		descriptionTextView.setText(game.getDescription());
 
 		if (!TextUtils.isEmpty(thumbnailUrl)) {
 			final Bitmap thumbnailBitmap = new ImageController(getActivity())
@@ -229,6 +227,10 @@ public class GameDataController extends BaseController implements GameDataView {
 					.load();
 			if (thumbnailBitmap != null) {
 				thumbnail.setImageBitmap(thumbnailBitmap);
+				//getToolbarImage().setImageBitmap(thumbnailBitmap);
+				getToolbar().setTitleTextColor(foregroundColor);
+//				getCollapsingToolbarLayout().setTitleEnabled(true);
+//				getCollapsingToolbarLayout().setTitle(game.getName());
 			} else {
 				thumbnail.setVisibility(View.GONE);
 			}
@@ -288,9 +290,7 @@ public class GameDataController extends BaseController implements GameDataView {
 								break;
 						}
 						ActivityUtilities.setDatabaseChanged(getActivity(), true);
-						startActivity(new Intent(finalView.getContext(), GameListActivity.class)
-											  .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-						ActivityUtilities.exitRight(getActivity());
+						getRouter().popCurrentController();
 					}
 				})
 				.setNegativeButton("Cancel", null)
@@ -376,7 +376,7 @@ public class GameDataController extends BaseController implements GameDataView {
 						gameString += " (" + game.getYearPublished() + ")";
 
 					nameEditText.setText(gameString);
-					descriptionTextView.setText(game.getDescription() + "\n\n\n");
+					descriptionTextView.setText(game.getDescription());
 				} else showError("Could not update game.");
 			} catch (Exception e) {
 				Timber.e(e);
@@ -384,11 +384,6 @@ public class GameDataController extends BaseController implements GameDataView {
 
 			dummyView.requestFocus();
 		}
-	}
-
-	@OnTouch(R.id.scrollview_description)
-	protected boolean touchScrollView(MotionEvent event) {
-		return Preferences.useSwipes(getActivity()) && gestureDetector.onTouchEvent(event);
 	}
 
 
@@ -511,7 +506,7 @@ public class GameDataController extends BaseController implements GameDataView {
 							showError("Could not sync with Board Game Geek");
 						else {
 							String thumbnailUrl = newGame.getThumbnailUrl();
-							GameDownloadUtilities.downloadThumbnail("http://" + thumbnailUrl, getActivity());
+							GameDownloadUtilities.downloadThumbnail(thumbnailUrl, getActivity());
 						}
 					}
 				} catch (Exception e) {
@@ -530,7 +525,7 @@ public class GameDataController extends BaseController implements GameDataView {
 							showError("Could not sync with Board Game Geek");
 						else {
 							String thumbnailUrl = newGame.getThumbnailUrl();
-							GameDownloadUtilities.downloadThumbnail("http://" + thumbnailUrl, getActivity());
+							GameDownloadUtilities.downloadThumbnail(thumbnailUrl, getActivity());
 						}
 					}
 				} catch (Exception e) {
@@ -549,7 +544,7 @@ public class GameDataController extends BaseController implements GameDataView {
 							showError("Could not sync with Board Game Geek");
 						else {
 							String thumbnailUrl = newGame.getThumbnailUrl();
-							GameDownloadUtilities.downloadThumbnail("http://" + thumbnailUrl, getActivity());
+							GameDownloadUtilities.downloadThumbnail(thumbnailUrl, getActivity());
 						}
 					}
 				} catch (Exception e) {
@@ -579,7 +574,7 @@ public class GameDataController extends BaseController implements GameDataView {
 			gameString += " (" + game.getYearPublished() + ")";
 
 		nameEditText.setText(gameString);
-		descriptionTextView.setText(game.getDescription() + "\n\n\n");
+		descriptionTextView.setText(game.getDescription());
 
 		if (newGame != null) {
 			AlertDialog alertDialog = new ViewUtilities.DialogBuilder(getActivity())
@@ -623,24 +618,18 @@ public class GameDataController extends BaseController implements GameDataView {
 		errorDialog.show();
 	}
 
-	private class ScrollGestureListener extends GestureDetector.SimpleOnGestureListener {
-		@Override
-		public boolean onDown(MotionEvent e) {
-			if (fabMenu.isOpened()) fabMenu.close(true);
-			return super.onDown(e);
-		}
+	@Override
+	public void populateView(SimpleGame simpleGame) {
 
-		@Override
-		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-			if (Math.abs(velocityX) > Math.abs(velocityY)) {
-				if (Math.abs(e1.getX() - e2.getX()) >= 200) {
-					if (velocityX > 2000) {
-						getRouter().popCurrentController();
-						return true;
-					}
-				}
-			}
-			return false;
-		}
+	}
+
+	@Override
+	public void populateThumbnail(Bitmap thumbnail) {
+
+	}
+
+	@Override
+	public void populateToolbarImage(Bitmap image) {
+
 	}
 }

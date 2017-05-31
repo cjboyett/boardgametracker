@@ -1,46 +1,38 @@
 package com.cjboyett.boardgamestats.conductor.collection;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
 import android.support.annotation.NonNull;
-import android.support.v4.view.GestureDetectorCompat;
-import android.support.v7.graphics.Palette;
-import android.view.GestureDetector;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.bluelinelabs.conductor.RouterTransaction;
 import com.cjboyett.boardgamestats.R;
-import com.cjboyett.boardgamestats.conductor.ConductorActivity;
 import com.cjboyett.boardgamestats.conductor.addgame.AddGameController;
 import com.cjboyett.boardgamestats.conductor.base.BaseController;
 import com.cjboyett.boardgamestats.conductor.changehandlers.DirectionalChangeHandler;
 import com.cjboyett.boardgamestats.data.DataManager;
 import com.cjboyett.boardgamestats.data.games.GamesDbHelper;
-import com.cjboyett.boardgamestats.data.games.board.BoardGameDbUtility;
-import com.cjboyett.boardgamestats.data.games.rpg.RPGDbUtility;
-import com.cjboyett.boardgamestats.data.games.video.VideoGameDbUtility;
 import com.cjboyett.boardgamestats.utility.ActivityUtilities;
 import com.cjboyett.boardgamestats.utility.Preferences;
 import com.cjboyett.boardgamestats.utility.data.StringUtilities;
-import com.cjboyett.boardgamestats.utility.view.ImageController;
 import com.cjboyett.boardgamestats.utility.view.ViewUtilities;
-import com.cjboyett.boardgamestats.view.adapter.ImageAdapter;
+import com.cjboyett.boardgamestats.view.adapter.ImageRecyclerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class GameListController extends BaseController {
+import timber.log.Timber;
+
+public class GameListController extends BaseController implements ImageRecyclerAdapter.GamesGridView {
 	private Activity activity;
-	private GridView gamesGridView;
+	private RecyclerView gamesGridView;
 	private SearchView gamesSearchView;
 	private View view, dummyView;
 
@@ -49,7 +41,6 @@ public class GameListController extends BaseController {
 	private String game;
 
 	private GamesDbHelper dbHelper;
-	private GestureDetectorCompat gestureDetector;
 
 	@NonNull
 	@Override
@@ -80,8 +71,8 @@ public class GameListController extends BaseController {
 			});
 
 		dbHelper = new GamesDbHelper(activity);
-		gestureDetector = new GestureDetectorCompat(activity, new ScrollGestureListener());
-		((ConductorActivity) getActivity()).setGestureDetector(null);
+
+		getToolbar().setTitle("Collection");
 
 		generateLayout();
 		setColors();
@@ -90,7 +81,6 @@ public class GameListController extends BaseController {
 
 	@Override
 	protected void onDetach(@NonNull View view) {
-		((ConductorActivity) getActivity()).removeGestureDetector();
 		dbHelper.close();
 		super.onDetach(view);
 	}
@@ -101,18 +91,11 @@ public class GameListController extends BaseController {
 		super.onDestroy();
 	}
 
-/*	@Override
-	public void onBackPressed() {
-		super.onBackPressed();
-		ActivityUtilities.exitRight(this);
-	}
-*/
-
 	protected void generateLayout() {
 		dummyView = view.findViewById(R.id.dummyview);
 		gamesSearchView = (SearchView) view.findViewById(R.id.searchview_games_list);
-		gamesGridView = (GridView) view.findViewById(R.id.listview_games);
-		gamesGridView.setFastScrollEnabled(true);
+		gamesGridView = (RecyclerView) view.findViewById(R.id.listview_games);
+		Timber.d((gamesList == null) + "");
 		gamesList = new ArrayList<>();
 
 		// TODO Move to a background thread
@@ -143,11 +126,12 @@ public class GameListController extends BaseController {
 			}
 		});
 
+		gamesSearchView.setQuery("", true);
+
 		setColors();
 		colorComponents();
 
 		ActivityUtilities.setDatabaseChanged(activity, false);
-
 	}
 
 	protected void colorComponents() {
@@ -163,84 +147,11 @@ public class GameListController extends BaseController {
 	}
 
 	private void populateGrid(final List<String> games) {
-		gamesGridView.setNumColumns(Preferences.numberOfGridColumns(activity));
-		gamesGridView.setAdapter(new ImageAdapter(activity, games));
-
-		gamesGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				dummyView.requestFocus();
-				game = games.get(position);
-				if (!game.startsWith("---")) {
-					final String gameType = game.substring(game.length() - 1);
-					game = game.substring(0, game.length() - 2);
-
-					String thumbnailUrl = "";
-					switch (gameType) {
-						case "b":
-							thumbnailUrl = BoardGameDbUtility.getThumbnailUrl(dbHelper, game);
-							break;
-						case "r":
-							thumbnailUrl = RPGDbUtility.getThumbnailUrl(dbHelper, game);
-							break;
-						case "v":
-							thumbnailUrl = VideoGameDbUtility.getThumbnailUrl(dbHelper, game);
-							break;
-					}
-
-					final Bitmap thumbnail = new ImageController(activity)
-							.setDirectoryName("thumbnails")
-							.setFileName(thumbnailUrl.substring(thumbnailUrl.lastIndexOf("/") + 1))
-							.load();
-					if (Preferences.generatePalette(activity) && thumbnail != null) {
-						final String finalThumbnailUrl = thumbnailUrl;
-						Palette.from(thumbnail).generate(new Palette.PaletteAsyncListener() {
-							@Override
-							public void onGenerated(Palette palette) {
-								List<Palette.Swatch> swatchList = new ArrayList<>();
-								if (palette.getDarkVibrantSwatch() != null)
-									swatchList.add(palette.getDarkVibrantSwatch());
-								if (palette.getDarkMutedSwatch() != null)
-									swatchList.add(palette.getDarkMutedSwatch());
-								if (palette.getMutedSwatch() != null)
-									swatchList.add(palette.getMutedSwatch());
-								if (palette.getVibrantSwatch() != null)
-									swatchList.add(palette.getVibrantSwatch());
-								if (palette.getLightMutedSwatch() != null)
-									swatchList.add(palette.getLightMutedSwatch());
-								if (palette.getLightVibrantSwatch() != null)
-									swatchList.add(palette.getLightVibrantSwatch());
-
-								Palette.Swatch swatch;
-								if (Preferences.lightUI(activity))
-									swatch = swatchList.get(swatchList.size() - 1);
-								else swatch = swatchList.get(0);
-
-								Preferences.setGeneratedPaletteColors(activity,
-																	  swatch.getRgb(),
-																	  swatch.getBodyTextColor());
-
-								navigateToGameDetails(gameType, finalThumbnailUrl);
-							}
-						});
-					} else navigateToGameDetails(gameType, thumbnailUrl);
-				}
-			}
-		});
-
-
-		gamesGridView.setOnTouchListener(new View.OnTouchListener() {
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				if (Preferences.useSwipes(v.getContext()))
-					return gestureDetector.onTouchEvent(event);
-				return false;
-			}
-		});
-
+		gamesGridView.setAdapter(new ImageRecyclerAdapter(this, games, foregroundColor));
+		gamesGridView.setLayoutManager(new GridLayoutManager(activity, Preferences.numberOfGridColumns(activity)));
 	}
 
-	private void navigateToGameDetails(String gameType, String thumbnailUrl) {
+	public void navigateToGameDetails(String game, String gameType, String thumbnailUrl, String bggId) {
 		getRouter().pushController(RouterTransaction.with(new GameDataController(game,
 																				 gameType,
 																				 thumbnailUrl))
@@ -248,26 +159,18 @@ public class GameListController extends BaseController {
 															DirectionalChangeHandler.RIGHT))
 													.popChangeHandler(DirectionalChangeHandler.from(
 															DirectionalChangeHandler.RIGHT)));
+/*
+		getRouter().pushController(RouterTransaction.with(new GameDataController2(game,
+																				  gameType,
+																				  thumbnailUrl, bggId))
+													.pushChangeHandler(DirectionalChangeHandler.from(
+															DirectionalChangeHandler.RIGHT))
+													.popChangeHandler(DirectionalChangeHandler.from(
+															DirectionalChangeHandler.RIGHT)));
+*/
 	}
 
-	private class ScrollGestureListener extends GestureDetector.SimpleOnGestureListener {
-		@Override
-		public boolean onDown(MotionEvent e) {
-			return super.onDown(e);
-		}
-
-		@Override
-		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-			if (Math.abs(velocityX) > Math.abs(velocityY)) {
-				if (Math.abs(e1.getX() - e2.getX()) >= 200) {
-					if (velocityX > 2000) {
-						getRouter().popCurrentController();
-						return true;
-					}
-				}
-			}
-			return false;
-		}
+	public void navigateToGameDetails(String gameType, String thumbnailUrl, String bggId) {
+		navigateToGameDetails(game, gameType, thumbnailUrl, bggId);
 	}
-
 }

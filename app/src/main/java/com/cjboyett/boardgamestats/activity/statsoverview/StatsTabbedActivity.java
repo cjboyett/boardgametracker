@@ -57,6 +57,13 @@ public class StatsTabbedActivity extends AppCompatActivity {
 		TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
 		tabLayout.setupWithViewPager(mViewPager);
 
+		int buttonColor = Preferences.getButtonColor(this);
+		int foregroundColor = Preferences.getForegroundColor(this);
+
+		tabLayout.setBackgroundColor(buttonColor);
+		tabLayout.setSelectedTabIndicatorColor(ColorUtilities.darken(buttonColor));
+		tabLayout.setTabTextColors(ColorUtilities.lighten(foregroundColor), foregroundColor);
+
 		statsOverviewFragment = new StatsOverviewFragment();
 		gameStatsListFragment = new GameStatsListFragment();
 		gamePlayCalendarFragment = new GamePlayCalendarFragment();

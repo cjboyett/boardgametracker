@@ -241,7 +241,8 @@
 			android:name=".conductor.ConductorActivity"
 			android:label="@string/title_conductor"
 			android:screenOrientation="portrait"
-			android:theme="@style/AppTheme">
+			android:theme="@style/AppTheme.NoActionBar"
+			android:windowSoftInputMode="adjustResize|stateHidden">
 		</activity>
 	</application>
 

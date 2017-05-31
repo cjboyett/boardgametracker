@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:animateLayoutChanges="true"
+	android:paddingBottom="@dimen/activity_vertical_margin"
+	android:paddingLeft="@dimen/activity_horizontal_margin"
+	android:paddingRight="@dimen/activity_horizontal_margin"
+	android:paddingTop="@dimen/activity_vertical_margin"
+	app:layout_behavior="@string/appbar_scrolling_view_behavior"
+	tools:context=".activity.collection.GameDataActivity"
+	tools:showIn="@layout/activity_game_data2">
+
+	<LinearLayout
+		android:id="@+id/linearlayout_header"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:background="@drawable/content_background_medium_border"
+		android:orientation="horizontal"
+		android:padding="2dp">
+
+		<ImageView
+			android:id="@+id/imageview_thumbnail"
+			android:layout_width="128dp"
+			android:layout_height="128dp"/>
+
+		<TextView
+			android:id="@+id/textview_game_name"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center"
+			android:layout_weight="1"
+			android:textSize="18sp"/>
+
+	</LinearLayout>
+
+	<TextView
+		android:id="@+id/textview_description_label"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_below="@+id/linearlayout_header"
+		android:paddingTop="3dp"
+		android:text="Description"
+		android:textSize="12sp"/>
+
+	<RelativeLayout
+		android:id="@+id/relativelayout_description"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_below="@+id/textview_description_label"
+		android:background="@drawable/content_background_medium_border"
+		android:padding="2dp">
+
+		<ScrollView
+			android:id="@+id/scrollview_description"
+			android:layout_width="match_parent"
+			android:layout_height="250dp"
+			android:layout_alignParentBottom="false"
+			android:layout_alignParentRight="false"
+			android:layout_margin="5dp"
+			android:visibility="visible">
+
+			<TextView
+				android:id="@+id/textview_game_description"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:gravity="top|left"
+				android:isScrollContainer="true"
+				android:textSize="14sp"
+				/>
+
+		</ScrollView>
+
+	</RelativeLayout>
+
+	<TextView
+		android:id="@+id/textview_extras_label"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_below="@+id/relativelayout_description"
+		android:paddingTop="3dp"
+		android:text="Extras"
+		android:textSize="12sp"/>
+
+	<ListView
+		android:id="@+id/listview_game_extras"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_alignParentBottom="true"
+		android:layout_below="@+id/textview_extras_label"
+		android:background="@drawable/content_background_medium_border"
+		android:padding="5dp"/>
+
+</RelativeLayout>

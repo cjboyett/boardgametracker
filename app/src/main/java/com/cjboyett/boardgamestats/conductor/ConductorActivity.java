@@ -2,10 +2,17 @@ package com.cjboyett.boardgamestats.conductor;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.NavigationView;
 import android.support.v4.view.GestureDetectorCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.bluelinelabs.conductor.Conductor;
@@ -34,9 +41,29 @@ public class ConductorActivity extends BaseActivity {
 	@BindView(R.id.ad_container)
 	RelativeLayout adContainer;
 
+	@BindView(R.id.app_bar_layout)
+	AppBarLayout appBarLayout;
+
+	@BindView(R.id.collapsing_toolbar)
+	CollapsingToolbarLayout collapsingToolbarLayout;
+
+	@BindView(R.id.toolbar)
+	Toolbar toolbar;
+
+	@BindView(R.id.toolbar_image)
+	ImageView toolbarImage;
+
+	@BindView(R.id.drawer_layout)
+	DrawerLayout drawerLayout;
+
+	@BindView(R.id.main_navigation)
+	NavigationView navigationView;
+
 	private Router router;
 	private String googleAdUnitId;
 	private AdView googleAdView;
+
+	private MyNavigationDrawer myNavigationDrawer;
 
 	private GestureDetectorCompat gestureDetector;
 
@@ -46,10 +73,21 @@ public class ConductorActivity extends BaseActivity {
 		setContentView(R.layout.root);
 		ButterKnife.bind(this);
 
+		setSupportActionBar(toolbar);
+		getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+		appBarLayout.setExpanded(false, false);
+
 		googleAdUnitId = "ca-app-pub-1437859753538305/9571180678";
 
 		router = Conductor.attachRouter(this, mainContainer, savedInstanceState);
-		if (!router.hasRootController()) router.setRoot(RouterTransaction.with(new MainController()));
+		if (!router.hasRootController()) {
+			router.setRoot(RouterTransaction.with(new MainController()).tag(MainController.TAG));
+		}
+
+		drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+		myNavigationDrawer = new MyNavigationDrawer(router, drawerLayout, navigationView);
 
 		if (Preferences.showAds(this)) {
 			try {
@@ -67,8 +105,8 @@ public class ConductorActivity extends BaseActivity {
 				adViewContainer.setGravity(RelativeLayout.CENTER_IN_PARENT);
 
 				AdRequest adRequest = new AdRequest.Builder()
-//					.addTestDevice("EFC2D62A72499E15BA2294EEB7737A12")
-.build();
+						//.addTestDevice("EFC2D62A72499E15BA2294EEB7737A12")
+						.build();
 				googleAdView.setAdListener(new AdListener() {
 					@Override
 					public void onAdLoaded() {
@@ -109,7 +147,19 @@ public class ConductorActivity extends BaseActivity {
 
 	@Override
 	public void onBackPressed() {
-		if (!router.handleBack()) super.onBackPressed();
+		if (drawerLayout.isDrawerOpen(navigationView)) {
+			drawerLayout.closeDrawers();
+		} else if (!router.handleBack()) {
+			super.onBackPressed();
+		}
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (item.getItemId() == android.R.id.home) {
+			drawerLayout.openDrawer(navigationView);
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	@Override
@@ -128,13 +178,23 @@ public class ConductorActivity extends BaseActivity {
 		return super.onTouchEvent(event);
 	}
 
-	public void setGestureDetector(GestureDetectorCompat gestureDetector) {
-		if (gestureDetector != null) {
-			this.gestureDetector = gestureDetector;
-		}
+	public AppBarLayout getAppBarLayout() {
+		return appBarLayout;
 	}
 
-	public void removeGestureDetector() {
-//		this.gestureDetector = null;
+	public CollapsingToolbarLayout getCollapsingToolbarLayout() {
+		return collapsingToolbarLayout;
+	}
+
+	public Toolbar getToolbar() {
+		return toolbar;
+	}
+
+	public ImageView getToolbarImage() {
+		return toolbarImage;
+	}
+
+	public MyNavigationDrawer getMyNavigationDrawer() {
+		return myNavigationDrawer;
 	}
 }

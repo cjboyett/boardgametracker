@@ -118,6 +118,9 @@ public class AddGamePlayTabbedController extends BaseController {
 		mViewPager = (ViewPager) view.findViewById(R.id.container);
 		TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tabs);
 		tabLayout.setupWithViewPager(mViewPager);
+		tabLayout.setBackgroundColor(buttonColor);
+		tabLayout.setSelectedTabIndicatorColor(ColorUtilities.darken(buttonColor));
+		tabLayout.setTabTextColors(ColorUtilities.lighten(foregroundColor), foregroundColor);
 
 		dbHelper = new GamesDbHelper(activity);
 		if (gameType == null) gameType = "";

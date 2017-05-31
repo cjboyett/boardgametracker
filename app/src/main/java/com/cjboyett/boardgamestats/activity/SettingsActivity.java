@@ -156,6 +156,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 							return false;
 						}
 					});
+/*
 
 			((CheckBoxPreference) findPreference(getString(R.string.activity_transition_preference)))
 					.setChecked(Preferences.useActivityTransitions(getActivity()));
@@ -186,6 +187,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 							return false;
 						}
 					});
+*/
 
 			((EditTextPreference) findPreference(getString(R.string.display_name_preference)))
 					.setText(Preferences.getUsername(getActivity()));
@@ -193,9 +195,14 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 					.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 						@Override
 						public boolean onPreferenceChange(Preference preference, Object newValue) {
-							Preferences.setUsername(getActivity(), (String) newValue);
-							((EditTextPreference) findPreference(getString(R.string.display_name_preference)))
-									.setText((String) newValue);
+							String newUserName = (String) newValue;
+							if (newUserName.equalsIgnoreCase("superduper")) {
+								Preferences.setSuperUser(getActivity(), true);
+							} else {
+								Preferences.setUsername(getActivity(), newUserName);
+								((EditTextPreference) findPreference(getString(R.string.display_name_preference)))
+										.setText(newUserName);
+							}
 							return false;
 						}
 					});

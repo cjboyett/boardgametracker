@@ -39,7 +39,6 @@ public class MostPlayTimeGamesStatistic extends MultiStatistic {
 
 		for (int i = counts.size() - 1; i >= 0; i--) {
 			int count = counts.get(i);
-			Timber.d(games.get(count).toString());
 			while (!games.get(count).isEmpty()) {
 				String game = games.get(count).remove(r.nextInt(games.get(count).size()));
 				stats.add(new String[]{game, StringUtilities.convertMinutes(count)});

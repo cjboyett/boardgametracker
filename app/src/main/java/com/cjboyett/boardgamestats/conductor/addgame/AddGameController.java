@@ -129,6 +129,8 @@ public class AddGameController extends BaseController implements AddGameView {
 		dbHelper = new GamesDbHelper(activity);
 		games = new ArrayList<>();
 
+		getToolbar().setTitle("Add Game");
+
 		generateLayout();
 		setColors();
 		colorComponents();
@@ -728,8 +730,7 @@ public class AddGameController extends BaseController implements AddGameView {
 				if (game.getThumbnailUrl() != null) {
 					try {
 						thumbnail = new DownloadThumbnailTask().execute(
-								"http://" + game.getThumbnailUrl())
-															   .get();
+								game.getThumbnailUrl()).get();
 					} catch (InterruptedException e) {
 						Timber.e(e);
 					} catch (ExecutionException e) {
@@ -778,7 +779,7 @@ public class AddGameController extends BaseController implements AddGameView {
 												}
 												String thumbnailUrl = currentGame.getThumbnailUrl();
 												GameDownloadUtilities.downloadThumbnail(
-														"http://" + thumbnailUrl, activity);
+														thumbnailUrl, activity);
 												ActivityUtilities.setDatabaseChanged(activity, true);
 												if (!TextUtils.isEmpty(gameName))
 													handleBack();
@@ -831,10 +832,12 @@ public class AddGameController extends BaseController implements AddGameView {
 
 		@Override
 		protected Bitmap doInBackground(String... url) {
+			Timber.d(url[0]);
 			Bitmap bitmap = null;
 			InputStream in = null;
 			try {
 				URL thumbnailUrl = new URL(url[0]);
+				if (!url[0].startsWith("http://") && !url[0].startsWith("https://")) url[0] = "https://" + url[0];
 				HttpURLConnection connection = (HttpURLConnection) thumbnailUrl.openConnection();
 				connection.setReadTimeout(10000);
 				connection.setConnectTimeout(15000);

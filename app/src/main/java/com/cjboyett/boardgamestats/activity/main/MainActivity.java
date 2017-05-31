@@ -167,7 +167,7 @@ public class MainActivity extends BaseActivity implements MainView, GestureDetec
 		ViewUtilities.tintImageView(achievementButton, foregroundColor);
 		ViewUtilities.tintImageView(helpButton, foregroundColor);
 
-		ticker.setColors(foregroundColor);
+		ticker.setColors(backgroundColor, foregroundColor);
 	}
 
 

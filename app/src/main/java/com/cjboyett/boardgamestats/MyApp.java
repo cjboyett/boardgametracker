@@ -1,10 +1,9 @@
 package com.cjboyett.boardgamestats;
 
-import android.app.Application;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
-import android.util.Log;
+import android.support.multidex.MultiDexApplication;
 
 import com.cjboyett.boardgamestats.data.DataManager;
 import com.cjboyett.boardgamestats.data.TempDataManager;
@@ -17,7 +16,7 @@ import com.google.android.gms.analytics.Tracker;
 
 import timber.log.Timber;
 
-public class MyApp extends Application {
+public class MyApp extends MultiDexApplication {
 	/**
 	 * The Analytics singleton. The field is set in onCreate method override when the application
 	 * class is initially created.

@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.text.Html;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -38,6 +39,7 @@ public class FilteredGameArrayAdapter extends ArrayAdapter<String> {
 	private boolean useThumbnails;
 
 	private float SCALE_FACTOR;
+	private float ratio;
 	private BitmapCache thumbnails;
 
 //	private final ImageController imageController;
@@ -46,6 +48,9 @@ public class FilteredGameArrayAdapter extends ArrayAdapter<String> {
 		super(activity, resource, games);
 		this.activity = activity;
 		this.useThumbnails = useThumbnails;
+		DisplayMetrics metrics = new DisplayMetrics();
+		activity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
+		ratio = metrics.density;
 		items = new ArrayList<>(games);
 
 		Iterator<String> iterator = items.iterator();
@@ -230,17 +235,18 @@ public class FilteredGameArrayAdapter extends ArrayAdapter<String> {
 			} else {
 				thumbnail = new StringToBitmapBuilder(activity)
 						.setTextSize(90 * SCALE_FACTOR)
+						.setImageWidth((int)(128 * ratio * SCALE_FACTOR))
 						.buildBitmap(thumbnailUrl.charAt(0) + "");
 			}
 
 			boolean noThumbnail = (thumbnail == null);
 
-			if (noThumbnail)
+			if (noThumbnail) {
 				thumbnail = new StringToBitmapBuilder(activity)
 						.setTextSize(16)
-//								.setTextWidth(10)
-//								.setAlign(Paint.Align.CENTER)
+						.setImageWidth((int)(128 * ratio * SCALE_FACTOR))
 						.buildBitmap(game.substring(0, game.length() - 2));
+			}
 			thumbnails.put(game, thumbnail);
 			return thumbnail;
 		}

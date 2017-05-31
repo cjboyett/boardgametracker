@@ -4,31 +4,30 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.text.Layout;
+import android.text.StaticLayout;
+import android.text.TextPaint;
 import android.util.DisplayMetrics;
 
 import com.cjboyett.boardgamestats.utility.Preferences;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import timber.log.Timber;
 
 /**
  * Created by Casey on 4/2/2016.
  */
 public class StringToBitmapBuilder {
 	private Activity activity;
-	private int textWidth = 20;
+	private int imageWidth = 100;
+	private int imageHeight = 100;
 	private float textSize = 14;
 	private Paint.Align align = Paint.Align.LEFT;
+	private Layout.Alignment alignment = Layout.Alignment.ALIGN_NORMAL;
 	private boolean antiAlias = true;
 
-	private Paint paint;
-	private int paintWidth;
+	private TextPaint paint;
 
 	public StringToBitmapBuilder(Activity activity) {
 		this.activity = activity;
-		paint = new Paint();
+		paint = new TextPaint();
 	}
 
 	public Bitmap buildBitmap(String string) {
@@ -41,17 +40,13 @@ public class StringToBitmapBuilder {
 		paint.setTextAlign(align);
 		paint.setAntiAlias(antiAlias);
 
-		String toPaint = breakString(string);
-
-		float baseline = -paint.ascent();
-//		int width = (int)(paint.measureText(toPaint));
-		int height = (int) (baseline + paint.descent() + 0.5f);
-		Bitmap image = Bitmap.createBitmap(paintWidth, height, Bitmap.Config.ARGB_8888);
+		StaticLayout staticLayout = new StaticLayout(string, paint, imageWidth, alignment, 1, 0, false);
+		Bitmap image = Bitmap.createBitmap(imageWidth, staticLayout.getHeight(), Bitmap.Config.ARGB_8888);
 		Canvas canvas = new Canvas(image);
-//		if (align == Paint.Align.LEFT)
-		canvas.drawText(toPaint, 0, baseline, paint);
-//		else if (align == Paint.Align.CENTER)
-//			canvas.drawText(toPaint, -paintWidth, baseline, paint);
+		canvas.save();
+		staticLayout.draw(canvas);
+		canvas.restore();
+
 		return image;
 	}
 
@@ -70,50 +65,13 @@ public class StringToBitmapBuilder {
 		return this;
 	}
 
-	public StringToBitmapBuilder setTextWidth(int textWidth) {
-		this.textWidth = textWidth;
+	public StringToBitmapBuilder setImageWidth(int imageWidth) {
+		this.imageWidth = imageWidth;
 		return this;
 	}
 
-	private String breakString(String string) {
-		if (string.length() < textWidth) {
-			paintWidth = (int) (paint.measureText(string));
-			return string;
-		} else {
-			Timber.d(string);
-			// TODO Lazy breaking.  Fix later?
-			String[] bits = string.split(" ");
-			String tempLine = "";
-			List<String> lines = new ArrayList<>();
-			int lineLength = 0;
-
-			for (int i = 0; i < bits.length; i++) {
-				if (lineLength + bits[i].length() > textWidth) {
-					lineLength = bits[i].length();
-					lines.add(tempLine);
-					tempLine = bits[i];
-				} else {
-					lineLength += bits[i].length();
-					tempLine += " " + bits[i];
-				}
-			}
-
-			if (lines.isEmpty()) lines.add(string);
-
-			String toReturn = "";
-			paintWidth = 0;
-
-			for (String line : lines) {
-				Timber.d(paintWidth + "");
-				paintWidth = Math.max(paintWidth, (int) paint.measureText(line));
-				toReturn += line + "\n";
-			}
-			Timber.d(paintWidth + "");
-			Timber.d(toReturn);
-
-			toReturn = toReturn.substring(0, toReturn.length() - 1);
-
-			return toReturn;
-		}
+	public StringToBitmapBuilder setImageHeight(int imageHeight) {
+		this.imageHeight = imageHeight;
+		return this;
 	}
 }

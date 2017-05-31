@@ -1,22 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-				android:orientation="vertical"
+				android:id="@+id/ticker_layout"
 				android:layout_width="match_parent"
-				android:layout_height="180dp"
-				android:background="@drawable/content_background_medium_border_33alpha"
-				android:padding="3dp">
+				android:layout_height="180dp">
 
 	<com.cjboyett.boardgamestats.view.ticker.TickerItemView
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
 		android:id="@+id/ticker_view_1"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
 		android:layout_centerInParent="true"/>
 
 	<com.cjboyett.boardgamestats.view.ticker.TickerItemView
+		android:id="@+id/ticker_view_2"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:id="@+id/ticker_view_2"
-		android:visibility="visible"
-		android:layout_centerInParent="true"/>
+		android:layout_centerInParent="true"
+		android:visibility="visible"/>
 
 </RelativeLayout>

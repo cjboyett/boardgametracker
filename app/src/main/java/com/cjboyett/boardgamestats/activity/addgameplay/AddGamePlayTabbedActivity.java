@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.cjboyett.boardgamestats.R;
 import com.cjboyett.boardgamestats.activity.addgame.AddGameActivity;
+import com.cjboyett.boardgamestats.activity.main.ClearStackMainActivity;
 import com.cjboyett.boardgamestats.data.PlayersDbUtility;
 import com.cjboyett.boardgamestats.data.TempDataManager;
 import com.cjboyett.boardgamestats.data.games.GamesDbHelper;
@@ -68,6 +69,7 @@ public class AddGamePlayTabbedActivity extends AppCompatActivity {
 	private AddGamePlaySubmitFragment addGamePlaySubmitFragment;
 
 	private SectionsPagerAdapter mSectionsPagerAdapter;
+	private TabLayout tabLayout;
 	private ViewPager mViewPager;
 	private int currentPage;
 
@@ -81,12 +83,14 @@ public class AddGamePlayTabbedActivity extends AppCompatActivity {
 	private long gamePlayId;
 
 	private View view;
-	private int backgroundColor, foregroundColor;
+	private int backgroundColor, foregroundColor, buttonColor;
 
 	private CallbackManager callbackManager;
 
 	private boolean override = false, submitted = false;
 	private static int NOTIFICATION_ID = 0;
+
+	private boolean fromMainController;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -107,7 +111,7 @@ public class AddGamePlayTabbedActivity extends AppCompatActivity {
 		mViewPager.setOffscreenPageLimit(2);
 		mViewPager.setPageTransformer(true, new ZoomOutPageTransformer());
 
-		TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+		tabLayout = (TabLayout) findViewById(R.id.tabs);
 		tabLayout.setupWithViewPager(mViewPager);
 
 		dbHelper = new GamesDbHelper(this);
@@ -180,6 +184,10 @@ public class AddGamePlayTabbedActivity extends AppCompatActivity {
 			}
 		}
 
+		if (getIntent().hasExtra("FROM_MAIN_CONTROLLER")) {
+			fromMainController = true;
+		}
+
 		mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 			@Override
 			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -207,10 +215,15 @@ public class AddGamePlayTabbedActivity extends AppCompatActivity {
 	private void setColors() {
 		backgroundColor = Preferences.getBackgroundColor(this);
 		foregroundColor = Preferences.getForegroundColor(this);
+		buttonColor = Preferences.getButtonColor(this);
 	}
 
 	private void colorComponents() {
 		view.setBackgroundColor(ColorUtilities.darken(backgroundColor));
+
+		tabLayout.setBackgroundColor(buttonColor);
+		tabLayout.setSelectedTabIndicatorColor(ColorUtilities.darken(buttonColor));
+		tabLayout.setTabTextColors(ColorUtilities.lighten(foregroundColor), foregroundColor);
 	}
 
 	public Game getGame() {
@@ -454,8 +467,8 @@ public class AddGamePlayTabbedActivity extends AppCompatActivity {
 	}
 
 	private void goBack() {
-/*
-		if (getIntent().getBooleanExtra("WIDGET", false) || getIntent().getStringExtra("EXIT") == null) {
+		if (getIntent().getBooleanExtra("WIDGET", false) || getIntent().getStringExtra("EXIT") == null ||
+				fromMainController) {
 			startActivity(new Intent(this, ClearStackMainActivity.class));
 			ActivityUtilities.exitUp(this);
 		} else {
@@ -463,9 +476,8 @@ public class AddGamePlayTabbedActivity extends AppCompatActivity {
 			String exitActivity = getIntent().getStringExtra("EXIT");
 			ActivityUtilities.exit(this, exitActivity);
 		}
-*/
-		super.onBackPressed();
-		ActivityUtilities.exitUp(this);
+//		super.onBackPressed();
+//		ActivityUtilities.exitUp(this);
 	}
 
 	@Override

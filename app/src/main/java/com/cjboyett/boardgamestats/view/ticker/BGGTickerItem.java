@@ -45,7 +45,11 @@ public class BGGTickerItem extends TickerItem {
 						Bitmap bitmap = null;
 						InputStream in = null;
 						try {
-							if (!url[0].startsWith("http://")) url[0] = "http://" + url[0];
+							if (!url[0].startsWith("http://") && !url[0].startsWith("https://")) {
+								url[0] = "https://" + url[0];
+							}
+							url[0] = url[0].replaceAll("http://http://", "http://")
+										   .replaceAll("https://https://", "https://");
 							URL thumbnailUrl = new URL(url[0]);
 							HttpURLConnection connection = (HttpURLConnection) thumbnailUrl.openConnection();
 							connection.setReadTimeout(10000);

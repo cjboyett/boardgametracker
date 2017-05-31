@@ -44,6 +44,7 @@ import java.util.Random;
 public class Ticker extends RelativeLayout {
 	private static final long DURATION = 8000;
 	private final int THRESHOLD, TICKER_ITEM_TRANSLATION_X;
+	private RelativeLayout tickerLayout;
 	private TickerItemView[] tickerItemViews;
 	private TickerItem[] tickerItems;
 	private int currentTickerItem = 0;
@@ -54,12 +55,15 @@ public class Ticker extends RelativeLayout {
 
 	private Queue<String> previousTickerItems;
 
+	private int backgroundColor;
 	private int foregroundColor;
 
 	public Ticker(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		LayoutInflater inflater = LayoutInflater.from(context);
 		inflater.inflate(R.layout.layout_ticker, this);
+
+		tickerLayout = (RelativeLayout) findViewById(R.id.ticker_layout);
 
 		// THRESHOLD is used to keep ticker from using the same items too often.
 		THRESHOLD = Math.min(StatisticsManager.getInstance(context).getNumberGamesPlayed(), 6);
@@ -89,12 +93,14 @@ public class Ticker extends RelativeLayout {
 		}
 	}
 
-	public void setColors(int foregroundColor) {
+	public void setColors(int backgroundColor, int foregroundColor) {
+		this.backgroundColor = backgroundColor;
 		this.foregroundColor = foregroundColor;
 		colorComponents();
 	}
 
 	private void colorComponents() {
+		tickerLayout.setBackgroundColor(backgroundColor);
 		// TODO Get this damn thing to tint correctly!!!
 //		ViewUtilities.tintLayoutBackground(this, foregroundColor);
 		tickerItemViews[0].colorComponents(foregroundColor);

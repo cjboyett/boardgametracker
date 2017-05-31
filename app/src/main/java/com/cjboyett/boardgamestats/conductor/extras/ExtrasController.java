@@ -3,19 +3,15 @@ package com.cjboyett.boardgamestats.conductor.extras;
 import android.app.Activity;
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatButton;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.bluelinelabs.conductor.RouterTransaction;
 import com.cjboyett.boardgamestats.R;
-import com.cjboyett.boardgamestats.conductor.ConductorActivity;
 import com.cjboyett.boardgamestats.conductor.base.BaseController;
 import com.cjboyett.boardgamestats.conductor.changehandlers.DirectionalChangeHandler;
 import com.cjboyett.boardgamestats.utility.Preferences;
@@ -41,8 +37,6 @@ public class ExtrasController extends BaseController {
 	private AccessTokenTracker accessTokenTracker;
 	private FirebaseUtility firebaseUtility;
 
-	private GestureDetectorCompat gestureDetector;
-
 	@NonNull
 	@Override
 	protected View onCreateView(@NonNull LayoutInflater inflater, @NonNull ViewGroup container) {
@@ -55,9 +49,7 @@ public class ExtrasController extends BaseController {
 		super.onAttach(view);
 		activity = getActivity();
 		firebaseUtility = new FirebaseUtility(activity);
-		gestureDetector = new GestureDetectorCompat(activity, new ScrollGestureListener());
-		((ConductorActivity) getActivity()).setGestureDetector(gestureDetector);
-
+		getToolbar().setTitle("Extras");
 		generateLayout();
 		setColors();
 		colorComponents();
@@ -93,7 +85,6 @@ public class ExtrasController extends BaseController {
 
 	@Override
 	protected void onDetach(@NonNull View view) {
-		((ConductorActivity) getActivity()).removeGestureDetector();
 		firebaseUtility.close();
 		try {
 			accessTokenTracker.stopTracking();
@@ -266,33 +257,6 @@ public class ExtrasController extends BaseController {
 		try {
 			callbackManager.onActivityResult(requestCode, resultCode, data);
 		} catch (Exception e) {
-		}
-	}
-
-	private class ScrollGestureListener extends GestureDetector.SimpleOnGestureListener {
-		@Override
-		public boolean onDown(MotionEvent e) {
-			return super.onDown(e);
-		}
-
-		@Override
-		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-			if (Math.abs(velocityX) > Math.abs(velocityY)) {
-				if (Math.abs(e1.getX() - e2.getX()) >= 200) {
-					if (velocityX < -2000) {
-						getRouter().popCurrentController();
-						return true;
-					} else if (velocityX > 2000) {
-						getRouter().pushController(RouterTransaction.with(new RecommendationController())
-																	.pushChangeHandler(DirectionalChangeHandler.from(
-																			DirectionalChangeHandler.LEFT))
-																	.popChangeHandler(DirectionalChangeHandler.from(
-																			DirectionalChangeHandler.LEFT)));
-						return true;
-					}
-				}
-			}
-			return false;
 		}
 	}
 }

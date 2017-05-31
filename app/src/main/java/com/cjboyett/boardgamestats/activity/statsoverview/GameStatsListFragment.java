@@ -5,14 +5,11 @@ import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.GestureDetectorCompat;
-import android.view.GestureDetector;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
@@ -22,33 +19,27 @@ import com.cjboyett.boardgamestats.R;
 import com.cjboyett.boardgamestats.activity.statsdetail.GameStatsActivity;
 import com.cjboyett.boardgamestats.data.DataManager;
 import com.cjboyett.boardgamestats.data.games.GamesDbHelper;
-import com.cjboyett.boardgamestats.data.games.board.BoardGameDbUtility;
-import com.cjboyett.boardgamestats.data.games.rpg.RPGDbUtility;
-import com.cjboyett.boardgamestats.data.games.video.VideoGameDbUtility;
 import com.cjboyett.boardgamestats.utility.ActivityUtilities;
 import com.cjboyett.boardgamestats.utility.Preferences;
 import com.cjboyett.boardgamestats.utility.data.StringUtilities;
 import com.cjboyett.boardgamestats.utility.view.ViewUtilities;
-import com.cjboyett.boardgamestats.view.adapter.ImageAdapter;
+import com.cjboyett.boardgamestats.view.adapter.ImageRecyclerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import timber.log.Timber;
-
-public class GameStatsListFragment extends Fragment {
+public class GameStatsListFragment extends Fragment implements ImageRecyclerAdapter.GamesGridView {
 	private Activity activity;
 	private View view;
 	private LinearLayout dummyView;
 	private TextView textView;
-	private GridView gridView;
+	private RecyclerView gridView;
 	private SearchView gamesSearchView;
 	private int scrollY;
 
 	private int backgroundColor, foregroundColor, hintTextColor;
 
 	private GamesDbHelper dbHelper;
-	private GestureDetectorCompat gestureDetector;
 
 	private boolean regenerateLayout;
 
@@ -59,7 +50,6 @@ public class GameStatsListFragment extends Fragment {
 		activity = this.getActivity();
 
 		dbHelper = new GamesDbHelper(activity);
-		gestureDetector = new GestureDetectorCompat(activity, new ScrollGestureListener());
 
 		generateLayout();
 
@@ -96,7 +86,7 @@ public class GameStatsListFragment extends Fragment {
 	private void generateLayout() {
 		dummyView = (LinearLayout) view.findViewById(R.id.dummyview);
 		textView = (TextView) view.findViewById(R.id.textview_game_play);
-		gridView = (GridView) view.findViewById(R.id.listview_game_stats);
+		gridView = (RecyclerView) view.findViewById(R.id.listview_game_stats);
 		gamesSearchView = (SearchView) view.findViewById(R.id.searchview_games_stats);
 
 		DataManager dataManager = DataManager.getInstance(activity.getApplication());
@@ -104,6 +94,7 @@ public class GameStatsListFragment extends Fragment {
 
 		final List<String> finalGamesList = gamesList;
 
+		setColors();
 		populateGrid(finalGamesList);
 
 		gamesSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -128,7 +119,6 @@ public class GameStatsListFragment extends Fragment {
 			}
 		});
 
-		setColors();
 		colorComponents();
 
 		ActivityUtilities.setDatabaseChanged(activity, false);
@@ -159,69 +149,20 @@ public class GameStatsListFragment extends Fragment {
 	}
 
 	private void populateGrid(final List<String> games) {
-		gridView.setNumColumns(Preferences.numberOfGridColumns(activity));
-		gridView.setAdapter(new ImageAdapter(activity, games));
+		gridView.setAdapter(new ImageRecyclerAdapter(this, games, foregroundColor));
+		gridView.setLayoutManager(new GridLayoutManager(activity, Preferences.numberOfGridColumns(activity)));
 
-		gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				dummyView.requestFocus();
-				if (!games.get(position).startsWith("---")) {
-					textView.requestFocus();
-					String game = games.get(position);
-					String gameType = game.substring(game.length() - 1);
-					game = game.substring(0, game.length() - 2);
-
-					String thumbnailUrl = "";
-					if (gameType.equals("b"))
-						thumbnailUrl = BoardGameDbUtility.getThumbnailUrl(dbHelper, game);
-					else if (gameType.equals("r"))
-						thumbnailUrl = RPGDbUtility.getThumbnailUrl(dbHelper, game);
-					else if (gameType.equals("v"))
-						thumbnailUrl = VideoGameDbUtility.getThumbnailUrl(dbHelper, game);
-					ActivityUtilities.generatePaletteAndOpenActivity(activity,
-																	 new Intent(view.getContext(),
-																				GameStatsActivity.class)
-																			 .putExtra("GAME", game)
-																			 .putExtra("TYPE", gameType),
-																	 "http://" + thumbnailUrl,
-																	 "UP");
-					ActivityUtilities.exitUp(activity);
-				}
-			}
-		});
-		gridView.setOnTouchListener(new View.OnTouchListener() {
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				if (Preferences.useSwipes(v.getContext()))
-					return gestureDetector.onTouchEvent(event);
-				return false;
-			}
-		});
 	}
 
-	private class ScrollGestureListener extends GestureDetector.SimpleOnGestureListener {
-		@Override
-		public boolean onDown(MotionEvent e) {
-			View c = gridView.getChildAt(0);
-			scrollY = -c.getTop() + gridView.getFirstVisiblePosition() * c.getHeight();
-			Timber.d(scrollY + "");
-			return super.onDown(e);
-		}
-
-		@Override
-		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-			Timber.d(scrollY + "");
-			if (Math.abs(velocityX) < Math.abs(velocityY)) {
-				if (Math.abs(e1.getY() - e2.getY()) >= 200) {
-					if (velocityY > 2000 && scrollY == 0) {
-						getActivity().onBackPressed();
-						return true;
-					}
-				}
-			}
-			return false;
-		}
+	@Override
+	public void navigateToGameDetails(String game, String gameType, String thumbnailUrl, String bggId) {
+		ActivityUtilities.generatePaletteAndOpenActivity(activity,
+														 new Intent(view.getContext(),
+																	GameStatsActivity.class)
+																 .putExtra("GAME", game)
+																 .putExtra("TYPE", gameType),
+														 "http://" + thumbnailUrl,
+														 "UP");
+		ActivityUtilities.exitUp(activity);
 	}
-
 }

@@ -171,6 +171,10 @@ public class GamesDbUtility {
 				gamePlayData.add(gameCursor.getLong(i));
 				Timber.d(i + " " + gameCursor.getLong(i));
 			}
+		} else {
+			for (int i = 0; i < 4; i++) {
+				gamePlayData.add(0L);
+			}
 		}
 		gameCursor.close();
 

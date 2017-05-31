@@ -160,8 +160,7 @@ public class DailyGamePlayView extends LinearLayout {
 			imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
 			thumbnail = new StringToBitmapBuilder(activity)
 					.setTextSize(8)
-//								.setTextWidth(10)
-//								.setAlign(Paint.Align.CENTER)
+					.setImageWidth(128)
 					.buildBitmap(gamePlayData.getGame().getName());
 		}
 

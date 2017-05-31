@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+	<group android:id="@+id/group_home">
+		<item
+			android:id="@+id/menu_home"
+			android:checkable="true"
+			android:title="Home"/>
+		<item
+			android:id="@+id/menu_collections"
+			android:checkable="true"
+			android:title="Collection"/>
+		<item
+			android:id="@+id/menu_add_game"
+			android:checkable="true"
+			android:title="Add Game"/>
+		<item
+			android:id="@+id/menu_stats"
+			android:checkable="true"
+			android:title="Stats"/>
+		<item
+			android:id="@+id/menu_add_game_play"
+			android:checkable="true"
+			android:title="Add Game Play"/>
+		<item
+			android:id="@+id/menu_extras"
+			android:checkable="true"
+			android:title="Extras"/>
+		<item
+			android:id="@+id/menu_settings"
+			android:checkable="true"
+			android:title="Settings"/>
+	</group>
+</menu>

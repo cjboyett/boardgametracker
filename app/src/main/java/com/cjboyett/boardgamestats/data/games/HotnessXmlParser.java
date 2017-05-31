@@ -108,8 +108,11 @@ public class HotnessXmlParser {
 		} catch (Exception e) {
 			Timber.e(e);
 		}
+		if (!thumbnailUrl.startsWith("http://") || thumbnailUrl.startsWith("https://")) {
+			thumbnailUrl = "https://" + thumbnailUrl;
+		}
 
-		return "http://" + thumbnailUrl;
+		return thumbnailUrl;
 	}
 
 	private void skip(XmlPullParser parser) {

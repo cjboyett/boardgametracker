@@ -4,7 +4,7 @@
 		<item name="windowActionBar">false</item>
 		<item name="windowNoTitle">true</item>
 		<item name="android:windowDrawsSystemBarBackgrounds">true</item>
-		<item name="android:statusBarColor">@color/colorMainDark</item>
+		<item name="android:statusBarColor">@android:color/transparent</item>
 
 		<!-- enable window content transitions -->
 		<item name="android:windowActivityTransitions">true</item>

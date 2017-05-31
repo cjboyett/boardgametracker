@@ -25,6 +25,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import timber.log.Timber;
+
 /**
  * Created by Casey on 3/19/2016.
  */
@@ -224,7 +226,7 @@ public class ImageAdapter extends BaseAdapter implements SectionIndexer {
 		protected Bitmap doInBackground(String... params) {
 			Bitmap thumbnail;
 			String thumbnailUrl = params[0];
-			if (thumbnailUrl.length() > 1) {
+			if (thumbnailUrl.length() > 1 && !thumbnailUrl.endsWith("null")) {
 				final ImageController imageController = new ImageController(activity).setDirectoryName("thumbnails");
 				thumbnail =
 						imageController.setFileName(thumbnailUrl.substring(thumbnailUrl.lastIndexOf("/") + 1)).load();
@@ -232,17 +234,18 @@ public class ImageAdapter extends BaseAdapter implements SectionIndexer {
 			} else {
 				thumbnail = new StringToBitmapBuilder(activity)
 						.setTextSize(90 * SCALE_FACTOR)
+						.setImageWidth((int) (128 * ratio * SCALE_FACTOR))
 						.buildBitmap(thumbnailUrl.charAt(0) + "");
 			}
 
 			boolean noThumbnail = (thumbnail == null);
 
-			if (noThumbnail)
+			if (noThumbnail) {
 				thumbnail = new StringToBitmapBuilder(activity)
 						.setTextSize(16)
-//								.setTextWidth(10)
-//								.setAlign(Paint.Align.CENTER)
+						.setImageWidth((int) (128 * ratio * SCALE_FACTOR))
 						.buildBitmap(game.substring(0, game.length() - 2));
+			}
 			thumbnails.addBitmapToCache(game, thumbnail);
 			return thumbnail;
 		}

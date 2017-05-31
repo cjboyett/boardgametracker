@@ -2,14 +2,17 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion '25.0.0'
+    buildToolsVersion '25.0.2'
 
     defaultConfig {
         applicationId "com.cjboyett.boardgamestats"
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 25
-        versionName "1.1.0"
+        versionCode 26
+        versionName "1.2.0"
+
+        vectorDrawables.useSupportLibrary = true;
+        multiDexEnabled true
     }
     packagingOptions {
         pickFirst 'META-INF/LICENSE.txt'
@@ -22,8 +25,8 @@ android {
         }
     }
     compileOptions {
-        targetCompatibility 1.7
-        sourceCompatibility 1.7
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
     }
 }
 
@@ -36,8 +39,10 @@ ext {
     conductorVersion = "2.1.1"
     facebookVersion = "4.19.0"
     leakCanaryVersion = "1.5"
-    playServicesVersion = "10.2.1"
-    supportLibraryVersion = "25.3.0"
+    picassoVersion = "2.5.2"
+    playServicesVersion = "10.2.6"
+    retrofitVersion = "2.3.0"
+    supportLibraryVersion = "25.3.1"
     timberVersion = "4.5.1"
 }
 
@@ -46,6 +51,8 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile project(':colorpicker')
     compile project(':floatingactionmenu')
+
+    compile 'com.android.support:multidex:1.0.1'
 
     compile "com.android.support:appcompat-v7:$supportLibraryVersion"
     compile "com.android.support:design:$supportLibraryVersion"
@@ -56,7 +63,6 @@ dependencies {
 
     compile "com.google.android.gms:play-services-ads:$playServicesVersion"
     compile "com.google.android.gms:play-services-analytics:$playServicesVersion"
-    compile "com.google.firebase:firebase-core:$playServicesVersion"
     compile "com.google.firebase:firebase-database:$playServicesVersion"
     compile "com.google.firebase:firebase-ads:$playServicesVersion"
     compile "com.google.firebase:firebase-auth:$playServicesVersion"
@@ -77,6 +83,19 @@ dependencies {
 
     compile "com.bluelinelabs:conductor:$conductorVersion"
     compile "com.bluelinelabs:conductor-support:$conductorVersion"
+
+    def withoutStaxApi = { exclude group: 'stax', module: 'stax-api' }
+    def withoutStax = { exclude group: 'stax', module 'stax' }
+    def withoutXpp3 = { exclude group: 'xpp3', module: 'xpp3' }
+    compile "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    compile "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+    compile("com.squareup.retrofit2:converter-simplexml:$retrofitVersion") {
+        exclude module: 'xpp3'
+        exclude module: 'stax-api'
+        exclude module: 'stax'
+    }
+
+    compile "com.squareup.picasso:picasso:$picassoVersion"
 }
 
 apply plugin: 'com.google.gms.google-services'

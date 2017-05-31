@@ -2,9 +2,9 @@ package com.cjboyett.boardgamestats.conductor.main;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
-import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatImageView;
@@ -15,17 +15,14 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.bluelinelabs.conductor.RouterTransaction;
 import com.bluelinelabs.conductor.changehandler.FadeChangeHandler;
 import com.cjboyett.boardgamestats.R;
 import com.cjboyett.boardgamestats.activity.SettingsActivity;
-import com.cjboyett.boardgamestats.activity.addgame.AddGameActivity;
+import com.cjboyett.boardgamestats.activity.addgameplay.AddGamePlayTabbedActivity;
 import com.cjboyett.boardgamestats.activity.extras.AchievementsController;
 import com.cjboyett.boardgamestats.activity.statsoverview.StatsTabbedActivity;
-import com.cjboyett.boardgamestats.conductor.ConductorActivity;
-import com.cjboyett.boardgamestats.conductor.addgameplay.AddGamePlayTabbedController;
 import com.cjboyett.boardgamestats.conductor.base.BaseController;
 import com.cjboyett.boardgamestats.conductor.changehandlers.DirectionalChangeHandler;
 import com.cjboyett.boardgamestats.conductor.collection.GameListController;
@@ -35,7 +32,7 @@ import com.cjboyett.boardgamestats.data.PlayersDbUtility;
 import com.cjboyett.boardgamestats.data.games.GamesDbHelper;
 import com.cjboyett.boardgamestats.utility.ActivityUtilities;
 import com.cjboyett.boardgamestats.utility.Preferences;
-import com.cjboyett.boardgamestats.utility.data.GameDownloadUtilities;
+import com.cjboyett.boardgamestats.utility.view.ColorUtilities;
 import com.cjboyett.boardgamestats.utility.view.ViewUtilities;
 import com.cjboyett.boardgamestats.view.ticker.Ticker;
 
@@ -44,13 +41,11 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class MainController extends BaseController implements MainView {
+	public static final String TAG = MainController.class.getSimpleName();
 	private View view;
 
 	@BindView(R.id.ticker)
 	Ticker ticker;
-
-	@BindView(R.id.textview_welcome_back)
-	TextView welcomeBackTextView;
 
 	@BindView(R.id.textview_add_game_play)
 	AppCompatButton addGamePlayButton;
@@ -75,8 +70,6 @@ public class MainController extends BaseController implements MainView {
 
 	private MainPresenter presenter;
 
-	private GestureDetectorCompat gestureDetector;
-
 	@NonNull
 	@Override
 	protected View onCreateView(@NonNull LayoutInflater inflater, @NonNull ViewGroup container) {
@@ -93,14 +86,11 @@ public class MainController extends BaseController implements MainView {
 		setColors();
 		colorComponents();
 		presenter.initializeView();
-		gestureDetector = new GestureDetectorCompat(getActivity(), new ScrollGestureListener());
-		((ConductorActivity) getActivity()).setGestureDetector(gestureDetector);
 	}
 
 	@Override
 	protected void onDetach(@NonNull View view) {
 		pauseTicker();
-		((ConductorActivity) getActivity()).removeGestureDetector();
 		presenter.detachView();
 		super.onDetach(view);
 	}
@@ -117,17 +107,17 @@ public class MainController extends BaseController implements MainView {
 		extrasButton.setTextColor(foregroundColor);
 		addGamePlayButton.setTextColor(foregroundColor);
 
-		welcomeBackTextView.setTextColor(foregroundColor);
+		ViewUtilities.tintImageView(settingsButton, buttonColor);
+		ViewUtilities.tintImageView(achievementButton, buttonColor);
+		ViewUtilities.tintImageView(helpButton, buttonColor);
 
-		ViewUtilities.tintImageView(settingsButton, foregroundColor);
-		ViewUtilities.tintImageView(achievementButton, foregroundColor);
-		ViewUtilities.tintImageView(helpButton, foregroundColor);
-
-		ticker.setColors(foregroundColor);
+		ticker.setColors(ColorUtilities.mixWithBaseColor(Color.argb(50, 255, 255, 255), 1, backgroundColor, 2),
+						 foregroundColor);
 	}
 
 	public void setWelcomeMessage(String welcomeMessage) {
-		welcomeBackTextView.setText(welcomeMessage);
+		getCollapsingToolbarLayout().setTitleEnabled(false);
+		getToolbar().setTitle(welcomeMessage);
 	}
 
 	public void processFirstVisit() {
@@ -135,7 +125,7 @@ public class MainController extends BaseController implements MainView {
 		Preferences.setMetYancey(getActivity(), true);
 		ViewUtilities.DialogBuilder syncDialogBuilder = new ViewUtilities.DialogBuilder(getActivity());
 		final EditText usernameEditText = syncDialogBuilder.getInput();
-		final AlertDialog syncDialog = syncDialogBuilder.setTitle("Sync With BGG")
+/*		final AlertDialog syncDialog = syncDialogBuilder.setTitle("Sync With BGG")
 														.setMessage(
 																"Would you like me to download your collection and game plays from your Board Game Geek account?  This can also be done at any time through the Settings.")
 														.setHintText("BGG Username")
@@ -154,7 +144,9 @@ public class MainController extends BaseController implements MainView {
 																		   })
 														.setNegativeButton("Cancel", null)
 														.create();
+*/
 
+/*
 		final AlertDialog addToCollectionDialog = new ViewUtilities.DialogBuilder(getActivity())
 				.setTitle("Add a New Game?")
 				.setMessage("If you have a Board Game Geek account I can download your game information.\n\n" +
@@ -175,6 +167,7 @@ public class MainController extends BaseController implements MainView {
 				})
 				.setNegativeButton("Later", null)
 				.create();
+*/
 
 		final ViewUtilities.DialogBuilder firstVisitDialog = new ViewUtilities.DialogBuilder(getActivity());
 		final EditText firstVisitInput = firstVisitDialog.getInput();
@@ -193,7 +186,7 @@ public class MainController extends BaseController implements MainView {
 								else
 									Preferences.setUsername(v.getContext(), "User");
 								Preferences.setFirstVisit(v.getContext(), false);
-								addToCollectionDialog.show();
+//								addToCollectionDialog.show();
 							}
 						});
 		firstVisitDialog.create()
@@ -243,14 +236,18 @@ public class MainController extends BaseController implements MainView {
 
 	public void openAddGamePlay() {
 
+/*
 		getRouter().pushController(RouterTransaction.with(new AddGamePlayTabbedController())
 													.pushChangeHandler(DirectionalChangeHandler.from(
 															DirectionalChangeHandler.TOP))
 													.popChangeHandler(DirectionalChangeHandler.from(
 															DirectionalChangeHandler.TOP)));
+*/
 
-//		startActivity(new Intent(getActivity(), AddGamePlayTabbedActivity.class).putExtra("EXIT", "UP"));
-//		ActivityUtilities.exitDown(getActivity());
+		startActivity(new Intent(getActivity(), AddGamePlayTabbedActivity.class).putExtra("EXIT", "UP")
+																				.putExtra("FROM_MAIN_CONTROLLER",
+																						  true));
+		ActivityUtilities.exitDown(getActivity());
 	}
 
 	public void openCollections() {

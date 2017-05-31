@@ -40,36 +40,36 @@ public class ChooseThemeDialogPreference extends DialogPreference {
 		int light = context.getResources().getColor(R.color.colorMainLight);
 
 		palettes = new ArrayList<>();
-		palettes.add(new Integer[]{dark, light, dark});
+		palettes.add(new Integer[]{dark, light, Color.parseColor("#4A4E5A")});
 		palettes.add(new Integer[]{light, dark, Color.parseColor("#A9A26B")});
 
 		palettes.add(new Integer[]{Color.parseColor("#9EA7C1"),
 								   Color.parseColor("#2F2D27"),
-								   Color.parseColor("#A9A26B")});
+								   Color.parseColor("#656B7B")});
 		palettes.add(new Integer[]{Color.parseColor("#2F2D27"),
 								   Color.parseColor("#9EA7C1"),
-								   Color.parseColor("#A9A26B")});
+								   Color.parseColor("#75756A")});
 
 		palettes.add(new Integer[]{Color.parseColor("#6AA67A"),
 								   Color.parseColor("#033811"),
-								   Color.parseColor("#A9A26B")});
+								   Color.parseColor("#289350")});
 		palettes.add(new Integer[]{Color.parseColor("#033811"),
 								   Color.parseColor("#6AA67A"),
-								   Color.parseColor("#A9A26B")});
+								   Color.parseColor("#1A5F34")});
 
 		palettes.add(new Integer[]{Color.parseColor("#3F0420"),
 								   Color.parseColor("#D6C761"),
 								   Color.parseColor("#75355D")});
 		palettes.add(new Integer[]{Color.parseColor("#D6C761"),
 								   Color.parseColor("#3F0420"),
-								   Color.parseColor("#A9A26B")});
+								   Color.parseColor("#CDAD4A")});
 
 		palettes.add(new Integer[]{Color.parseColor("#310A60"),
 								   Color.parseColor("#D1C535"),
-								   Color.parseColor("#A9A26B")});
+								   Color.parseColor("#5100A1")});
 		palettes.add(new Integer[]{Color.parseColor("#D1C535"),
 								   Color.parseColor("#310A60"),
-								   Color.parseColor("#A9A26B")});
+								   Color.parseColor("#A98E3D")});
 		currentPalette = palettes.get(0);
 
 		setDialogLayoutResource(R.layout.dialog_choose_theme);
